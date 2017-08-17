@@ -13,7 +13,6 @@ namespace GDApp
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -28,7 +27,6 @@ namespace GDApp
         /// </summary>
         protected override void Initialize()
         {
-            
             base.Initialize();
         }
 
