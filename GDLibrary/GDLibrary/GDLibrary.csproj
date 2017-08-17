@@ -59,10 +59,18 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actors\Actor.cs" />
+    <Compile Include="Actors\Actor3D.cs" />
+    <Compile Include="Actors\Drawn\3D\DrawnActor3D.cs" />
+    <Compile Include="Enums\ActorType.cs" />
+    <Compile Include="Enums\StatusType.cs" />
+    <Compile Include="Interfaces\IActor.cs" />
+    <Compile Include="Interfaces\IController.cs" />
     <Compile Include="Parameters\Camera\ProjectionParameters.cs" />
     <Compile Include="Parameters\Transforms\Transform3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

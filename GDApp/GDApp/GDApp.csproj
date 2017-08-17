@@ -68,6 +68,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\GDLibrary\GDLibrary\GDLibrary.csproj">
+      <Project>{781A2CF8-83E6-4968-BCEA-CF650AA4758F}</Project>
+      <Name>GDLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GDAppContent\GDAppContent.contentproj">
       <Name>GDAppContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
