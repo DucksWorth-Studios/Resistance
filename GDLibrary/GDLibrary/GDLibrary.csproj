@@ -59,6 +59,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parameters\Camera\ProjectionParameters.cs" />
     <Compile Include="Parameters\Transforms\Transform3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
