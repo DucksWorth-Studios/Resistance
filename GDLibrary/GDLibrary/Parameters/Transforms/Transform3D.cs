@@ -135,40 +135,6 @@ namespace GDLibrary
             }
         }
       
-        public Vector3 TranslateIncrement
-        {
-            get
-            {
-                return translateIncrement;
-            }
-            set
-            {
-                translateIncrement = value;
-            }
-        }
-        public float TranslateIncrementY //used by 1st person camera to constrain vertical movement
-        {
-            get
-            {
-                return translateIncrement.Y;
-            }
-            set
-            {
-                translateIncrement.Y = value;
-            }
-        }
-
-        public float RotateIncrement
-        {
-            get
-            {
-                return rotateIncrement;
-            }
-            set
-            {
-                rotateIncrement = value;
-            }
-        }
         #endregion
 
         //used by the camera

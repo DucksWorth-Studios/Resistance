@@ -16,7 +16,7 @@ namespace GDLibrary
     public class Actor : IActor, ICloneable
     {
         #region Variables
-        public static Main game;
+        public static Game game;
 
         private string id;
         private ActorType actorType;

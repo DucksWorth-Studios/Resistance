@@ -54,12 +54,6 @@ namespace GDLibrary
             {
                 value = (value >= 0 && value <= 1) ? value : 1; //bounds check on value
 
-                //notify the object manager to move the object from one draw list to the other based on new alpha
-                if(value == 1 && this.alpha != 1) //going from opaque to transparent
-                    EventDispatcher.Publish(new EventData(this.ID, this, EventActionType.OnAlpha, EventCategoryType.OpacityChange));
-                else if(value != 1 && this.alpha == 1) //going from transparent to opaque
-                    EventDispatcher.Publish(new EventData(this.ID, this, EventActionType.OnAlpha, EventCategoryType.OpacityChange));
-
                 //assign the new alpha
                 this.alpha = value;
             }
