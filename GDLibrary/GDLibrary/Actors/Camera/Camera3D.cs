@@ -85,32 +85,6 @@ namespace GDLibrary
 
         #endregion
 
-        //creates a default camera3D - we can use this for a fixed camera archetype i.e. one we will clone - see MainApp::InitialiseCameras()
-        public Camera3D(string id, ActorType actorType, Viewport viewPort)
-            : this(id, actorType, Transform3D.Zero,
-            ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Updated)
-        {
-
-        }
-
-        //forward compatibility (since v3.4) for existing code with no drawDepth
-        public Camera3D(string id, ActorType actorType,
-         Transform3D transform, ProjectionParameters projectionParameters, Viewport viewPort)
-            : this(id, actorType, transform, projectionParameters, 
-            viewPort, 0, StatusType.Updated)
-        {
-
-        }
-
-        //forward compatibility (since v3.4) for existing code with no StatusType
-        public Camera3D(string id, ActorType actorType,
-            Transform3D transform, ProjectionParameters projectionParameters,
-            Viewport viewPort, int drawDepth)
-            : this(id, actorType, transform, projectionParameters, 
-            viewPort, drawDepth, StatusType.Updated)
-        {
-        }
-
         public Camera3D(string id, ActorType actorType,
             Transform3D transform, ProjectionParameters projectionParameters,
             Viewport viewPort, int drawDepth, StatusType statusType)
@@ -119,6 +93,14 @@ namespace GDLibrary
             this.projectionParameters = projectionParameters;
             this.viewPort = viewPort;
             this.drawDepth = drawDepth;
+        }
+
+        //creates a default camera3D - we can use this for a fixed camera archetype i.e. one we will clone - see MainApp::InitialiseCameras()
+        public Camera3D(string id, ActorType actorType, Viewport viewPort)
+            : this(id, actorType, Transform3D.Zero,
+            ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update)
+        {
+
         }
 
         public override bool Equals(object obj)
@@ -143,7 +125,7 @@ namespace GDLibrary
         {
             return new Camera3D("clone - " + this.ID,
                 this.ActorType, (Transform3D)this.Transform3D.Clone(), 
-                (ProjectionParameters)this.projectionParameters.Clone(), this.Viewport);
+                (ProjectionParameters)this.projectionParameters.Clone(), this.Viewport, 0, StatusType.Update);
         }
         public override string ToString()
         {

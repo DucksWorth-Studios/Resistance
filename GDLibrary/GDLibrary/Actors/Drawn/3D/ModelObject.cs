@@ -60,7 +60,7 @@ namespace GDLibrary
         public ModelObject(string id, ActorType actorType, 
             Transform3D transform, Effect effect, Color color, float alpha,
             Texture2D texture, Model model)
-            : base(id, actorType, transform, effect, color, alpha)
+            : base(id, actorType, transform, effect, color, alpha, StatusType.Drawn | StatusType.Update)
         {
             this.texture = texture;
             this.model = model;

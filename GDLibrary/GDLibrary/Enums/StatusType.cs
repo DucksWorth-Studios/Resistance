@@ -14,7 +14,7 @@ namespace GDLibrary
     {
         //used for enabling objects for updating and drawing e.g. a model or a camera, or a controller
         Drawn = 1,
-        Updated = 2,
+        Update = 2,
 
         //used for media
         Play = 4,

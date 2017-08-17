@@ -65,27 +65,8 @@ namespace GDLibrary
          Transform3D transform, Effect effect)
             : this(id, actorType, transform, effect, 
             Color.White, 1, 
-            StatusType.Drawn | StatusType.Updated) // when we use a bitwise OR we are saying "drawn AND updated"
+            StatusType.Drawn | StatusType.Update) // when we use a bitwise OR we are saying "drawn AND updated"
         {
-        }
-
-        //for code with no StatusType
-        public DrawnActor3D(string id, ActorType actorType,
-           Transform3D transform, Effect effect, Color color, float alpha)
-            : this(id, actorType, transform, effect, color, alpha, 
-            StatusType.Drawn | StatusType.Updated) 
-
-        {
-
-        }
-
-        //used by ZoneObjects
-        public DrawnActor3D(string id, ActorType actorType,
-           Transform3D transform, Color color, float alpha)
-            : this(id, actorType, transform, null, color, alpha,
-            StatusType.Drawn | StatusType.Updated) 
-        {
-
         }
 
         public DrawnActor3D(string id, ActorType actorType,
@@ -106,10 +87,11 @@ namespace GDLibrary
         {
             return new DrawnActor3D("clone - " + ID, //deep
                 this.ActorType, //deep
-                (Transform3D)this.Transform3D.Clone(), //deep
+                (Transform3D)this.Transform3D.Clone(), //deep - calls the clone for Transform3D explicitly
                 this.effect, //shallow - its ok if objects refer to the same effect
-                this.color, //deep
-                this.alpha); //deep
+                this.color, //deep  - a simple numeric type
+                this.alpha, //deep  - a simple numeric type
+                StatusType.Drawn | StatusType.Update); //deep - a simple numeric type
         }       
     }
 }

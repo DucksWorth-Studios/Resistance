@@ -1,3 +1,4 @@
+using GDLibrary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,6 +12,7 @@ namespace GDApp
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
 
         public Main()
         {
@@ -26,8 +28,7 @@ namespace GDApp
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            
             base.Initialize();
         }
 
