@@ -30,6 +30,10 @@ namespace GDApp
         /// </summary>
         protected override void Initialize()
         {
+
+            //test change
+
+
             #region Set the screen resolution
             //obviously this will affect the viewport for the camera and does use the same aspect ratio as the camera i.e. 4/3
             int width = 1024, height = 768; //4.3 ratiow
