@@ -13,6 +13,9 @@ namespace GDApp
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        private CameraManager cameraManager;
+        public ObjectManager objectManager { get; private set; }
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,6 +30,76 @@ namespace GDApp
         /// </summary>
         protected override void Initialize()
         {
+            #region Set the screen resolution
+            //obviously this will affect the viewport for the camera and does use the same aspect ratio as the camera i.e. 4/3
+            int width = 1024, height = 768; //4.3 ratiow
+            graphics.PreferredBackBufferWidth = width;
+            graphics.PreferredBackBufferHeight = height;
+            //if we forget to apply the changes then our resolution wont be set!
+            graphics.ApplyChanges();
+            #endregion
+
+            #region Initialize the effect (shader) for models
+            BasicEffect modelEffect = new BasicEffect(graphics.GraphicsDevice);
+            //enable the use of a texture on a model
+            modelEffect.TextureEnabled = true;
+            //setup the effect to have a single default light source which will be used to calculate N.L and N.H lighting
+            modelEffect.EnableDefaultLighting();
+            #endregion
+
+            #region Add the CameraManager and ObjectManager
+            this.cameraManager = new CameraManager(this, 1);
+            Components.Add(this.cameraManager);
+
+            this.objectManager = new ObjectManager(this, cameraManager, 10);
+            Components.Add(this.objectManager);
+            #endregion
+
+            //we will use this variable for the camera and re-use for the modelobject
+            Transform3D transform = null;
+
+            #region Add the camera 
+            //add the camera
+            transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
+
+            //set the camera to occupy the entire viewport
+            Viewport viewPort = new Viewport(0, 0, width, height);
+            //initialise the camera
+            Camera3D simpleCamera = new Camera3D("simple camera", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            this.cameraManager.Add(simpleCamera);
+            #endregion
+
+            #region Add the model object
+            //load the texture
+            Texture2D texture = Content.Load<Texture2D>("Assets/Textures/Props/Crates/crate1");
+
+            //load the model file i.e. the vertices of the model from the 3DS Max file
+            Model boxModel = Content.Load<Model>("Assets/Models/box2");
+
+            //use one of our static defaults to position the object at the origin
+            transform = Transform3D.Zero;
+            //initialise the boxObject
+            ModelObject boxObject = new ModelObject("box1", ActorType.Decorator, transform, modelEffect, Color.White, 1, texture, boxModel);
+            //add to the objectManager so that it will be drawn and updated
+            this.objectManager.Add(boxObject);
+
+            //a clone variable that we can reuse
+            ModelObject clone = null;
+
+            //add a clone of the box model object to test the clone
+            clone = (ModelObject)boxObject.Clone();
+            clone.Transform3D.Translation = new Vector3(5, 0, 0);
+            //scale it to make it look different
+            clone.Transform3D.Scale = new Vector3(1, 4, 1);
+            //change its color
+            clone.Color = Color.Red;
+            this.objectManager.Add(clone);
+
+            //add more clones here...
+
+
+            #endregion
+
             base.Initialize();
         }
 
