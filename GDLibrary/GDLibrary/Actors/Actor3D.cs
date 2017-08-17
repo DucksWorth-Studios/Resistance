@@ -1,5 +1,5 @@
 ﻿/*
-Function: 		Represents the parent class for all updateable 3D game objects. Notice that Transform3D has been added.
+Function: 		Represents the parent class for all updateable 3D game objects. Notice that Transform3D and List<IController> has been added.
 Author: 		NMCG
 Version:		1.0
 Date Updated:	17/8/17
@@ -73,6 +73,7 @@ namespace GDLibrary
             base.Update(gameTime);
         }
 
+        //returns the compound matrix transformation that will scale, rotate and place the actor in the 3D world of the game
         public override Matrix GetWorldMatrix()
         {
             return this.transform.World;
