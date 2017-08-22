@@ -30,6 +30,18 @@ namespace GDLibrary
         {
             this.cameraManager = cameraManager;
             this.drawList = new List<IActor>(initialSize);
+
+            InitializeGraphics(game);       
+        }
+
+        private void InitializeGraphics(Game game)
+        {
+            //set the graphics card to repeat the end pixel value for any UV value outside 0-1
+            //See http://what-when-how.com/xna-game-studio-4-0-programmingdeveloping-for-windows-phone-7-and-xbox-360/samplerstates-xna-game-studio-4-0-programming/
+            SamplerState samplerState = new SamplerState();
+            samplerState.AddressU = TextureAddressMode.Clamp;
+            samplerState.AddressV = TextureAddressMode.Clamp;
+            game.GraphicsDevice.SamplerStates[0] = samplerState;
         }
 
         public void Add(IActor actor)
