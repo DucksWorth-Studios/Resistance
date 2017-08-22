@@ -14,6 +14,9 @@ namespace GDApp
         SpriteBatch spriteBatch;
 
         private CameraManager cameraManager;
+        private MouseManager mouseManager;
+        private KeyboardManager keyboardManager;
+
         public ObjectManager objectManager { get; private set; }
 
         public Main()
@@ -30,10 +33,6 @@ namespace GDApp
         /// </summary>
         protected override void Initialize()
         {
-
-            //test change
-
-
             #region Set the screen resolution
             //obviously this will affect the viewport for the camera and does use the same aspect ratio as the camera i.e. 4/3
             int width = 1024, height = 768; //4.3 ratiow
@@ -59,6 +58,14 @@ namespace GDApp
             Components.Add(this.objectManager);
             #endregion
 
+            #region Add the input managers
+            //add mouse and keyboard managers used by any actor with a controller based on a UserInputController
+            this.mouseManager = new MouseManager(this, true, new Vector2(width/2.0f, height/2.0f));
+            Components.Add(this.mouseManager);
+            this.keyboardManager = new KeyboardManager(this);
+            Components.Add(this.keyboardManager);
+            #endregion
+
             //we will use this variable for the camera and re-use for the modelobject
             Transform3D transform = null;
 
@@ -69,8 +76,14 @@ namespace GDApp
             //set the camera to occupy the entire viewport
             Viewport viewPort = new Viewport(0, 0, width, height);
             //initialise the camera
-            Camera3D simpleCamera = new Camera3D("simple camera", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
-            this.cameraManager.Add(simpleCamera);
+            Camera3D firstPersonCamera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            //attach a FirstPersonCameraController
+            firstPersonCamera.AttachController(new FirstPersonController("firstPersonCameraController1", ControllerType.FirstPerson,
+                AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed,
+                this.mouseManager, this.keyboardManager, this.cameraManager));
+
+
+            this.cameraManager.Add(firstPersonCamera);
             #endregion
 
             #region Add the model object

@@ -15,15 +15,15 @@ namespace GDLibrary
     public class ProjectionParameters : ICloneable
     {
         #region Statics
+        //Medium relates to the distance between the near and far clipping planes i.e. 1 to 1000
         public static ProjectionParameters StandardMediumFourThree
            = new ProjectionParameters(MathHelper.PiOver2, 4.0f / 3, 1, 1000);
         public static ProjectionParameters StandardMediumSixteenTen
             = new ProjectionParameters(MathHelper.PiOver2, 16.0f / 10, 1, 1000);
-
-
         public static ProjectionParameters StandardMediumSixteenNine
             = new ProjectionParameters(MathHelper.PiOver4, 16.0f/9, 1, 1000);
 
+        //Shallow relates to the distance between the near and far clipping planes i.e. 1 to 500
         public static ProjectionParameters StandardShallowFourThree
             = new ProjectionParameters(MathHelper.PiOver2, 4.0f / 3, 1, 500);
         public static ProjectionParameters StandardShallowSixteenTen

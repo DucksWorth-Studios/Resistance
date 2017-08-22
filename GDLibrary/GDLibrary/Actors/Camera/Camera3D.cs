@@ -91,8 +91,8 @@ namespace GDLibrary
             : base(id, actorType, transform, statusType)
         {
             this.projectionParameters = projectionParameters;
-            this.viewPort = viewPort;
-            this.drawDepth = drawDepth;
+            this.Viewport = viewPort;
+            this.DrawDepth = drawDepth;
         }
 
         //creates a default camera3D - we can use this for a fixed camera archetype i.e. one we will clone - see MainApp::InitialiseCameras()

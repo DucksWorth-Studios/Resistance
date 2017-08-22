@@ -64,7 +64,11 @@
     <Compile Include="Actors\Camera\Camera3D.cs" />
     <Compile Include="Actors\Drawn\3D\DrawnActor3D.cs" />
     <Compile Include="Actors\Drawn\3D\ModelObject.cs" />
+    <Compile Include="Controllers\Camera3D\FirstPersonController.cs" />
+    <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\UserInputController.cs" />
     <Compile Include="Enums\ActorType.cs" />
+    <Compile Include="Enums\ControllerType.cs" />
     <Compile Include="Enums\StatusType.cs" />
     <Compile Include="Interfaces\IActor.cs" />
     <Compile Include="Interfaces\IController.cs" />

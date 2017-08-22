@@ -36,10 +36,11 @@ namespace GDLibrary
         }
         #endregion
 
-        public MouseManager(Game game, bool isVisible)
+        public MouseManager(Game game, bool isVisible, Vector2 initialPosition)
             : base(game)
         {
             game.IsMouseVisible = isVisible;
+            SetPosition(initialPosition);
         }
 
         /// <summary>
@@ -96,27 +97,28 @@ namespace GDLibrary
             return (newState.RightButton.Equals(ButtonState.Pressed));
         }
 
-        //Calculates the mouse pointer distance (in X and Y) from a user-defined position
-        public Vector2 GetDeltaFromPosition(Vector2 position, Camera3D activeCamera)
-        {
-            Vector2 delta;
-            if (this.Position != position) //e.g. not the centre
-            {
-                if (activeCamera.View.Up.Y == -1)
-                {
-                    delta.X = 0;
-                    delta.Y = 0;
-                }
-                else
-                {
-                    delta.X = this.Position.X - position.X;
-                    delta.Y = this.Position.Y - position.Y;
-                }
-                SetPosition(position);
-                return delta;
-            }
-            return Vector2.Zero;
-        }
+        ////Calculates the mouse pointer distance (in X and Y) from a user-defined position
+        //public Vector2 GetDeltaFromPosition(Vector2 position, Camera3D activeCamera)
+        //{
+        //    Vector2 delta;
+        //    if (this.Position != position) //e.g. not the centre
+        //    {
+                
+        //        if (activeCamera.View.Up.Y == -1)
+        //        {
+        //            delta.X = 0;
+        //            delta.Y = 0;
+        //        }
+        //        else
+        //        {
+        //            delta.X = this.Position.X - position.X;
+        //            delta.Y = this.Position.Y - position.Y;
+        //        }
+        //        SetPosition(position);
+        //        return delta;
+        //    }
+        //    return Vector2.Zero;
+        //}
 
         //Calculates the mouse pointer distance from the screen centre
         public Vector2 GetDeltaFromCentre(Vector2 screenCentre)
