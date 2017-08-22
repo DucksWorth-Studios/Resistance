@@ -55,10 +55,46 @@ namespace GDApp
             #endregion
 
             #region Add ModelObject(s)
+            int worldScale = 50;
+            AddWorldDecoratorObjects(worldScale);
             AddDecoratorModelObjects();
             #endregion
 
             base.Initialize();
+        }
+
+        private void AddWorldDecoratorObjects(int worldScale)
+        {
+            //first we will create a prototype plane and then simply clone it for each of the decorator elements (e.g. ground, sky_top etc). 
+            Transform3D transform = new Transform3D(new Vector3(0, -5, 0), worldScale*Vector3.One);
+            Texture2D texture = Content.Load<Texture2D>("Assets/Textures/Debug/checkerboard");
+            Model planeModel = Content.Load<Model>("Assets/Models/plane1");
+
+            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, Color.White, 1, texture, planeModel);
+            //this.objectManager.Add(planePrototypeModelObject);
+
+            //will be re-used for all planes
+            ModelObject clonePlane = null;
+
+            //add the grass
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Foliage/Ground/grass1");
+            this.objectManager.Add(clonePlane);
+
+            //add the back skybox plane
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Skybox/back");
+            //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
+            clonePlane.Transform3D.Rotation = new Vector3(90, 0, 0);
+            /*
+             * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
+             * Note the interaction between 3DS Max and XNA units which result in the scale factor used below (i.e. 1 x 2.54 x worldScale)/2
+             */
+            clonePlane.Transform3D.Translation = new Vector3(0, 0, (-2.54f * worldScale)/2.0f);
+            this.objectManager.Add(clonePlane);
+
+            //As an exercise the student should add the remaining 4 skybox planes here by repeating the clone, texture assignment, rotation, and translation steps above...
+
         }
 
         private void AddDecoratorModelObjects()
