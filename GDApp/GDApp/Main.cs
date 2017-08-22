@@ -126,6 +126,21 @@ namespace GDApp
             this.objectManager.Add(clonePlane);
             #endregion
 
+            #region Add Trees
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Foliage/Trees/tree2");
+            clonePlane.Transform3D.Rotation = new Vector3(90, 0, 0);
+            /*
+             * ISRoT - Scale operations are applied before rotation in XNA so to make the tree tall (i.e. 10) we actually scale 
+             * along the Z-axis (remember the original plane is flat on the XZ axis) and then flip the plane to stand upright.
+             */
+            clonePlane.Transform3D.Scale = new Vector3(5, 1, 10);
+            //y-displacement is (10(XNA) x 2.54f(3DS Max))/2 - 5(ground level) = 7.7f
+            clonePlane.Transform3D.Translation = new Vector3(0, ((clonePlane.Transform3D.Scale.Z* 2.54f)/2 - 5), -20);
+            this.objectManager.Add(clonePlane);
+            #endregion
+
+
         }
 
         private void AddDecoratorModelObjects()
@@ -139,7 +154,7 @@ namespace GDApp
             //use one of our static defaults to position the object at the origin
             Transform3D transform = Transform3D.Zero;
             //initialise the boxObject
-            ModelObject boxObject = new ModelObject("box1", ActorType.Decorator, transform, this.modelEffect, Color.White, 1, texture, boxModel);
+            ModelObject boxObject = new ModelObject("box1", ActorType.Decorator, transform, this.modelEffect, Color.White, 0.5f, texture, boxModel);
             //add to the objectManager so that it will be drawn and updated
             this.objectManager.Add(boxObject);
 

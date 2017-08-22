@@ -42,6 +42,14 @@ namespace GDLibrary
             samplerState.AddressU = TextureAddressMode.Clamp;
             samplerState.AddressV = TextureAddressMode.Clamp;
             game.GraphicsDevice.SamplerStates[0] = samplerState;
+
+            //enable alpha blending for transparent objects i.e. trees
+            game.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
+            //draw the forward and backward facing surfaces for all objects in the game - expensive - we will need to refine this approach in time
+            RasterizerState rasterizerStateTransparent = new RasterizerState();
+            rasterizerStateTransparent.CullMode = CullMode.None;
+            game.GraphicsDevice.RasterizerState = rasterizerStateTransparent;
         }
 
         public void Add(IActor actor)
