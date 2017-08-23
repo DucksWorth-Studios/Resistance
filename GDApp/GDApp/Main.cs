@@ -182,8 +182,9 @@ namespace GDApp
             //add the camera
             transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
 
-            //set the camera to occupy the entire viewport
-            Viewport viewPort = new Viewport(0, 0, resolutionWidth, resolutionHeight);
+            //set the camera to occupy the the full width but only half the height of the full viewport
+            Viewport viewPort = new Viewport(0, 0, resolutionWidth, (int)(resolutionHeight/2.0f));
+
             //initialise the camera
             Camera3D firstPersonCamera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
             //attach a FirstPersonCameraController

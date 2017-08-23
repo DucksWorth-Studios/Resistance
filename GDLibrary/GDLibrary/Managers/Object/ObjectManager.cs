@@ -84,8 +84,10 @@ namespace GDLibrary
         {
             if (modelObject.Model != null)
             {
-                BasicEffect effect = modelObject.Effect as BasicEffect;
+                //set the viewport dimensions to the size defined by the active camera
+                this.Game.GraphicsDevice.Viewport = cameraManager.ActiveCamera.Viewport;
 
+                BasicEffect effect = modelObject.Effect as BasicEffect;
                 effect.View = cameraManager.ActiveCamera.View;
                 effect.Projection = cameraManager.ActiveCamera.ProjectionParameters.Projection;
 
