@@ -74,6 +74,7 @@
     <Compile Include="Interfaces\IController.cs" />
     <Compile Include="Managers\Camera\CameraManager.cs" />
     <Compile Include="Managers\Object\ObjectManager.cs" />
+    <Compile Include="Managers\Screen\ScreenManager.cs" />
     <Compile Include="Parameters\Camera\ProjectionParameters.cs" />
     <Compile Include="Managers\Input\KeyboardManager.cs" />
     <Compile Include="Managers\Input\MouseManager.cs" />

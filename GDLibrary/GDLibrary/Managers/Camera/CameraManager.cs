@@ -2,23 +2,24 @@
 Function: 		Stores and organises the cameras available within the game (used single and split screen layouts) 
                 WORK IN PROGRESS - at present this class is only a barebones class to be used by the ObjectManager 
 Author: 		NMCG
-Version:		1.0
+Version:		1.1
 Date Updated:	
 Bugs:			None
-Fixes:			None
+Fixes:			Added IEnumberable
 */
 
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace GDLibrary
 {
-    public class CameraManager : GameComponent
+    //See http://www.claudiobernasconi.ch/2013/07/22/when-to-use-ienumerable-icollection-ilist-and-list/
+    public class CameraManager : GameComponent, IEnumerable<Camera3D>
     {
 
         #region Variables
-        private Camera3D activeCamera;
         private List<Camera3D> cameraList;
         private int activeCameraIndex = -1;
         #endregion
@@ -83,6 +84,16 @@ namespace GDLibrary
                 camera.Update(gameTime);
 
             base.Update(gameTime);
+        }
+
+        public IEnumerator<Camera3D> GetEnumerator()
+        {
+            return this.cameraList.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
