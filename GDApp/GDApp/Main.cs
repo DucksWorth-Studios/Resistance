@@ -185,15 +185,21 @@ namespace GDApp
             //set the camera to occupy the the full width but only half the height of the full viewport
             Viewport viewPort = new Viewport(0, 0, resolutionWidth, (int)(resolutionHeight/2.0f));
 
-            //initialise the camera
-            Camera3D firstPersonCamera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            //initialise the 1st top camera
+            Camera3D camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
             //attach a FirstPersonCameraController
-            firstPersonCamera.AttachController(new FirstPersonController("firstPersonCameraController1", ControllerType.FirstPerson,
+            camera.AttachController(new FirstPersonController("firstPersonCameraController1", ControllerType.FirstPerson,
                 AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed,
                 this.mouseManager, this.keyboardManager, this.cameraManager));
+            this.cameraManager.Add(camera);
 
 
-            this.cameraManager.Add(firstPersonCamera);
+            //shift the old viewport down half-way on y-axis and re-use the variable
+            viewPort.Y = (int)(resolutionHeight / 2.0f);
+
+            //initialise the 2nd bottom camera
+            camera = new Camera3D("static camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            this.cameraManager.Add(camera);
         }
 
         private void InitializeManagers(int resolutionWidth, int resolutionHeight, bool isMouseVisible)
