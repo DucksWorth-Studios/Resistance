@@ -11,15 +11,22 @@ namespace GDApp
     /// </summary>
     public class Main : Microsoft.Xna.Framework.Game
     {
+        #region Variables
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        private CameraManager cameraManager;
-        private MouseManager mouseManager;
-        private KeyboardManager keyboardManager;
-        private BasicEffect modelEffect;
-
+        //added property setters in short-hand form for speed
         public ObjectManager objectManager { get; private set; }
+        public CameraManager cameraManager { get; private set; }
+        public MouseManager mouseManager { get; private set; }
+        public KeyboardManager keyboardManager { get; private set; }
+        public ScreenManager screenManager { get; private set; }
+
+        private BasicEffect modelEffect;
+        #endregion
+
+        #region Properties
+        #endregion
 
         public Main()
         {
@@ -35,11 +42,8 @@ namespace GDApp
         /// </summary>
         protected override void Initialize()
         {
-            #region Set the screen resolution
-            //obviously this will affect the viewport for the camera and does use the same aspect ratio as the camera i.e. 4/3
-            int resolutionWidth = 1024, resolutionHeight = 768;
-            InitializeGraphics(resolutionWidth, resolutionHeight);
-            #endregion
+            //set resolution - see ScreenUtility statics
+            Integer2 screenResolution = ScreenUtility.XVGA;
 
             #region Initialize the effect (shader) for models
             InitializeEffects();
@@ -47,11 +51,11 @@ namespace GDApp
 
             #region Add the Managers
             bool isMouseVisible = true;
-            InitializeManagers(resolutionWidth, resolutionHeight, isMouseVisible);
+            InitializeManagers(screenResolution, isMouseVisible);
             #endregion
 
             #region Add Camera(s)
-            InitializeCameras(resolutionWidth, resolutionHeight);
+            InitializeCameras(screenResolution);
             #endregion
 
             #region Add ModelObject(s)
@@ -175,18 +179,17 @@ namespace GDApp
 
         }
 
-        private void InitializeCameras(int resolutionWidth, int resolutionHeight)
+        private void InitializeCameras(Integer2 screenResolution)
         {
             Transform3D transform = null;
-
-            //add the camera
-            transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
-
-            //set the camera to occupy the the full width but only half the height of the full viewport
-            Viewport viewPort = new Viewport(0, 0, resolutionWidth, (int)(resolutionHeight/2.0f));
+            Camera3D camera = null;
 
             //initialise the 1st top camera
-            Camera3D camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
+            //set the camera to occupy the the full width but only half the height of the full viewport
+            Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)),0, 100, 0, 0);
+
+            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 1, StatusType.Drawn | StatusType.Update);
             //attach a FirstPersonCameraController
             camera.AttachController(new FirstPersonController("firstPersonCameraController1", ControllerType.FirstPerson,
                 AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed,
@@ -194,29 +197,37 @@ namespace GDApp
             this.cameraManager.Add(camera);
 
 
-            //shift the old viewport down half-way on y-axis and re-use the variable
-            viewPort.Y = (int)(resolutionHeight / 2.0f);
-
             //initialise the 2nd bottom camera
+            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            transform = new Transform3D(new Vector3(40, 0, 0), -Vector3.UnitX, Vector3.UnitY);
+
+            //define a viewport at the top of the main screen e.g. a security camera view - obviously there is relationship between the dimensions of this window and the use of ScreenUtility::Pad() above
+            //x-axis position is screen width/2 - 160/2 = 1024/2 - 80 = 432
+            viewPort = new Viewport(432, 0, 160, 100);
+
             camera = new Camera3D("static camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
             this.cameraManager.Add(camera);
+
         }
 
-        private void InitializeManagers(int resolutionWidth, int resolutionHeight, bool isMouseVisible)
+        private void InitializeManagers(Integer2 screenResolution, bool isMouseVisible)
         {
             this.cameraManager = new CameraManager(this, 1);
             Components.Add(this.cameraManager);
 
             this.objectManager = new ObjectManager(this, cameraManager, 10);
-            Components.Add(this.objectManager);
+            //Components.Add(this.objectManager);
+
+            //create the manager which supports multiple camera viewports
+            this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiPictureInPicture, this.objectManager, this.cameraManager);
+            Components.Add(this.screenManager);
 
             //add mouse and keyboard managers
-            this.mouseManager = new MouseManager(this, isMouseVisible, /*screen centre*/ new Vector2(resolutionWidth / 2.0f, resolutionHeight / 2.0f));
+            this.mouseManager = new MouseManager(this, isMouseVisible, /*screen centre*/ new Vector2(screenResolution.X / 2.0f, screenResolution.Y / 2.0f));
             Components.Add(this.mouseManager);
 
             this.keyboardManager = new KeyboardManager(this);
             Components.Add(this.keyboardManager);
-
         }
 
         private void InitializeEffects()
@@ -228,13 +239,7 @@ namespace GDApp
             //modelEffect.EnableDefaultLighting();
         }
 
-        private void InitializeGraphics(int resolutionWidth, int resolutionHeight)
-        {
-            graphics.PreferredBackBufferWidth = resolutionWidth;
-            graphics.PreferredBackBufferHeight = resolutionHeight;
-            //if we forget to apply the changes then our resolution wont be set!
-            graphics.ApplyChanges();
-        }
+        
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load

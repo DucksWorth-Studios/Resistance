@@ -1,8 +1,8 @@
 ﻿/*
 Function: 		Represents a simple static camera in our 3D world to which we will later attach controllers. 
 Author: 		NMCG
-Version:		1.0
-Date Updated:	17/8/17
+Version:		1.1
+Date Updated:	24/8/17
 Bugs:			None
 Fixes:			None
 */
@@ -19,8 +19,10 @@ namespace GDLibrary
         #region Fields
         private ProjectionParameters projectionParameters;
         private Viewport viewPort;
+        //centre for each cameras viewport - important when deciding how much to turn the camera when a particular camera view, in a multi-screen layout, is in focus
         private Vector2 viewportCentre;
-        private int drawDepth;
+        //used to sort cameras by depth on screen where 0 = top-most, 1 = bottom-most (i.e. 0 for rear-view mirror and > 0 for main game screen)
+        private float drawDepth; 
         #endregion
 
         #region Properties
@@ -71,7 +73,7 @@ namespace GDLibrary
                 return this.viewportCentre;
             }
         }
-        public int DrawDepth
+        public float DrawDepth
         {
             get
             {
@@ -87,7 +89,7 @@ namespace GDLibrary
 
         public Camera3D(string id, ActorType actorType,
             Transform3D transform, ProjectionParameters projectionParameters,
-            Viewport viewPort, int drawDepth, StatusType statusType)
+            Viewport viewPort, float drawDepth, StatusType statusType)
             : base(id, actorType, transform, statusType)
         {
             this.projectionParameters = projectionParameters;
@@ -131,8 +133,9 @@ namespace GDLibrary
         {
             return this.ID
                 + ", Translation: " + MathUtility.Round(this.Transform3D.Translation, 0)
-                + ", Look: " + MathUtility.Round(this.Transform3D.Look, 0)
-                + ", Up: " + MathUtility.Round(this.Transform3D.Up, 0);
+                    + ", Look: " + MathUtility.Round(this.Transform3D.Look, 0)
+                        + ", Up: " + MathUtility.Round(this.Transform3D.Up, 0)
+                            +", Depth: " + this.drawDepth;
 
         }
     }

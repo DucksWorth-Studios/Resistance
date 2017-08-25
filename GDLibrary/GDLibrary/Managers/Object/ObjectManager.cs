@@ -1,10 +1,11 @@
 ﻿/*
 Function: 		Store, update, and draw all visible objects
 Author: 		NMCG
-Version:		1.0
+Version:		1.1
 Date Updated:	17/8/17
 Bugs:			None
 Fixes:			None
+Mods:           Removed DrawableGameComponent to support ScreenManager
 */
 
 using Microsoft.Xna.Framework;
@@ -14,20 +15,22 @@ using System.Collections.Generic;
 
 namespace GDLibrary
 {
-    public class ObjectManager : DrawableGameComponent
+    public class ObjectManager //: DrawableGameComponent
     {
 
         #region Variables
         private CameraManager cameraManager;
         private List<IActor> drawList;
+        private Game game;
         #endregion
 
         #region Properties   
         #endregion
 
         public ObjectManager(Game game, CameraManager cameraManager, int initialSize)
-            : base(game)
+         //   : base(game)
         {
+            this.game = game;
             this.cameraManager = cameraManager;
             this.drawList = new List<IActor>(initialSize);
 
@@ -71,25 +74,35 @@ namespace GDLibrary
             return this.drawList.RemoveAll(predicate);
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             foreach (IActor actor in this.drawList)
             {
-                DrawObject(gameTime, actor as ModelObject);
+                actor.Update(gameTime);
+            }
+        }
+
+       
+        public void Draw(GameTime gameTime, Camera3D activeCamera)
+        {
+            //modify Draw() method to pass in the currently active camera - used to support multiple camera viewports - see ScreenManager::Draw()
+            //set the viewport dimensions to the size defined by the active camera
+            this.game.GraphicsDevice.Viewport = activeCamera.Viewport;
+
+            foreach (IActor actor in this.drawList)
+            {
+                DrawObject(gameTime, actor as ModelObject, activeCamera);
             }
         }
 
         //draw a model object 
-        private void DrawObject(GameTime gameTime, ModelObject modelObject)
+        private void DrawObject(GameTime gameTime, ModelObject modelObject, Camera3D activeCamera)
         {
             if (modelObject.Model != null)
             {
-                //set the viewport dimensions to the size defined by the active camera
-               //this.Game.GraphicsDevice.Viewport = cameraManager.ActiveCamera.Viewport;
-
                 BasicEffect effect = modelObject.Effect as BasicEffect;
-                effect.View = cameraManager.ActiveCamera.View;
-                effect.Projection = cameraManager.ActiveCamera.ProjectionParameters.Projection;
+                effect.View = activeCamera.View;
+                effect.Projection = activeCamera.ProjectionParameters.Projection;
 
                 effect.Texture = modelObject.Texture;
                 effect.DiffuseColor = modelObject.Color.ToVector3();

@@ -73,6 +73,12 @@ namespace GDLibrary
             return this.cameraList.RemoveAll(predicate);
         }
 
+        //sorts cameras by Camera3D::drawDepth - used for PIP screen layout - see ScreenManager
+        public void SortByDepth(SortDirectionType sortDirectionType)
+        {
+            this.cameraList.Sort(new CameraDepthComparer(sortDirectionType));
+        }
+
         public override void Update(GameTime gameTime)
         {
             /* 
