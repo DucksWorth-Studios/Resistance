@@ -194,7 +194,7 @@ namespace GDLibrary
         }
 
 
-        public void RotateBy(Vector3 rotateBy)
+        public void RotateBy(Vector3 rotateBy) //in degrees
         {
             this.rotation = this.OriginalTransform3D.Rotation + rotateBy;
 
@@ -208,12 +208,10 @@ namespace GDLibrary
             this.isDirty = true;
         }
 
-        public void RotateAroundYBy(float magnitude)
+        public void RotateAroundYBy(float magnitude) //in degrees
         {
             this.rotation.Y += magnitude;
-            this.look = Vector3.Normalize(Vector3.Transform(this.originalTransform3D.Look,
-                Matrix.CreateRotationY(MathHelper.ToRadians(rotation.Y))));
-
+            this.look = Vector3.Normalize(Vector3.Transform(this.originalTransform3D.Look, Matrix.CreateRotationY(MathHelper.ToRadians(rotation.Y))));
             this.isDirty = true;
         }
 

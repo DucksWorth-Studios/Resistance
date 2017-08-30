@@ -115,6 +115,6 @@ namespace GDLibrary
         {
         }
 
-        //add clone...
+        //Add Equals, Clone, ToString, GetHashCode...
     }
 }

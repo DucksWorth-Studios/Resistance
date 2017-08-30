@@ -44,12 +44,21 @@ namespace GDLibrary
                                          Keys.Space, Keys.C, Keys.LeftShift, Keys.RightShift};
         public static Keys[] CameraMoveKeys_Alt1 = { Keys.T, Keys.G, Keys.F, Keys.H };
 
-        public static float CameraLerpSpeedSlow = 0.05f;
-        public static float CameraLerpSpeedMedium = 0.1f;
-        public static float CameraLerpSpeedFast = 0.2f;
+        public static readonly float CameraLerpSpeedSlow = 0.05f;
+        public static readonly float CameraLerpSpeedMedium = 0.1f;
+        public static readonly float CameraLerpSpeedFast = 0.2f;
 
-        public static float CameraThirdPersonScrollSpeedDistanceMultiplier = 0.01f;
-        public static float CameraThirdPersonScrollSpeedElevatationMultiplier = 0.1f;
+        public static readonly float CameraThirdPersonScrollSpeedDistanceMultiplier = 0.01f;
+        public static readonly float CameraThirdPersonScrollSpeedElevatationMultiplier = 0.1f;
+
+        public static readonly float SecurityCameraRotationSpeedSlow = 0.5f;
+        public static readonly float SecurityCameraRotationSpeedMedium = 2 * SecurityCameraRotationSpeedSlow;
+        public static readonly float SecurityCameraRotationSpeedFast = 2 * SecurityCameraRotationSpeedMedium;
+
+        //yaw means to rotate around the Y-axis - this will confuse you at first since we're using UnitX but you need to look at Transform3D::RotateBy()
+        public static readonly Vector3 SecurityCameraRotationAxisYaw = Vector3.UnitX;
+        public static readonly Vector3 SecurityCameraRotationAxisPitch = Vector3.UnitY;
+        public static readonly Vector3 SecurityCameraRotationAxisRoll = Vector3.UnitZ;
         #endregion
 
         #region Player

@@ -184,7 +184,7 @@ namespace GDApp
             Transform3D transform = null;
             Camera3D camera = null;
 
-            //initialise the 1st top camera
+            #region Initialise the 1st camera
             transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
             //set the camera to occupy the the full width but only half the height of the full viewport
             Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)),0, 100, 0, 0);
@@ -194,18 +194,50 @@ namespace GDApp
             camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
                 AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
             this.cameraManager.Add(camera);
+            #endregion
 
-
-            //initialise the 2nd bottom camera
+            #region Initialise the 1st security camera
             //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
-            transform = new Transform3D(new Vector3(40, 0, 0), -Vector3.UnitX, Vector3.UnitY);
+            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
             //define a viewport at the top of the main screen e.g. a security camera view - obviously there is relationship between the dimensions of this window and the use of ScreenUtility::Pad() above
             //x-axis position is screen width/2 - 160/2 = 1024/2 - 80 = 432
-            viewPort = new Viewport(432, 0, 160, 100);
+            viewPort = new Viewport(0, 0, 160, 100);
 
-            camera = new Camera3D("static camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            //create the camera and attachte security controller
+            camera = new Camera3D("security camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            camera.AttachController(new SecurityCameraController("securityCameraController1", ControllerType.Security, 
+                60, AppData.SecurityCameraRotationSpeedSlow, AppData.SecurityCameraRotationAxisYaw));
             this.cameraManager.Add(camera);
+            #endregion
+
+            #region Initialise the 2nd security camera
+            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+
+            //x-axis position is right of the previous camera
+            viewPort = new Viewport(160, 0, 160, 100);
+
+            //create the camera and attachte security controller
+            camera = new Camera3D("security camera 2", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            camera.AttachController(new SecurityCameraController("securityCameraController2", ControllerType.Security,
+                45, AppData.SecurityCameraRotationSpeedMedium, new Vector3(1, 1, 0))); //note the rotation axis - this will yaw and pitch
+            this.cameraManager.Add(camera);
+            #endregion
+
+            #region Initialise the 3rd security camera
+            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+
+            //x-axis position is right of the previous camera
+            viewPort = new Viewport(320, 0, 160, 100);
+
+            //create the camera and attachte security controller
+            camera = new Camera3D("security camera 3", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            camera.AttachController(new SecurityCameraController("securityCameraController3", ControllerType.Security,
+                30, AppData.SecurityCameraRotationSpeedFast, new Vector3(4, 1, 0))); //note the rotation axis - this will yaw and pitch but yaw 4 times for every pitch
+            this.cameraManager.Add(camera);
+            #endregion
 
         }
 
@@ -268,6 +300,7 @@ namespace GDApp
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+           
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();

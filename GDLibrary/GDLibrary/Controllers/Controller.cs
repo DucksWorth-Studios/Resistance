@@ -57,5 +57,7 @@ namespace GDLibrary
         {
             return this.ID;
         }
+
+        //Add Equals, Clone, ToString, GetHashCode...
     }
 }

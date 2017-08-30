@@ -67,6 +67,7 @@
     <Compile Include="Comparer\CameraDepthComparer.cs" />
     <Compile Include="Controllers\Camera3D\FirstPersonCameraController.cs" />
     <Compile Include="Controllers\Camera3D\FlightCameraController.cs" />
+    <Compile Include="Controllers\Camera3D\SecurityCameraController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\UserInputController.cs" />
     <Compile Include="Enums\ActorType.cs" />
