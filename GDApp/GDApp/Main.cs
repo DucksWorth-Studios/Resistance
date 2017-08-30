@@ -62,9 +62,32 @@ namespace GDApp
             int worldScale = 100;
             AddWorldDecoratorObjects(worldScale);
             AddDecoratorModelObjects();
+            AddControllableModelObjects();
             #endregion
 
             base.Initialize();
+        }
+
+        private void AddControllableModelObjects()
+        {
+            //load the texture
+            Texture2D texture = Content.Load<Texture2D>("Assets/Textures/Props/Crates/crate1");
+
+            //load the model file i.e. the vertices of the model from the 3DS Max file
+            Model boxModel = Content.Load<Model>("Assets/Models/box2");
+
+            //place the drivable model to the left of the existing models and specify that forward movement is along the -ve z-axis
+            Transform3D transform = new Transform3D(new Vector3(-10, 0, 0), -Vector3.UnitZ, Vector3.UnitY);
+            //initialise the boxObject
+            ModelObject drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, Color.LightYellow, 1, texture, boxModel);
+            
+            //attach a DriveController
+            drivableBoxObject.AttachController(new DriveController("driveController1", ControllerType.FirstPerson,
+                AppData.PlayerMoveKeys, AppData.PlayerMoveSpeed, AppData.PlayerStrafeSpeed, AppData.PlayerRotationSpeed, this.mouseManager, this.keyboardManager));
+
+
+            //add to the objectManager so that it will be drawn and updated
+            this.objectManager.Add(drivableBoxObject);
         }
 
         private void AddWorldDecoratorObjects(int worldScale)
@@ -232,10 +255,31 @@ namespace GDApp
             //x-axis position is right of the previous camera
             viewPort = new Viewport(320, 0, 160, 100);
 
-            //create the camera and attachte security controller
+            //create the camera and attach the security controller
             camera = new Camera3D("security camera 3", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
             camera.AttachController(new SecurityCameraController("securityCameraController3", ControllerType.Security,
                 30, AppData.SecurityCameraRotationSpeedFast, new Vector3(4, 1, 0))); //note the rotation axis - this will yaw and pitch but yaw 4 times for every pitch
+            this.cameraManager.Add(camera);
+            #endregion
+
+            #region Initialise the track camera
+            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+
+            //x-axis position is right of the previous camera
+            viewPort = new Viewport(480, 0, 160, 100);
+
+            //create the camera curve to be applied to the track controller
+            Transform3DCurve transform3DCurve = new Transform3DCurve(CurveLoopType.Oscillate);
+            transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 0); //start position
+            //add more points and make the camera point in other directions here...
+            transform3DCurve.Add(new Vector3(0, 20, 0), -Vector3.UnitY, -Vector3.UnitZ, 8); //curve mid-point
+            //add more points and make the camera point in other directions here...
+            transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 12); //end position - same as start for zero-discontinuity on cycle
+
+            //create the camera and attach the track controller controller
+            camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, StatusType.Play));
             this.cameraManager.Add(camera);
             #endregion
 
@@ -250,7 +294,7 @@ namespace GDApp
             //Components.Add(this.objectManager);
 
             //create the manager which supports multiple camera viewports
-            this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiPictureInPicture, this.objectManager, this.cameraManager);
+            this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen, this.objectManager, this.cameraManager);
             Components.Add(this.screenManager);
 
             //add mouse and keyboard managers

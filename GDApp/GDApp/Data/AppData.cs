@@ -62,15 +62,14 @@ namespace GDLibrary
         #endregion
 
         #region Player
-        public static Keys[] PlayerMoveKeys = { Keys.U, Keys.J, Keys.H, Keys.K,
-                                              Keys.Space, Keys.I, Keys.N, Keys.M};
-        public static float PlayerMoveSpeed = 0.3f;
-        public static float PlayerStrafeSpeed = 0.07f;
-        public static float PlayerRotationSpeed = 0.08f;
+        public static readonly Keys[] PlayerMoveKeys = { Keys.U, Keys.J, Keys.H, Keys.K, Keys.Space, Keys.I, Keys.N, Keys.M};
+        public static readonly float PlayerMoveSpeed = 0.02f;
+        public static readonly float PlayerStrafeSpeed = 0.7f * PlayerMoveSpeed;
+        public static readonly float PlayerRotationSpeed = 0.08f;
         #endregion
 
         #region Menu
-        public static Keys KeyPauseShowMenu = Keys.Escape;
+        public static readonly Keys KeyPauseShowMenu = Keys.Escape;
         #endregion
     }
 }
