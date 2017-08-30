@@ -191,7 +191,7 @@ namespace GDApp
 
             camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 1, StatusType.Drawn | StatusType.Update);
             //attach a FirstPersonCameraController
-            camera.AttachController(new FlightCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
+            camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
                 AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
             this.cameraManager.Add(camera);
 
