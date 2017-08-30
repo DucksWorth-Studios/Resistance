@@ -1,10 +1,19 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*
+Function: 		Flight controllers allows movement in any XYZ direction 
+Author: 		NMCG
+Version:		1.0
+Date Updated:	30/8/17
+Bugs:			None
+Fixes:			None
+*/
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace GDLibrary
 {
-    //allows movement in any XZ direction (i.e. y is set to zero to prevent flight)
-    public class FirstPersonController : UserInputController
+    
+    public class FlightCameraController : UserInputController
     {
         private CameraManager cameraManager;
         #region Variables
@@ -13,7 +22,7 @@ namespace GDLibrary
         #region Properties
         #endregion
 
-        public FirstPersonController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed, 
+        public FlightCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed, 
             MouseManager mouseManager, KeyboardManager keyboardManager, CameraManager cameraManager)
             : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, mouseManager, keyboardManager)
         {
