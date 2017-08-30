@@ -67,8 +67,10 @@
     <Compile Include="Comparer\CameraDepthComparer.cs" />
     <Compile Include="Controllers\Base\CurveController.cs" />
     <Compile Include="Controllers\Base\DriveController.cs" />
+    <Compile Include="Controllers\Base\TargetController.cs" />
     <Compile Include="Controllers\Camera3D\FirstPersonCameraController.cs" />
     <Compile Include="Controllers\Camera3D\FlightCameraController.cs" />
+    <Compile Include="Controllers\Camera3D\RailController.cs" />
     <Compile Include="Controllers\Camera3D\SecurityCameraController.cs" />
     <Compile Include="Controllers\Base\Controller.cs" />
     <Compile Include="Controllers\Base\UserInputController.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Parameters\Camera\ProjectionParameters.cs" />
     <Compile Include="Managers\Input\KeyboardManager.cs" />
     <Compile Include="Managers\Input\MouseManager.cs" />
+    <Compile Include="Parameters\Camera\RailParameters.cs" />
     <Compile Include="Parameters\Transforms\Transform3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Integer2.cs" />

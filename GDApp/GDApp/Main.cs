@@ -23,6 +23,7 @@ namespace GDApp
         public ScreenManager screenManager { get; private set; }
 
         private BasicEffect modelEffect;
+        private ModelObject drivableBoxObject;
         #endregion
 
         #region Properties
@@ -43,7 +44,7 @@ namespace GDApp
         protected override void Initialize()
         {
             //set resolution - see ScreenUtility statics
-            Integer2 screenResolution = ScreenUtility.XVGA;
+            Integer2 screenResolution = ScreenUtility.HD720;
 
             #region Initialize the effect (shader) for models
             InitializeEffects();
@@ -54,10 +55,6 @@ namespace GDApp
             InitializeManagers(screenResolution, isMouseVisible);
             #endregion
 
-            #region Add Camera(s)
-            InitializeCameras(screenResolution);
-            #endregion
-
             #region Add ModelObject(s)
             int worldScale = 100;
             AddWorldDecoratorObjects(worldScale);
@@ -65,11 +62,17 @@ namespace GDApp
             AddControllableModelObjects();
             #endregion
 
+            //we need to move this method because of a dependency with the drivable model object instanciated in AddControllableModelObjects() and the RailController
+            #region Add Camera(s)
+            InitializeCameras(screenResolution);
+            #endregion
+
             base.Initialize();
         }
 
         private void AddControllableModelObjects()
         {
+            #region Add 1st drivable crate
             //load the texture
             Texture2D texture = Content.Load<Texture2D>("Assets/Textures/Props/Crates/crate1");
 
@@ -78,8 +81,9 @@ namespace GDApp
 
             //place the drivable model to the left of the existing models and specify that forward movement is along the -ve z-axis
             Transform3D transform = new Transform3D(new Vector3(-10, 0, 0), -Vector3.UnitZ, Vector3.UnitY);
-            //initialise the boxObject
-            ModelObject drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, Color.LightYellow, 1, texture, boxModel);
+            
+            //initialise the drivable model object - we've made this variable a field to allow it to be visible to the rail camera controller - see InitializeCameras()
+            this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, Color.LightYellow, 1, texture, boxModel);
             
             //attach a DriveController
             drivableBoxObject.AttachController(new DriveController("driveController1", ControllerType.FirstPerson,
@@ -88,6 +92,7 @@ namespace GDApp
 
             //add to the objectManager so that it will be drawn and updated
             this.objectManager.Add(drivableBoxObject);
+            #endregion
         }
 
         private void AddWorldDecoratorObjects(int worldScale)
@@ -207,12 +212,15 @@ namespace GDApp
             Transform3D transform = null;
             Camera3D camera = null;
 
-            #region Initialise the 1st camera
+            int smallViewPortHeight = 144; //6 small cameras along the left hand side of the main camera view i.e. total height / 5 = 720 / 5 = 144
+            int smallViewPortWidth = 5 * smallViewPortHeight/3; //we should try to maintain same ProjectionParameters aspect ratio for small cameras as the large
+
+            #region Initialise the first person camera
             transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
             //set the camera to occupy the the full width but only half the height of the full viewport
-            Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)),0, 100, 0, 0);
+            Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), smallViewPortWidth, 0, 0, 0);
 
-            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 1, StatusType.Drawn | StatusType.Update);
+            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Drawn | StatusType.Update);
             //attach a FirstPersonCameraController
             camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
                 AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
@@ -225,7 +233,7 @@ namespace GDApp
 
             //define a viewport at the top of the main screen e.g. a security camera view - obviously there is relationship between the dimensions of this window and the use of ScreenUtility::Pad() above
             //x-axis position is screen width/2 - 160/2 = 1024/2 - 80 = 432
-            viewPort = new Viewport(0, 0, 160, 100);
+            viewPort = new Viewport(0, 0, smallViewPortWidth, smallViewPortHeight);
 
             //create the camera and attachte security controller
             camera = new Camera3D("security camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
@@ -239,7 +247,7 @@ namespace GDApp
             transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
             //x-axis position is right of the previous camera
-            viewPort = new Viewport(160, 0, 160, 100);
+            viewPort = new Viewport(0, smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
             //create the camera and attachte security controller
             camera = new Camera3D("security camera 2", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
@@ -253,7 +261,7 @@ namespace GDApp
             transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
             //x-axis position is right of the previous camera
-            viewPort = new Viewport(320, 0, 160, 100);
+            viewPort = new Viewport(0, 2 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
             //create the camera and attach the security controller
             camera = new Camera3D("security camera 3", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
@@ -267,7 +275,7 @@ namespace GDApp
             transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
             //x-axis position is right of the previous camera
-            viewPort = new Viewport(480, 0, 160, 100);
+            viewPort = new Viewport(0, 3 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
             //create the camera curve to be applied to the track controller
             Transform3DCurve transform3DCurve = new Transform3DCurve(CurveLoopType.Oscillate);
@@ -280,6 +288,22 @@ namespace GDApp
             //create the camera and attach the track controller controller
             camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
             camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, StatusType.Play));
+            this.cameraManager.Add(camera);
+            #endregion
+
+            #region Initialise the rail camera
+            //remember that the camera will automatically situate itself along the rail, so its initial transform settings are irrelevant
+            transform = Transform3D.Zero;
+
+            //x-axis position is right of the previous camera
+            viewPort = new Viewport(0, 4 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
+
+            //create the camera curve to be applied to the track controller
+            RailParameters railParameters = new RailParameters("rail1 - parallel to x-axis", new Vector3(-20, 10, 20), new Vector3(20, 10, 20));
+
+            //create the camera and attach the track controller controller
+            camera = new Camera3D("rail camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            camera.AttachController(new RailController("railCameraController1", ControllerType.Rail, this.drivableBoxObject, railParameters, 0.5f));
             this.cameraManager.Add(camera);
             #endregion
 
