@@ -15,7 +15,7 @@ namespace GDLibrary
     {
         #region Mouse
         //defines how much the mouse has to move in pixels before a movement is registered - see MouseManager::HasMoved()
-        public static float MouseSensitivity = 1;
+        public static readonly float MouseSensitivity = 1;
         #endregion
 
         #region Common
@@ -30,19 +30,19 @@ namespace GDLibrary
         #endregion
         
         #region Camera
-        public static float CameraRotationSpeed = 0.005f;
-        public static float CameraMoveSpeed = 0.05f;
-        public static float CameraStrafeSpeed = 0.025f;
+        public static readonly float CameraRotationSpeed = 0.005f;
+        public static readonly float CameraMoveSpeed = 0.05f;
+        public static readonly float CameraStrafeSpeed = 0.025f;
 
-        public static float CameraJumpHeight = 30;
-        public static float CollidableCameraRotationSpeed = 0.05f;
-        public static float CollidableCameraMoveSpeed = 0.5f;
-        public static float CollidableCameraStrafeSpeed = 0.4f;
+        public static readonly float CameraJumpHeight = 30;
+        public static readonly float CollidableCameraRotationSpeed = 0.05f;
+        public static readonly float CollidableCameraMoveSpeed = 0.5f;
+        public static readonly float CollidableCameraStrafeSpeed = 0.4f;
 
 
-        public static Keys[] CameraMoveKeys = { Keys.W, Keys.S, Keys.A, Keys.D, 
+        public static readonly Keys[] CameraMoveKeys = { Keys.W, Keys.S, Keys.A, Keys.D, 
                                          Keys.Space, Keys.C, Keys.LeftShift, Keys.RightShift};
-        public static Keys[] CameraMoveKeys_Alt1 = { Keys.T, Keys.G, Keys.F, Keys.H };
+        public static readonly Keys[] CameraMoveKeys_Alt1 = { Keys.T, Keys.G, Keys.F, Keys.H };
 
         public static readonly float CameraLerpSpeedSlow = 0.05f;
         public static readonly float CameraLerpSpeedMedium = 0.1f;
