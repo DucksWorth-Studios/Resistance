@@ -59,8 +59,8 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actors\Actor.cs" />
-    <Compile Include="Actors\Actor3D.cs" />
+    <Compile Include="Actors\Base\Actor.cs" />
+    <Compile Include="Actors\Base\Actor3D.cs" />
     <Compile Include="Actors\Camera\Camera3D.cs" />
     <Compile Include="Actors\Drawn\3D\DrawnActor3D.cs" />
     <Compile Include="Actors\Drawn\3D\ModelObject.cs" />
@@ -81,6 +81,7 @@
     <Compile Include="Curve\Transform3DCurve.cs" />
     <Compile Include="Enums\ActorType.cs" />
     <Compile Include="Enums\ControllerType.cs" />
+    <Compile Include="Enums\PlayStatusType.cs" />
     <Compile Include="Enums\SortDirectionType.cs" />
     <Compile Include="Enums\StatusType.cs" />
     <Compile Include="Interfaces\IActor.cs" />

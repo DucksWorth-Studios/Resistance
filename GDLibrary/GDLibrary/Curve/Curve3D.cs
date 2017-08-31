@@ -44,5 +44,7 @@ namespace GDLibrary
                 this.yCurve.Evaluate(timeInSecs, decimalPrecision),
                  this.zCurve.Evaluate(timeInSecs, decimalPrecision));
         }
+
+        //Add Equals, Clone, ToString, GetHashCode...
     }
 }

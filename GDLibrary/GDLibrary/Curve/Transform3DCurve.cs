@@ -110,8 +110,6 @@ namespace GDLibrary
             this.upCurve.Clear();
         }
 
-        //add clone...
-
         //See https://msdn.microsoft.com/en-us/library/t3c3bfhx.aspx for information on using the out keyword
         public void Evalulate(float timeInSecs, int precision,
             out Vector3 translation, out Vector3 look, out Vector3 up)
@@ -120,5 +118,7 @@ namespace GDLibrary
             look = this.lookCurve.Evaluate(timeInSecs, precision);
             up = this.upCurve.Evaluate(timeInSecs, precision);
         }
+
+        //Add Equals, Clone, ToString, GetHashCode...
     }
 }

@@ -111,8 +111,6 @@ namespace GDLibrary
             this.rotationCurve.Clear();
         }
 
-        //add clone...
-
         //See https://msdn.microsoft.com/en-us/library/t3c3bfhx.aspx for information on using the out keyword
         public void Evalulate(float timeInSecs, int precision, out Vector2 translation, out Vector2 scale, out float rotation)
         {
@@ -120,5 +118,7 @@ namespace GDLibrary
             scale = this.scaleCurve.Evaluate(timeInSecs, precision);
             rotation = this.rotationCurve.Evaluate(timeInSecs, precision);
         }
+
+        //Add Equals, Clone, ToString, GetHashCode...
     }
 }

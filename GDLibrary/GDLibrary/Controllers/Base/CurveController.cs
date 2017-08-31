@@ -15,7 +15,7 @@ namespace GDLibrary
     {
         #region Variables
         private Transform3DCurve transform3DCurve;
-        private StatusType playState;
+        private PlayStatusType playStatusType;
         private float elapsedTimeInMs;
         #endregion
 
@@ -31,15 +31,15 @@ namespace GDLibrary
                 this.transform3DCurve = value;
             }
         }
-        public StatusType PlayStateType
+        public PlayStatusType PlayStatusType
         {
             get
             {
-                return this.playState;
+                return this.playStatusType;
             }
             set
             {
-                this.playState = value;
+                this.playStatusType = value;
             }
         }
         #endregion
@@ -47,11 +47,11 @@ namespace GDLibrary
 
         public CurveController(string id, 
             ControllerType controllerType,
-            Transform3DCurve transform3DCurve, StatusType playState)
+            Transform3DCurve transform3DCurve, PlayStatusType playStatusType)
             : base(id, controllerType)
         {
             this.transform3DCurve = transform3DCurve;
-            this.playState = playState;
+            this.playStatusType = playStatusType;
             this.elapsedTimeInMs = 0;
         }
 
@@ -59,9 +59,9 @@ namespace GDLibrary
         {
             Actor3D parentActor = actor as Actor3D;
 
-            if (this.playState == StatusType.Play)
+            if (this.playStatusType == PlayStatusType.Play)
                 UpdateTrack(gameTime, parentActor);
-            else if ((this.playState == StatusType.Reset) || (this.playState == StatusType.Stop))
+            else if ((this.playStatusType == PlayStatusType.Reset) || (this.playStatusType == PlayStatusType.Stop))
                 this.elapsedTimeInMs = 0;
         }
 

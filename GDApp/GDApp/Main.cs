@@ -286,8 +286,8 @@ namespace GDApp
             transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 12); //end position - same as start for zero-discontinuity on cycle
 
             //create the camera and attach the track controller controller
-            camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Stop);
-            camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, StatusType.Update));
+            camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
+            camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, PlayStatusType.Play));
             this.cameraManager.Add(camera);
             #endregion
 

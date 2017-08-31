@@ -39,5 +39,7 @@ namespace GDLibrary
         {
             return new Vector2(this.xCurve.Evaluate(timeInSecs, decimalPrecision), this.yCurve.Evaluate(timeInSecs, decimalPrecision));
         }
+
+        //Add Equals, Clone, ToString, GetHashCode...
     }
 }
