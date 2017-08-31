@@ -220,7 +220,7 @@ namespace GDApp
             //set the camera to occupy the the full width but only half the height of the full viewport
             Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), smallViewPortWidth, 0, 0, 0);
 
-            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Drawn | StatusType.Update);
+            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Update);
             //attach a FirstPersonCameraController
             camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
                 AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
@@ -236,7 +236,7 @@ namespace GDApp
             viewPort = new Viewport(0, 0, smallViewPortWidth, smallViewPortHeight);
 
             //create the camera and attachte security controller
-            camera = new Camera3D("security camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            camera = new Camera3D("security camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
             camera.AttachController(new SecurityCameraController("securityCameraController1", ControllerType.Security, 
                 60, AppData.SecurityCameraRotationSpeedSlow, AppData.SecurityCameraRotationAxisYaw));
             this.cameraManager.Add(camera);
@@ -250,7 +250,7 @@ namespace GDApp
             viewPort = new Viewport(0, smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
             //create the camera and attachte security controller
-            camera = new Camera3D("security camera 2", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            camera = new Camera3D("security camera 2", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
             camera.AttachController(new SecurityCameraController("securityCameraController2", ControllerType.Security,
                 45, AppData.SecurityCameraRotationSpeedMedium, new Vector3(1, 1, 0))); //note the rotation axis - this will yaw and pitch
             this.cameraManager.Add(camera);
@@ -264,7 +264,7 @@ namespace GDApp
             viewPort = new Viewport(0, 2 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
             //create the camera and attach the security controller
-            camera = new Camera3D("security camera 3", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            camera = new Camera3D("security camera 3", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
             camera.AttachController(new SecurityCameraController("securityCameraController3", ControllerType.Security,
                 30, AppData.SecurityCameraRotationSpeedFast, new Vector3(4, 1, 0))); //note the rotation axis - this will yaw and pitch but yaw 4 times for every pitch
             this.cameraManager.Add(camera);
@@ -286,8 +286,8 @@ namespace GDApp
             transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 12); //end position - same as start for zero-discontinuity on cycle
 
             //create the camera and attach the track controller controller
-            camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
-            camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, StatusType.Play));
+            camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Stop);
+            camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, StatusType.Update));
             this.cameraManager.Add(camera);
             #endregion
 
@@ -299,10 +299,10 @@ namespace GDApp
             viewPort = new Viewport(0, 4 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
             //create the camera curve to be applied to the track controller
-            RailParameters railParameters = new RailParameters("rail1 - parallel to x-axis", new Vector3(-20, 10, 20), new Vector3(20, 10, 20));
+            RailParameters railParameters = new RailParameters("rail1 - parallel to x-axis", new Vector3(-20, 10, 40), new Vector3(20, 10, 40));
 
             //create the camera and attach the track controller controller
-            camera = new Camera3D("rail camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Drawn | StatusType.Update);
+            camera = new Camera3D("rail camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
             camera.AttachController(new RailController("railCameraController1", ControllerType.Rail, this.drivableBoxObject, railParameters, 0.5f));
             this.cameraManager.Add(camera);
             #endregion

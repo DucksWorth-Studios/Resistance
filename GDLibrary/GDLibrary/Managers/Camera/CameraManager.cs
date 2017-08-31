@@ -87,7 +87,10 @@ namespace GDLibrary
              * Assuming each camera in the list had some form of automatic movement (e.g. like a security camera) then what would happen if we only updated the active camera?
              */
             foreach (Camera3D camera in this.cameraList)
-                camera.Update(gameTime);
+            {
+                if((camera.StatusType & StatusType.Update) != 0) //if update flag is set
+                    camera.Update(gameTime);
+            }
 
             base.Update(gameTime);
         }

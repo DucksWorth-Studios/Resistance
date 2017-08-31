@@ -78,7 +78,8 @@ namespace GDLibrary
         {
             foreach (IActor actor in this.drawList)
             {
-                actor.Update(gameTime);
+                if ((actor.GetStatusType() & StatusType.Update) != 0) //if update flag is set
+                    actor.Update(gameTime);
             }
         }
 
@@ -91,7 +92,8 @@ namespace GDLibrary
 
             foreach (IActor actor in this.drawList)
             {
-                DrawObject(gameTime, actor as ModelObject, activeCamera);
+                if ((actor.GetStatusType() & StatusType.Drawn) != 0) //if update flag is set
+                    DrawObject(gameTime, actor as ModelObject, activeCamera);
             }
         }
 

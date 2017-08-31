@@ -88,6 +88,11 @@ namespace GDLibrary
         {
             return 1;
         }
+        public virtual StatusType GetStatusType()
+        {
+            return this.statusType;
+        }
+
         public object Clone()
         {
             return this.MemberwiseClone(); //deep because all variables are either C# types, structs, or enums
