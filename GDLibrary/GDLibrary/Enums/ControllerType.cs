@@ -12,22 +12,22 @@ namespace GDLibrary
 {
     public enum ControllerType : sbyte
     {
-        FirstPerson,
-        ThirdPerson,
-        Rail,
-        Track,
-        Security,
+        Drive, //applied to model
+        FirstPerson, //applied to camera
+        ThirdPerson, //applied to camera
+        Rail,  //applied to camera or model
+        Track, //applied to camera or model
+        Security, //applied to camera
 
+        //applied to any actor (camera or model)
         Rotation,
         Translation,
         Scale,
         Color,
-        Texture,
-
         LerpRotation,
         LerpTranslation,
         LerpScale,
         LerpColor,
-        LerpTexture,
+        LerpTexture
     }
 }

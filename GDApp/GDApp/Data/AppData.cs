@@ -59,6 +59,7 @@ namespace GDLibrary
         public static readonly Vector3 SecurityCameraRotationAxisYaw = Vector3.UnitX;
         public static readonly Vector3 SecurityCameraRotationAxisPitch = Vector3.UnitY;
         public static readonly Vector3 SecurityCameraRotationAxisRoll = Vector3.UnitZ;
+
         #endregion
 
         #region Player

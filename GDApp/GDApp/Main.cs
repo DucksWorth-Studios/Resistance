@@ -57,9 +57,9 @@ namespace GDApp
 
             #region Add ModelObject(s)
             int worldScale = 100;
-            AddWorldDecoratorObjects(worldScale);
-            AddDecoratorModelObjects();
+            AddWorldDecoratorObjects(worldScale); 
             AddControllableModelObjects();
+            AddDecoratorModelObjects();
             #endregion
 
             //we need to move this method because of a dependency with the drivable model object instanciated in AddControllableModelObjects() and the RailController
@@ -86,9 +86,8 @@ namespace GDApp
             this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, Color.LightYellow, 1, texture, boxModel);
             
             //attach a DriveController
-            drivableBoxObject.AttachController(new DriveController("driveController1", ControllerType.FirstPerson,
+            drivableBoxObject.AttachController(new DriveController("driveController1", ControllerType.Drive,
                 AppData.PlayerMoveKeys, AppData.PlayerMoveSpeed, AppData.PlayerStrafeSpeed, AppData.PlayerRotationSpeed, this.mouseManager, this.keyboardManager));
-
 
             //add to the objectManager so that it will be drawn and updated
             this.objectManager.Add(drivableBoxObject);
@@ -188,7 +187,7 @@ namespace GDApp
             //initialise the boxObject
             ModelObject boxObject = new ModelObject("box1", ActorType.Decorator, transform, this.modelEffect, Color.White, 0.5f, texture, boxModel);
             //add to the objectManager so that it will be drawn and updated
-            this.objectManager.Add(boxObject);
+           // this.objectManager.Add(boxObject);
 
             //a clone variable that we can reuse
             ModelObject clone = null;
@@ -215,95 +214,97 @@ namespace GDApp
             int smallViewPortHeight = 144; //6 small cameras along the left hand side of the main camera view i.e. total height / 5 = 720 / 5 = 144
             int smallViewPortWidth = 5 * smallViewPortHeight/3; //we should try to maintain same ProjectionParameters aspect ratio for small cameras as the large
 
-            #region Initialise the first person camera
-            transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
-            //set the camera to occupy the the full width but only half the height of the full viewport
-            Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), smallViewPortWidth, 0, 0, 0);
+            //#region Initialise the first person camera
+            //transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
+            ////set the camera to occupy the the full width but only half the height of the full viewport
+            //Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), smallViewPortWidth, 0, 0, 0);
 
-            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Update);
-            //attach a FirstPersonCameraController
-            camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
-                AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
-            this.cameraManager.Add(camera);
-            #endregion
+            //camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Update);
+            ////attach a FirstPersonCameraController
+            //camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
+            //    AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
+            //this.cameraManager.Add(camera);
+            //#endregion
 
-            #region Initialise the 1st security camera
-            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
-            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+            //#region Initialise the 1st security camera
+            ////it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            //transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
-            //define a viewport at the top of the main screen e.g. a security camera view - obviously there is relationship between the dimensions of this window and the use of ScreenUtility::Pad() above
-            //x-axis position is screen width/2 - 160/2 = 1024/2 - 80 = 432
-            viewPort = new Viewport(0, 0, smallViewPortWidth, smallViewPortHeight);
+            ////define a viewport at the top of the main screen e.g. a security camera view - obviously there is relationship between the dimensions of this window and the use of ScreenUtility::Pad() above
+            ////x-axis position is screen width/2 - 160/2 = 1024/2 - 80 = 432
+            //viewPort = new Viewport(0, 0, smallViewPortWidth, smallViewPortHeight);
 
-            //create the camera and attachte security controller
-            camera = new Camera3D("security camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
-            camera.AttachController(new SecurityCameraController("securityCameraController1", ControllerType.Security, 
-                60, AppData.SecurityCameraRotationSpeedSlow, AppData.SecurityCameraRotationAxisYaw));
-            this.cameraManager.Add(camera);
-            #endregion
+            ////create the camera and attachte security controller
+            //camera = new Camera3D("security camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
+            //camera.AttachController(new SecurityCameraController("securityCameraController1", ControllerType.Security, 
+            //    60, AppData.SecurityCameraRotationSpeedSlow, AppData.SecurityCameraRotationAxisYaw));
+            //this.cameraManager.Add(camera);
+            //#endregion
 
-            #region Initialise the 2nd security camera
-            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
-            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+            //#region Initialise the 2nd security camera
+            ////it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            //transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
-            //x-axis position is right of the previous camera
-            viewPort = new Viewport(0, smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
+            ////x-axis position is right of the previous camera
+            //viewPort = new Viewport(0, smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
-            //create the camera and attachte security controller
-            camera = new Camera3D("security camera 2", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
-            camera.AttachController(new SecurityCameraController("securityCameraController2", ControllerType.Security,
-                45, AppData.SecurityCameraRotationSpeedMedium, new Vector3(1, 1, 0))); //note the rotation axis - this will yaw and pitch
-            this.cameraManager.Add(camera);
-            #endregion
+            ////create the camera and attachte security controller
+            //camera = new Camera3D("security camera 2", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
+            //camera.AttachController(new SecurityCameraController("securityCameraController2", ControllerType.Security,
+            //    45, AppData.SecurityCameraRotationSpeedMedium, new Vector3(1, 1, 0))); //note the rotation axis - this will yaw and pitch
+            //this.cameraManager.Add(camera);
+            //#endregion
 
-            #region Initialise the 3rd security camera
-            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
-            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+            //#region Initialise the 3rd security camera
+            ////it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            //transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
-            //x-axis position is right of the previous camera
-            viewPort = new Viewport(0, 2 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
+            ////x-axis position is right of the previous camera
+            //viewPort = new Viewport(0, 2 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
-            //create the camera and attach the security controller
-            camera = new Camera3D("security camera 3", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
-            camera.AttachController(new SecurityCameraController("securityCameraController3", ControllerType.Security,
-                30, AppData.SecurityCameraRotationSpeedFast, new Vector3(4, 1, 0))); //note the rotation axis - this will yaw and pitch but yaw 4 times for every pitch
-            this.cameraManager.Add(camera);
-            #endregion
+            ////create the camera and attach the security controller
+            //camera = new Camera3D("security camera 3", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
+            //camera.AttachController(new SecurityCameraController("securityCameraController3", ControllerType.Security,
+            //    30, AppData.SecurityCameraRotationSpeedFast, new Vector3(4, 1, 0))); //note the rotation axis - this will yaw and pitch but yaw 4 times for every pitch
+            //this.cameraManager.Add(camera);
+            //#endregion
 
-            #region Initialise the track camera
-            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
-            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+            //#region Initialise the track camera
+            ////it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            //transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
-            //x-axis position is right of the previous camera
-            viewPort = new Viewport(0, 3 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
+            ////x-axis position is right of the previous camera
+            //viewPort = new Viewport(0, 3 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
-            //create the camera curve to be applied to the track controller
-            Transform3DCurve transform3DCurve = new Transform3DCurve(CurveLoopType.Oscillate);
-            transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 0); //start position
-            //add more points and make the camera point in other directions here...
-            transform3DCurve.Add(new Vector3(0, 20, 0), -Vector3.UnitY, -Vector3.UnitZ, 8); //curve mid-point
-            //add more points and make the camera point in other directions here...
-            transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 12); //end position - same as start for zero-discontinuity on cycle
+            ////create the camera curve to be applied to the track controller
+            //Transform3DCurve transform3DCurve = new Transform3DCurve(CurveLoopType.Oscillate);
+            //transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 0); //start position
+            ////add more points and make the camera point in other directions here...
+            //transform3DCurve.Add(new Vector3(0, 20, 0), -Vector3.UnitY, -Vector3.UnitZ, 8); //curve mid-point
+            ////add more points and make the camera point in other directions here...
+            //transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 12); //end position - same as start for zero-discontinuity on cycle
 
-            //create the camera and attach the track controller controller
-            camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
-            camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, PlayStatusType.Play));
-            this.cameraManager.Add(camera);
-            #endregion
+            ////create the camera and attach the track controller controller
+            //camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
+            //camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, PlayStatusType.Play));
+            //this.cameraManager.Add(camera);
+            //#endregion
 
             #region Initialise the rail camera
             //remember that the camera will automatically situate itself along the rail, so its initial transform settings are irrelevant
             transform = Transform3D.Zero;
 
             //x-axis position is right of the previous camera
-            viewPort = new Viewport(0, 4 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
+            // viewPort = new Viewport(0, 4 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
+
+            Viewport viewPort = new Viewport(0, 0, screenResolution.X, screenResolution.Y);
 
             //create the camera curve to be applied to the track controller
             RailParameters railParameters = new RailParameters("rail1 - parallel to x-axis", new Vector3(-20, 10, 40), new Vector3(20, 10, 40));
 
             //create the camera and attach the track controller controller
             camera = new Camera3D("rail camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
-            camera.AttachController(new RailController("railCameraController1", ControllerType.Rail, this.drivableBoxObject, railParameters, 0.5f));
+            camera.AttachController(new RailController("railCameraController1", ControllerType.Rail, this.drivableBoxObject, railParameters));
             this.cameraManager.Add(camera);
             #endregion
 

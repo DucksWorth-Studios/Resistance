@@ -1,4 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*
+Function: 		Rail controller constrains an actor to movement along a rail and causes the actor to focus on a target.
+Author: 		NMCG
+Version:		1.0
+Date Updated:	30/8/17
+Bugs:			None
+Fixes:			None
+*/
+
+using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
@@ -7,8 +16,6 @@ namespace GDLibrary
         #region Fields
         private RailParameters railParameters;
         private bool bFirstUpdate = true;
-        private float lerpSpeed;
-        private Vector3 oldCameraToTarget;
         #endregion
 
         #region Properties
@@ -23,25 +30,13 @@ namespace GDLibrary
                 this.railParameters = value;
             }
         }
-        public bool FirstUpdate
-        {
-            get
-            {
-                return this.bFirstUpdate;
-            }
-            set
-            {
-                this.bFirstUpdate = value;
-            }
-        }
         #endregion
 
         public RailController(string id, ControllerType controllerType, IActor targetActor, 
-                                RailParameters railParameters, float lerpSpeed)
+                                RailParameters railParameters)
             : base(id, controllerType, targetActor)
         {
             this.railParameters = railParameters;
-            this.lerpSpeed = lerpSpeed;
         }
 
         public override void Update(GameTime gameTime, IActor actor)
@@ -64,17 +59,12 @@ namespace GDLibrary
 
             //do not allow the camera to move outside the rail
             if (railParameters.InsideRail(projectedCameraPosition))
+            {
                 parentActor.Transform3D.Translation = projectedCameraPosition;
+            }
 
             //set the camera to look at the object
             parentActor.Transform3D.Look = cameraToTarget;
-
-            //set the camera to look at the target object
-            parentActor.Transform3D.Look = Vector3.Lerp(this.oldCameraToTarget, cameraToTarget, lerpSpeed);
-
-            //store old values for lerp
-            this.oldCameraToTarget = cameraToTarget;
-
         }
 
         //Add Equals, Clone, ToString, GetHashCode...
