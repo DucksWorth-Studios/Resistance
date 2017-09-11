@@ -8,6 +8,7 @@ Fixes:			None
 */
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GDLibrary
 {
@@ -19,6 +20,7 @@ namespace GDLibrary
         private CameraManager cameraManager;
         private bool bFirstTime = true;
         private GraphicsDeviceManager graphics;
+        private Viewport fullScreenViewport;
         #endregion
 
         #region Properties 
@@ -60,6 +62,7 @@ namespace GDLibrary
 
             //set the resolution using the property
             this.ScreenResolution = screenResolution;
+            this.fullScreenViewport = new Viewport(0, 0, screenResolution.X, screenResolution.Y);
         }
 
         public bool ToggleFullScreen()
@@ -101,6 +104,9 @@ namespace GDLibrary
                     this.objectManager.Draw(gameTime, camera);
                 }
             }
+
+            //reset the viewport to fullscreen
+            this.Game.GraphicsDevice.Viewport = this.fullScreenViewport;
             base.Draw(gameTime);
         }
     }

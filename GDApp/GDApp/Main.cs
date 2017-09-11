@@ -25,9 +25,15 @@ namespace GDApp
         private BasicEffect modelEffect;
         private ContentDictionary<Model> modelDictionary;
         private ContentDictionary<Texture2D> textureDictionary;
+        private ContentDictionary<SpriteFont> fontDictionary;
+
 
         //temp var - remove later
         private ModelObject drivableBoxObject;
+
+#if DEBUG
+        private DebugDrawer debugDrawer;
+#endif
         #endregion
 
         #region Properties
@@ -59,8 +65,8 @@ namespace GDApp
             InitializeManagers(screenResolution, isMouseVisible);
             #endregion
 
-            #region Initialise & Load Content Dictionary
-            InitializeAndLoadContentDictionaries();
+            #region Load Content Dictionary
+            LoadContentDictionaries();
             #endregion
 
             #region Add ModelObject(s)
@@ -78,7 +84,7 @@ namespace GDApp
             base.Initialize();
         }
 
-        private void InitializeAndLoadContentDictionaries()
+        private void LoadContentDictionaries()
         {
             //models
             this.modelDictionary = new ContentDictionary<Model>("model dictionary", this.Content);
@@ -88,7 +94,7 @@ namespace GDApp
             //textures
             this.textureDictionary = new ContentDictionary<Texture2D>("texture dictionary", this.Content);
             this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1"); //demo use of the shorter form of Load() that generates key from asset name
-            this.textureDictionary.Load("Assets/Textures/Debug/checkerboard");    
+            this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");    
             this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
             this.textureDictionary.Load("Assets/Textures/Skybox/back");
             this.textureDictionary.Load("Assets/Textures/Skybox/left");
@@ -97,6 +103,9 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Skybox/front");
             this.textureDictionary.Load("Assets /Textures/Foliage/Trees/tree2");
 
+            //fonts
+            this.fontDictionary = new ContentDictionary<SpriteFont>("font dictionary", this.Content);
+            this.fontDictionary.Load("Assets/Debug/Fonts/debug");
         }
 
         private void AddControllableModelObjects()
@@ -204,6 +213,9 @@ namespace GDApp
         {
             //use one of our static defaults to position the object at the origin
             Transform3D transform = Transform3D.Zero;
+
+            //loading model, texture
+
             //initialise the boxObject
             ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, Color.White, 0.5f,
                 this.textureDictionary["crate1"], this.modelDictionary["box2"]);
@@ -223,8 +235,6 @@ namespace GDApp
             this.objectManager.Add(clone);
 
             //add more clones here...
-
-
         }
 
         private void InitializeCameras(Integer2 screenResolution)
@@ -334,8 +344,8 @@ namespace GDApp
             this.cameraManager = new CameraManager(this, 1);
             Components.Add(this.cameraManager);
 
+            //create the object manager - notice that its not a drawablegamecomponent. See ScreeManager::Draw()
             this.objectManager = new ObjectManager(this, cameraManager, 10);
-            //Components.Add(this.objectManager);
 
             //create the manager which supports multiple camera viewports
             this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen, this.objectManager, this.cameraManager);
@@ -369,7 +379,13 @@ namespace GDApp
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+#if DEBUG
+            #region Debug Info
+            this.debugDrawer = new DebugDrawer(this, this.screenManager, this.cameraManager, spriteBatch, this.fontDictionary["debug"], 
+                Color.White, new Vector2(5, 5));
+            Components.Add(this.debugDrawer);
+            #endregion
+#endif
         }
 
         /// <summary>
@@ -378,8 +394,10 @@ namespace GDApp
         /// </summary>
         protected override void UnloadContent()
         {
+            //formally call garbage collection to de-allocate resources from RAM
             this.modelDictionary.Dispose();
             this.textureDictionary.Dispose();
+            this.fontDictionary.Dispose();
         }
 
         /// <summary>

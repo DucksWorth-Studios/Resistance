@@ -82,7 +82,7 @@ namespace GDLibrary
             float boundedRotationAngle = this.rotationAmplitude * (float)Math.Sin(this.rotationSpeedMultiplier * time);
 
             //useful debug statement to see that the angle value is cycling
-            System.Diagnostics.Debug.WriteLine("boundedRotationAngle:" + boundedRotationAngle);
+            //System.Diagnostics.Debug.WriteLine("boundedRotationAngle:" + boundedRotationAngle);
 
             //cast to access the Transform3D
             Actor3D actor3D = actor as Actor3D;

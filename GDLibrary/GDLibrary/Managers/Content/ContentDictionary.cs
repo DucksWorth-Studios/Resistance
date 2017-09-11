@@ -2,7 +2,7 @@
 Function: 		Provide generic map to load and store game content AND allow dispose() to be called on all content
 Author: 		NMCG
 Version:		1.0
-Date Updated:	2/10/16
+Date Updated:	11/9/17
 Bugs:			None
 Fixes:			None
 */
@@ -116,7 +116,7 @@ namespace GDLibrary
                 ((IDisposable)value).Dispose();
             //if it's just a user-defined or C# object, then set to null for garbage collection
             else
-                value = default(V);
+                value = default(V); //null
         }
     }
 }

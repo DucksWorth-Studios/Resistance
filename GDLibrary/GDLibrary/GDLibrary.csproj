@@ -79,6 +79,7 @@
     <Compile Include="Curve\Curve3D.cs" />
     <Compile Include="Curve\Transform2DCurve.cs" />
     <Compile Include="Curve\Transform3DCurve.cs" />
+    <Compile Include="Debug\DebugDrawer.cs" />
     <Compile Include="Enums\ActorType.cs" />
     <Compile Include="Enums\ControllerType.cs" />
     <Compile Include="Enums\PlayStatusType.cs" />

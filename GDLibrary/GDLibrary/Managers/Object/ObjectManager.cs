@@ -83,7 +83,6 @@ namespace GDLibrary
             }
         }
 
-       
         public void Draw(GameTime gameTime, Camera3D activeCamera)
         {
             //modify Draw() method to pass in the currently active camera - used to support multiple camera viewports - see ScreenManager::Draw()

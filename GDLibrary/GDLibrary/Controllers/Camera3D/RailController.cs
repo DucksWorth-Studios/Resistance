@@ -44,27 +44,30 @@ namespace GDLibrary
             Actor3D parentActor = actor as Actor3D;
             DrawnActor3D targetDrawnActor = this.TargetActor as DrawnActor3D;
 
-            if(this.bFirstUpdate)
+            if (targetDrawnActor != null)
             {
-                //set the initial position of the camera
-                parentActor.Transform3D.Translation = railParameters.MidPoint;
-                this.bFirstUpdate = false;
+                if (this.bFirstUpdate)
+                {
+                    //set the initial position of the camera
+                    parentActor.Transform3D.Translation = railParameters.MidPoint;
+                    this.bFirstUpdate = false;
+                }
+
+                //get look vector to target
+                Vector3 cameraToTarget = MathUtility.GetNormalizedObjectToTargetVector(parentActor.Transform3D, targetDrawnActor.Transform3D);
+
+                //new position for camera if it is positioned between start and the end points of the rail
+                Vector3 projectedCameraPosition = parentActor.Transform3D.Translation + Vector3.Dot(cameraToTarget, railParameters.Look) * railParameters.Look * gameTime.ElapsedGameTime.Milliseconds;
+
+                //do not allow the camera to move outside the rail
+                if (railParameters.InsideRail(projectedCameraPosition))
+                {
+                    parentActor.Transform3D.Translation = projectedCameraPosition;
+                }
+
+                //set the camera to look at the object
+                parentActor.Transform3D.Look = cameraToTarget;
             }
-
-            //get look vector to target
-            Vector3 cameraToTarget = MathUtility.GetNormalizedObjectToTargetVector(parentActor.Transform3D, targetDrawnActor.Transform3D);
-
-            //new position for camera if it is positioned between start and the end points of the rail
-            Vector3 projectedCameraPosition = parentActor.Transform3D.Translation + Vector3.Dot(cameraToTarget, railParameters.Look) * railParameters.Look * gameTime.ElapsedGameTime.Milliseconds;
-
-            //do not allow the camera to move outside the rail
-            if (railParameters.InsideRail(projectedCameraPosition))
-            {
-                parentActor.Transform3D.Translation = projectedCameraPosition;
-            }
-
-            //set the camera to look at the object
-            parentActor.Transform3D.Look = cameraToTarget;
         }
 
         //Add Equals, Clone, ToString, GetHashCode...
