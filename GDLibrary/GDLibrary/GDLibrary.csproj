@@ -87,6 +87,7 @@
     <Compile Include="Interfaces\IActor.cs" />
     <Compile Include="Interfaces\IController.cs" />
     <Compile Include="Managers\Camera\CameraManager.cs" />
+    <Compile Include="Managers\Content\ContentDictionary.cs" />
     <Compile Include="Managers\Object\ObjectManager.cs" />
     <Compile Include="Managers\Screen\ScreenManager.cs" />
     <Compile Include="Parameters\Camera\ProjectionParameters.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Utility\Integer3.cs" />
     <Compile Include="Utility\MathUtility.cs" />
     <Compile Include="Utility\ScreenUtility.cs" />
+    <Compile Include="Utility\StringUtility.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

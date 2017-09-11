@@ -23,6 +23,10 @@ namespace GDApp
         public ScreenManager screenManager { get; private set; }
 
         private BasicEffect modelEffect;
+        private ContentDictionary<Model> modelDictionary;
+        private ContentDictionary<Texture2D> textureDictionary;
+
+        //temp var - remove later
         private ModelObject drivableBoxObject;
         #endregion
 
@@ -55,9 +59,13 @@ namespace GDApp
             InitializeManagers(screenResolution, isMouseVisible);
             #endregion
 
+            #region Initialise & Load Content Dictionary
+            InitializeAndLoadContentDictionaries();
+            #endregion
+
             #region Add ModelObject(s)
             int worldScale = 100;
-            AddWorldDecoratorObjects(worldScale); 
+            AddWorldDecoratorObjects(worldScale);
             AddControllableModelObjects();
             AddDecoratorModelObjects();
             #endregion
@@ -70,21 +78,39 @@ namespace GDApp
             base.Initialize();
         }
 
+        private void InitializeAndLoadContentDictionaries()
+        {
+            //models
+            this.modelDictionary = new ContentDictionary<Model>("model dictionary", this.Content);
+            this.modelDictionary.Load("Assets/Models/plane1", "plane1");
+            this.modelDictionary.Load("Assets/Models/box2", "box2");
+
+            //textures
+            this.textureDictionary = new ContentDictionary<Texture2D>("texture dictionary", this.Content);
+            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1"); //demo use of the shorter form of Load() that generates key from asset name
+            this.textureDictionary.Load("Assets/Textures/Debug/checkerboard");    
+            this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
+            this.textureDictionary.Load("Assets/Textures/Skybox/back");
+            this.textureDictionary.Load("Assets/Textures/Skybox/left");
+            this.textureDictionary.Load("Assets/Textures/Skybox/right");
+            this.textureDictionary.Load("Assets/Textures/Skybox/sky");
+            this.textureDictionary.Load("Assets/Textures/Skybox/front");
+            this.textureDictionary.Load("Assets /Textures/Foliage/Trees/tree2");
+
+        }
+
         private void AddControllableModelObjects()
         {
             #region Add 1st drivable crate
-            //load the texture
-            Texture2D texture = Content.Load<Texture2D>("Assets/Textures/Props/Crates/crate1");
-
-            //load the model file i.e. the vertices of the model from the 3DS Max file
-            Model boxModel = Content.Load<Model>("Assets/Models/box2");
 
             //place the drivable model to the left of the existing models and specify that forward movement is along the -ve z-axis
-            Transform3D transform = new Transform3D(new Vector3(-10, 0, 0), -Vector3.UnitZ, Vector3.UnitY);
+            Transform3D transform = new Transform3D(new Vector3(0, 0, 5), -Vector3.UnitZ, Vector3.UnitY);
             
             //initialise the drivable model object - we've made this variable a field to allow it to be visible to the rail camera controller - see InitializeCameras()
-            this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, Color.LightYellow, 1, texture, boxModel);
-            
+            this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, Color.LightYellow, 1,
+                this.textureDictionary["crate1"],
+                this.modelDictionary["box2"]);
+
             //attach a DriveController
             drivableBoxObject.AttachController(new DriveController("driveController1", ControllerType.Drive,
                 AppData.PlayerMoveKeys, AppData.PlayerMoveSpeed, AppData.PlayerStrafeSpeed, AppData.PlayerRotationSpeed, this.mouseManager, this.keyboardManager));
@@ -98,10 +124,10 @@ namespace GDApp
         {
             //first we will create a prototype plane and then simply clone it for each of the decorator elements (e.g. ground, sky_top etc). 
             Transform3D transform = new Transform3D(new Vector3(0, -5, 0), new Vector3(worldScale, 1, worldScale));
-            Texture2D texture = Content.Load<Texture2D>("Assets/Textures/Debug/checkerboard");
-            Model planeModel = Content.Load<Model>("Assets/Models/plane1");
 
-            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, Color.White, 1, texture, planeModel);
+            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, Color.White, 1,
+                this.textureDictionary["grass1"], 
+                this.modelDictionary["plane1"]);
 
             //will be re-used for all planes
             ModelObject clonePlane = null;
@@ -109,12 +135,12 @@ namespace GDApp
             #region Grass & Skybox
             //add the grass
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Foliage/Ground/grass1");
+            clonePlane.Texture = this.textureDictionary["grass1"];
             this.objectManager.Add(clonePlane);
 
             //add the back skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Skybox/back");
+            clonePlane.Texture = this.textureDictionary["back"];
             //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
             clonePlane.Transform3D.Rotation = new Vector3(90, 0, 0);
             /*
@@ -129,21 +155,21 @@ namespace GDApp
             //As an exercise the student should add the remaining 4 skybox planes here by repeating the clone, texture assignment, rotation, and translation steps above...
             //add the left skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Skybox/left");
+            clonePlane.Texture = this.textureDictionary["left"];
             clonePlane.Transform3D.Rotation = new Vector3(90, 90, 0);
             clonePlane.Transform3D.Translation = new Vector3((-2.54f * worldScale) / 2.0f, -5, 0);
             this.objectManager.Add(clonePlane);
 
             //add the right skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Skybox/right");
+            clonePlane.Texture = this.textureDictionary["right"];
             clonePlane.Transform3D.Rotation = new Vector3(90, -90, 0);
             clonePlane.Transform3D.Translation = new Vector3((2.54f * worldScale) / 2.0f, -5, 0);
             this.objectManager.Add(clonePlane);
 
             //add the top skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Skybox/sky");
+            clonePlane.Texture = this.textureDictionary["sky"];
             //notice the combination of rotations to correctly align the sky texture with the sides
             clonePlane.Transform3D.Rotation = new Vector3(180, -90, 0);
             clonePlane.Transform3D.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f) - 5, 0);
@@ -151,7 +177,7 @@ namespace GDApp
 
             //add the front skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Skybox/front");
+            clonePlane.Texture = this.textureDictionary["front"];
             clonePlane.Transform3D.Rotation = new Vector3(-90, 0, 180);
             clonePlane.Transform3D.Translation = new Vector3(0 , -5, (2.54f * worldScale) / 2.0f);
             this.objectManager.Add(clonePlane);
@@ -159,7 +185,7 @@ namespace GDApp
 
             #region Add Trees
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = Content.Load<Texture2D>("Assets/Textures/Foliage/Trees/tree2");
+            clonePlane.Texture = this.textureDictionary["tree2"];
             clonePlane.Transform3D.Rotation = new Vector3(90, 0, 0);
             /*
              * ISRoT - Scale operations are applied before rotation in XNA so to make the tree tall (i.e. 10) we actually scale 
@@ -176,18 +202,13 @@ namespace GDApp
 
         private void AddDecoratorModelObjects()
         {
-            //load the texture
-            Texture2D texture = Content.Load<Texture2D>("Assets/Textures/Props/Crates/crate1");
-
-            //load the model file i.e. the vertices of the model from the 3DS Max file
-            Model boxModel = Content.Load<Model>("Assets/Models/box2");
-
             //use one of our static defaults to position the object at the origin
             Transform3D transform = Transform3D.Zero;
             //initialise the boxObject
-            ModelObject boxObject = new ModelObject("box1", ActorType.Decorator, transform, this.modelEffect, Color.White, 0.5f, texture, boxModel);
+            ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, Color.White, 0.5f,
+                this.textureDictionary["crate1"], this.modelDictionary["box2"]);
             //add to the objectManager so that it will be drawn and updated
-           // this.objectManager.Add(boxObject);
+            //this.objectManager.Add(boxObject);
 
             //a clone variable that we can reuse
             ModelObject clone = null;
@@ -214,90 +235,88 @@ namespace GDApp
             int smallViewPortHeight = 144; //6 small cameras along the left hand side of the main camera view i.e. total height / 5 = 720 / 5 = 144
             int smallViewPortWidth = 5 * smallViewPortHeight/3; //we should try to maintain same ProjectionParameters aspect ratio for small cameras as the large
 
-            //#region Initialise the first person camera
-            //transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
-            ////set the camera to occupy the the full width but only half the height of the full viewport
-            //Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), smallViewPortWidth, 0, 0, 0);
+            #region Initialise the first person camera
+            transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
+            //set the camera to occupy the the full width but only half the height of the full viewport
+            Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), smallViewPortWidth, 0, 0, 0);
 
-            //camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Update);
-            ////attach a FirstPersonCameraController
-            //camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
-            //    AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
-            //this.cameraManager.Add(camera);
-            //#endregion
+            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Update);
+            //attach a FirstPersonCameraController
+            camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
+                AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
+            this.cameraManager.Add(camera);
+            #endregion
 
-            //#region Initialise the 1st security camera
-            ////it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
-            //transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+            #region Initialise the 1st security camera
+            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
-            ////define a viewport at the top of the main screen e.g. a security camera view - obviously there is relationship between the dimensions of this window and the use of ScreenUtility::Pad() above
-            ////x-axis position is screen width/2 - 160/2 = 1024/2 - 80 = 432
-            //viewPort = new Viewport(0, 0, smallViewPortWidth, smallViewPortHeight);
+            //define a viewport at the top of the main screen e.g. a security camera view - obviously there is relationship between the dimensions of this window and the use of ScreenUtility::Pad() above
+            //x-axis position is screen width/2 - 160/2 = 1024/2 - 80 = 432
+            viewPort = new Viewport(0, 0, smallViewPortWidth, smallViewPortHeight);
 
-            ////create the camera and attachte security controller
-            //camera = new Camera3D("security camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
-            //camera.AttachController(new SecurityCameraController("securityCameraController1", ControllerType.Security, 
-            //    60, AppData.SecurityCameraRotationSpeedSlow, AppData.SecurityCameraRotationAxisYaw));
-            //this.cameraManager.Add(camera);
-            //#endregion
+            //create the camera and attachte security controller
+            camera = new Camera3D("security camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
+            camera.AttachController(new SecurityCameraController("securityCameraController1", ControllerType.Security,
+                60, AppData.SecurityCameraRotationSpeedSlow, AppData.SecurityCameraRotationAxisYaw));
+            this.cameraManager.Add(camera);
+            #endregion
 
-            //#region Initialise the 2nd security camera
-            ////it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
-            //transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+            #region Initialise the 2nd security camera
+            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
-            ////x-axis position is right of the previous camera
-            //viewPort = new Viewport(0, smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
+            //x-axis position is right of the previous camera
+            viewPort = new Viewport(0, smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
-            ////create the camera and attachte security controller
-            //camera = new Camera3D("security camera 2", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
-            //camera.AttachController(new SecurityCameraController("securityCameraController2", ControllerType.Security,
-            //    45, AppData.SecurityCameraRotationSpeedMedium, new Vector3(1, 1, 0))); //note the rotation axis - this will yaw and pitch
-            //this.cameraManager.Add(camera);
-            //#endregion
+            //create the camera and attachte security controller
+            camera = new Camera3D("security camera 2", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
+            camera.AttachController(new SecurityCameraController("securityCameraController2", ControllerType.Security,
+                45, AppData.SecurityCameraRotationSpeedMedium, new Vector3(1, 1, 0))); //note the rotation axis - this will yaw and pitch
+            this.cameraManager.Add(camera);
+            #endregion
 
-            //#region Initialise the 3rd security camera
-            ////it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
-            //transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+            #region Initialise the 3rd security camera
+            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
-            ////x-axis position is right of the previous camera
-            //viewPort = new Viewport(0, 2 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
+            //x-axis position is right of the previous camera
+            viewPort = new Viewport(0, 2 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
-            ////create the camera and attach the security controller
-            //camera = new Camera3D("security camera 3", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
-            //camera.AttachController(new SecurityCameraController("securityCameraController3", ControllerType.Security,
-            //    30, AppData.SecurityCameraRotationSpeedFast, new Vector3(4, 1, 0))); //note the rotation axis - this will yaw and pitch but yaw 4 times for every pitch
-            //this.cameraManager.Add(camera);
-            //#endregion
+            //create the camera and attach the security controller
+            camera = new Camera3D("security camera 3", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
+            camera.AttachController(new SecurityCameraController("securityCameraController3", ControllerType.Security,
+                30, AppData.SecurityCameraRotationSpeedFast, new Vector3(4, 1, 0))); //note the rotation axis - this will yaw and pitch but yaw 4 times for every pitch
+            this.cameraManager.Add(camera);
+            #endregion
 
-            //#region Initialise the track camera
-            ////it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
-            //transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
+            #region Initialise the track camera
+            //it's important to instanciate a new transform and not simply reset the vales on the transform of the first camera. why? if we dont, then modifying one transform will modify the other
+            transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
 
-            ////x-axis position is right of the previous camera
-            //viewPort = new Viewport(0, 3 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
+            //x-axis position is right of the previous camera
+            viewPort = new Viewport(0, 3 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
-            ////create the camera curve to be applied to the track controller
-            //Transform3DCurve transform3DCurve = new Transform3DCurve(CurveLoopType.Oscillate);
-            //transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 0); //start position
-            ////add more points and make the camera point in other directions here...
-            //transform3DCurve.Add(new Vector3(0, 20, 0), -Vector3.UnitY, -Vector3.UnitZ, 8); //curve mid-point
-            ////add more points and make the camera point in other directions here...
-            //transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 12); //end position - same as start for zero-discontinuity on cycle
+            //create the camera curve to be applied to the track controller
+            Transform3DCurve transform3DCurve = new Transform3DCurve(CurveLoopType.Oscillate);
+            transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 0); //start position
+            //add more points and make the camera point in other directions here...
+            transform3DCurve.Add(new Vector3(0, 20, 0), -Vector3.UnitY, -Vector3.UnitZ, 8); //curve mid-point
+            //add more points and make the camera point in other directions here...
+            transform3DCurve.Add(new Vector3(0, 0, 60), -Vector3.UnitZ, Vector3.UnitY, 12); //end position - same as start for zero-discontinuity on cycle
 
-            ////create the camera and attach the track controller controller
-            //camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
-            //camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, PlayStatusType.Play));
-            //this.cameraManager.Add(camera);
-            //#endregion
+            //create the camera and attach the track controller controller
+            camera = new Camera3D("track camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFourThree, viewPort, 0, StatusType.Update);
+            camera.AttachController(new CurveController("trackCameraController1", ControllerType.Track, transform3DCurve, PlayStatusType.Play));
+            this.cameraManager.Add(camera);
+            #endregion
 
             #region Initialise the rail camera
             //remember that the camera will automatically situate itself along the rail, so its initial transform settings are irrelevant
             transform = Transform3D.Zero;
 
             //x-axis position is right of the previous camera
-            // viewPort = new Viewport(0, 4 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
-
-            Viewport viewPort = new Viewport(0, 0, screenResolution.X, screenResolution.Y);
+            viewPort = new Viewport(0, 4 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight);
 
             //create the camera curve to be applied to the track controller
             RailParameters railParameters = new RailParameters("rail1 - parallel to x-axis", new Vector3(-20, 10, 40), new Vector3(20, 10, 40));
@@ -359,7 +378,8 @@ namespace GDApp
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            this.modelDictionary.Dispose();
+            this.textureDictionary.Dispose();
         }
 
         /// <summary>
