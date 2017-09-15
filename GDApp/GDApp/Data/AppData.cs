@@ -31,13 +31,13 @@ namespace GDLibrary
         
         #region Camera
         public static readonly float CameraRotationSpeed = 0.005f;
-        public static readonly float CameraMoveSpeed = 0.05f;
-        public static readonly float CameraStrafeSpeed = 0.025f;
+        public static readonly float CameraMoveSpeed = 0.0125f;
+        public static readonly float CameraStrafeSpeed = 0.6f * CameraMoveSpeed;
 
         public static readonly float CameraJumpHeight = 30;
         public static readonly float CollidableCameraRotationSpeed = 0.05f;
-        public static readonly float CollidableCameraMoveSpeed = 0.5f;
-        public static readonly float CollidableCameraStrafeSpeed = 0.4f;
+        public static readonly float CollidableCameraMoveSpeed = 0.1f;
+        public static readonly float CollidableCameraStrafeSpeed = 0.6f * CollidableCameraMoveSpeed;
 
 
         public static readonly Keys[] CameraMoveKeys = { Keys.W, Keys.S, Keys.A, Keys.D, 
@@ -64,7 +64,7 @@ namespace GDLibrary
 
         #region Player
         public static readonly Keys[] PlayerMoveKeys = { Keys.U, Keys.J, Keys.H, Keys.K, Keys.Y, Keys.I, Keys.N, Keys.M};
-        public static readonly float PlayerMoveSpeed = 0.02f;
+        public static readonly float PlayerMoveSpeed = 0.05f;
         public static readonly float PlayerStrafeSpeed = 0.7f * PlayerMoveSpeed;
         public static readonly float PlayerRotationSpeed = 0.08f;
         #endregion

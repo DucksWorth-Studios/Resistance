@@ -1,5 +1,5 @@
 ﻿/*
-Function: 		Encapsulates the transformation and World matrix specific parameters for any entity that can have a position e.g. a player, a prop, a camera
+Function: 		Encapsulates the transformation and World matrix specific parameters for any 3D entity that can have a position (e.g. a player, a prop, a camera)
 Author: 		NMCG
 Version:		1.0
 Date Updated:	1/10/16
