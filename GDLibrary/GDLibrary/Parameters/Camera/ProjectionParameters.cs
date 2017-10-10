@@ -198,6 +198,11 @@ namespace GDLibrary
         {
             ProjectionParameters other = obj as ProjectionParameters;
 
+            if (other == null)
+                return false;
+            else if (this == other)
+                return true;
+
             return float.Equals(this.FOV, other.FOV)
                 && float.Equals(this.AspectRatio, other.AspectRatio)
                     && float.Equals(this.NearClipPlane, other.NearClipPlane)
