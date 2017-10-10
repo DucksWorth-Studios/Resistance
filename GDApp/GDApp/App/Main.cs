@@ -1,8 +1,17 @@
-using System;
 using GDLibrary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+
+/*
+ modelobject - clone
+ menu - click sound
+ menu transparency
+ clone to controllers
+ controller::Apply
+ menu manager - apply draw and apply update
+ */
 
 namespace GDApp
 {
@@ -11,7 +20,7 @@ namespace GDApp
     /// </summary>
     public class Main : Microsoft.Xna.Framework.Game
     {
-        #region Variables
+        #region Fields
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -21,6 +30,7 @@ namespace GDApp
         public MouseManager mouseManager { get; private set; }
         public KeyboardManager keyboardManager { get; private set; }
         public ScreenManager screenManager { get; private set; }
+        public MyAppMenuManager menuManager { get; private set; }
 
         private BasicEffect modelEffect;
         private ContentDictionary<Model> modelDictionary;
@@ -53,6 +63,9 @@ namespace GDApp
         /// </summary>
         protected override void Initialize()
         {
+            //set the title
+            Window.Title = "3DGD - My Amazing Game 1.0";
+
             //set resolution - see ScreenUtility statics
             Integer2 screenResolution = ScreenUtility.HD720;
 
@@ -65,8 +78,9 @@ namespace GDApp
             InitializeManagers(screenResolution, isMouseVisible);
             #endregion
 
-            #region Load Content Dictionary
-            LoadContentDictionaries();
+            #region Load Content Dictionary & Assets
+            LoadDictionaries();
+            LoadAssets();
             #endregion
 
             #region Add ModelObject(s)
@@ -76,36 +90,243 @@ namespace GDApp
             AddDecoratorModelObjects();
             #endregion
 
-            //we need to move this method because of a dependency with the drivable model object instanciated in AddControllableModelObjects() and the RailController
             #region Add Camera(s)
+            //we needed to move this method because of a dependency with the drivable model object instanciated in AddControllableModelObjects() and the RailController
             InitializeCameras(screenResolution);
             #endregion
 
             base.Initialize();
         }
+        private void InitializeMenu()
+        {
+            this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, spriteBatch, StatusType.Update | StatusType.Drawn);
+            //set the main menu to be the active menu scene
+            this.menuManager.SetActiveList("mainmenu");
+            Components.Add(this.menuManager);
+        }
 
-        private void LoadContentDictionaries()
+        private void AddMenuElements()
+        {
+            Transform2D transform = null;
+            Texture2D texture = null;
+            Vector2 position = Vector2.Zero;
+            UIButtonObject uiButtonObject = null, clone = null;
+            string sceneID = "", buttonID = "", buttonText = "";
+            int verticalBtnSeparation = 50;
+
+            #region Main Menu
+            sceneID = "main menu";
+            //retrieve the background texture
+            texture = this.textureDictionary["mainmenu"];
+            //scale the texture to fit the entire screen
+            Vector2 scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
+                (float)graphics.PreferredBackBufferHeight / texture.Height);
+            transform = new Transform2D(scale);
+            this.menuManager.Add(sceneID, new UITextureObject("mainmenuTexture", ActorType.UIStaticTexture,
+                StatusType.Drawn, //notice we dont need to update a static texture
+                transform, ColorParameters.WhiteOpaque, SpriteEffects.None,
+                1, //depth is 1 so its always sorted to the back of other menu elements
+                texture));
+
+            //add start button
+            buttonID = "startbtn";
+            buttonText = "Start";
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, 200);
+            texture = this.textureDictionary["genericbtn"];
+            transform = new Transform2D(position,
+                0, new Vector2(1.5f, 0.6f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+                transform, new ColorParameters(Color.LightPink, 1), SpriteEffects.None, 0.1f, texture, buttonText,
+                this.fontDictionary["menu"],
+                Color.DarkGray, new Vector2(0, 2));
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+            //add audio button - clone the audio button then just reset texture, ids etc in all the clones
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "audiobtn";
+            clone.Text = "Audio";
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(0, verticalBtnSeparation);
+            //change the texture blend color
+            clone.ColorParameters.Color = Color.LightGreen;
+            this.menuManager.Add(sceneID, clone);
+
+            //add controls button - clone the audio button then just reset texture, ids etc in all the clones
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "controlsbtn";
+            clone.Text = "Controls";
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(0, 2 * verticalBtnSeparation);
+            //change the texture blend color
+            clone.ColorParameters.Color = Color.LightBlue;
+            this.menuManager.Add(sceneID, clone);
+
+            //add exit button - clone the audio button then just reset texture, ids etc in all the clones
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "exitbtn";
+            clone.Text = "Exit";
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(0, 3 * verticalBtnSeparation);
+            //change the texture blend color
+            clone.ColorParameters.Color = Color.LightYellow;
+            //store the original color since if we modify with a controller and need to reset
+            clone.ColorParameters.OriginalColorParameters.Color = clone.ColorParameters.Color;
+            //attach another controller on the exit button just to illustrate multi-controller approach
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.LightSeaGreen, Color.LightGreen));
+            this.menuManager.Add(sceneID, clone);
+            #endregion
+
+            #region Audio Menu
+            sceneID = "audio menu";
+
+            //retrieve the audio menu background texture
+            texture = this.textureDictionary["audiomenu"];
+            //scale the texture to fit the entire screen
+            scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
+                (float)graphics.PreferredBackBufferHeight / texture.Height);
+            transform = new Transform2D(scale);
+            this.menuManager.Add(sceneID, new UITextureObject("audiomenuTexture", ActorType.UIStaticTexture,
+                StatusType.Drawn, //notice we dont need to update a static texture
+                transform, ColorParameters.WhiteOpaque, SpriteEffects.None,
+                1, //depth is 1 so its always sorted to the back of other menu elements
+                texture));
+
+
+            //add volume up button - clone the audio button then just reset texture, ids etc in all the clones
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "volumeUpbtn";
+            clone.Text = "Volume Up";
+            //change the texture blend color
+            clone.ColorParameters.Color = Color.LightPink;
+            this.menuManager.Add(sceneID, clone);
+
+            //add volume down button - clone the audio button then just reset texture, ids etc in all the clones
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(0, verticalBtnSeparation);
+            clone.ID = "volumeDownbtn";
+            clone.Text = "Volume Down";
+            //change the texture blend color
+            clone.ColorParameters.Color = Color.LightGreen;
+            this.menuManager.Add(sceneID, clone);
+
+            //add volume mute button - clone the audio button then just reset texture, ids etc in all the clones
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(0, 2 * verticalBtnSeparation);
+            clone.ID = "volumeMutebtn";
+            clone.Text = "Volume Mute";
+            //change the texture blend color
+            clone.ColorParameters.Color = Color.LightBlue;
+            this.menuManager.Add(sceneID, clone);
+
+            //add back button - clone the audio button then just reset texture, ids etc in all the clones
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(0, 3 * verticalBtnSeparation);
+            clone.ID = "backbtn";
+            clone.Text = "Back";
+            //change the texture blend color
+            clone.ColorParameters.Color = Color.LightYellow;
+            this.menuManager.Add(sceneID, clone);
+            #endregion
+
+
+            #region Audio Menu
+            sceneID = "controls menu";
+
+            //retrieve the controls menu background texture
+            texture = this.textureDictionary["controlsmenu"];
+            //scale the texture to fit the entire screen
+            scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
+                (float)graphics.PreferredBackBufferHeight / texture.Height);
+            transform = new Transform2D(scale);
+            this.menuManager.Add(sceneID, new UITextureObject("controlsmenuTexture", ActorType.UIStaticTexture,
+                StatusType.Drawn, //notice we dont need to update a static texture
+                transform, ColorParameters.WhiteOpaque, SpriteEffects.None,
+                1, //depth is 1 so its always sorted to the back of other menu elements
+                texture));
+
+            //add back button - clone the audio button then just reset texture, ids etc in all the clones
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(0, 9 * verticalBtnSeparation);
+            clone.ID = "backbtn";
+            clone.Text = "Back";
+            //change the texture blend color
+            clone.ColorParameters.Color = Color.LightYellow;
+            this.menuManager.Add(sceneID, clone);
+            #endregion
+        }
+
+        private void InitializeUI()
+        {
+             //to do - add a hud manager to show game state
+        }
+
+        private void AddUIElements()
+        {
+            //to do - add hud elements with game state
+        }
+
+        private void LoadDictionaries()
         {
             //models
             this.modelDictionary = new ContentDictionary<Model>("model dictionary", this.Content);
-            this.modelDictionary.Load("Assets/Models/plane1", "plane1");
-            this.modelDictionary.Load("Assets/Models/box2", "box2");
 
             //textures
             this.textureDictionary = new ContentDictionary<Texture2D>("texture dictionary", this.Content);
+
+            //fonts
+            this.fontDictionary = new ContentDictionary<SpriteFont>("font dictionary", this.Content);
+        }
+
+        private void LoadAssets()
+        {
+            //models
+            this.modelDictionary.Load("Assets/Models/plane1", "plane1");
+            this.modelDictionary.Load("Assets/Models/box2", "box2");
+
+            #region Textures
+            //environment
             this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1"); //demo use of the shorter form of Load() that generates key from asset name
-            this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");    
+            this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");
             this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
             this.textureDictionary.Load("Assets/Textures/Skybox/back");
             this.textureDictionary.Load("Assets/Textures/Skybox/left");
             this.textureDictionary.Load("Assets/Textures/Skybox/right");
             this.textureDictionary.Load("Assets/Textures/Skybox/sky");
             this.textureDictionary.Load("Assets/Textures/Skybox/front");
-            this.textureDictionary.Load("Assets /Textures/Foliage/Trees/tree2");
+            this.textureDictionary.Load("Assets/Textures/Foliage/Trees/tree2");
+
+            //menu - buttons
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/white64x64");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/startbtn");
+
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/audiobtn");
+            //this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/volumeupbtn");
+            //this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/volumedownbtn");
+            //this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/volumemutebtn");
+
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/controlsbtn");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/backbtn");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/exitbtn");
+
+            //menu - backgrounds
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/mainmenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/audiomenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/controlsmenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/exitmenuwithtrans");
+            #endregion
 
             //fonts
-            this.fontDictionary = new ContentDictionary<SpriteFont>("font dictionary", this.Content);
             this.fontDictionary.Load("Assets/Debug/Fonts/debug");
+            this.fontDictionary.Load("Assets/Fonts/menu");
         }
 
         private void AddControllableModelObjects()
@@ -116,7 +337,7 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3(0, 0, 5), -Vector3.UnitZ, Vector3.UnitY);
             
             //initialise the drivable model object - we've made this variable a field to allow it to be visible to the rail camera controller - see InitializeCameras()
-            this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, Color.LightYellow, 1,
+            this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, new ColorParameters(Color.LightYellow, 1),
                 this.textureDictionary["crate1"],
                 this.modelDictionary["box2"]);
 
@@ -134,7 +355,7 @@ namespace GDApp
             //first we will create a prototype plane and then simply clone it for each of the decorator elements (e.g. ground, sky_top etc). 
             Transform3D transform = new Transform3D(new Vector3(0, -5, 0), new Vector3(worldScale, 1, worldScale));
 
-            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, Color.White, 1,
+            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, ColorParameters.WhiteOpaque,
                 this.textureDictionary["grass1"], 
                 this.modelDictionary["plane1"]);
 
@@ -151,58 +372,58 @@ namespace GDApp
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.Texture = this.textureDictionary["back"];
             //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
-            clonePlane.Transform3D.Rotation = new Vector3(90, 0, 0);
+            clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
             /*
              * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
              * Note:
              * - the interaction between 3DS Max and XNA units which result in the scale factor used below (i.e. 1 x 2.54 x worldScale)/2
              * - that I move the plane down a little on the Y-axiz, purely for aesthetic purposes
              */
-            clonePlane.Transform3D.Translation = new Vector3(0, -5, (-2.54f * worldScale)/2.0f);
+            clonePlane.Transform.Translation = new Vector3(0, -5, (-2.54f * worldScale)/2.0f);
             this.objectManager.Add(clonePlane);
 
             //As an exercise the student should add the remaining 4 skybox planes here by repeating the clone, texture assignment, rotation, and translation steps above...
             //add the left skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.Texture = this.textureDictionary["left"];
-            clonePlane.Transform3D.Rotation = new Vector3(90, 90, 0);
-            clonePlane.Transform3D.Translation = new Vector3((-2.54f * worldScale) / 2.0f, -5, 0);
+            clonePlane.Transform.Rotation = new Vector3(90, 90, 0);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f, -5, 0);
             this.objectManager.Add(clonePlane);
 
             //add the right skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.Texture = this.textureDictionary["right"];
-            clonePlane.Transform3D.Rotation = new Vector3(90, -90, 0);
-            clonePlane.Transform3D.Translation = new Vector3((2.54f * worldScale) / 2.0f, -5, 0);
+            clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
+            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 2.0f, -5, 0);
             this.objectManager.Add(clonePlane);
 
             //add the top skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.Texture = this.textureDictionary["sky"];
             //notice the combination of rotations to correctly align the sky texture with the sides
-            clonePlane.Transform3D.Rotation = new Vector3(180, -90, 0);
-            clonePlane.Transform3D.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f) - 5, 0);
+            clonePlane.Transform.Rotation = new Vector3(180, -90, 0);
+            clonePlane.Transform.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f) - 5, 0);
             this.objectManager.Add(clonePlane);
 
             //add the front skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.Texture = this.textureDictionary["front"];
-            clonePlane.Transform3D.Rotation = new Vector3(-90, 0, 180);
-            clonePlane.Transform3D.Translation = new Vector3(0 , -5, (2.54f * worldScale) / 2.0f);
+            clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
+            clonePlane.Transform.Translation = new Vector3(0 , -5, (2.54f * worldScale) / 2.0f);
             this.objectManager.Add(clonePlane);
             #endregion
 
             #region Add Trees
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.Texture = this.textureDictionary["tree2"];
-            clonePlane.Transform3D.Rotation = new Vector3(90, 0, 0);
+            clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
             /*
              * ISRoT - Scale operations are applied before rotation in XNA so to make the tree tall (i.e. 10) we actually scale 
              * along the Z-axis (remember the original plane is flat on the XZ axis) and then flip the plane to stand upright.
              */
-            clonePlane.Transform3D.Scale = new Vector3(5, 1, 10);
+            clonePlane.Transform.Scale = new Vector3(5, 1, 10);
             //y-displacement is (10(XNA) x 2.54f(3DS Max))/2 - 5(ground level) = 7.7f
-            clonePlane.Transform3D.Translation = new Vector3(0, ((clonePlane.Transform3D.Scale.Z* 2.54f)/2 - 5), -20);
+            clonePlane.Transform.Translation = new Vector3(0, ((clonePlane.Transform.Scale.Z* 2.54f)/2 - 5), -20);
             this.objectManager.Add(clonePlane);
             #endregion
 
@@ -217,7 +438,7 @@ namespace GDApp
             //loading model, texture
 
             //initialise the boxObject
-            ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, Color.White, 0.5f,
+            ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, new ColorParameters(Color.White, 0.5f),
                 this.textureDictionary["crate1"], this.modelDictionary["box2"]);
             //add to the objectManager so that it will be drawn and updated
             //this.objectManager.Add(boxObject);
@@ -227,11 +448,11 @@ namespace GDApp
 
             //add a clone of the box model object to test the clone
             clone = (ModelObject)boxObject.Clone();
-            clone.Transform3D.Translation = new Vector3(5, 0, 0);
+            clone.Transform.Translation = new Vector3(5, 0, 0);
             //scale it to make it look different
-            clone.Transform3D.Scale = new Vector3(1, 4, 1);
+            clone.Transform.Scale = new Vector3(1, 4, 1);
             //change its color
-            clone.Color = Color.Red;
+            clone.ColorParameters.Color = Color.Red;
             this.objectManager.Add(clone);
 
             //add more clones here...
@@ -348,11 +569,13 @@ namespace GDApp
             this.objectManager = new ObjectManager(this, cameraManager, 10);
 
             //create the manager which supports multiple camera viewports
-            this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen, this.objectManager, this.cameraManager);
+            this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen,
+                this.objectManager, this.cameraManager, StatusType.Update);// | StatusType.Drawn);
             Components.Add(this.screenManager);
 
             //add mouse and keyboard managers
-            this.mouseManager = new MouseManager(this, isMouseVisible, /*screen centre*/ new Vector2(screenResolution.X / 2.0f, screenResolution.Y / 2.0f));
+            this.mouseManager = new MouseManager(this, isMouseVisible, 
+                new Vector2(screenResolution.X / 2.0f, screenResolution.Y / 2.0f) /*screen centre*/);
             Components.Add(this.mouseManager);
 
             this.keyboardManager = new KeyboardManager(this);
@@ -377,13 +600,27 @@ namespace GDApp
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            #region Add Menu & UI
+            InitializeMenu();
+            AddMenuElements();
+            InitializeUI();
+            AddUIElements();
+            #endregion
+
 #if DEBUG
             #region Debug Info
-            this.debugDrawer = new DebugDrawer(this, this.screenManager, this.cameraManager, spriteBatch, this.fontDictionary["debug"], 
-                Color.White, new Vector2(5, 5));
+            this.debugDrawer = new DebugDrawer(this, this.screenManager, this.cameraManager, spriteBatch, 
+                this.fontDictionary["debug"], 
+                Color.White, new Vector2(5, 5),
+                true);
             Components.Add(this.debugDrawer);
             #endregion
 #endif
+
+
+
+
+
         }
 
         /// <summary>

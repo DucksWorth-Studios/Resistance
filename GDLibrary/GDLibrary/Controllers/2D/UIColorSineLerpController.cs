@@ -1,0 +1,118 @@
+﻿/*
+Function: 		Applies a color change to a UI actor based on a sine wave and user-specified min and max colours.
+Author: 		NMCG
+Version:		1.0
+Date Updated:	6/10/17
+Bugs:			None
+Fixes:			None
+*/
+using System;
+using Microsoft.Xna.Framework;
+
+namespace GDLibrary
+{
+    public class UIColorSineLerpController : UIController
+    {
+        #region Fields
+        private TrigonometricParameters trigonometricParameters;
+        private Color colorMin, colorMax;
+        #endregion
+
+        #region Properties
+        public TrigonometricParameters TrigonometricParameters
+        {
+            get
+            {
+                return this.trigonometricParameters;
+            }
+            set
+            {
+                this.trigonometricParameters = value;
+            }
+        }
+        public Color ColorMin
+        {
+            get
+            {
+                return this.colorMin;
+            }
+            set
+            {
+                this.colorMin = value;
+            }
+        }
+        public Color ColorMax
+        {
+            get
+            {
+                return this.colorMax;
+            }
+            set
+            {
+                this.colorMax = value;
+            }
+        }
+        #endregion
+
+        public UIColorSineLerpController(string id, ControllerType controllerType, TrigonometricParameters trigonometricParameters,
+            Color colorMin, Color colorMax) 
+            : base(id, controllerType)
+        {
+            this.TrigonometricParameters = trigonometricParameters;
+            this.colorMin = colorMin;
+            this.colorMax = colorMax;
+        }
+
+        public override void Reset(IActor actor)
+        {
+            UIObject uiObject = actor as UIObject;
+            uiObject.ColorParameters.Color = uiObject.ColorParameters.OriginalColorParameters.Color;
+        }
+
+        protected override void ApplyController(GameTime gameTime, UIObject uiObject, float totalElapsedTime)
+        {
+            //range -amplitude -> amplitude
+            float lerpFactor = (float)(this.TrigonometricParameters.MaxAmplitude 
+                * Math.Sin(this.TrigonometricParameters.AngularFrequency 
+                * MathHelper.ToRadians(totalElapsedTime) + this.TrigonometricParameters.PhaseAngle));
+            //range 0 -> 2*amplitude
+            lerpFactor += this.TrigonometricParameters.MaxAmplitude;
+            //range 0 -> amplitude
+            lerpFactor /= 2.0f;
+            //apply color change
+            uiObject.ColorParameters.Color = MathUtility.Lerp(this.colorMin, this.colorMax, lerpFactor);
+        }
+
+        public override bool Equals(object obj)
+        {
+            UIColorSineLerpController other = obj as UIColorSineLerpController;
+
+            if (other == null)
+                return false;
+            else if (this == other)
+                return true;
+
+            return this.colorMin.Equals(other.ColorMin)
+                    && this.colorMax.Equals(other.ColorMax)
+                        && base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash = hash * 31 + this.colorMin.GetHashCode();
+            hash = hash * 17 + this.colorMax.GetHashCode();
+            hash = hash * 11 + base.GetHashCode();
+            return hash;
+        }
+
+        public override object Clone()
+        {
+            return new UIColorSineLerpController("clone - " + this.ID, //deep
+                this.ControllerType, //deep
+                (TrigonometricParameters) this.trigonometricParameters.Clone(), //deep
+                this.colorMin,  //deep
+                this.colorMax); //deep
+        }
+    }
+}

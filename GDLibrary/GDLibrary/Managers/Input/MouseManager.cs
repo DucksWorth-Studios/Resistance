@@ -15,7 +15,7 @@ namespace GDLibrary
 {
     public class MouseManager : GameComponent
     {
-        #region Variables
+        #region Fields
         private MouseState newState, oldState;
         #endregion
 

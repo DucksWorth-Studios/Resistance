@@ -16,8 +16,8 @@ namespace GDLibrary
     public interface IActor
     {
         void Update(GameTime gameTime);
-        void Draw(GameTime gameTime);
-
+        void AttachController(IController controller);
+        bool DetachController(string id);
         ActorType GetActorType();
         StatusType GetStatusType();
         string GetID();

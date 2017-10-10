@@ -14,7 +14,7 @@ namespace GDLibrary
 {
     public class DriveController : UserInputController
     {
-        #region Variables
+        #region Fields
         #endregion
 
         #region Properties
@@ -40,12 +40,12 @@ namespace GDLibrary
             if (this.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
             {
                 translation = gameTime.ElapsedGameTime.Milliseconds
-                             * this.MoveSpeed * parentActor.Transform3D.Look;
+                             * this.MoveSpeed * parentActor.Transform.Look;
             }
             else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
             {
                 translation = -gameTime.ElapsedGameTime.Milliseconds
-                            * this.MoveSpeed * parentActor.Transform3D.Look;
+                            * this.MoveSpeed * parentActor.Transform.Look;
             }
 
             //strafe
@@ -53,23 +53,23 @@ namespace GDLibrary
             {
                 //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
                 translation += -gameTime.ElapsedGameTime.Milliseconds
-                             * this.StrafeSpeed * parentActor.Transform3D.Right;
+                             * this.StrafeSpeed * parentActor.Transform.Right;
             }
             else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
             {
                 //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
                 translation += gameTime.ElapsedGameTime.Milliseconds
-                            * this.StrafeSpeed * parentActor.Transform3D.Right;
+                            * this.StrafeSpeed * parentActor.Transform.Right;
             }
 
             //rotate
             if (this.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
             {
-                parentActor.Transform3D.RotateAroundYBy(gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed);
+                parentActor.Transform.RotateAroundYBy(gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed);
             }
             else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
             {
-                parentActor.Transform3D.RotateAroundYBy(-gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed);
+                parentActor.Transform.RotateAroundYBy(-gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed);
             }
 
             //Was a move button(s) pressed?
@@ -78,7 +78,7 @@ namespace GDLibrary
                 //remove y-axis component of the translation
                 translation.Y = 0;
                 //apply
-                parentActor.Transform3D.TranslateBy(translation);
+                parentActor.Transform.TranslateBy(translation);
             }
         }
 

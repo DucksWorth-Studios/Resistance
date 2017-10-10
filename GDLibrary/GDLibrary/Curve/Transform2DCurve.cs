@@ -11,7 +11,7 @@ namespace GDLibrary
     {
         public static Transform2DCurveOffsets Zero = new Transform2DCurveOffsets(Vector2.Zero, Vector2.One, 0, 0);
 
-        #region Variables
+        #region Fields
         private Vector2 translation, scale;
         private float rotation;
         private float timeInSecs;
@@ -87,7 +87,7 @@ namespace GDLibrary
     //Represents a 2D point on a curve (i.e. position, rotation, and scale) at a specified time in seconds
     public class Transform2DCurve
     {
-        #region Variables
+        #region Fields
         private Curve1D rotationCurve;
         private Curve2D translationCurve, scaleCurve;
         #endregion

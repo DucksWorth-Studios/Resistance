@@ -15,7 +15,7 @@ namespace GDLibrary
 {
     public class ModelObject : DrawnActor3D, ICloneable
     {
-        #region Variables
+        #region Fields
         private Texture2D texture;
         private Model model;
         private Matrix[] boneTransforms;
@@ -58,9 +58,8 @@ namespace GDLibrary
         #endregion
 
         public ModelObject(string id, ActorType actorType, 
-            Transform3D transform, Effect effect, Color color, float alpha,
-            Texture2D texture, Model model)
-            : base(id, actorType, transform, effect, color, alpha, StatusType.Drawn | StatusType.Update)
+            Transform3D transform, Effect effect, ColorParameters colorParameters, Texture2D texture, Model model)
+            : base(id, actorType, transform, effect, colorParameters, StatusType.Drawn | StatusType.Update)
         {
             this.texture = texture;
             this.model = model;
@@ -118,14 +117,36 @@ namespace GDLibrary
         //}
 
 
+        public override bool Equals(object obj)
+        {
+            ModelObject other = obj as ModelObject;
+
+            if (other == null)
+                return false;
+            else if (this == other)
+                return true;
+
+            return this.texture.Equals(other.Texture)
+                    && this.model.Equals(other.Model)
+                        && base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash = hash * 31 + this.texture.GetHashCode();
+            hash = hash * 17 + this.model.GetHashCode();
+            hash = hash * 7 + base.GetHashCode();
+            return hash;
+        }
+
         public new object Clone()
         {
             return new ModelObject("clone - " + ID, //deep
                 this.ActorType,   //deep
-                (Transform3D)this.Transform3D.Clone(),  //deep
+                (Transform3D)this.Transform.Clone(),  //deep
                 this.Effect, //shallow i.e. a reference
-                this.Color,  //deep
-                this.Alpha,  //deep
+                (ColorParameters)this.ColorParameters.Clone(), //deep 
                 this.texture, //shallow i.e. a reference
                 this.model); //shallow i.e. a reference
         }
@@ -134,7 +155,7 @@ namespace GDLibrary
         {
             //tag for garbage collection
             this.boneTransforms = null;
-            //notice how the base Remove() is called. What will happen when this is called? See Actor3D::Remove().
+            //notice how the base Remove() is called. What will happen when this is called? See DrawnActor3D::Remove().
             return base.Remove();
         }
     }

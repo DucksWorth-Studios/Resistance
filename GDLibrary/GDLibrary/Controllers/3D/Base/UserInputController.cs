@@ -14,7 +14,7 @@ namespace GDLibrary
 {
     public class UserInputController : Controller
     {
-        #region Variables
+        #region Fields
         private Keys[] moveKeys;
         private float moveSpeed, strafeSpeed, rotationSpeed;
         private MouseManager mouseManager;

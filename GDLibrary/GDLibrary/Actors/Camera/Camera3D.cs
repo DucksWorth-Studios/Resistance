@@ -30,9 +30,9 @@ namespace GDLibrary
         {
             get
             {
-                return Matrix.CreateLookAt(this.Transform3D.Translation,
-                    this.Transform3D.Translation + this.Transform3D.Look,
-                    this.Transform3D.Up);
+                return Matrix.CreateLookAt(this.Transform.Translation,
+                    this.Transform.Translation + this.Transform.Look,
+                    this.Transform.Up);
             }
         }
         public Matrix Projection
@@ -109,32 +109,32 @@ namespace GDLibrary
         {
             Camera3D other = obj as Camera3D;
 
-            return Vector3.Equals(this.Transform3D.Translation, other.Transform3D.Translation)
-                && Vector3.Equals(this.Transform3D.Look, other.Transform3D.Look)
-                    && Vector3.Equals(this.Transform3D.Up, other.Transform3D.Up)
+            return Vector3.Equals(this.Transform.Translation, other.Transform.Translation)
+                && Vector3.Equals(this.Transform.Look, other.Transform.Look)
+                    && Vector3.Equals(this.Transform.Up, other.Transform.Up)
                         && this.ProjectionParameters.Equals(other.ProjectionParameters);
         }
         public override int GetHashCode() //a simple hash code method 
         {
             int hash = 1;
-            hash = hash * 31 + this.Transform3D.Translation.GetHashCode();
-            hash = hash * 17 + this.Transform3D.Look.GetHashCode();
-            hash = hash * 13 + this.Transform3D.Up.GetHashCode();
+            hash = hash * 31 + this.Transform.Translation.GetHashCode();
+            hash = hash * 17 + this.Transform.Look.GetHashCode();
+            hash = hash * 13 + this.Transform.Up.GetHashCode();
             hash = hash * 53 + this.ProjectionParameters.GetHashCode();
             return hash;
         }
         public new object Clone()
         {
             return new Camera3D("clone - " + this.ID,
-                this.ActorType, (Transform3D)this.Transform3D.Clone(), 
+                this.ActorType, (Transform3D)this.Transform.Clone(), 
                 (ProjectionParameters)this.projectionParameters.Clone(), this.Viewport, 0, StatusType.Update);
         }
         public override string ToString()
         {
             return this.ID
-                + ", Translation: " + MathUtility.Round(this.Transform3D.Translation, 0)
-                    + ", Look: " + MathUtility.Round(this.Transform3D.Look, 0)
-                        + ", Up: " + MathUtility.Round(this.Transform3D.Up, 0)
+                + ", Translation: " + MathUtility.Round(this.Transform.Translation, 0)
+                    + ", Look: " + MathUtility.Round(this.Transform.Look, 0)
+                        + ", Up: " + MathUtility.Round(this.Transform.Up, 0)
                             +", Depth: " + this.drawDepth;
 
         }

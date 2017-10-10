@@ -17,7 +17,7 @@ namespace GDLibrary
     /// </summary>
     public class KeyboardManager : GameComponent
     {
-        #region Variables
+        #region Fields
         protected KeyboardState newState, oldState;
         #endregion
 

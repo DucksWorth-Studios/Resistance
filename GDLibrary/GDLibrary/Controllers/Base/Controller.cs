@@ -12,7 +12,7 @@ namespace GDLibrary
 {
     public class Controller : IController
     {
-        #region Variables
+        #region Fields
         private string id;
         private ControllerType controllerType;
         #endregion
@@ -53,11 +53,42 @@ namespace GDLibrary
             //does nothing - no point in child classes calling this.
         }
 
+        public virtual void Reset(IActor actor)
+        {
+            //does nothing - no point in child classes calling this - see UIScaleLerpController::Reset()
+        }
+
+
         public virtual string GetID()
         {
             return this.ID;
         }
 
-        //Add Equals, Clone, ToString, GetHashCode...
+        public override bool Equals(object obj)
+        {
+            Controller other = obj as Controller;
+
+            if (other == null)
+                return false;
+            else if (this == other)
+                return true;
+
+            return this.ID.Equals(other.ID) 
+                && this.controllerType.Equals(other.ControllerType)
+                    && base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash = hash * 31 + this.ID.GetHashCode();
+            hash = hash * 17 + this.controllerType.GetHashCode();
+            return hash;
+        }
+
+        public virtual object Clone()
+        {
+            return new Controller("clone - " + this.ID, this.controllerType);
+        }
     }
 }

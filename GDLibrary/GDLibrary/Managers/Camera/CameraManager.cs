@@ -19,7 +19,7 @@ namespace GDLibrary
     public class CameraManager : GameComponent, IEnumerable<Camera3D>
     {
 
-        #region Variables
+        #region Fields
         private List<Camera3D> cameraList;
         private int activeCameraIndex = -1;
         #endregion

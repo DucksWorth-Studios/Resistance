@@ -15,9 +15,11 @@ namespace GDLibrary
 {
     public class Actor : IActor, ICloneable
     {
-        #region Variables
+        #region Statics
         public static Game game;
+        #endregion
 
+        #region Fields
         private string id;
         private ActorType actorType;
         private StatusType statusType;
@@ -68,9 +70,6 @@ namespace GDLibrary
         public virtual void Update(GameTime gameTime)
         {           
         }
-        public virtual void Draw(GameTime gameTime)
-        {       
-        }
 
         public virtual Matrix GetWorldMatrix()
         {
@@ -93,14 +92,49 @@ namespace GDLibrary
             return this.statusType;
         }
 
+        public override bool Equals(object obj)
+        {
+            Actor other = obj as Actor;
+
+            if (other == null)
+                return false;
+            else if (this == other)
+                return true;
+
+            return this.ID.Equals(other.ID)
+                && this.actorType == other.ActorType
+                    && this.statusType.Equals(other.StatusType);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash = hash * 31 + this.ID.GetHashCode();
+            hash = hash * 17 + this.actorType.GetHashCode();
+            hash = hash * 13 + this.statusType.GetHashCode();
+            return hash;
+        }
+
         public object Clone()
         {
-            return this.MemberwiseClone(); //deep because all variables are either C# types, structs, or enums
+            //deep because all variables are C# types (e.g. primitives, structs, or enums)
+            return this.MemberwiseClone();
         }
 
         public virtual bool Remove()
         {
-            return false; //see implementation in child classes e.g. ModelObject
+            return true; //see implementation in child classes e.g. ModelObject
+        }
+
+        public virtual void AttachController(IController controller)
+        {
+            //does nothing see derived classes e.g. Actor2D, Actor3D
+        }
+
+        public virtual bool DetachController(string id)
+        {
+            //does nothing see derived classes e.g. Actor2D, Actor3D
+            return true;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace GDLibrary
 {
     public class ContentDictionary<V> : IDisposable
     {
-        #region Variables
+        #region Fields
         private string name;
         private Dictionary<string, V> dictionary;
         private ContentManager content;

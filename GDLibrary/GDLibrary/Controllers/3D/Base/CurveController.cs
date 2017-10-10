@@ -13,7 +13,7 @@ namespace GDLibrary
     //used to cause an object (or camera) to move along a predefined track
     public class CurveController : Controller
     {
-        #region Variables
+        #region Fields
         private Transform3DCurve transform3DCurve;
         private PlayStatusType playStatusType;
         private float elapsedTimeInMs;
@@ -75,9 +75,9 @@ namespace GDLibrary
                 this.transform3DCurve.Evalulate(elapsedTimeInMs, 2,
                     out translation, out look, out up);
 
-                parentActor.Transform3D.Translation = translation;
-                parentActor.Transform3D.Look = look;
-                parentActor.Transform3D.Up = up;
+                parentActor.Transform.Translation = translation;
+                parentActor.Transform.Look = look;
+                parentActor.Transform.Up = up;
             }
         }
 

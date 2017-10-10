@@ -1,5 +1,5 @@
 ﻿/*
-Function: 		First person camera controller allows movement in any XZ direction (no y-axis movement is allowed)
+Function: 		Flight controllers allows movement in any XYZ direction 
 Author: 		NMCG
 Version:		1.0
 Date Updated:	30/8/17
@@ -13,16 +13,16 @@ using Microsoft.Xna.Framework.Input;
 namespace GDLibrary
 {
     
-    public class FirstPersonCameraController : UserInputController
+    public class FlightCameraController : UserInputController
     {
+        #region Fields
         private CameraManager cameraManager;
-        #region Variables
         #endregion
 
         #region Properties
         #endregion
 
-        public FirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed, 
+        public FlightCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed, 
             MouseManager mouseManager, KeyboardManager keyboardManager, CameraManager cameraManager)
             : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, mouseManager, keyboardManager)
         {
@@ -42,44 +42,31 @@ namespace GDLibrary
 
             //only rotate if something has changed with the mouse
             if(mouseDelta.Length() != 0) 
-                parentActor.Transform3D.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
+                parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
         }
 
         public override void HandleKeyboardInput(GameTime gameTime, Actor3D parentActor)
         {
-            Vector3 translation = Vector3.Zero;
-
             if (this.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
             {
-                translation = gameTime.ElapsedGameTime.Milliseconds
-                             * this.MoveSpeed * parentActor.Transform3D.Look;
+                parentActor.Transform.TranslateBy(gameTime.ElapsedGameTime.Milliseconds
+                             * this.MoveSpeed * parentActor.Transform.Look);
             }
             else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
             {
-                translation = -gameTime.ElapsedGameTime.Milliseconds
-                            * this.MoveSpeed * parentActor.Transform3D.Look;
+                parentActor.Transform.TranslateBy(-gameTime.ElapsedGameTime.Milliseconds
+                             * this.MoveSpeed * parentActor.Transform.Look);
             }
 
             if (this.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
             {
-                //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
-                translation += -gameTime.ElapsedGameTime.Milliseconds
-                             * this.StrafeSpeed * parentActor.Transform3D.Right;
+                parentActor.Transform.TranslateBy(-gameTime.ElapsedGameTime.Milliseconds
+                             * this.StrafeSpeed * parentActor.Transform.Right);
             }
             else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
             {
-                //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
-                translation += gameTime.ElapsedGameTime.Milliseconds
-                            * this.StrafeSpeed * parentActor.Transform3D.Right;
-            }
-
-            //Was a move button(s) pressed?
-            if (translation != Vector3.Zero)
-            {
-                //remove y-axis component of the translation
-                translation.Y = 0;
-                //apply
-                parentActor.Transform3D.TranslateBy(translation);
+                parentActor.Transform.TranslateBy(gameTime.ElapsedGameTime.Milliseconds
+                    * this.StrafeSpeed * parentActor.Transform.Right);
             }
         }
 

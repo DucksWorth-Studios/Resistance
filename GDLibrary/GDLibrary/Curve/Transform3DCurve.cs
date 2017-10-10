@@ -87,7 +87,7 @@ namespace GDLibrary
     //Represents a 3D point on a camera curve (i.e. position, look, and up) at a specified time in seconds
     public class Transform3DCurve
     {
-        #region Variables
+        #region Fields
         private Curve3D translationCurve, lookCurve, upCurve;
         #endregion
 

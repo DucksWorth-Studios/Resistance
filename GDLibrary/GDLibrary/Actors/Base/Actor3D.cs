@@ -14,7 +14,7 @@ namespace GDLibrary
 {
     public class Actor3D : Actor, ICloneable
     {
-        #region Variables
+        #region Fields
         private Transform3D transform;
         private List<IController> controllerList;
         #endregion
@@ -27,7 +27,7 @@ namespace GDLibrary
                 return this.controllerList;
             }
         }
-        public Transform3D Transform3D
+        public Transform3D Transform
         {
             get
             {
@@ -48,13 +48,19 @@ namespace GDLibrary
             this.transform = transform;
         }
 
-        public void AttachController(IController controller)
+        //returns the compound matrix transformation that will scale, rotate and place the actor in the 3D world of the game
+        public override Matrix GetWorldMatrix()
+        {
+            return this.transform.World;
+        }
+
+        public override void AttachController(IController controller)
         {
             if(this.controllerList == null)
                 this.controllerList = new List<IController>();
             this.controllerList.Add(controller); //duplicates?
         }
-        public bool DetachController(string id)
+        public override bool DetachController(string id)
         {
             return false; //to do...
         }
@@ -73,18 +79,43 @@ namespace GDLibrary
             base.Update(gameTime);
         }
 
-        //returns the compound matrix transformation that will scale, rotate and place the actor in the 3D world of the game
-        public override Matrix GetWorldMatrix()
+        public virtual void Draw(GameTime gameTime)
         {
-            return this.transform.World;
+
+        }
+
+        public override bool Equals(object obj)
+        {
+            Actor3D other = obj as Actor3D;
+
+            if (other == null)
+                return false;
+            else if (this == other)
+                return true;
+
+            return this.Transform.Equals(other.Transform) && base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash = hash * 31 + this.Transform.GetHashCode();
+            hash = hash * 17 + base.GetHashCode();
+            return hash;
         }
 
         public new object Clone()
         {
-            return new Actor3D("clone - " + ID, //deep
+            IActor actor = new Actor3D("clone - " + ID, //deep
                 this.ActorType, //deep
                 (Transform3D)this.transform.Clone(), //deep
                 this.StatusType); //shallow
+
+            //clone each of the (behavioural) controllers
+            foreach(IController controller in this.controllerList)
+                actor.AttachController((IController)controller.Clone());
+
+            return actor;
         }
 
         public override bool Remove()
@@ -96,7 +127,11 @@ namespace GDLibrary
                 this.controllerList.Clear();
                 this.controllerList = null;
             }
-            return base.Remove();
+
+            return true;
+
+            //don't bother returning the base since it doesnt do anything
+            //return base.Remove();
         }
     }
 }

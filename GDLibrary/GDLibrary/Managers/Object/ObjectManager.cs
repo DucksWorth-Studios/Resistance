@@ -18,7 +18,7 @@ namespace GDLibrary
     public class ObjectManager //: DrawableGameComponent
     {
 
-        #region Variables
+        #region Fields
         private CameraManager cameraManager;
         private List<IActor> drawList;
         private Game game;
@@ -106,8 +106,8 @@ namespace GDLibrary
                 effect.Projection = activeCamera.ProjectionParameters.Projection;
 
                 effect.Texture = modelObject.Texture;
-                effect.DiffuseColor = modelObject.Color.ToVector3();
-                effect.Alpha = modelObject.Alpha;
+                effect.DiffuseColor = modelObject.ColorParameters.Color.ToVector3();
+                effect.Alpha = modelObject.ColorParameters.Alpha;
 
                 //apply or serialise the variables above to the GFX card
                 effect.CurrentTechnique.Passes[0].Apply();

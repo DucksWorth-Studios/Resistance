@@ -7,7 +7,6 @@ Bugs:			None
 Fixes:			None
 */
 
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -15,10 +14,9 @@ namespace GDLibrary
 {
     public class DrawnActor3D : Actor3D, ICloneable
     {
-        #region Variables
+        #region Fields
         private Effect effect;
-        private Color color;
-        private float alpha;
+        private ColorParameters colorParameters;
         #endregion
 
         #region Properties
@@ -33,65 +31,79 @@ namespace GDLibrary
                 this.effect = value;
             }
         }
-        public Color Color
+        public ColorParameters ColorParameters
         {
             get
             {
-                return this.color;
+                return this.colorParameters;
             }
             set
             {
-                this.color = value;
-            }
-        }
-        public float Alpha
-        {
-            get
-            {
-                return this.alpha;
-            }
-            set
-            {
-                value = (value >= 0 && value <= 1) ? value : 1; //bounds check on value
-
-                //assign the new alpha
-                this.alpha = value;
+                this.colorParameters = value;
             }
         }
         #endregion
 
         //used when we don't want to specify color and alpha
-        public DrawnActor3D(string id, ActorType actorType,
-         Transform3D transform, Effect effect)
-            : this(id, actorType, transform, effect, 
-            Color.White, 1, 
-            StatusType.Drawn | StatusType.Update) // when we use a bitwise OR we are saying "drawn AND updated"
+        public DrawnActor3D(string id, ActorType actorType, Transform3D transform, Effect effect)
+            : this(id, actorType, transform, effect, ColorParameters.WhiteOpaque, StatusType.Drawn | StatusType.Update) 
         {
         }
 
-        public DrawnActor3D(string id, ActorType actorType,
-            Transform3D transform, Effect effect, Color color, 
-            float alpha, StatusType statusType)
-            : base(id, actorType, transform, statusType)
+        public DrawnActor3D(string id, ActorType actorType, Transform3D transform, Effect effect, 
+            ColorParameters colorParameters, StatusType statusType) : base(id, actorType, transform, statusType)
         {
             this.effect = effect;
-            this.color = color;
-            this.alpha = alpha;
+            this.colorParameters = colorParameters;
         }
 
         public override float GetAlpha()
         {
-            return this.alpha;
+            return this.colorParameters.Alpha;
         }
+
+        public override bool Equals(object obj)
+        {
+            DrawnActor3D other = obj as DrawnActor3D;
+
+            if (other == null)
+                return false;
+            else if (this == other)
+                return true;
+
+            return this.ColorParameters.Equals(other.ColorParameters) && base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash = hash * 31 + this.ColorParameters.GetHashCode();
+            hash = hash * 17 + base.GetHashCode();
+            return hash;
+        }
+
         public new object Clone()
         {
-            return new DrawnActor3D("clone - " + ID, //deep
+            IActor actor = new DrawnActor3D("clone - " + ID, //deep
                 this.ActorType, //deep
-                (Transform3D)this.Transform3D.Clone(), //deep - calls the clone for Transform3D explicitly
-                this.effect, //shallow - its ok if objects refer to the same effect
-                this.color, //deep  - a simple numeric type
-                this.alpha, //deep  - a simple numeric type
+                (Transform3D)this.Transform.Clone(), //deep - calls the clone for Transform3D explicitly
+                this.effect, //shallow - its ok if all objects refer to the same effect
+                (ColorParameters)this.ColorParameters.Clone(), //deep 
                 StatusType.Drawn | StatusType.Update); //deep - a simple numeric type
-        }       
+
+            //clone each of the (behavioural) controllers
+            foreach (IController controller in this.ControllerList)
+                actor.AttachController((IController)controller.Clone());
+
+            return actor;
+        }
+
+        public override bool Remove()
+        {
+            this.colorParameters = null;
+            return base.Remove();
+        }
+
+
     }
 }

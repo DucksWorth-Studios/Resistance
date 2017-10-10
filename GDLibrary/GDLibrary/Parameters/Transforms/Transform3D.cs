@@ -14,8 +14,10 @@ namespace GDLibrary
 {
     public class Transform3D : ICloneable
     {
+        #region Statics
         public static Transform3D Zero = new Transform3D(Vector3.Zero,
                                 Vector3.Zero, Vector3.One, -Vector3.UnitZ, Vector3.UnitY);
+        #endregion
 
         #region Fields
         private Vector3 translation, rotation, scale;
@@ -137,6 +139,16 @@ namespace GDLibrary
       
         #endregion
 
+        //used by drawn objects
+        public Transform3D(Vector3 translation, Vector3 rotation, Vector3 scale, Vector3 look, Vector3 up)
+        {
+            Initialize(translation, rotation, scale, look, up);
+
+            //store original values in case of reset
+            this.originalTransform3D = new Transform3D();
+            this.originalTransform3D.Initialize(translation, rotation, scale, look, up);
+        }
+
         //used by the camera
         public Transform3D(Vector3 translation, Vector3 look, Vector3 up)
             : this(translation, Vector3.Zero, Vector3.One, look, up)
@@ -145,14 +157,19 @@ namespace GDLibrary
         }
 
         //used by zone objects
-        public Transform3D(Vector3 translation,  Vector3 scale)
+        public Transform3D(Vector3 translation, Vector3 scale)
             : this(translation, Vector3.Zero, scale, Vector3.UnitX, Vector3.UnitY)
         {
 
         }
 
-        //used by drawn objects
-        public Transform3D(Vector3 translation, Vector3 rotation, Vector3 scale, Vector3 look, Vector3 up)
+        //used internally when creating the originalTransform object
+        private Transform3D()
+        {
+
+        }
+
+        protected void Initialize(Vector3 translation, Vector3 rotation, Vector3 scale, Vector3 look, Vector3 up)
         {
             this.Translation = translation;
             this.Rotation = rotation;
@@ -160,8 +177,6 @@ namespace GDLibrary
 
             this.Look = Vector3.Normalize(look);
             this.Up = Vector3.Normalize(up);
-
-            this.originalTransform3D = (Transform3D)this.Clone();
         }
 
         public void Reset()
@@ -176,6 +191,11 @@ namespace GDLibrary
         public override bool Equals(object obj)
         {
             Transform3D other = obj as Transform3D;
+
+            if (other == null)
+                return false;
+            else if (this == other)
+                return true;
 
             return Vector3.Equals(this.translation, other.Translation)
                 && Vector3.Equals(this.rotation, other.Rotation)
@@ -193,6 +213,11 @@ namespace GDLibrary
             return hash;
         }
 
+        public object Clone() 
+        {
+            //deep because all variables are either C# types (e.g. primitives, structs, or enums) or  XNA types
+            return this.MemberwiseClone();
+        }
 
         public void RotateBy(Vector3 rotateBy) //in degrees
         {
@@ -237,11 +262,6 @@ namespace GDLibrary
         {
             this.scale *= scaleBy;
             this.isDirty = true;
-        }
-
-        public object Clone() //deep copy - Vector3 are structures (i.e. value types) and so MemberwiseClone() will copy by value and effectively make a deep copy
-        {
-            return this.MemberwiseClone();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace GDLibrary
     public class Transform2D : ICloneable
     {
         #region Fields
-        private Vector2 translation, scale, originalScale;
+        private Vector2 translation, scale;
         private float rotationInDegrees, rotationInRadians;
         private Vector2 origin;
 
@@ -23,10 +23,12 @@ namespace GDLibrary
 
         private Rectangle bounds, originalBounds;
         private Integer2 originalDimensions;
+
+        //used to reset object
         private Transform2D originalTransform2D;
         #endregion
 
-        #region Properties
+        #region Properties     
         protected Matrix RotationMatrix
         {
             get
@@ -54,7 +56,7 @@ namespace GDLibrary
                 this.bBoundsDirty = true;
             }
         }
-        public float Rotation
+        public float RotationInDegrees
         {
             get
             {
@@ -116,6 +118,7 @@ namespace GDLibrary
             {
                 if (this.bBoundsDirty)
                 {
+                    //calculate where the new bounding box is in screen space based on the ISRoT transformation from the World matrix
                     this.bounds = CollisionUtility.CalculateTransformedBoundingRectangle(this.originalBounds, this.World);
                     this.bBoundsDirty = false;
                 }
@@ -129,52 +132,87 @@ namespace GDLibrary
             {
                 return this.originalBounds;
             }
-            set
+        }
+        public Transform2D OriginalTransform2D
+        {
+            get
             {
-                this.originalBounds = value;
+                return this.originalTransform2D;
             }
         }
         #endregion
-
 
         //used by dynamic sprites i.e. which need a look and right vector for movement
         public Transform2D(Vector2 translation, float rotationInDegrees, Vector2 scale,
             Vector2 origin, Integer2 dimensions)
         {
-            this.Translation = translation;
-            this.Scale = scale;
-            this.Rotation = rotationInDegrees;
-            this.Origin = origin;
+            Initialize(translation, rotationInDegrees, scale, origin, dimensions); 
 
-
-            //original bounding box based on the texture source rectangle dimensions
-            this.originalBounds = new Rectangle(0, 0, dimensions.X, dimensions.Y);
-            this.originalDimensions = dimensions;
-            this.originalTransform2D = (Transform2D)this.Clone();
+            //store original values in case of reset
+            this.originalTransform2D = new Transform2D();
+            this.originalTransform2D.Initialize(translation, rotationInDegrees, scale, origin, dimensions);
         }
-
 
         //used by static background sprites that cover the entire screen OR more than the entire screen
         public Transform2D(Vector2 scale) : this(Vector2.Zero, 0, scale, Vector2.Zero, Integer2.Zero)
         {
 
         }
-
-        //used to reset sprite to it's original transform
-        public void Reset()
+ 
+        //used internally when creating the originalTransform object
+        private Transform2D()
         {
-            this.Translation = this.originalTransform2D.Translation;
-            this.Rotation = this.originalTransform2D.Rotation;
-            this.Scale = this.originalTransform2D.Scale;
-            this.Origin = this.originalTransform2D.Origin;
+
         }
 
+        //called by constructor to setup the object
+        protected void Initialize(Vector2 translation, float rotationInDegrees, Vector2 scale, Vector2 origin, Integer2 dimensions)
+        {
+            this.Translation = translation;
+            this.Scale = scale;
+            this.RotationInDegrees = rotationInDegrees;
+            this.Origin = origin;
+
+            //original bounding box based on the texture source rectangle dimensions
+            this.originalBounds = new Rectangle(0, 0, dimensions.X, dimensions.Y);
+            this.originalDimensions = dimensions;
+        }
+
+        //called if we ever wish to completely reset the object (e.g. after modifying a menu button with a controller we want to reset the button's position etc)
+        public virtual void Reset()
+        {
+            Initialize(this.originalTransform2D.Translation, this.originalTransform2D.RotationInDegrees,
+                this.originalTransform2D.Scale, this.originalTransform2D.Origin, this.originalTransform2D.originalDimensions);
+        }
+
+        public override bool Equals(object obj)
+        {
+            Transform2D other = obj as Transform2D;
+
+            if (other == null)
+                return false;
+            else if (this == other)
+                return true;
+
+            return this.translation.Equals(other.Translation)
+                && this.RotationInRadians.Equals(other.RotationInRadians)
+                    && this.scale.Equals(other.Scale)
+                        && this.origin.Equals(other.Origin);
+        }
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash = hash * 31 + this.translation.GetHashCode();
+            hash = hash * 17 + this.RotationInRadians.GetHashCode();
+            hash = hash * 13 + this.scale.GetHashCode();
+            hash = hash * 7 + this.origin.GetHashCode();
+            return hash;
+        }
         public object Clone()
         {
+            //deep because all variables are either C# types (e.g. primitives, structs, or enums) or  XNA types
             return this.MemberwiseClone();
         }
-
-        //Add Equals, GetHashCode...
     }
 
 

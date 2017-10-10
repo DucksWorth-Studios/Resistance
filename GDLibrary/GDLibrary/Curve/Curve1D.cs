@@ -5,7 +5,7 @@ namespace GDLibrary
 {
     public class Curve1D
     {
-        #region Variables
+        #region Fields
         private Curve curve;
         private CurveLoopType curveLookType;
         private bool bSet;

@@ -21,7 +21,8 @@ namespace GDLibrary
         Zone, //i.e. invisible and triggers events e.g. walk through a bounding volume and trigger game end or camera change
         Helper, //i.e.. a wireframe visualisation for an entitiy e.g. camera, camera path, bounding box of a pickip
 
-        UITexture, //i.e. a menu texture
-        UIText     //i.e. menu text representing game state or menu choice e.g. "Pause"
+        UIStaticTexture,  //i.e. a static illustrative texture e.g. a background menu image
+        UIStaticText,     //i.e. menu text shown beside the value of game state e.g. Health: XXX
+        UIButton          //i.e. menu text representing a menu choice e.g. "Pause"
     }
 }

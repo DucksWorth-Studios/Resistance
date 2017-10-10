@@ -12,9 +12,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GDLibrary
 {
-    public class ScreenManager : DrawableGameComponent
+    public class ScreenManager : PausableDrawableGameComponent
     {
-        #region Variables
+        #region Fields
         private ScreenUtility.ScreenType screenType;
         private ObjectManager objectManager;
         private CameraManager cameraManager;
@@ -51,8 +51,10 @@ namespace GDLibrary
         }
         #endregion
 
-        public ScreenManager(Game game, GraphicsDeviceManager graphics, Integer2 screenResolution, ScreenUtility.ScreenType screenType, ObjectManager objectManager, CameraManager cameraManager)
-            : base(game)
+        public ScreenManager(Game game, GraphicsDeviceManager graphics, Integer2 screenResolution, 
+            ScreenUtility.ScreenType screenType, ObjectManager objectManager, CameraManager cameraManager,
+            StatusType statusType)
+            : base(game, statusType)
         {
             
             this.screenType = screenType;
@@ -63,6 +65,7 @@ namespace GDLibrary
             //set the resolution using the property
             this.ScreenResolution = screenResolution;
             this.fullScreenViewport = new Viewport(0, 0, screenResolution.X, screenResolution.Y);
+
         }
 
         public bool ToggleFullScreen()
@@ -75,7 +78,7 @@ namespace GDLibrary
             return this.graphics.IsFullScreen;
         }
 
-        public override void Update(GameTime gameTime)
+        protected override void ApplyUpdate(GameTime gameTime)
         {
             //if one camera needs to be drawn on top of another then we need to do a depth sort the first time the game is run
             if (this.bFirstTime && this.screenType == ScreenUtility.ScreenType.MultiPictureInPicture)
@@ -87,10 +90,9 @@ namespace GDLibrary
 
             //explicit call, as mentioned in Wiki - 2.4. Camera Viewports
             this.objectManager.Update(gameTime);
-            base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        protected override void ApplyDraw(GameTime gameTime)
         {
             if (this.screenType == ScreenUtility.ScreenType.SingleScreen)
             {
@@ -107,7 +109,6 @@ namespace GDLibrary
 
             //reset the viewport to fullscreen
             this.Game.GraphicsDevice.Viewport = this.fullScreenViewport;
-            base.Draw(gameTime);
         }
     }
 }

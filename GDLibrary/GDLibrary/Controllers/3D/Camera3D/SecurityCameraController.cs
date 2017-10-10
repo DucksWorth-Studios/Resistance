@@ -15,7 +15,7 @@ namespace GDLibrary
     //by default when VS creates a class it doesnt add the "public" access modifier - ensure you manually add to enable visibility of class from outside
     public class SecurityCameraController : Controller
     {
-        #region Variables
+        #region Fields
         private float rotationAmplitude;
         private float rotationSpeedMultiplier;
         private Vector3 rotationAxis;
@@ -90,7 +90,7 @@ namespace GDLibrary
             //Apply the rotation to get the camera to yaw (i.e. rotate around the Y axis)
             //This is a little counter-intuitive (since we set a x-ordinate value on the Vector3 below)
             //You need to look at the RotateBy() method to understand what is happening
-            actor3D.Transform3D.RotateBy(this.rotationAxis * boundedRotationAngle);
+            actor3D.Transform.RotateBy(this.rotationAxis * boundedRotationAngle);
 
             base.Update(gameTime, actor);
         }
