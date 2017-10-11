@@ -149,9 +149,12 @@ namespace GDLibrary
                 this.sourceRectangle,  //deep 
                 this.origin); //deep 
 
-            //clone each of the (behavioural) controllers
-            foreach (IController controller in this.ControllerList)
-                actor.AttachController((IController)controller.Clone());
+            //clone each of the (behavioural) controllers, if we have any controllers attached
+            if (this.ControllerList != null)
+            {
+                foreach (IController controller in this.ControllerList)
+                    actor.AttachController((IController)controller.Clone());
+            }
 
             return actor;
         }

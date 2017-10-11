@@ -115,12 +115,14 @@ namespace GDApp
 
             #region Main Menu
             sceneID = "main menu";
+
             //retrieve the background texture
             texture = this.textureDictionary["mainmenu"];
             //scale the texture to fit the entire screen
             Vector2 scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
                 (float)graphics.PreferredBackBufferHeight / texture.Height);
             transform = new Transform2D(scale);
+
             this.menuManager.Add(sceneID, new UITextureObject("mainmenuTexture", ActorType.UIStaticTexture,
                 StatusType.Drawn, //notice we dont need to update a static texture
                 transform, ColorParameters.WhiteOpaque, SpriteEffects.None,
@@ -135,13 +137,16 @@ namespace GDApp
             transform = new Transform2D(position,
                 0, new Vector2(1.5f, 0.6f),
                 new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+
             uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
                 transform, new ColorParameters(Color.LightPink, 1), SpriteEffects.None, 0.1f, texture, buttonText,
                 this.fontDictionary["menu"],
                 Color.DarkGray, new Vector2(0, 2));
-            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
-              new TrigonometricParameters(0.1f, 0.2f, 1)));
+
+            //uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+            //  new TrigonometricParameters(0.1f, 0.2f, 1)));
             this.menuManager.Add(sceneID, uiButtonObject);
+
 
             //add audio button - clone the audio button then just reset texture, ids etc in all the clones
             clone = (UIButtonObject)uiButtonObject.Clone();
@@ -234,8 +239,7 @@ namespace GDApp
             this.menuManager.Add(sceneID, clone);
             #endregion
 
-
-            #region Audio Menu
+            #region Controls Menu
             sceneID = "controls menu";
 
             //retrieve the controls menu background texture
@@ -303,18 +307,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Foliage/Trees/tree2");
 
             //menu - buttons
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/white64x64");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/startbtn");
-
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/audiobtn");
-            //this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/volumeupbtn");
-            //this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/volumedownbtn");
-            //this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/volumemutebtn");
-
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/controlsbtn");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/backbtn");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/exitbtn");
 
             //menu - backgrounds
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/mainmenu");

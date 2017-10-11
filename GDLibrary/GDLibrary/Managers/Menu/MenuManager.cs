@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace GDLibrary
 {
@@ -132,6 +130,7 @@ namespace GDLibrary
 
             foreach (UIObject currentUIObject in this.activeList)
             {
+                //add an if to check that this is a interactive UIButton object
                 if (currentUIObject.Transform.Bounds.Intersects(this.mouseManager.Bounds))
                 {
                     //if mouse is over a new ui object then set old to "IsMouseOver=false"

@@ -252,7 +252,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Textures\UI\Menu\Buttons\white64x64.png">
+    <Compile Include="Assets\Textures\Common\white64x64.png">
       <Name>white64x64</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -288,37 +288,6 @@
     </Compile>
     <Compile Include="Assets\Textures\UI\Menu\Backgrounds\mainmenu.PNG">
       <Name>mainmenu</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\Textures\UI\Menu\Buttons\controlsBtn.png">
-      <Name>controlsBtn</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\Textures\UI\Menu\Buttons\audiobtn.png">
-      <Name>audiobtn</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Assets\Textures\UI\Menu\Buttons\exitbtn.png">
-      <Name>exitbtn</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Assets\Textures\UI\Menu\Buttons\startbtn.png">
-      <Name>startbtn</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\Textures\UI\Menu\Buttons\backbtn.png">
-      <Name>backbtn</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
