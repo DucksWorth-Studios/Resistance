@@ -63,6 +63,20 @@ namespace GDLibrary
                                 (int)MathHelper.Lerp(a.A, b.A, lerpFactor));
         }
 
+        //lerps along a sine wave with properties defined by TrigonometricParameters (i.e. max amplitude, phase, speed) - see UISineLerpController
+        public static float SineLerpByElapsedTime(TrigonometricParameters trigonometricParameters, float totalElapsedTime)
+        {
+            //range - max amplitude -> + max amplitude
+            float lerpFactor = (float)(trigonometricParameters.MaxAmplitude
+                * Math.Sin(trigonometricParameters.AngularFrequency
+                * MathHelper.ToRadians(totalElapsedTime) + trigonometricParameters.PhaseAngle));
+            //range 0 -> 2* max amplitude
+            lerpFactor += trigonometricParameters.MaxAmplitude;
+            //range 0 -> max amplitude
+            lerpFactor /= 2.0f;
+
+            return lerpFactor;
+        }
 
         public static Vector2 Round(Vector2 a, int precision)
         {

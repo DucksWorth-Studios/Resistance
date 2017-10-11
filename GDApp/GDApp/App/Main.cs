@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 
 
 /*
- modelobject - clone
  menu - click sound
  menu transparency
  clone to controllers
@@ -570,7 +569,7 @@ namespace GDApp
 
             //create the manager which supports multiple camera viewports
             this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen,
-                this.objectManager, this.cameraManager, StatusType.Update);// | StatusType.Drawn);
+                this.objectManager, this.cameraManager, StatusType.Off);
             Components.Add(this.screenManager);
 
             //add mouse and keyboard managers

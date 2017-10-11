@@ -71,14 +71,8 @@ namespace GDLibrary
 
         protected override void ApplyController(GameTime gameTime, UIObject uiObject, float totalElapsedTime)
         {
-            //range -amplitude -> amplitude
-            float lerpFactor = (float)(this.TrigonometricParameters.MaxAmplitude 
-                * Math.Sin(this.TrigonometricParameters.AngularFrequency 
-                * MathHelper.ToRadians(totalElapsedTime) + this.TrigonometricParameters.PhaseAngle));
-            //range 0 -> 2*amplitude
-            lerpFactor += this.TrigonometricParameters.MaxAmplitude;
-            //range 0 -> amplitude
-            lerpFactor /= 2.0f;
+            //sine wave in the range 0 -> max amplitude
+            float lerpFactor = MathUtility.SineLerpByElapsedTime(this.TrigonometricParameters, totalElapsedTime);
             //apply color change
             uiObject.ColorParameters.Color = MathUtility.Lerp(this.colorMin, this.colorMax, lerpFactor);
         }
