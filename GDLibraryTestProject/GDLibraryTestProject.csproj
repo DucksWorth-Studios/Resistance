@@ -57,6 +57,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Actors\Base\ActorTests.cs" />
+    <Compile Include="Parameters\Camera\RailParametersTests.cs" />
+    <Compile Include="Parameters\Other\ColorParametersTests.cs" />
     <Compile Include="Parameters\Transforms\Transform2DTests.cs" />
     <Compile Include="Parameters\Transforms\Transform3DTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

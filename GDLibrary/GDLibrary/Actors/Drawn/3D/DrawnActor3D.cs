@@ -89,7 +89,7 @@ namespace GDLibrary
                 (Transform3D)this.Transform.Clone(), //deep - calls the clone for Transform3D explicitly
                 this.effect, //shallow - its ok if all objects refer to the same effect
                 (ColorParameters)this.ColorParameters.Clone(), //deep 
-                StatusType.Drawn | StatusType.Update); //deep - a simple numeric type
+                this.StatusType); //deep - a simple numeric type
 
             //clone each of the (behavioural) controllers
             foreach (IController controller in this.ControllerList)
