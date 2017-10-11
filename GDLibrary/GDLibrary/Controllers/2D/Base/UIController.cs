@@ -7,7 +7,6 @@ Bugs:			None
 Fixes:			None
 */
 
-using System;
 using Microsoft.Xna.Framework;
 
 namespace GDLibrary

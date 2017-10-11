@@ -143,8 +143,8 @@ namespace GDApp
                 this.fontDictionary["menu"],
                 Color.DarkGray, new Vector2(0, 2));
 
-            //uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
-            //  new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
             this.menuManager.Add(sceneID, uiButtonObject);
 
 
