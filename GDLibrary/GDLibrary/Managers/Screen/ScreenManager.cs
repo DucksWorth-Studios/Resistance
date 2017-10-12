@@ -53,8 +53,9 @@ namespace GDLibrary
 
         public ScreenManager(Game game, GraphicsDeviceManager graphics, Integer2 screenResolution, 
             ScreenUtility.ScreenType screenType, ObjectManager objectManager, CameraManager cameraManager,
+            EventDispatcher eventDispatcher, 
             StatusType statusType)
-            : base(game, statusType)
+            : base(game, eventDispatcher, statusType)
         {
             
             this.screenType = screenType;
@@ -65,8 +66,27 @@ namespace GDLibrary
             //set the resolution using the property
             this.ScreenResolution = screenResolution;
             this.fullScreenViewport = new Viewport(0, 0, screenResolution.X, screenResolution.Y);
-
         }
+
+        #region Event Handling
+        //See MenuManager::EventDispatcher_MenuChanged to see how it does the reverse i.e. they are mutually exclusive
+        protected override void EventDispatcher_MenuChanged(EventData eventData)
+        {
+            //did the event come from the main menu and is it a start game event
+            if (eventData.EventCategoryType == EventCategoryType.MainMenu && eventData.EventType == EventActionType.OnStart)
+            {
+                //turn on update and draw i.e. hide the menu
+                this.StatusType = StatusType.Update | StatusType.Drawn;
+            }
+            //did the event come from the main menu and is it a start game event
+            else if (eventData.EventCategoryType == EventCategoryType.MainMenu && eventData.EventType == EventActionType.OnPause)
+            {
+                //turn off update and draw i.e. show the menu since the game is paused
+                this.StatusType = StatusType.Off;
+            }
+        }
+        #endregion
+
 
         public bool ToggleFullScreen()
         {

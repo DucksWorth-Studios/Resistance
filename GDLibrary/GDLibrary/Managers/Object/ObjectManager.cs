@@ -28,16 +28,17 @@ namespace GDLibrary
         #endregion
 
         public ObjectManager(Game game, CameraManager cameraManager, int initialSize)
-         //   : base(game)
+        //   : base(game)
         {
             this.game = game;
             this.cameraManager = cameraManager;
             this.drawList = new List<IActor>(initialSize);
 
-            InitializeGraphics(game);       
+            //set up graphic settings
+            InitializeGraphics(game);
         }
 
-        private void InitializeGraphics(Game game)
+        protected void InitializeGraphics(Game game)
         {
             //set the graphics card to repeat the end pixel value for any UV value outside 0-1
             //See http://what-when-how.com/xna-game-studio-4-0-programmingdeveloping-for-windows-phone-7-and-xbox-360/samplerstates-xna-game-studio-4-0-programming/

@@ -91,9 +91,14 @@
     <Compile Include="Debug\DebugDrawer.cs" />
     <Compile Include="Enums\ActorType.cs" />
     <Compile Include="Enums\ControllerType.cs" />
+    <Compile Include="Enums\EventActionType.cs" />
+    <Compile Include="Enums\EventCategoryType.cs" />
     <Compile Include="Enums\PlayStatusType.cs" />
     <Compile Include="Enums\SortDirectionType.cs" />
     <Compile Include="Enums\StatusType.cs" />
+    <Compile Include="Events\Base\EventDataEqualityComparer.cs" />
+    <Compile Include="Events\Base\EventDispatcher.cs" />
+    <Compile Include="Events\Data\EventData.cs" />
     <Compile Include="Interfaces\IActor.cs" />
     <Compile Include="Interfaces\IController.cs" />
     <Compile Include="Managers\Camera\CameraManager.cs" />

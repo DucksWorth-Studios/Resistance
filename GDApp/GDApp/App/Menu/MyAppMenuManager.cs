@@ -7,7 +7,8 @@ namespace GDApp
     public class MyAppMenuManager : MenuManager
     {
         public MyAppMenuManager(Game game, MouseManager mouseManager, KeyboardManager keyboardManager, 
-            SpriteBatch spriteBatch, StatusType statusType) : base(game, mouseManager, keyboardManager, spriteBatch, statusType)
+            SpriteBatch spriteBatch, EventDispatcher eventDispatcher, 
+            StatusType statusType) : base(game, mouseManager, keyboardManager, spriteBatch, eventDispatcher, statusType)
         {
 
         }
@@ -68,7 +69,8 @@ namespace GDApp
 
         private void DoStart()
         {
-            //to do - generate an event to pause menu and unpause game
+            //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
+            EventDispatcher.Publish(new EventData("unused id", this, EventActionType.OnStart, EventCategoryType.MainMenu));
         }
 
         private void DoExit()

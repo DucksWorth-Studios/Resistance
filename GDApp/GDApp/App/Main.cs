@@ -1,3 +1,4 @@
+using System;
 using GDLibrary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,8 +9,6 @@ using Microsoft.Xna.Framework.Input;
  menu - click sound
  menu transparency
  clone to controllers
- controller::Apply
- menu manager - apply draw and apply update
  */
 
 namespace GDApp
@@ -31,16 +30,22 @@ namespace GDApp
         public ScreenManager screenManager { get; private set; }
         public MyAppMenuManager menuManager { get; private set; }
 
+        //receives, handles and routes events
+        public EventDispatcher eventDispatcher { get; private set; }
+
+        //default shader for rendering 3D models
         private BasicEffect modelEffect;
+
+        //stores loaded game resources
         private ContentDictionary<Model> modelDictionary;
         private ContentDictionary<Texture2D> textureDictionary;
         private ContentDictionary<SpriteFont> fontDictionary;
 
 
+#if DEBUG
         //temp var - remove later
         private ModelObject drivableBoxObject;
 
-#if DEBUG
         private DebugDrawer debugDrawer;
 #endif
         #endregion
@@ -72,6 +77,10 @@ namespace GDApp
             InitializeEffects();
             #endregion
 
+            #region Add Event Dispatcher
+            InitializeEventDispatcher();
+            #endregion
+
             #region Add the Managers
             bool isMouseVisible = true;
             InitializeManagers(screenResolution, isMouseVisible);
@@ -94,11 +103,32 @@ namespace GDApp
             InitializeCameras(screenResolution);
             #endregion
 
+            #region Publish Start Event(s)
+            PublishGameStartEvents();
+            #endregion
+
             base.Initialize();
         }
+
+        private void PublishGameStartEvents()
+        {
+            //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
+            EventDispatcher.Publish(new EventData("unused id", this, EventActionType.OnPause, EventCategoryType.MainMenu));
+        }
+
+        private void InitializeEventDispatcher()
+        {
+            //initialize with an arbitrary size based on the expected number of events per update cycle, increase/reduce where appropriate
+            this.eventDispatcher = new EventDispatcher(this, 20);
+
+            //dont forget to add to the Component list otherwise EventDispatcher::Update won't get called and no event processing will occur!
+            Components.Add(this.eventDispatcher);
+        }
+
         private void InitializeMenu()
         {
-            this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, spriteBatch, StatusType.Update | StatusType.Drawn);
+            this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, spriteBatch, 
+                this.eventDispatcher, StatusType.Off);
             //set the main menu to be the active menu scene
             this.menuManager.SetActiveList("mainmenu");
             Components.Add(this.menuManager);
@@ -562,7 +592,7 @@ namespace GDApp
 
             //create the manager which supports multiple camera viewports
             this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen,
-                this.objectManager, this.cameraManager, StatusType.Off);
+                this.objectManager, this.cameraManager, this.eventDispatcher, StatusType.Off);
             Components.Add(this.screenManager);
 
             //add mouse and keyboard managers
@@ -639,7 +669,29 @@ namespace GDApp
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+
+            #region Menu Handling
+            //if user presses menu button then either show or hide the menu
+            if (this.keyboardManager.IsFirstKeyPress(AppData.KeyPauseShowMenu))
+            {
+                //if game is paused then publish a play event
+                if (this.screenManager.StatusType == StatusType.Off)
+                {
+                    //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
+                    EventDispatcher.Publish(new EventData("unused id", this, EventActionType.OnStart, EventCategoryType.MainMenu));
+                }
+                //if game is playing then publish a pause event
+                else if (this.screenManager.StatusType != StatusType.Off)
+                {
+                    //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
+                    EventDispatcher.Publish(new EventData("unused id", this, EventActionType.OnPause, EventCategoryType.MainMenu));
+                }
+            }
+            #endregion
+
+
+
+
 
             base.Update(gameTime);
         }

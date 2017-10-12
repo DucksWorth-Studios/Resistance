@@ -6,9 +6,21 @@ namespace GDLibrary
     {
         #region Fields
         private StatusType statusType;
+        private EventDispatcher eventDispatcher;
         #endregion
 
         #region Properties 
+        private EventDispatcher EventDispatcher
+        {
+            get
+            {
+                return this.eventDispatcher;
+            }
+            set
+            {
+                this.eventDispatcher = value;
+            }
+        }
         public StatusType StatusType
         {
             get
@@ -21,12 +33,31 @@ namespace GDLibrary
             }
         }
         #endregion
-        public PausableDrawableGameComponent(Game game, StatusType statusType)
+
+        public PausableDrawableGameComponent(Game game, EventDispatcher eventDispatcher, StatusType statusType)
             : base(game)
         {
+            //store handle to event dispatcher for event registration and de-registration
+            this.eventDispatcher = eventDispatcher;
+
             //allows us to start the game component with drawing and/or updating paused
             this.statusType = statusType;
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
         }
+
+        #region Event Handling
+        protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.MenuChanged += EventDispatcher_MenuChanged;
+        }
+
+        protected virtual void EventDispatcher_MenuChanged(EventData eventData)
+        {
+
+        }
+        #endregion
 
         public override void Update(GameTime gameTime)
         {
