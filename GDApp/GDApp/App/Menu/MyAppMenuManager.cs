@@ -23,8 +23,6 @@ namespace GDApp
         //add the code here to say how click events are handled by your code
         protected override void HandleMouseClick(UIObject clickedUIObject)
         {
-            if(clickedUIObject.ActorType == ActorType.UIButton)
-            {
                 //notice that the IDs are the same as the button IDs specified when we created the menu in Main::AddMenuElements()
                 switch (clickedUIObject.ID)
                 {
@@ -63,8 +61,6 @@ namespace GDApp
                     default:
                         break;
                 }
-                
-            }
         }     
 
         private void DoStart()

@@ -144,37 +144,41 @@ namespace GDLibrary
                 //check for mouse over and mouse click on a menu item
                 CheckMouseOverAndClick(gameTime);
             }
+
         }
 
         private void CheckMouseOverAndClick(GameTime gameTime)
         {
-
             foreach (UIObject currentUIObject in this.activeList)
             {
-                //add an if to check that this is a interactive UIButton object
-                if (currentUIObject.Transform.Bounds.Intersects(this.mouseManager.Bounds))
+                //only handle mouseover and mouse click for buttons
+                if (currentUIObject.ActorType == ActorType.UIButton)
                 {
-                    //if mouse is over a new ui object then set old to "IsMouseOver=false"
-                    if (this.oldUIObjectMouseOver != null && this.oldUIObjectMouseOver != currentUIObject)
+                    //add an if to check that this is a interactive UIButton object
+                    if (currentUIObject.Transform.Bounds.Intersects(this.mouseManager.Bounds))
                     {
-                        oldUIObjectMouseOver.MouseOverState.Update(false);
+                        //if mouse is over a new ui object then set old to "IsMouseOver=false"
+                        if (this.oldUIObjectMouseOver != null && this.oldUIObjectMouseOver != currentUIObject)
+                        {
+                            oldUIObjectMouseOver.MouseOverState.Update(false);
+                        }
+
+                        //update the current state of the currently mouse-over'ed ui object
+                        currentUIObject.MouseOverState.Update(true);
+
+                        //apply any mouse over or mouse click actions
+                        HandleMouseOver(currentUIObject);
+                        if (this.mouseManager.IsLeftButtonClickedOnce())
+                            HandleMouseClick(currentUIObject);
+
+                        //store the current as old for the next update
+                        this.oldUIObjectMouseOver = currentUIObject;
                     }
-
-                    //update the current state of the currently mouse-over'ed ui object
-                    currentUIObject.MouseOverState.Update(true);
-
-                    //apply any mouse over or mouse click actions
-                    HandleMouseOver(currentUIObject);
-                    if (this.mouseManager.IsLeftButtonClickedOnce())
-                        HandleMouseClick(currentUIObject);
-
-                    //store the current as old for the next update
-                    this.oldUIObjectMouseOver = currentUIObject;
-                }
-                else
-                {
-                    //set the mouse as not being over the current ui object
-                    currentUIObject.MouseOverState.Update(false);
+                    else
+                    {
+                        //set the mouse as not being over the current ui object
+                        currentUIObject.MouseOverState.Update(false);
+                    }
                 }
             }
         }

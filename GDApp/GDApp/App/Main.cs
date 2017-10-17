@@ -590,18 +590,19 @@ namespace GDApp
             //create the object manager - notice that its not a drawablegamecomponent. See ScreeManager::Draw()
             this.objectManager = new ObjectManager(this, cameraManager, 10);
 
-            //create the manager which supports multiple camera viewports
-            this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen,
-                this.objectManager, this.cameraManager, this.eventDispatcher, StatusType.Off);
-            Components.Add(this.screenManager);
-
             //add mouse and keyboard managers
-            this.mouseManager = new MouseManager(this, isMouseVisible, 
+            this.mouseManager = new MouseManager(this, isMouseVisible,
                 new Vector2(screenResolution.X / 2.0f, screenResolution.Y / 2.0f) /*screen centre*/);
             Components.Add(this.mouseManager);
 
             this.keyboardManager = new KeyboardManager(this);
             Components.Add(this.keyboardManager);
+
+            //create the manager which supports multiple camera viewports
+            this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen,
+                this.objectManager, this.cameraManager, this.keyboardManager, AppData.KeyPauseShowMenu,
+                this.eventDispatcher, StatusType.Off);
+            Components.Add(this.screenManager);
         }
 
         private void InitializeEffects()
@@ -639,10 +640,6 @@ namespace GDApp
             #endregion
 #endif
 
-
-
-
-
         }
 
         /// <summary>
@@ -668,30 +665,6 @@ namespace GDApp
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
-
-            #region Menu Handling
-            //if user presses menu button then either show or hide the menu
-            if (this.keyboardManager.IsFirstKeyPress(AppData.KeyPauseShowMenu))
-            {
-                //if game is paused then publish a play event
-                if (this.screenManager.StatusType == StatusType.Off)
-                {
-                    //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
-                    EventDispatcher.Publish(new EventData("unused id", this, EventActionType.OnStart, EventCategoryType.MainMenu));
-                }
-                //if game is playing then publish a pause event
-                else if (this.screenManager.StatusType != StatusType.Off)
-                {
-                    //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
-                    EventDispatcher.Publish(new EventData("unused id", this, EventActionType.OnPause, EventCategoryType.MainMenu));
-                }
-            }
-            #endregion
-
-
-
-
 
             base.Update(gameTime);
         }

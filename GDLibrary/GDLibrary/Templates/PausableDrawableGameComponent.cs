@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
@@ -61,12 +62,17 @@ namespace GDLibrary
 
         public override void Update(GameTime gameTime)
         {
+            //screen manager needs to listen to input even when paused i.e. hide/show menu - see ScreenManager::HandleInput()
+            HandleInput(gameTime);
+
             if ((this.statusType & StatusType.Update) != 0) //if update flag is set
             {
                 ApplyUpdate(gameTime);
                 base.Update(gameTime);
             }
         }
+
+        
 
         public override void Draw(GameTime gameTime)
         {
@@ -85,6 +91,10 @@ namespace GDLibrary
         protected virtual void ApplyDraw(GameTime gameTime)
         {
 
+        }
+
+        protected virtual void HandleInput(GameTime gameTime)
+        {
         }
     }
 }
