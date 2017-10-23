@@ -99,8 +99,11 @@ namespace GDApp
             #endregion
 
             #region Add Camera(s)
+            //add a single camera only as we progress with development
+            InitializeSingleCamera(screenResolution);
+
             //we needed to move this method because of a dependency with the drivable model object instanciated in AddControllableModelObjects() and the RailController
-            InitializeCameras(screenResolution);
+            //InitializeCameras(screenResolution);
             #endregion
 
             #region Publish Start Event(s)
@@ -113,7 +116,7 @@ namespace GDApp
         private void PublishGameStartEvents()
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
-            EventDispatcher.Publish(new EventData("unused id", this, EventActionType.OnPause, EventCategoryType.MainMenu));
+            EventDispatcher.Publish(new EventData("bbbbbb", this, EventActionType.OnPause, EventCategoryType.MainMenu));
         }
 
         private void InitializeEventDispatcher()
@@ -480,6 +483,24 @@ namespace GDApp
             //add more clones here...
         }
 
+        private void InitializeSingleCamera(Integer2 screenResolution)
+        {
+            Transform3D transform = null;
+            Camera3D camera = null;
+
+            #region Initialise the first person camera
+            transform = new Transform3D(new Vector3(0, 0, 10), -Vector3.UnitZ, Vector3.UnitY);
+            //set the camera to occupy the the full width but only half the height of the full viewport
+            Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), 0, 0, 0, 0);
+
+            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Update);
+            //attach a FirstPersonCameraController
+            camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
+                AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
+            this.cameraManager.Add(camera);
+            #endregion
+        }
+
         private void InitializeCameras(Integer2 screenResolution)
         {
             Transform3D transform = null;
@@ -602,6 +623,7 @@ namespace GDApp
             this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen,
                 this.objectManager, this.cameraManager, this.keyboardManager, AppData.KeyPauseShowMenu,
                 this.eventDispatcher, StatusType.Off);
+
             Components.Add(this.screenManager);
         }
 

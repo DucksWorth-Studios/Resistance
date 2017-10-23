@@ -71,6 +71,7 @@ namespace GDLibrary
 
         #region Menu
         public static readonly Keys KeyPauseShowMenu = Keys.Escape;
+        public static readonly Keys KeyToggleCameraLayout = Keys.F1;
         #endregion
     }
 }

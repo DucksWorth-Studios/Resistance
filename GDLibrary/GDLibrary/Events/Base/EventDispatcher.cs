@@ -72,7 +72,7 @@ namespace GDLibrary
                     break;
             }
         }
-     
+
         //called when a menu change is requested
         protected virtual void OnMenu(EventData eventData)
         {

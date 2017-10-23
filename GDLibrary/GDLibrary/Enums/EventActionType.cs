@@ -37,6 +37,11 @@ namespace GDLibrary
 
         //sent by game state manager
         OnLose,
-        OnWin
+        OnWin,
+
+        OnPickup,
+        OnOpen,
+        OnClose,
+
     }
 }

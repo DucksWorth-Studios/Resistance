@@ -17,7 +17,8 @@ namespace GDLibrary
         Camera,
         Player,
         NonPlayer,
-        Pickup
+        Pickup,
+        Door,
         //all other categories of sender...
     }
 }
