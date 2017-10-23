@@ -99,8 +99,12 @@ namespace GDApp
             #endregion
 
             #region Add Camera(s)
-            //add a single camera only as we progress with development
-            InitializeSingleCamera(screenResolution);
+            //add a third person camera to test the thirdpersoncontroller
+            InitializeThirdPersonCamera(screenResolution, this.drivableBoxObject);
+
+
+            //add a first person camera only
+            //InitializeFirstPersonCamera(screenResolution);
 
             //we needed to move this method because of a dependency with the drivable model object instanciated in AddControllableModelObjects() and the RailController
             //InitializeCameras(screenResolution);
@@ -483,7 +487,38 @@ namespace GDApp
             //add more clones here...
         }
 
-        private void InitializeSingleCamera(Integer2 screenResolution)
+     
+
+        private void InitializeThirdPersonCamera(Integer2 screenResolution, Actor targetActor)
+        {
+            Transform3D transform = null;
+            Camera3D camera = null;
+
+            #region Initialise the third person camera
+            //it doesnt matter what we set for translation, look, and up since these will be changed by the 3rd Person Controller
+            transform = new Transform3D(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
+
+            //set the camera to occupy the the full width but only half the height of the full viewport
+            Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), 0, 0, 0, 0);
+
+            camera = new Camera3D("third person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Update);
+
+            //attach a ThirdPersonCameraController
+            camera.AttachController(new ThirdPersonController("thirdPersControl1", ControllerType.ThirdPerson,
+                  targetActor, 
+                  AppData.CameraThirdPersonDistance,
+                  AppData.CameraThirdPersonScrollSpeedDistanceMultiplier,
+                    AppData.CameraThirdPersonElevationAngleInDegrees,
+                  AppData.CameraThirdPersonScrollSpeedElevatationMultiplier,
+                  LerpSpeed.VerySlow,
+                  LerpSpeed.Medium,
+                  this.mouseManager));
+
+            this.cameraManager.Add(camera);
+            #endregion
+        }
+
+        private void InitializeFirstPersonCamera(Integer2 screenResolution)
         {
             Transform3D transform = null;
             Camera3D camera = null;

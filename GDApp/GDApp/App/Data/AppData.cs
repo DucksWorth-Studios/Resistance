@@ -11,7 +11,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 namespace GDLibrary
 {
-    public class AppData
+    public sealed class LerpSpeed
+    {
+        private static readonly float SpeedMultiplier = 2;
+        public static readonly float VerySlow = 0.05f;
+        public static readonly float Slow = SpeedMultiplier * VerySlow;
+        public static readonly float Medium = SpeedMultiplier * Slow;
+        public static readonly float Fast = SpeedMultiplier * Medium;
+        public static readonly float VeryFast = SpeedMultiplier * Fast;
+    }
+    public sealed class AppData
     {
         #region Mouse
         //defines how much the mouse has to move in pixels before a movement is registered - see MouseManager::HasMoved()
@@ -44,12 +53,10 @@ namespace GDLibrary
                                          Keys.Space, Keys.C, Keys.LeftShift, Keys.RightShift};
         public static readonly Keys[] CameraMoveKeys_Alt1 = { Keys.T, Keys.G, Keys.F, Keys.H };
 
-        public static readonly float CameraLerpSpeedSlow = 0.05f;
-        public static readonly float CameraLerpSpeedMedium = 0.1f;
-        public static readonly float CameraLerpSpeedFast = 0.2f;
-
         public static readonly float CameraThirdPersonScrollSpeedDistanceMultiplier = 0.01f;
         public static readonly float CameraThirdPersonScrollSpeedElevatationMultiplier = 0.1f;
+        public static readonly float CameraThirdPersonDistance = 20;
+        public static readonly float CameraThirdPersonElevationAngleInDegrees = 160;
 
         public static readonly float SecurityCameraRotationSpeedSlow = 0.5f;
         public static readonly float SecurityCameraRotationSpeedMedium = 2 * SecurityCameraRotationSpeedSlow;
