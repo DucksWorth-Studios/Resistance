@@ -23,6 +23,10 @@ namespace GDLibrary
 
         UIStaticTexture,  //i.e. a static illustrative texture e.g. a background menu image
         UIStaticText,     //i.e. menu text shown beside the value of game state e.g. Health: XXX
-        UIButton          //i.e. menu text representing a menu choice e.g. "Pause"
+        UIButton,          //i.e. menu text representing a menu choice e.g. "Pause"
+
+        //new with JigLibX
+        CollidableGround,
+        CollidableProp     //could be an inventory item
     }
 }

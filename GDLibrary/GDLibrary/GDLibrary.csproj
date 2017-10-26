@@ -43,6 +43,9 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JigLibX">
+      <HintPath>..\Dependencies\Physics\JigLibX.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
@@ -68,6 +71,10 @@
     <Compile Include="Actors\Drawn\2D\UI\UIObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UITextObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UITextureObject.cs" />
+    <Compile Include="Actors\Drawn\3D\Collidable\CollidableObject.cs" />
+    <Compile Include="Actors\Drawn\3D\Collidable\Player\CharacterObject.cs" />
+    <Compile Include="Actors\Drawn\3D\Collidable\Player\PlayerObject.cs" />
+    <Compile Include="Actors\Drawn\3D\Collidable\TriangleMeshObject.cs" />
     <Compile Include="Actors\Drawn\3D\DrawnActor3D.cs" />
     <Compile Include="Actors\Drawn\3D\ModelObject.cs" />
     <Compile Include="Comparer\CameraDepthComparer.cs" />
@@ -88,13 +95,15 @@
     <Compile Include="Controllers\3D\Object\TranslationSineLerpController.cs" />
     <Compile Include="Controllers\Base\Controller.cs" />
     <Compile Include="Controllers\3D\Base\UserInputController.cs" />
+    <Compile Include="Controllers\Physics\PhysicsController.cs" />
     <Compile Include="Curve\Curve1D.cs" />
     <Compile Include="Curve\Curve2D.cs" />
     <Compile Include="Curve\Curve3D.cs" />
     <Compile Include="Curve\Transform2DCurve.cs" />
     <Compile Include="Curve\Transform3DCurve.cs" />
+    <Compile Include="Debug\Physics\BoundingBoxDrawer.cs" />
     <Compile Include="Debug\DebugDrawer.cs" />
-    <Compile Include="Debug\DebugInfo.cs" />
+    <Compile Include="Debug\Physics\PhysicsDebugDrawer.cs" />
     <Compile Include="Enums\ActorType.cs" />
     <Compile Include="Enums\ControllerType.cs" />
     <Compile Include="Enums\EventActionType.cs" />
@@ -111,12 +120,12 @@
     <Compile Include="Managers\Content\ContentDictionary.cs" />
     <Compile Include="Managers\Menu\MenuManager.cs" />
     <Compile Include="Managers\Object\ObjectManager.cs" />
+    <Compile Include="Managers\Physics\PhysicsManager.cs" />
     <Compile Include="Managers\Screen\ScreenManager.cs" />
     <Compile Include="Parameters\Other\ColorParameters.cs" />
     <Compile Include="Parameters\Other\TrigonometricParameters.cs" />
     <Compile Include="Templates\PausableDrawableGameComponent.cs" />
     <Compile Include="Templates\SimpleDrawableComponent.cs" />
-    <Compile Include="Debug\SimpleFPSCounter.cs" />
     <Compile Include="Parameters\Camera\ProjectionParameters.cs" />
     <Compile Include="Managers\Input\KeyboardManager.cs" />
     <Compile Include="Managers\Input\MouseManager.cs" />

@@ -132,22 +132,25 @@ namespace GDLibrary
 
         private void UpdateParent(GameTime gameTime, Actor3D parentActor, Actor3D targetActor)
         {
-            //rotate the target look around the target right to get a vector pointing away from the target at a specified elevation
-            Vector3 cameraToTarget = Vector3.Transform(targetActor.Transform.Look,
-                Matrix.CreateFromAxisAngle(targetActor.Transform.Right, this.elevationAngle));
+            if (targetActor != null)
+            {
+                //rotate the target look around the target right to get a vector pointing away from the target at a specified elevation
+                Vector3 cameraToTarget = Vector3.Transform(targetActor.Transform.Look,
+                    Matrix.CreateFromAxisAngle(targetActor.Transform.Right, this.elevationAngle));
 
-            //normalize to give unit length, otherwise distance from camera to target will vary over time
-            cameraToTarget.Normalize();
+                //normalize to give unit length, otherwise distance from camera to target will vary over time
+                cameraToTarget.Normalize();
 
-            //set the position of the camera to be a set distance from target and at certain elevation angle
-            parentActor.Transform.Translation = Vector3.Lerp(this.oldTranslation, cameraToTarget * this.distance + targetActor.Transform.Translation, this.translationLerpSpeed);
+                //set the position of the camera to be a set distance from target and at certain elevation angle
+                parentActor.Transform.Translation = Vector3.Lerp(this.oldTranslation, cameraToTarget * this.distance + targetActor.Transform.Translation, this.translationLerpSpeed);
 
-            //set the camera to look at the target object
-            parentActor.Transform.Look = Vector3.Lerp(this.oldCameraToTarget, cameraToTarget, this.lookLerpSpeed);
+                //set the camera to look at the target object
+                parentActor.Transform.Look = Vector3.Lerp(this.oldCameraToTarget, cameraToTarget, this.lookLerpSpeed);
 
-            //store old values for lerp
-            this.oldTranslation = parentActor.Transform.Translation;
-            this.oldCameraToTarget = -cameraToTarget;
+                //store old values for lerp
+                this.oldTranslation = parentActor.Transform.Translation;
+                this.oldCameraToTarget = -cameraToTarget;
+            }
         }
 
         private void UpdateFromScrollWheel(GameTime gameTime)

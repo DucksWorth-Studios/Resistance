@@ -22,23 +22,27 @@ namespace GDLibrary
         private CameraManager cameraManager;
         private List<IActor> drawList;
         private Game game;
+        private RasterizerState rasterizerStateOpaque;
+        private RasterizerState rasterizerStateTransparent;
+        private PhysicsDebugDrawer physicsDebugDrawer;
         #endregion
 
         #region Properties   
         #endregion
 
-        public ObjectManager(Game game, CameraManager cameraManager, int initialSize)
+        public ObjectManager(Game game, CameraManager cameraManager, PhysicsDebugDrawer physicsDebugDrawer, int initialSize)
         //   : base(game)
         {
             this.game = game;
             this.cameraManager = cameraManager;
+            this.physicsDebugDrawer = physicsDebugDrawer;
             this.drawList = new List<IActor>(initialSize);
 
             //set up graphic settings
-            InitializeGraphics(game);
+            InitializeGraphics();
         }
 
-        protected void InitializeGraphics(Game game)
+        private void InitializeGraphics()
         {
             //set the graphics card to repeat the end pixel value for any UV value outside 0-1
             //See http://what-when-how.com/xna-game-studio-4-0-programmingdeveloping-for-windows-phone-7-and-xbox-360/samplerstates-xna-game-studio-4-0-programming/
@@ -47,14 +51,41 @@ namespace GDLibrary
             samplerState.AddressV = TextureAddressMode.Clamp;
             game.GraphicsDevice.SamplerStates[0] = samplerState;
 
-            //enable alpha blending for transparent objects i.e. trees
-            game.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            //opaque objects
+            this.rasterizerStateOpaque = new RasterizerState();
+            this.rasterizerStateOpaque.CullMode = CullMode.CullCounterClockwiseFace;
 
-            //draw the forward and backward facing surfaces for all objects in the game - expensive - we will need to refine this approach in time
-            RasterizerState rasterizerStateTransparent = new RasterizerState();
-            rasterizerStateTransparent.CullMode = CullMode.None;
-            game.GraphicsDevice.RasterizerState = rasterizerStateTransparent;
+            //transparent objects
+            this.rasterizerStateTransparent = new RasterizerState();
+            this.rasterizerStateTransparent.CullMode = CullMode.None;
         }
+        private void SetGraphicsStateObjects(bool isOpaque)
+        {
+            //Remember this code from our initial aliasing problems with the Sky box?
+            //enable anti-aliasing along the edges of the quad i.e. to remove jagged edges to the primitive
+            game.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+
+            if (isOpaque)
+            {
+                //set the appropriate state for opaque objects
+                game.GraphicsDevice.RasterizerState = this.rasterizerStateOpaque;
+
+                //disable to see what happens when we disable depth buffering - look at the boxes
+                game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            }
+            else
+            {
+                //set the appropriate state for transparent objects
+                game.GraphicsDevice.RasterizerState = this.rasterizerStateTransparent;
+
+                //enable alpha blending for transparent objects i.e. trees
+                game.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
+                //disable to see what happens when we disable depth buffering - look at the boxes
+                game.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+            }
+        }
+
 
         public void Add(IActor actor)
         {
@@ -90,10 +121,17 @@ namespace GDLibrary
             //set the viewport dimensions to the size defined by the active camera
             this.game.GraphicsDevice.Viewport = activeCamera.Viewport;
 
+            SetGraphicsStateObjects(true);
+
             foreach (IActor actor in this.drawList)
             {
                 if ((actor.GetStatusType() & StatusType.Drawn) != 0) //if drawn flag is set
+                {
                     DrawObject(gameTime, actor as ModelObject, activeCamera);
+                    DrawCollisionSkin(actor);
+                }
+
+
             }
         }
 
@@ -123,6 +161,17 @@ namespace GDLibrary
                     mesh.Draw();
                 }
             }
+        }
+
+        //debug method to draw collision skins for collidable objects and zone objects
+        private void DrawCollisionSkin(IActor actor)
+        {
+            if (actor is CollidableObject)
+            {
+                CollidableObject collidableObject = actor as CollidableObject;
+                this.physicsDebugDrawer.DrawDebug(actor as CollidableObject);
+            }
+           
         }
     }
 }

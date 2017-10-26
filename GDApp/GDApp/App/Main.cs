@@ -3,12 +3,13 @@ using GDLibrary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using JigLibX.Geometry;
+using JigLibX.Collision;
 
 
 /*
  menu - click sound
  menu transparency
- clone to controllers
  */
 
 namespace GDApp
@@ -47,6 +48,8 @@ namespace GDApp
         private ModelObject drivableBoxObject;
 
         private DebugDrawer debugDrawer;
+        private PhysicsManager physicsManager;
+        private PhysicsDebugDrawer physicsDebugDrawer;
 #endif
         #endregion
 
@@ -59,6 +62,7 @@ namespace GDApp
             Content.RootDirectory = "Content";
         }
 
+        #region Initialization
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -91,23 +95,12 @@ namespace GDApp
             LoadAssets();
             #endregion
 
-            #region Add ModelObject(s)
-            int worldScale = 100;
-            AddWorldDecoratorObjects(worldScale);
-            AddControllableModelObjects();
-            AddDecoratorModelObjects();
-            #endregion
+            int level = 1;
+            LoadGame(level);
 
             #region Add Camera(s)
-            //add a third person camera to test the thirdpersoncontroller
-            InitializeThirdPersonCamera(screenResolution, this.drivableBoxObject);
-
-
             //add a first person camera only
-            //InitializeFirstPersonCamera(screenResolution);
-
-            //we needed to move this method because of a dependency with the drivable model object instanciated in AddControllableModelObjects() and the RailController
-            //InitializeCameras(screenResolution);
+            InitializeFirstPersonCamera(screenResolution);
             #endregion
 
             #region Publish Start Event(s)
@@ -117,6 +110,348 @@ namespace GDApp
             base.Initialize();
         }
 
+        private void InitializeManagers(Integer2 screenResolution, bool isMouseVisible)
+        {
+            this.cameraManager = new CameraManager(this, 1);
+            Components.Add(this.cameraManager);
+
+            //CD-CR using JigLibX and add debug drawer to visualise collision skins
+            this.physicsManager = new PhysicsManager(this, this.eventDispatcher);
+            Components.Add(this.physicsManager);
+            this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager);
+            Components.Add(this.physicsDebugDrawer);
+
+            //create the object manager - notice that its not a drawablegamecomponent. See ScreeManager::Draw()
+            this.objectManager = new ObjectManager(this, this.cameraManager, this.physicsDebugDrawer, 10);
+
+            //add mouse and keyboard managers
+            this.mouseManager = new MouseManager(this, isMouseVisible,
+                new Vector2(screenResolution.X / 2.0f, screenResolution.Y / 2.0f) /*screen centre*/);
+            Components.Add(this.mouseManager);
+
+            this.keyboardManager = new KeyboardManager(this);
+            Components.Add(this.keyboardManager);
+
+            //create the manager which supports multiple camera viewports
+            this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen,
+                this.objectManager, this.cameraManager, this.keyboardManager, AppData.KeyPauseShowMenu,
+                this.eventDispatcher, StatusType.Off);
+
+            Components.Add(this.screenManager);
+        }
+
+        private void LoadDictionaries()
+        {
+            //models
+            this.modelDictionary = new ContentDictionary<Model>("model dictionary", this.Content);
+
+            //textures
+            this.textureDictionary = new ContentDictionary<Texture2D>("texture dictionary", this.Content);
+
+            //fonts
+            this.fontDictionary = new ContentDictionary<SpriteFont>("font dictionary", this.Content);
+        }
+
+        private void LoadAssets()
+        {
+            //models
+            this.modelDictionary.Load("Assets/Models/plane1", "plane1");
+            this.modelDictionary.Load("Assets/Models/box2", "box2");
+            this.modelDictionary.Load("Assets/Models/torus");
+            this.modelDictionary.Load("Assets/Models/sphere");
+
+            #region Textures
+            //environment
+            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1"); //demo use of the shorter form of Load() that generates key from asset name
+            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate2"); 
+            this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");
+            this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
+            this.textureDictionary.Load("Assets/Textures/Skybox/back");
+            this.textureDictionary.Load("Assets/Textures/Skybox/left");
+            this.textureDictionary.Load("Assets/Textures/Skybox/right");
+            this.textureDictionary.Load("Assets/Textures/Skybox/sky");
+            this.textureDictionary.Load("Assets/Textures/Skybox/front");
+            this.textureDictionary.Load("Assets/Textures/Foliage/Trees/tree2");
+
+            //menu - buttons
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
+
+            //menu - backgrounds
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/mainmenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/audiomenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/controlsmenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/exitmenuwithtrans");
+            #endregion
+
+            //fonts
+            this.fontDictionary.Load("Assets/Debug/Fonts/debug");
+            this.fontDictionary.Load("Assets/Fonts/menu");
+
+
+            #region Demo Remove Later
+            this.textureDictionary.Load("Assets/Debug/Textures/ml");
+            this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");
+            #endregion
+        }
+
+        private void LoadGame(int level)
+        {
+
+            int worldScale = 250;
+
+            //Non-collidable
+            InitializeNonCollidableSkyBox(worldScale);
+            InitializeNonCollidableFoliage(worldScale);
+            //AddControllableModelObjects();
+            //AddDecoratorModelObjects();
+
+            //Collidable
+            InitializeCollidableGround(worldScale);
+            InitializeStaticCollidableTriangleMeshObjects();
+            InitializeDynamicCollidableObjects();
+        }
+
+        private void InitializeNonCollidableSkyBox(int worldScale)
+        {
+            //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
+            Transform3D transform = new Transform3D(new Vector3(0, -5, 0), new Vector3(worldScale, 1, worldScale));
+
+            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, ColorParameters.WhiteOpaque,
+                this.textureDictionary["grass1"],
+                this.modelDictionary["plane1"]);
+
+            //will be re-used for all planes
+            ModelObject clonePlane = null;
+
+            #region Skybox
+            //we no longer add a simple grass plane - see InitializeCollidableGround()
+            //clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            //clonePlane.Texture = this.textureDictionary["grass1"];
+            //this.objectManager.Add(clonePlane);
+
+            //add the back skybox plane
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.Texture = this.textureDictionary["back"];
+            //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
+            clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
+            /*
+             * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
+             * Note:
+             * - the interaction between 3DS Max and XNA units which result in the scale factor used below (i.e. 1 x 2.54 x worldScale)/2
+             * - that I move the plane down a little on the Y-axiz, purely for aesthetic purposes
+             */
+            clonePlane.Transform.Translation = new Vector3(0, -5, (-2.54f * worldScale) / 2.0f);
+            this.objectManager.Add(clonePlane);
+
+            //As an exercise the student should add the remaining 4 skybox planes here by repeating the clone, texture assignment, rotation, and translation steps above...
+            //add the left skybox plane
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.Texture = this.textureDictionary["left"];
+            clonePlane.Transform.Rotation = new Vector3(90, 90, 0);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f, -5, 0);
+            this.objectManager.Add(clonePlane);
+
+            //add the right skybox plane
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.Texture = this.textureDictionary["right"];
+            clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
+            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 2.0f, -5, 0);
+            this.objectManager.Add(clonePlane);
+
+            //add the top skybox plane
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.Texture = this.textureDictionary["sky"];
+            //notice the combination of rotations to correctly align the sky texture with the sides
+            clonePlane.Transform.Rotation = new Vector3(180, -90, 0);
+            clonePlane.Transform.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f) - 5, 0);
+            this.objectManager.Add(clonePlane);
+
+            //add the front skybox plane
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.Texture = this.textureDictionary["front"];
+            clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
+            clonePlane.Transform.Translation = new Vector3(0, -5, (2.54f * worldScale) / 2.0f);
+            this.objectManager.Add(clonePlane);
+            #endregion
+        }
+
+        private void InitializeNonCollidableFoliage(int worldScale)
+        {
+            //first we will create a prototype plane and then simply clone it for each of the decorator elements (e.g. trees etc). 
+            Transform3D transform = new Transform3D(new Vector3(0, -5, 0), new Vector3(worldScale, 1, worldScale));
+
+            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, ColorParameters.WhiteOpaque,
+                this.textureDictionary["grass1"],
+                this.modelDictionary["plane1"]);
+
+            //will be re-used for all planes
+            ModelObject clonePlane = null;
+
+            #region Add Trees
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.Texture = this.textureDictionary["tree2"];
+            clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
+            /*
+             * ISRoT - Scale operations are applied before rotation in XNA so to make the tree tall (i.e. 10) we actually scale 
+             * along the Z-axis (remember the original plane is flat on the XZ axis) and then flip the plane to stand upright.
+             */
+            clonePlane.Transform.Scale = new Vector3(5, 1, 10);
+            //y-displacement is (10(XNA) x 2.54f(3DS Max))/2 - 5(ground level) = 7.7f
+            clonePlane.Transform.Translation = new Vector3(0, ((clonePlane.Transform.Scale.Z * 2.54f) / 2 - 5), -20);
+            this.objectManager.Add(clonePlane);
+            #endregion
+        }
+
+        //the ground is simply a large flat box with a Box primitive collision surface attached
+        private void InitializeCollidableGround(int worldScale)
+        {
+            CollidableObject collidableObject = null;
+            Transform3D transform3D = null;
+            Texture2D texture = null;
+
+            Model model = this.modelDictionary["box2"];
+            texture = this.textureDictionary["grass1"];
+            transform3D = new Transform3D(new Vector3(0, -5, 0), new Vector3(0, 0, 0),
+                new Vector3(worldScale, 0.01f, worldScale), Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, this.modelEffect, ColorParameters.WhiteOpaque, texture, model);
+            collidableObject.AddPrimitive(new Box(transform3D.Translation, Matrix.Identity, transform3D.Scale), new MaterialProperties(0.8f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1); //change to false, see what happens.
+            this.objectManager.Add(collidableObject);
+        }
+
+        //Triangle mesh objects wrap a tight collision surface around complex shapes - the downside is that TriangleMeshObjects CANNOT be moved
+        private void InitializeStaticCollidableTriangleMeshObjects()
+        {
+            CollidableObject collidableObject = null;
+            Transform3D transform3D = null;
+
+            transform3D = new Transform3D(new Vector3(-50, 5, 0),
+                new Vector3(45, 0, 0), 0.1f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
+            collidableObject = new TriangleMeshObject("torus", ActorType.CollidableProp,
+            transform3D, this.modelEffect,
+            ColorParameters.WhiteOpaque,
+            this.textureDictionary["ml"], this.modelDictionary["torus"],
+                new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            collidableObject.ActorType = ActorType.CollidableProp;
+            this.objectManager.Add(collidableObject);
+        }
+
+        //if you want objects to be collidable AND moveable then you must attach either a box, sphere, or capsule primitives to the object
+        private void InitializeDynamicCollidableObjects()
+        {
+            CollidableObject collidableObject, sphereArchetype = null;
+            Transform3D transform3D = null;
+            Texture2D texture = null;
+            Model model = null;
+
+            #region Spheres
+            //these boxes, spheres and cylinders are all centered around (0,0,0) in 3DS Max
+            model = this.modelDictionary["sphere"];
+            texture = this.textureDictionary["checkerboard"];
+
+            //make once then clone
+            sphereArchetype = new CollidableObject("sphere ",
+                 ActorType.CollidableProp, Transform3D.Zero, this.modelEffect,
+                 ColorParameters.WhiteOpaque,
+                 texture, model);
+
+            for (int i = 0; i < 10; i++)
+            {
+                collidableObject = (CollidableObject)sphereArchetype.Clone();
+
+                collidableObject.ID += " - " + i;
+                collidableObject.Transform = new Transform3D(new Vector3(-55, 20 + 8 * i, i), new Vector3(0, 0, 0),
+                    0.082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                    Vector3.UnitX, Vector3.UnitY);
+
+                collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 2.54f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+                collidableObject.Enable(false, 1);
+                collidableObject.ActorType = ActorType.CollidableProp;
+                this.objectManager.Add(collidableObject);
+            }
+            #endregion
+
+            #region Box - BUG - 4.10.16
+            model = this.modelDictionary["box2"];
+            texture = this.textureDictionary["crate2"];
+
+            for (int i = 0; i < 5; i++)
+            {
+                transform3D = new Transform3D(
+                        new Vector3(15, 15 + 10 * i, i * 2),
+                        new Vector3(0, 0, 0),
+                        2 * Vector3.One,
+                        Vector3.UnitX, Vector3.UnitY);
+
+                collidableObject = new CollidableObject("box - " + i,
+                    ActorType.CollidableProp, transform3D, this.modelEffect,
+                    ColorParameters.WhiteOpaque,
+                    texture, model);
+
+                collidableObject.AddPrimitive(
+                    new Box(transform3D.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * transform3D.Scale),
+                    new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+                collidableObject.Enable(false, 1);
+                this.objectManager.Add(collidableObject);
+            }
+
+            #endregion
+        }
+
+        private void AddControllableModelObjects()
+        {
+            #region Add 1st drivable crate
+
+            //place the drivable model to the left of the existing models and specify that forward movement is along the -ve z-axis
+            Transform3D transform = new Transform3D(new Vector3(0, 0, 5), -Vector3.UnitZ, Vector3.UnitY);
+
+            //initialise the drivable model object - we've made this variable a field to allow it to be visible to the rail camera controller - see InitializeCameras()
+            this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, new ColorParameters(Color.LightYellow, 1),
+                this.textureDictionary["crate1"],
+                this.modelDictionary["box2"]);
+
+            //attach a DriveController
+            drivableBoxObject.AttachController(new DriveController("driveController1", ControllerType.Drive,
+                AppData.PlayerMoveKeys, AppData.PlayerMoveSpeed, AppData.PlayerStrafeSpeed, AppData.PlayerRotationSpeed, this.mouseManager, this.keyboardManager));
+
+            //add to the objectManager so that it will be drawn and updated
+            this.objectManager.Add(drivableBoxObject);
+            #endregion
+        }
+
+        private void AddDecoratorModelObjects()
+        {
+            //use one of our static defaults to position the object at the origin
+            Transform3D transform = Transform3D.Zero;
+
+            //loading model, texture
+
+            //initialise the boxObject
+            ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, new ColorParameters(Color.White, 0.5f),
+                this.textureDictionary["crate1"], this.modelDictionary["box2"]);
+            //add to the objectManager so that it will be drawn and updated
+            //this.objectManager.Add(boxObject);
+
+            //a clone variable that we can reuse
+            ModelObject clone = null;
+
+            //add a clone of the box model object to test the clone
+            clone = (ModelObject)boxObject.Clone();
+            clone.Transform.Translation = new Vector3(5, 0, 0);
+            //scale it to make it look different
+            clone.Transform.Scale = new Vector3(1, 4, 1);
+            //change its color
+            clone.ColorParameters.Color = Color.Red;
+            this.objectManager.Add(clone);
+
+            //add more clones here...
+        }
+        #endregion
+
+        #region Events
         private void PublishGameStartEvents()
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
@@ -131,7 +466,9 @@ namespace GDApp
             //dont forget to add to the Component list otherwise EventDispatcher::Update won't get called and no event processing will occur!
             Components.Add(this.eventDispatcher);
         }
+        #endregion
 
+        #region Menu
         private void InitializeMenu()
         {
             this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, spriteBatch, 
@@ -312,183 +649,20 @@ namespace GDApp
         {
             //to do - add hud elements with game state
         }
+        #endregion
 
-        private void LoadDictionaries()
+        #region Effects
+        private void InitializeEffects()
         {
-            //models
-            this.modelDictionary = new ContentDictionary<Model>("model dictionary", this.Content);
-
-            //textures
-            this.textureDictionary = new ContentDictionary<Texture2D>("texture dictionary", this.Content);
-
-            //fonts
-            this.fontDictionary = new ContentDictionary<SpriteFont>("font dictionary", this.Content);
+            this.modelEffect = new BasicEffect(graphics.GraphicsDevice);
+            //enable the use of a texture on a model
+            modelEffect.TextureEnabled = true;
+            //setup the effect to have a single default light source which will be used to calculate N.L and N.H lighting
+            //modelEffect.EnableDefaultLighting();
         }
+        #endregion     
 
-        private void LoadAssets()
-        {
-            //models
-            this.modelDictionary.Load("Assets/Models/plane1", "plane1");
-            this.modelDictionary.Load("Assets/Models/box2", "box2");
-
-            #region Textures
-            //environment
-            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1"); //demo use of the shorter form of Load() that generates key from asset name
-            this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");
-            this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
-            this.textureDictionary.Load("Assets/Textures/Skybox/back");
-            this.textureDictionary.Load("Assets/Textures/Skybox/left");
-            this.textureDictionary.Load("Assets/Textures/Skybox/right");
-            this.textureDictionary.Load("Assets/Textures/Skybox/sky");
-            this.textureDictionary.Load("Assets/Textures/Skybox/front");
-            this.textureDictionary.Load("Assets/Textures/Foliage/Trees/tree2");
-
-            //menu - buttons
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
-
-            //menu - backgrounds
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/mainmenu");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/audiomenu");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/controlsmenu");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/exitmenuwithtrans");
-            #endregion
-
-            //fonts
-            this.fontDictionary.Load("Assets/Debug/Fonts/debug");
-            this.fontDictionary.Load("Assets/Fonts/menu");
-        }
-
-        private void AddControllableModelObjects()
-        {
-            #region Add 1st drivable crate
-
-            //place the drivable model to the left of the existing models and specify that forward movement is along the -ve z-axis
-            Transform3D transform = new Transform3D(new Vector3(0, 0, 5), -Vector3.UnitZ, Vector3.UnitY);
-            
-            //initialise the drivable model object - we've made this variable a field to allow it to be visible to the rail camera controller - see InitializeCameras()
-            this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, new ColorParameters(Color.LightYellow, 1),
-                this.textureDictionary["crate1"],
-                this.modelDictionary["box2"]);
-
-            //attach a DriveController
-            drivableBoxObject.AttachController(new DriveController("driveController1", ControllerType.Drive,
-                AppData.PlayerMoveKeys, AppData.PlayerMoveSpeed, AppData.PlayerStrafeSpeed, AppData.PlayerRotationSpeed, this.mouseManager, this.keyboardManager));
-
-            //add to the objectManager so that it will be drawn and updated
-            this.objectManager.Add(drivableBoxObject);
-            #endregion
-        }
-
-        private void AddWorldDecoratorObjects(int worldScale)
-        {
-            //first we will create a prototype plane and then simply clone it for each of the decorator elements (e.g. ground, sky_top etc). 
-            Transform3D transform = new Transform3D(new Vector3(0, -5, 0), new Vector3(worldScale, 1, worldScale));
-
-            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, ColorParameters.WhiteOpaque,
-                this.textureDictionary["grass1"], 
-                this.modelDictionary["plane1"]);
-
-            //will be re-used for all planes
-            ModelObject clonePlane = null;
-
-            #region Grass & Skybox
-            //add the grass
-            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = this.textureDictionary["grass1"];
-            this.objectManager.Add(clonePlane);
-
-            //add the back skybox plane
-            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = this.textureDictionary["back"];
-            //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
-            clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
-            /*
-             * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
-             * Note:
-             * - the interaction between 3DS Max and XNA units which result in the scale factor used below (i.e. 1 x 2.54 x worldScale)/2
-             * - that I move the plane down a little on the Y-axiz, purely for aesthetic purposes
-             */
-            clonePlane.Transform.Translation = new Vector3(0, -5, (-2.54f * worldScale)/2.0f);
-            this.objectManager.Add(clonePlane);
-
-            //As an exercise the student should add the remaining 4 skybox planes here by repeating the clone, texture assignment, rotation, and translation steps above...
-            //add the left skybox plane
-            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = this.textureDictionary["left"];
-            clonePlane.Transform.Rotation = new Vector3(90, 90, 0);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f, -5, 0);
-            this.objectManager.Add(clonePlane);
-
-            //add the right skybox plane
-            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = this.textureDictionary["right"];
-            clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
-            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 2.0f, -5, 0);
-            this.objectManager.Add(clonePlane);
-
-            //add the top skybox plane
-            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = this.textureDictionary["sky"];
-            //notice the combination of rotations to correctly align the sky texture with the sides
-            clonePlane.Transform.Rotation = new Vector3(180, -90, 0);
-            clonePlane.Transform.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f) - 5, 0);
-            this.objectManager.Add(clonePlane);
-
-            //add the front skybox plane
-            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = this.textureDictionary["front"];
-            clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
-            clonePlane.Transform.Translation = new Vector3(0 , -5, (2.54f * worldScale) / 2.0f);
-            this.objectManager.Add(clonePlane);
-            #endregion
-
-            #region Add Trees
-            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.Texture = this.textureDictionary["tree2"];
-            clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
-            /*
-             * ISRoT - Scale operations are applied before rotation in XNA so to make the tree tall (i.e. 10) we actually scale 
-             * along the Z-axis (remember the original plane is flat on the XZ axis) and then flip the plane to stand upright.
-             */
-            clonePlane.Transform.Scale = new Vector3(5, 1, 10);
-            //y-displacement is (10(XNA) x 2.54f(3DS Max))/2 - 5(ground level) = 7.7f
-            clonePlane.Transform.Translation = new Vector3(0, ((clonePlane.Transform.Scale.Z* 2.54f)/2 - 5), -20);
-            this.objectManager.Add(clonePlane);
-            #endregion
-
-
-        }
-
-        private void AddDecoratorModelObjects()
-        {
-            //use one of our static defaults to position the object at the origin
-            Transform3D transform = Transform3D.Zero;
-
-            //loading model, texture
-
-            //initialise the boxObject
-            ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, new ColorParameters(Color.White, 0.5f),
-                this.textureDictionary["crate1"], this.modelDictionary["box2"]);
-            //add to the objectManager so that it will be drawn and updated
-            //this.objectManager.Add(boxObject);
-
-            //a clone variable that we can reuse
-            ModelObject clone = null;
-
-            //add a clone of the box model object to test the clone
-            clone = (ModelObject)boxObject.Clone();
-            clone.Transform.Translation = new Vector3(5, 0, 0);
-            //scale it to make it look different
-            clone.Transform.Scale = new Vector3(1, 4, 1);
-            //change its color
-            clone.ColorParameters.Color = Color.Red;
-            this.objectManager.Add(clone);
-
-            //add more clones here...
-        }
-
-     
-
+        #region Cameras
         private void InitializeThirdPersonCamera(Integer2 screenResolution, Actor targetActor)
         {
             Transform3D transform = null;
@@ -536,7 +710,7 @@ namespace GDApp
             #endregion
         }
 
-        private void InitializeCameras(Integer2 screenResolution)
+        private void InitializeMultiCameras(Integer2 screenResolution)
         {
             Transform3D transform = null;
             Camera3D camera = null;
@@ -637,40 +811,9 @@ namespace GDApp
             #endregion
 
         }
+        #endregion
 
-        private void InitializeManagers(Integer2 screenResolution, bool isMouseVisible)
-        {
-            this.cameraManager = new CameraManager(this, 1);
-            Components.Add(this.cameraManager);
-
-            //create the object manager - notice that its not a drawablegamecomponent. See ScreeManager::Draw()
-            this.objectManager = new ObjectManager(this, cameraManager, 10);
-
-            //add mouse and keyboard managers
-            this.mouseManager = new MouseManager(this, isMouseVisible,
-                new Vector2(screenResolution.X / 2.0f, screenResolution.Y / 2.0f) /*screen centre*/);
-            Components.Add(this.mouseManager);
-
-            this.keyboardManager = new KeyboardManager(this);
-            Components.Add(this.keyboardManager);
-
-            //create the manager which supports multiple camera viewports
-            this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen,
-                this.objectManager, this.cameraManager, this.keyboardManager, AppData.KeyPauseShowMenu,
-                this.eventDispatcher, StatusType.Off);
-
-            Components.Add(this.screenManager);
-        }
-
-        private void InitializeEffects()
-        {
-            this.modelEffect = new BasicEffect(graphics.GraphicsDevice);
-            //enable the use of a texture on a model
-            modelEffect.TextureEnabled = true;
-            //setup the effect to have a single default light source which will be used to calculate N.L and N.H lighting
-            //modelEffect.EnableDefaultLighting();
-        }
-
+        #region Content, Update, Draw        
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -738,5 +881,7 @@ namespace GDApp
 
             base.Draw(gameTime);
         }
+        #endregion
+
     }
 }
