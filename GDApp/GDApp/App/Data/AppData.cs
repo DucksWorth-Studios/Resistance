@@ -53,7 +53,7 @@ namespace GDLibrary
                                          Keys.Space, Keys.C, Keys.LeftShift, Keys.RightShift};
         public static readonly Keys[] CameraMoveKeys_Alt1 = { Keys.T, Keys.G, Keys.F, Keys.H };
 
-        public static readonly float CameraThirdPersonScrollSpeedDistanceMultiplier = 0.01f;
+        public static readonly float CameraThirdPersonScrollSpeedDistanceMultiplier = 0.00125f;
         public static readonly float CameraThirdPersonScrollSpeedElevatationMultiplier = 0.1f;
         public static readonly float CameraThirdPersonDistance = 20;
         public static readonly float CameraThirdPersonElevationAngleInDegrees = 160;

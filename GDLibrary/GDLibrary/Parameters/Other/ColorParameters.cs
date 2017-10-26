@@ -15,12 +15,15 @@ namespace GDLibrary
     {
         #region Statics
         public static ColorParameters WhiteOpaque = new ColorParameters(Color.White, 1);
+        //use this setting when we are rendering a model that has a texture with transparent pixels - see Main::InitializeNonCollidableFoliage()
+        public static ColorParameters WhiteAlmostOpaque = new ColorParameters(Color.White, 0.99f);
         #endregion
 
         #region Fields
         private Color color;
         private float alpha;
         private ColorParameters originalColorParameters;
+       
         #endregion
 
         #region Properties

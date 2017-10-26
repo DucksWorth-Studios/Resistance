@@ -8,6 +8,11 @@ using JigLibX.Collision;
 
 
 /*
+ sort transparent drawn objects based on their distance to the camera
+ add collidable camera
+ add a collidable player object
+ add a collidable pickup object and remove on collision with player
+ add mouse picking to select and remove objects
  menu - click sound
  menu transparency
  */
@@ -50,6 +55,7 @@ namespace GDApp
         private DebugDrawer debugDrawer;
         private PhysicsManager physicsManager;
         private PhysicsDebugDrawer physicsDebugDrawer;
+        private BasicEffect unlitModelEffect;
 #endif
         #endregion
 
@@ -100,12 +106,18 @@ namespace GDApp
 
             #region Add Camera(s)
             //add a first person camera only
-            InitializeFirstPersonCamera(screenResolution);
+           // InitializeFirstPersonCamera(screenResolution);
+            //add a third person camera
+            InitializeThirdPersonCamera(screenResolution, this.drivableBoxObject);
             #endregion
 
             #region Publish Start Event(s)
-            PublishGameStartEvents();
+            StartGame();
             #endregion
+
+#if DEBUG
+            InitializeDebugCollisionSkinInfo();
+#endif
 
             base.Initialize();
         }
@@ -115,14 +127,8 @@ namespace GDApp
             this.cameraManager = new CameraManager(this, 1);
             Components.Add(this.cameraManager);
 
-            //CD-CR using JigLibX and add debug drawer to visualise collision skins
-            this.physicsManager = new PhysicsManager(this, this.eventDispatcher);
-            Components.Add(this.physicsManager);
-            this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager);
-            Components.Add(this.physicsDebugDrawer);
-
             //create the object manager - notice that its not a drawablegamecomponent. See ScreeManager::Draw()
-            this.objectManager = new ObjectManager(this, this.cameraManager, this.physicsDebugDrawer, 10);
+            this.objectManager = new ObjectManager(this, this.cameraManager, 10);
 
             //add mouse and keyboard managers
             this.mouseManager = new MouseManager(this, isMouseVisible,
@@ -136,8 +142,27 @@ namespace GDApp
             this.screenManager = new ScreenManager(this, graphics, screenResolution, ScreenUtility.ScreenType.MultiScreen,
                 this.objectManager, this.cameraManager, this.keyboardManager, AppData.KeyPauseShowMenu,
                 this.eventDispatcher, StatusType.Off);
-
             Components.Add(this.screenManager);
+
+            //CD-CR using JigLibX and add debug drawer to visualise collision skins
+            this.physicsManager = new PhysicsManager(this, this.eventDispatcher);
+            Components.Add(this.physicsManager);
+        }
+
+        private void InitializeDebugTextInfo()
+        {
+            //add debug info in top left hand corner of the screen
+            this.debugDrawer = new DebugDrawer(this, this.screenManager, this.cameraManager, spriteBatch,
+                this.fontDictionary["debug"], Color.White, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
+                    Components.Add(this.debugDrawer);
+
+        }
+
+        private void InitializeDebugCollisionSkinInfo()
+        {
+            //show the collision skins
+            this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager, this.objectManager, this.eventDispatcher, StatusType.Off);
+            Components.Add(this.physicsDebugDrawer);
         }
 
         private void LoadDictionaries()
@@ -159,6 +184,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/box2", "box2");
             this.modelDictionary.Load("Assets/Models/torus");
             this.modelDictionary.Load("Assets/Models/sphere");
+            this.modelDictionary.Load("Assets/Models/teapot");
 
             #region Textures
             //environment
@@ -193,7 +219,9 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");
             #endregion
         }
+        #endregion
 
+        #region Initialize Drawn Assets
         private void LoadGame(int level)
         {
 
@@ -202,8 +230,8 @@ namespace GDApp
             //Non-collidable
             InitializeNonCollidableSkyBox(worldScale);
             InitializeNonCollidableFoliage(worldScale);
-            //AddControllableModelObjects();
-            //AddDecoratorModelObjects();
+            InitializeNonCollidableDriveableModelObject();
+            AddDecoratorModelObjects();
 
             //Collidable
             InitializeCollidableGround(worldScale);
@@ -216,7 +244,7 @@ namespace GDApp
             //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
             Transform3D transform = new Transform3D(new Vector3(0, -5, 0), new Vector3(worldScale, 1, worldScale));
 
-            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, ColorParameters.WhiteOpaque,
+            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.unlitModelEffect, ColorParameters.WhiteOpaque,
                 this.textureDictionary["grass1"],
                 this.modelDictionary["plane1"]);
 
@@ -280,7 +308,8 @@ namespace GDApp
             //first we will create a prototype plane and then simply clone it for each of the decorator elements (e.g. trees etc). 
             Transform3D transform = new Transform3D(new Vector3(0, -5, 0), new Vector3(worldScale, 1, worldScale));
 
-            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.modelEffect, ColorParameters.WhiteOpaque,
+            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, this.unlitModelEffect, 
+                ColorParameters.WhiteAlmostOpaque,
                 this.textureDictionary["grass1"],
                 this.modelDictionary["plane1"]);
 
@@ -326,7 +355,7 @@ namespace GDApp
             CollidableObject collidableObject = null;
             Transform3D transform3D = null;
 
-            transform3D = new Transform3D(new Vector3(-50, 5, 0),
+            transform3D = new Transform3D(new Vector3(-30, 0, 0),
                 new Vector3(45, 0, 0), 0.1f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
             collidableObject = new TriangleMeshObject("torus", ActorType.CollidableProp,
             transform3D, this.modelEffect,
@@ -362,7 +391,7 @@ namespace GDApp
                 collidableObject = (CollidableObject)sphereArchetype.Clone();
 
                 collidableObject.ID += " - " + i;
-                collidableObject.Transform = new Transform3D(new Vector3(-55, 20 + 8 * i, i), new Vector3(0, 0, 0),
+                collidableObject.Transform = new Transform3D(new Vector3(-35, 20 + 8 * i, i), new Vector3(0, 0, 0),
                     0.082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                     Vector3.UnitX, Vector3.UnitY);
 
@@ -401,12 +430,10 @@ namespace GDApp
             #endregion
         }
 
-        private void AddControllableModelObjects()
+        private void InitializeNonCollidableDriveableModelObject()
         {
-            #region Add 1st drivable crate
-
             //place the drivable model to the left of the existing models and specify that forward movement is along the -ve z-axis
-            Transform3D transform = new Transform3D(new Vector3(0, 0, 5), -Vector3.UnitZ, Vector3.UnitY);
+            Transform3D transform = new Transform3D(new Vector3(-10, 0, 25), -Vector3.UnitZ, Vector3.UnitY);
 
             //initialise the drivable model object - we've made this variable a field to allow it to be visible to the rail camera controller - see InitializeCameras()
             this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, new ColorParameters(Color.LightYellow, 1),
@@ -419,7 +446,6 @@ namespace GDApp
 
             //add to the objectManager so that it will be drawn and updated
             this.objectManager.Add(drivableBoxObject);
-            #endregion
         }
 
         private void AddDecoratorModelObjects()
@@ -433,7 +459,7 @@ namespace GDApp
             ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, new ColorParameters(Color.White, 0.5f),
                 this.textureDictionary["crate1"], this.modelDictionary["box2"]);
             //add to the objectManager so that it will be drawn and updated
-            //this.objectManager.Add(boxObject);
+            this.objectManager.Add(boxObject);
 
             //a clone variable that we can reuse
             ModelObject clone = null;
@@ -452,10 +478,10 @@ namespace GDApp
         #endregion
 
         #region Events
-        private void PublishGameStartEvents()
+        private void StartGame()
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
-            EventDispatcher.Publish(new EventData("bbbbbb", this, EventActionType.OnPause, EventCategoryType.MainMenu));
+            EventDispatcher.Publish(new EventData("this doesnt matter", this, EventActionType.OnPause, EventCategoryType.MainMenu));
         }
 
         private void InitializeEventDispatcher()
@@ -656,9 +682,15 @@ namespace GDApp
         {
             this.modelEffect = new BasicEffect(graphics.GraphicsDevice);
             //enable the use of a texture on a model
-            modelEffect.TextureEnabled = true;
+            this.modelEffect.TextureEnabled = true;
             //setup the effect to have a single default light source which will be used to calculate N.L and N.H lighting
-            //modelEffect.EnableDefaultLighting();
+            this.modelEffect.EnableDefaultLighting();
+
+
+            //used by the skybox which doesn't respond to lighting within the scene i.e. the skybox is effectively unlit
+            this.unlitModelEffect = new BasicEffect(graphics.GraphicsDevice);
+            //enable the use of a texture on a model
+            this.unlitModelEffect.TextureEnabled = true;
         }
         #endregion     
 
@@ -831,13 +863,7 @@ namespace GDApp
             #endregion
 
 #if DEBUG
-            #region Debug Info
-            this.debugDrawer = new DebugDrawer(this, this.screenManager, this.cameraManager, spriteBatch, 
-                this.fontDictionary["debug"], 
-                Color.White, new Vector2(5, 5),
-                true);
-            Components.Add(this.debugDrawer);
-            #endregion
+            InitializeDebugTextInfo();
 #endif
 
         }

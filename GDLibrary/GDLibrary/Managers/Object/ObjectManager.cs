@@ -15,28 +15,43 @@ using System.Collections.Generic;
 
 namespace GDLibrary
 {
-    public class ObjectManager //: DrawableGameComponent
+    public class ObjectManager 
     {
-
         #region Fields
-        private CameraManager cameraManager;
-        private List<IActor> drawList;
         private Game game;
+        private CameraManager cameraManager;
+        private List<IActor> removeList, opaqueDrawList, transparentDrawList;
         private RasterizerState rasterizerStateOpaque;
         private RasterizerState rasterizerStateTransparent;
         private PhysicsDebugDrawer physicsDebugDrawer;
         #endregion
 
         #region Properties   
+        public List<IActor> OpaqueDrawList
+        {
+            get
+            {
+                return this.opaqueDrawList;
+            }
+        }
+        public List<IActor> TransparentDrawList
+        {
+            get
+            {
+                return this.transparentDrawList;
+            }
+        }
         #endregion
 
-        public ObjectManager(Game game, CameraManager cameraManager, PhysicsDebugDrawer physicsDebugDrawer, int initialSize)
-        //   : base(game)
+        public ObjectManager(Game game, CameraManager cameraManager, int initialSize)
         {
             this.game = game;
             this.cameraManager = cameraManager;
-            this.physicsDebugDrawer = physicsDebugDrawer;
-            this.drawList = new List<IActor>(initialSize);
+
+            //create two lists - opaque and transparent
+            this.opaqueDrawList = new List<IActor>(initialSize);
+            this.transparentDrawList = new List<IActor>(initialSize);
+            this.removeList = new List<IActor>(initialSize);
 
             //set up graphic settings
             InitializeGraphics();
@@ -86,29 +101,71 @@ namespace GDLibrary
             }
         }
 
-
         public void Add(IActor actor)
         {
-            this.drawList.Add(actor);
+            if (actor.GetAlpha() == 1)
+                this.opaqueDrawList.Add(actor);
+            else
+                this.transparentDrawList.Add(actor);
         }
 
-        public bool Remove(Predicate<IActor> predicate)
+        //call when we want to remove a drawn object from the scene
+        public void Remove(Actor actor)
         {
-            IActor foundActor = this.drawList.Find(predicate);
-            if(foundActor != null)
-                return this.drawList.Remove(foundActor);
-
-            return false;
+            this.removeList.Add(actor);
         }
 
-        public int RemoveAll(Predicate<IActor> predicate)
+        public int Remove(Predicate<IActor> predicate)
         {
-            return this.drawList.RemoveAll(predicate);
+            List<IActor> resultList = null;
+
+            resultList = this.opaqueDrawList.FindAll(predicate);
+            if ((resultList != null) && (resultList.Count != 0)) //the actor(s) were found in the opaque list
+            {
+                foreach (Actor actor in resultList)
+                    this.removeList.Add(actor);
+            }
+            else //the actor(s) were found in the transparent list
+            {
+                resultList = this.transparentDrawList.FindAll(predicate);
+
+                if ((resultList != null) && (resultList.Count != 0))
+                    foreach (Actor actor in resultList)
+                        this.removeList.Add(actor);
+            }
+
+            return resultList != null ? resultList.Count : 0;
+
+        }
+
+        //batch remove on all objects that were requested to be removed
+        protected virtual void ApplyRemove()
+        {
+            foreach (Actor actor in this.removeList)
+            {
+                if (actor.GetAlpha() == 1)
+                    this.opaqueDrawList.Remove(actor);
+                else
+                    this.transparentDrawList.Remove(actor);
+            }
+
+            this.removeList.Clear();
         }
 
         public void Update(GameTime gameTime)
         {
-            foreach (IActor actor in this.drawList)
+            //remove any outstanding objects since the last update
+            ApplyRemove();
+
+            //update all your opaque objects
+            foreach (IActor actor in this.opaqueDrawList)
+            {
+                if ((actor.GetStatusType() & StatusType.Update) != 0) //if update flag is set
+                    actor.Update(gameTime);
+            }
+
+            //update all your transparent objects
+            foreach (IActor actor in this.transparentDrawList)
             {
                 if ((actor.GetStatusType() & StatusType.Update) != 0) //if update flag is set
                     actor.Update(gameTime);
@@ -122,16 +179,29 @@ namespace GDLibrary
             this.game.GraphicsDevice.Viewport = activeCamera.Viewport;
 
             SetGraphicsStateObjects(true);
-
-            foreach (IActor actor in this.drawList)
+            foreach (IActor actor in this.opaqueDrawList)
             {
-                if ((actor.GetStatusType() & StatusType.Drawn) != 0) //if drawn flag is set
+                DrawByType(gameTime, actor as Actor3D, activeCamera);
+            }
+
+            SetGraphicsStateObjects(false);
+            foreach (IActor actor in this.transparentDrawList)
+            {
+                DrawByType(gameTime, actor as Actor3D, activeCamera);
+            }
+        }
+
+        //calls the correct DrawObject() based on underlying object type
+        private void DrawByType(GameTime gameTime, Actor3D actor, Camera3D activeCamera)
+        {
+            //was the drawn enum value set?
+            if ((actor.StatusType & StatusType.Drawn) == StatusType.Drawn)
+            {
+                if (actor is ModelObject)
                 {
                     DrawObject(gameTime, actor as ModelObject, activeCamera);
-                    DrawCollisionSkin(actor);
                 }
-
-
+                //we will add additional else...if statements here to render other object types (e.g model, animated, billboard etc)
             }
         }
 
@@ -161,17 +231,6 @@ namespace GDLibrary
                     mesh.Draw();
                 }
             }
-        }
-
-        //debug method to draw collision skins for collidable objects and zone objects
-        private void DrawCollisionSkin(IActor actor)
-        {
-            if (actor is CollidableObject)
-            {
-                CollidableObject collidableObject = actor as CollidableObject;
-                this.physicsDebugDrawer.DrawDebug(actor as CollidableObject);
-            }
-           
         }
     }
 }
