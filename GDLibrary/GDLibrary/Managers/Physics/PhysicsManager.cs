@@ -77,7 +77,7 @@ namespace GDLibrary
         {
             if (eventData.EventCategoryType == EventCategoryType.MainMenu)
             {
-                if (eventData.EventType == EventActionType.OnPlay)
+                if (eventData.EventType == EventActionType.OnStart)
                     this.bPaused = false;
                 else if (eventData.EventType == EventActionType.OnPause)
                     this.bPaused = true;

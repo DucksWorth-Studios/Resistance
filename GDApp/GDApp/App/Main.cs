@@ -373,7 +373,7 @@ namespace GDApp
             }
             #endregion
 
-            #region Box - BUG - 4.10.16
+            #region Box
             model = this.modelDictionary["box2"];
             texture = this.textureDictionary["crate2"];
 
