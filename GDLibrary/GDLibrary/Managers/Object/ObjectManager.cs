@@ -20,21 +20,21 @@ namespace GDLibrary
         #region Fields
         private Game game;
         private CameraManager cameraManager;
-        private List<IActor> removeList, opaqueDrawList, transparentDrawList;
+        private List<Actor3D> removeList, opaqueDrawList, transparentDrawList;
         private RasterizerState rasterizerStateOpaque;
         private RasterizerState rasterizerStateTransparent;
         private PhysicsDebugDrawer physicsDebugDrawer;
         #endregion
 
         #region Properties   
-        public List<IActor> OpaqueDrawList
+        public List<Actor3D> OpaqueDrawList
         {
             get
             {
                 return this.opaqueDrawList;
             }
         }
-        public List<IActor> TransparentDrawList
+        public List<Actor3D> TransparentDrawList
         {
             get
             {
@@ -49,9 +49,9 @@ namespace GDLibrary
             this.cameraManager = cameraManager;
 
             //create two lists - opaque and transparent
-            this.opaqueDrawList = new List<IActor>(initialSize);
-            this.transparentDrawList = new List<IActor>(initialSize);
-            this.removeList = new List<IActor>(initialSize);
+            this.opaqueDrawList = new List<Actor3D>(initialSize);
+            this.transparentDrawList = new List<Actor3D>(initialSize);
+            this.removeList = new List<Actor3D>(initialSize);
 
             //set up graphic settings
             InitializeGraphics();
@@ -101,7 +101,7 @@ namespace GDLibrary
             }
         }
 
-        public void Add(IActor actor)
+        public void Add(Actor3D actor)
         {
             if (actor.GetAlpha() == 1)
                 this.opaqueDrawList.Add(actor);
@@ -110,19 +110,19 @@ namespace GDLibrary
         }
 
         //call when we want to remove a drawn object from the scene
-        public void Remove(Actor actor)
+        public void Remove(Actor3D actor)
         {
             this.removeList.Add(actor);
         }
 
-        public int Remove(Predicate<IActor> predicate)
+        public int Remove(Predicate<Actor3D> predicate)
         {
-            List<IActor> resultList = null;
+            List<Actor3D> resultList = null;
 
             resultList = this.opaqueDrawList.FindAll(predicate);
             if ((resultList != null) && (resultList.Count != 0)) //the actor(s) were found in the opaque list
             {
-                foreach (Actor actor in resultList)
+                foreach (Actor3D actor in resultList)
                     this.removeList.Add(actor);
             }
             else //the actor(s) were found in the transparent list
@@ -130,7 +130,7 @@ namespace GDLibrary
                 resultList = this.transparentDrawList.FindAll(predicate);
 
                 if ((resultList != null) && (resultList.Count != 0))
-                    foreach (Actor actor in resultList)
+                    foreach (Actor3D actor in resultList)
                         this.removeList.Add(actor);
             }
 
@@ -141,7 +141,7 @@ namespace GDLibrary
         //batch remove on all objects that were requested to be removed
         protected virtual void ApplyRemove()
         {
-            foreach (Actor actor in this.removeList)
+            foreach (Actor3D actor in this.removeList)
             {
                 if (actor.GetAlpha() == 1)
                     this.opaqueDrawList.Remove(actor);
@@ -158,18 +158,30 @@ namespace GDLibrary
             ApplyRemove();
 
             //update all your opaque objects
-            foreach (IActor actor in this.opaqueDrawList)
+            foreach (Actor3D actor in this.opaqueDrawList)
             {
                 if ((actor.GetStatusType() & StatusType.Update) != 0) //if update flag is set
                     actor.Update(gameTime);
             }
 
             //update all your transparent objects
-            foreach (IActor actor in this.transparentDrawList)
+            foreach (Actor3D actor in this.transparentDrawList)
             {
                 if ((actor.GetStatusType() & StatusType.Update) != 0) //if update flag is set
+                {
                     actor.Update(gameTime);
+                    //used to sort objects by distance from the camera so that proper depth representation will be shown
+                    MathUtility.SetDistanceFromCamera(actor as Actor3D, this.cameraManager.ActiveCamera);
+                }
             }
+
+            //sort so that the transparent objects closest to the camera are the LAST transparent objects drawn
+            SortTransparentByDistance();
+        }
+
+        private void SortTransparentByDistance()
+        {
+            this.transparentDrawList.Sort((a, b) => (b.Transform.DistanceToCamera.CompareTo(a.Transform.DistanceToCamera)));
         }
 
         public void Draw(GameTime gameTime, Camera3D activeCamera)
@@ -179,13 +191,13 @@ namespace GDLibrary
             this.game.GraphicsDevice.Viewport = activeCamera.Viewport;
 
             SetGraphicsStateObjects(true);
-            foreach (IActor actor in this.opaqueDrawList)
+            foreach (Actor3D actor in this.opaqueDrawList)
             {
                 DrawByType(gameTime, actor as Actor3D, activeCamera);
             }
 
             SetGraphicsStateObjects(false);
-            foreach (IActor actor in this.transparentDrawList)
+            foreach (Actor3D actor in this.transparentDrawList)
             {
                 DrawByType(gameTime, actor as Actor3D, activeCamera);
             }

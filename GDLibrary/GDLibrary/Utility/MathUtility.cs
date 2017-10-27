@@ -113,5 +113,10 @@ namespace GDLibrary
             //camera to target object vector
             return Vector3.Normalize(target.Translation - start.Translation);
         }
+
+        public static void SetDistanceFromCamera(Actor3D actor, Camera3D activeCamera)
+        {
+            actor.Transform.DistanceToCamera = Vector3.Distance(actor.Transform.Translation, activeCamera.Transform.Translation);
+        }
     }
 }

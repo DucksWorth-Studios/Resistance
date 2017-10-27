@@ -25,6 +25,7 @@ namespace GDLibrary
         private Matrix world;
         private bool isDirty;
         private Transform3D originalTransform3D;
+        private double distanceToCamera; //used to sort transparent objects by distance from camera - see screencast on CDCR.
         #endregion
 
         #region Properties
@@ -136,7 +137,17 @@ namespace GDLibrary
                 return this.originalTransform3D;
             }
         }
-      
+        public double DistanceToCamera
+        {
+            get
+            {
+                return this.distanceToCamera;
+            }set
+            {
+                this.distanceToCamera = value;
+            }
+        }
+
         #endregion
 
         //used by drawn objects
