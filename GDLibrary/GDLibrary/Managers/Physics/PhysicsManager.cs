@@ -1,32 +1,28 @@
-﻿using JigLibX.Collision;
+﻿/*
+Function: 		Enables CDCR through JibLibX by integrating forces applied to each collidable object within the scene
+Author: 		NMCG
+Version:		1.0
+Date Updated:	27/10/17
+Bugs:			
+Fixes:			None
+*/
+
+using JigLibX.Collision;
 using JigLibX.Physics;
 using Microsoft.Xna.Framework;
 using System;
 
 namespace GDLibrary
 {
-    public class PhysicsManager : GameComponent
+    public class PhysicsManager : PausableGameComponent
     {
         #region Fields
         private PhysicsSystem physicSystem;
         private PhysicsController physCont;
         private float timeStep = 0;
-        //pause/unpause based on menu event
-        private bool bPaused = true;
         #endregion
 
         #region Properties
-        public bool Paused
-        {
-            get
-            {
-                return bPaused;
-            }
-            set
-            {
-                bPaused = value;
-            }
-        }
         public PhysicsSystem PhysicsSystem
         {
             get
@@ -43,8 +39,8 @@ namespace GDLibrary
         }
         #endregion
 
-        public PhysicsManager(Game game, EventDispatcher eventDispatcher)
-            : base(game)
+        public PhysicsManager(Game game, EventDispatcher eventDispatcher, StatusType statusType)
+            : base(game, eventDispatcher, statusType)
         {
             this.physicSystem = new PhysicsSystem();
 
@@ -67,40 +63,36 @@ namespace GDLibrary
             this.physCont = new PhysicsController();
             this.physicSystem.AddController(physCont);
 
-            #region Event Handling
-            //pause/unpause events
-            eventDispatcher.MenuChanged += EventDispatcher_MenuChanged;
-            #endregion
         }
 
-        private void EventDispatcher_MenuChanged(EventData eventData)
+        #region Event Handling
+        //See MenuManager::EventDispatcher_MenuChanged to see how it does the reverse i.e. they are mutually exclusive
+        protected override void EventDispatcher_MenuChanged(EventData eventData)
         {
-            if (eventData.EventCategoryType == EventCategoryType.MainMenu)
+            //did the event come from the main menu and is it a start game event
+            if (eventData.EventCategoryType == EventCategoryType.MainMenu && eventData.EventType == EventActionType.OnStart)
             {
-                if (eventData.EventType == EventActionType.OnStart)
-                    this.bPaused = false;
-                else if (eventData.EventType == EventActionType.OnPause)
-                    this.bPaused = true;
+                //turn on update and draw i.e. hide the menu
+                this.StatusType = StatusType.Update | StatusType.Drawn;
+            }
+            //did the event come from the main menu and is it a start game event
+            else if (eventData.EventCategoryType == EventCategoryType.MainMenu && eventData.EventType == EventActionType.OnPause)
+            {
+                //turn off update and draw i.e. show the menu since the game is paused
+                this.StatusType = StatusType.Off;
             }
         }
+        #endregion
 
-        public override void Initialize()
+        protected override void ApplyUpdate(GameTime gameTime)
         {
-            base.Initialize();
-        }
-        public override void Update(GameTime gameTime)
-        {
-            if (!bPaused)
-            {
-                timeStep = (float)gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
-                //if the time between updates indicates a FPS of close to 60 fps or less then update CD/CR engine
-                if (timeStep < 1.0f / 60.0f)
-                    physicSystem.Integrate(timeStep);
-                else
-                    //else fix at 60 updates per second
-                    physicSystem.Integrate(1.0f / 60.0f);
-            }
-            base.Update(gameTime);
+            timeStep = (float)gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
+            //if the time between updates indicates a FPS of close to 60 fps or less then update CD/CR engine
+            if (timeStep < 1.0f / 60.0f)
+                physicSystem.Integrate(timeStep);
+            else
+                //else fix at 60 updates per second
+                physicSystem.Integrate(1.0f / 60.0f);
         }
 
         //to do - dispose

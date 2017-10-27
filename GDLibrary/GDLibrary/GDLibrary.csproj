@@ -125,6 +125,7 @@
     <Compile Include="Parameters\Other\ColorParameters.cs" />
     <Compile Include="Parameters\Other\TrigonometricParameters.cs" />
     <Compile Include="Templates\PausableDrawableGameComponent.cs" />
+    <Compile Include="Templates\PausableGameComponent.cs" />
     <Compile Include="Templates\SimpleDrawableComponent.cs" />
     <Compile Include="Parameters\Camera\ProjectionParameters.cs" />
     <Compile Include="Managers\Input\KeyboardManager.cs" />

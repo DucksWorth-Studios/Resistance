@@ -1,16 +1,17 @@
 ﻿/*
-Function: 		Creates a class based on the DrawableGameComponent class that can be paused when the menu is shown.
+Function: 		Creates a class based on the GameComponent class that can be paused when the menu is shown.
 Author: 		NMCG
 Version:		1.0
 Date Updated:	27/10/17
 Bugs:			None
 Fixes:			None
 */
+
 using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
-    public class PausableDrawableGameComponent : DrawableGameComponent
+    public class PausableGameComponent : GameComponent
     {
         #region Fields
         private StatusType statusType;
@@ -42,7 +43,7 @@ namespace GDLibrary
         }
         #endregion
 
-        public PausableDrawableGameComponent(Game game, EventDispatcher eventDispatcher, StatusType statusType)
+        public PausableGameComponent(Game game, EventDispatcher eventDispatcher, StatusType statusType)
             : base(game)
         {
             //store handle to event dispatcher for event registration and de-registration
@@ -79,23 +80,8 @@ namespace GDLibrary
             }
         }
 
-        
-
-        public override void Draw(GameTime gameTime)
-        {
-            if ((this.statusType & StatusType.Drawn) != 0) //if draw flag is set
-            {
-                ApplyDraw(gameTime);
-                base.Draw(gameTime);
-            }
-        }
 
         protected virtual void ApplyUpdate(GameTime gameTime)
-        {
-
-        }
-
-        protected virtual void ApplyDraw(GameTime gameTime)
         {
 
         }

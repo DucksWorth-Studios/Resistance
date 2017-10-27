@@ -2,7 +2,7 @@
 Function: 		Stores common hard-coded variable values used within the game e.g. key mappings, mouse sensitivity
 Author: 		NMCG
 Version:		1.0
-Date Updated:	5/10/16
+Date Updated:	5/10/17
 Bugs:			None
 Fixes:			None
 */

@@ -8,7 +8,6 @@ using JigLibX.Collision;
 
 
 /*
- sort transparent drawn objects based on their distance to the camera
  add collidable camera
  add a collidable player object
  add a collidable pickup object and remove on collision with player
@@ -145,7 +144,7 @@ namespace GDApp
             Components.Add(this.screenManager);
 
             //CD-CR using JigLibX and add debug drawer to visualise collision skins
-            this.physicsManager = new PhysicsManager(this, this.eventDispatcher);
+            this.physicsManager = new PhysicsManager(this, this.eventDispatcher, StatusType.Off);
             Components.Add(this.physicsManager);
         }
 
@@ -229,9 +228,13 @@ namespace GDApp
 
             //Non-collidable
             InitializeNonCollidableSkyBox(worldScale);
+
             InitializeNonCollidableFoliage(worldScale);
-            InitializeNonCollidableDriveableModelObject();
-            AddDecoratorModelObjects();
+
+            InitializeNonCollidableDriveableObject();
+
+            InitializeNonCollidableDecoratorObjects();
+
 
             //Collidable
             InitializeCollidableGround(worldScale);
@@ -344,6 +347,7 @@ namespace GDApp
                 new Vector3(worldScale, 0.01f, worldScale), Vector3.UnitX, Vector3.UnitY);
 
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, this.modelEffect, ColorParameters.WhiteOpaque, texture, model);
+
             collidableObject.AddPrimitive(new Box(transform3D.Translation, Matrix.Identity, transform3D.Scale), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
             this.objectManager.Add(collidableObject);
@@ -356,14 +360,14 @@ namespace GDApp
             Transform3D transform3D = null;
 
             transform3D = new Transform3D(new Vector3(-30, 0, 0),
-                new Vector3(45, 0, 0), 0.1f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
+                new Vector3(45, 45, 0), 0.1f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
+
             collidableObject = new TriangleMeshObject("torus", ActorType.CollidableProp,
             transform3D, this.modelEffect,
             ColorParameters.WhiteOpaque,
             this.textureDictionary["ml"], this.modelDictionary["torus"],
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
-            collidableObject.ActorType = ActorType.CollidableProp;
             this.objectManager.Add(collidableObject);
         }
 
@@ -397,7 +401,6 @@ namespace GDApp
 
                 collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 2.54f), new MaterialProperties(0.2f, 0.8f, 0.7f));
                 collidableObject.Enable(false, 1);
-                collidableObject.ActorType = ActorType.CollidableProp;
                 this.objectManager.Add(collidableObject);
             }
             #endregion
@@ -411,7 +414,7 @@ namespace GDApp
                 transform3D = new Transform3D(
                         new Vector3(15, 15 + 10 * i, i * 2),
                         new Vector3(0, 0, 0),
-                        2 * Vector3.One,
+                        new Vector3(2, 4, 1),
                         Vector3.UnitX, Vector3.UnitY);
 
                 collidableObject = new CollidableObject("box - " + i,
@@ -430,13 +433,13 @@ namespace GDApp
             #endregion
         }
 
-        private void InitializeNonCollidableDriveableModelObject()
+        private void InitializeNonCollidableDriveableObject()
         {
             //place the drivable model to the left of the existing models and specify that forward movement is along the -ve z-axis
             Transform3D transform = new Transform3D(new Vector3(-10, 0, 25), -Vector3.UnitZ, Vector3.UnitY);
 
             //initialise the drivable model object - we've made this variable a field to allow it to be visible to the rail camera controller - see InitializeCameras()
-            this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, new ColorParameters(Color.LightYellow, 1),
+            this.drivableBoxObject = new ModelObject("drivable box1", ActorType.Player, transform, this.modelEffect, new ColorParameters(Color.Gold, 1),
                 this.textureDictionary["crate1"],
                 this.modelDictionary["box2"]);
 
@@ -448,7 +451,7 @@ namespace GDApp
             this.objectManager.Add(drivableBoxObject);
         }
 
-        private void AddDecoratorModelObjects()
+        private void InitializeNonCollidableDecoratorObjects()
         {
             //use one of our static defaults to position the object at the origin
             Transform3D transform = Transform3D.Zero;

@@ -2,7 +2,7 @@
 Function: 		Encapsulates the projection matrix specific parameters for the camera class
 Author: 		NMCG
 Version:		1.0
-Date Updated:	1/10/16
+Date Updated:	1/10/17
 Bugs:			None
 Fixes:			None
 */

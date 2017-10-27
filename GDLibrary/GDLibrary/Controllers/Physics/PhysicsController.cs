@@ -1,13 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*
+Function: 		Sums all forces and torques for all collidable bodies in the world
+Author: 		NMCG
+Version:		1.0
+Date Updated:	27/10/17
+Bugs:			
+Fixes:			None
+*/
+using Microsoft.Xna.Framework;
 using JigLibX.Physics;
 using System.Collections.Generic;
 
-/*
- * http://www.assembla.com/code/tomahawkengine/subversion/nodes/branches/prerelease/Engine/Tomahawk.Runtime/Physics/JigLibX/PhysicsScene.cs
- *
- * Amended: NMCG
- * Purpose: Sums all forces and torques for all moveable bodies in the world
- */
 namespace GDLibrary
 {
     public class PhysicsController : JigLibX.Physics.Controller

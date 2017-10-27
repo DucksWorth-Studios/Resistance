@@ -27,6 +27,7 @@ namespace GDLibrary
 
         //new with JigLibX
         CollidableGround,
+        CollidableDecorator,
         CollidableProp     //could be an inventory item
     }
 }

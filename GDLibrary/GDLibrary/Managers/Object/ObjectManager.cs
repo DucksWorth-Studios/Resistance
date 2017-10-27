@@ -23,7 +23,6 @@ namespace GDLibrary
         private List<Actor3D> removeList, opaqueDrawList, transparentDrawList;
         private RasterizerState rasterizerStateOpaque;
         private RasterizerState rasterizerStateTransparent;
-        private PhysicsDebugDrawer physicsDebugDrawer;
         #endregion
 
         #region Properties   
@@ -181,6 +180,7 @@ namespace GDLibrary
 
         private void SortTransparentByDistance()
         {
+            //sorting in descending order
             this.transparentDrawList.Sort((a, b) => (b.Transform.DistanceToCamera.CompareTo(a.Transform.DistanceToCamera)));
         }
 

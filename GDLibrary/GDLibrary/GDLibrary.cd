@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="GDLibrary.Actor" Collapsed="true">
-    <Position X="8.25" Y="5.5" Width="1.5" />
+    <Position X="13.5" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABQABAAAEAAAgAAEgAAAhAAAAAAwAIAIEAAAIAAAAhA=</HashCode>
       <FileName>Actors\Base\Actor.cs</FileName>
@@ -9,14 +9,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="GDLibrary.Actor2D" Collapsed="true">
-    <Position X="6" Y="6.75" Width="1.5" />
+    <Position X="10.25" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAEBAAAgAAgAAADAQAAAgkAIAAAAAAIAAAABA=</HashCode>
       <FileName>Actors\Base\Actor2D.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.Actor3D" Collapsed="true">
-    <Position X="10.5" Y="6.75" Width="1.5" />
+    <Position X="15.75" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAEAAAAgAAgAAADAQAAAgkAIAAAAAAIAAAABA=</HashCode>
       <FileName>Actors\Base\Actor3D.cs</FileName>
@@ -24,49 +24,91 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="GDLibrary.Camera3D" Collapsed="true">
-    <Position X="11.75" Y="8.25" Width="1.5" />
+    <Position X="13.5" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAIAAAAEAIAEgACAAAAAAAABAIEABAABAAAQAJA=</HashCode>
       <FileName>Actors\Camera\Camera3D.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.DrawnActor2D" Collapsed="true">
-    <Position X="6" Y="8.25" Width="1.5" />
+    <Position X="10.25" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQCAAEAAgABAAAAgQAABAAAAIAAAICAAQAAAAAEABA=</HashCode>
       <FileName>Actors\Drawn\2D\DrawnActor2D.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.UIButtonObject" Collapsed="true">
-    <Position X="7.25" Y="12.5" Width="1.5" />
+    <Position X="11.25" Y="15" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQAAAAgAIgCAADAAAAAAAAIAIACAACAgAABA=</HashCode>
       <FileName>Actors\Drawn\2D\UI\UIButtonObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.UIObject" Collapsed="true">
-    <Position X="6" Y="9.75" Width="1.5" />
+    <Position X="10.25" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAIAAAIAAAACAAAA=</HashCode>
       <FileName>Actors\Drawn\2D\UI\UIObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.UITextObject" Collapsed="true">
-    <Position X="5" Y="11.25" Width="1.5" />
+    <Position X="9" Y="13.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAgAAgCAABAAAAAAAAIAIACAACAAAABA=</HashCode>
       <FileName>Actors\Drawn\2D\UI\UITextObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.UITextureObject" Collapsed="true">
-    <Position X="7.25" Y="11.25" Width="1.5" />
+    <Position X="11.25" Y="13.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>SAAAAEAAAAAAAgAAgAAABAAAAAQABoAAAAYAAAgAABA=</HashCode>
       <FileName>Actors\Drawn\2D\UI\UITextureObject.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="GDLibrary.CollidableObject" Collapsed="true">
+    <Position X="17" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAgAAAEIAAACgAAAABDAAAEQAAAAAAAAAAAACAABA=</HashCode>
+      <FileName>Actors\Drawn\3D\Collidable\CollidableObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GDLibrary.CharacterObject" Collapsed="true">
+    <Position X="15.75" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAEAAAAAAAAAAACAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Actors\Drawn\3D\Collidable\Player\CharacterObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GDLibrary.ASkinPredicate" Collapsed="true">
+    <Position X="28.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Actors\Drawn\3D\Collidable\Player\CharacterObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GDLibrary.Character" Collapsed="true">
+    <Position X="37.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAgAAAAAAEAAAAIBAAAIAAAICAAAAAAAAACAA=</HashCode>
+      <FileName>Actors\Drawn\3D\Collidable\Player\CharacterObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GDLibrary.PlayerObject" Collapsed="true">
+    <Position X="15.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAEAAAAAQAAAAAAABABAAAAAQAAAAAAIAAQAA=</HashCode>
+      <FileName>Actors\Drawn\3D\Collidable\Player\PlayerObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GDLibrary.TriangleMeshObject" Collapsed="true">
+    <Position X="18" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEQAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Actors\Drawn\3D\Collidable\TriangleMeshObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="GDLibrary.DrawnActor3D" Collapsed="true">
-    <Position X="9.5" Y="8.25" Width="1.5" />
+    <Position X="17" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABACCAAAAggAAAAAgAAABAAAAAAAAIAAAAAAAAAAABA=</HashCode>
       <FileName>Actors\Drawn\3D\DrawnActor3D.cs</FileName>
@@ -74,7 +116,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="GDLibrary.ModelObject" Collapsed="true">
-    <Position X="9.5" Y="9.75" Width="1.5" />
+    <Position X="17" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAkAAABBAAQAAAAoAAAAoAAAAIABA=</HashCode>
       <FileName>Actors\Drawn\3D\ModelObject.cs</FileName>
@@ -82,7 +124,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="GDLibrary.CameraDepthComparer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="28.75" Y="0.5" Width="1.5" />
+    <Position X="34" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>Comparer\CameraDepthComparer.cs</FileName>
@@ -90,112 +132,112 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.UIController" Collapsed="true">
-    <Position X="13.75" Y="1.75" Width="1.5" />
+    <Position X="22.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAgAAAAAAAIAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Controllers\2D\Base\UIController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.UIColorSineLerpController" Collapsed="true">
-    <Position X="12.75" Y="3.25" Width="1.5" />
+    <Position X="24" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAAABAAAABBAAAgAEAAAABAIAAAIAAAAAAAAEAABA=</HashCode>
       <FileName>Controllers\2D\UI\UIColorSineLerpController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.UIScaleSineLerpController" Collapsed="true">
-    <Position X="15" Y="3.25" Width="1.5" />
+    <Position X="21.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABBAAAgAAAAAAAAIAAAIAAAAAAAAEAABA=</HashCode>
       <FileName>Controllers\2D\UI\UIScaleSineLerpController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GDLibrary.CurveController">
-    <Position X="19.5" Y="1.75" Width="1.5" />
+  <Class Name="GDLibrary.CurveController" Collapsed="true">
+    <Position X="1.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAQAAACAAAAAAAAAAAAAAAAAAAKgAAAAIAAAAAAAA=</HashCode>
       <FileName>Controllers\3D\Base\CurveController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.DriveController" Collapsed="true">
-    <Position X="10.5" Y="3.25" Width="1.5" />
+    <Position X="15" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
       <FileName>Controllers\3D\Base\DriveController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GDLibrary.SineLerpController">
-    <Position X="22.75" Y="1.75" Width="1.5" />
+  <Class Name="GDLibrary.SineLerpController" Collapsed="true">
+    <Position X="7" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Controllers\3D\Base\SineLerpControllers.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.TargetController" Collapsed="true">
-    <Position X="2.5" Y="1.75" Width="1.5" />
+    <Position X="11.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAA=</HashCode>
       <FileName>Controllers\3D\Base\TargetController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.UserInputController" Collapsed="true">
-    <Position X="8.25" Y="1.75" Width="1.5" />
+    <Position X="17.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQCAQAAEAAAABEAAAAAAAAABAAAAAQAAAFAAIAAQwA=</HashCode>
       <FileName>Controllers\3D\Base\UserInputController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.FirstPersonCameraController" Collapsed="true">
-    <Position X="6" Y="3.25" Width="1.5" />
+    <Position X="17.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAIAAQAA=</HashCode>
       <FileName>Controllers\3D\Camera3D\FirstPersonCameraController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.FlightCameraController" Collapsed="true">
-    <Position X="8.25" Y="3.25" Width="1.5" />
+    <Position X="19.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAIAAQAA=</HashCode>
       <FileName>Controllers\3D\Camera3D\FlightCameraController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.RailController" Collapsed="true">
-    <Position X="1.5" Y="3.25" Width="1.5" />
+    <Position X="12.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAE=</HashCode>
       <FileName>Controllers\3D\Camera3D\RailController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GDLibrary.SecurityCameraController">
-    <Position X="17.25" Y="1.75" Width="1.5" />
+  <Class Name="GDLibrary.SecurityCameraController" Collapsed="true">
+    <Position X="26.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEQAAAAABAAAAAAAAAAAAAAAAAAAAABAAAAEQABAAAA=</HashCode>
       <FileName>Controllers\3D\Camera3D\SecurityCameraController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.ThirdPersonController" Collapsed="true">
-    <Position X="3.75" Y="3.25" Width="1.5" />
+    <Position X="10.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQGAAAAAAAAwAAAgAABIEAFAGAAAIRAIAAABAAAARA=</HashCode>
       <FileName>Controllers\3D\Camera3D\ThirdPersonController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GDLibrary.ColorSineLerpController">
-    <Position X="24" Y="4.5" Width="1.5" />
+  <Class Name="GDLibrary.ColorSineLerpController" Collapsed="true">
+    <Position X="6" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAQAAAAEgAAAAAAAAAAAAIAAQAgAAEAAABA=</HashCode>
       <FileName>Controllers\3D\Object\ColorSineLerpController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GDLibrary.RotationController">
-    <Position X="26.25" Y="1.75" Width="1.5" />
+  <Class Name="GDLibrary.RotationController" Collapsed="true">
+    <Position X="3.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAIAAhACAAAAAAAAAAIAAAAAAAAAAABA=</HashCode>
       <FileName>Controllers\3D\Object\RotationController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GDLibrary.TranslationSineLerpController">
-    <Position X="21.5" Y="4.5" Width="1.5" />
+  <Class Name="GDLibrary.TranslationSineLerpController" Collapsed="true">
+    <Position X="8.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAgAAAAAAAAAAAAIAAAAgAAgAAABI=</HashCode>
       <FileName>Controllers\3D\Object\TranslationSineLerpController.cs</FileName>
@@ -209,29 +251,36 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="GDLibrary.PhysicsController" Collapsed="true">
+    <Position X="34" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEgAAABAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Controllers\Physics\PhysicsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="GDLibrary.Curve1D" Collapsed="true">
-    <Position X="37.5" Y="0.5" Width="1.5" />
+    <Position X="34" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAABAAAAAAAAggAAACAAAAAgAAAABpAAgA=</HashCode>
       <FileName>Curve\Curve1D.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.Curve2D" Collapsed="true">
-    <Position X="28.75" Y="1.5" Width="1.5" />
+    <Position X="35.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAAAAAAAAAAggAAAAAAAAABAAAAApAAAA=</HashCode>
       <FileName>Curve\Curve2D.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.Curve3D" Collapsed="true">
-    <Position X="30.5" Y="1.5" Width="1.5" />
+    <Position X="37.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAgAAAAAAAAAAAAAAggAAAAAAAAABAAAAApAAAA=</HashCode>
       <FileName>Curve\Curve3D.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.Transform2DCurveOffsets" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="35.75" Y="4.5" Width="1.5" />
+    <Position X="28.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAIAAAAIAEIACAAKAAAACAQAAAAAAAAAAAAAQABA=</HashCode>
       <FileName>Curve\Transform2DCurve.cs</FileName>
@@ -239,14 +288,14 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.Transform2DCurve" Collapsed="true">
-    <Position X="34" Y="4.5" Width="1.5" />
+    <Position X="37.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAAAAAgAAAAAAAAIAAAAAAAAAAIABACAA=</HashCode>
       <FileName>Curve\Transform2DCurve.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.Transform3DCurveOffsets" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="30.5" Y="5.5" Width="1.5" />
+    <Position X="34" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAIAAAAAAEIAgAAKAIAACAQAAAAAAAAAAAAAQABA=</HashCode>
       <FileName>Curve\Transform3DCurve.cs</FileName>
@@ -254,35 +303,42 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.Transform3DCurve" Collapsed="true">
-    <Position X="28.75" Y="5.5" Width="1.5" />
+    <Position X="32.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIgIAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAIABAAAA=</HashCode>
       <FileName>Curve\Transform3DCurve.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.DebugDrawer" Collapsed="true">
-    <Position X="32.25" Y="1.5" Width="1.5" />
+    <Position X="0.5" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACQgAEAAEAAAAgAAACEICAAAAAAAAAgAAggAAEAAAGQ=</HashCode>
+      <HashCode>ACAAAEAACAAAAAgAACEICAAAAAAAAAgAAAgAAEAAAGw=</HashCode>
       <FileName>Debug\DebugDrawer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GDLibrary.DebugInfo" Collapsed="true">
-    <Position X="34" Y="1.5" Width="1.5" />
+  <Class Name="GDLibrary.BoundingBoxBuffers" Collapsed="true">
+    <Position X="30.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAgAAAAIAAAAAAAAACIAAAAiAAAAAA=</HashCode>
-      <FileName>Debug\DebugInfo.cs</FileName>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAEAAAAAAAAAEAAACAAAAAA=</HashCode>
+      <FileName>Debug\Physics\BoundingBoxDrawer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GDLibrary.SimpleFPSCounter" Collapsed="true">
-    <Position X="37.5" Y="3.5" Width="1.5" />
+  <Class Name="GDLibrary.BoundingBoxDrawer" Collapsed="true">
+    <Position X="32.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAYAAEAAAAAAAgAAAAEAIAAAAAAAAACIAggAAAAAAAA=</HashCode>
-      <FileName>Debug\SimpleFPSCounter.cs</FileName>
+      <HashCode>AAAAAAAAgAAAAEAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Debug\Physics\BoundingBoxDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GDLibrary.PhysicsDebugDrawer" Collapsed="true">
+    <Position X="5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAGIAAAAAAAIAAAAAAAAAAACgAAABAAAAAwAg=</HashCode>
+      <FileName>Debug\Physics\PhysicsDebugDrawer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.EventDataEqualityComparer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="37.5" Y="1.5" Width="1.5" />
+    <Position X="30.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
       <FileName>Events\Base\EventDataEqualityComparer.cs</FileName>
@@ -290,21 +346,21 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.EventDispatcher" Collapsed="true">
-    <Position X="28.75" Y="2.5" Width="1.5" />
+    <Position X="32.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAoAAAAAAAAAAAkAAAFABAAAAAIAAAAAAAAAAAAA=</HashCode>
       <FileName>Events\Base\EventDispatcher.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.EventData" Collapsed="true">
-    <Position X="35.75" Y="1.5" Width="1.5" />
+    <Position X="28.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAEgAAAhAQAAAAEAAAAAIAAAAAAAAAIAhA=</HashCode>
       <FileName>Events\Data\EventData.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.CameraManager" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="30.5" Y="0.5" Width="1.5" />
+    <Position X="35.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAYAAAAAAQAAAFAAAAAhBAAAAAAAAAAEIAAAAAAAAAA=</HashCode>
       <FileName>Managers\Camera\CameraManager.cs</FileName>
@@ -312,7 +368,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.ContentDictionary&lt;V&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="35.75" Y="0.5" Width="1.5" />
+    <Position X="32.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACgACAACAAAAAACAAAAAQEAAAEBAAAAAAAAAAAAAA=</HashCode>
       <FileName>Managers\Content\ContentDictionary.cs</FileName>
@@ -320,42 +376,49 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.KeyboardManager" Collapsed="true">
-    <Position X="34" Y="2.5" Width="1.5" />
+    <Position X="37.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AASAAAAAAAgAAQAAAAAAAAAAAAAAAAAAACACQAAAAIA=</HashCode>
       <FileName>Managers\Input\KeyboardManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.MouseManager" Collapsed="true">
-    <Position X="37.5" Y="2.5" Width="1.5" />
+    <Position X="30.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgQBAAAAAAgAAYAwCAAACAAAAAAAAggAAAACQAAABoA=</HashCode>
       <FileName>Managers\Input\MouseManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.MenuManager" Collapsed="true">
-    <Position X="12.75" Y="11" Width="1.5" />
+    <Position X="2.75" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEIGA0AADAAAAAgEAAAAhAAAAAAKAACAAAAEAAAAABg=</HashCode>
       <FileName>Managers\Menu\MenuManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.ObjectManager" Collapsed="true">
-    <Position X="28.75" Y="3.5" Width="1.5" />
+    <Position X="32.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAYAAAAAAAAAAgEAAAAABAAAAAIAAAgIIAAAAAAAEAA=</HashCode>
+      <HashCode>AAYCYAAQABABAgAAAAAIBAAABAoAIBgIAAAIAAAAEAA=</HashCode>
       <FileName>Managers\Object\ObjectManager.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="GDLibrary.PhysicsManager" Collapsed="true">
+    <Position X="10.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAwAAAQAAAAAAAQAAAAAAAAAEIAAAAA=</HashCode>
+      <FileName>Managers\Physics\PhysicsManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="GDLibrary.ScreenManager" Collapsed="true">
-    <Position X="15" Y="11" Width="1.5" />
+    <Position X="7.25" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAAAASSACAIiAAgAEAAAAAAAAAAAAAgACAAAAAAAAAg=</HashCode>
       <FileName>Managers\Screen\ScreenManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.ProjectionParameters" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="30.5" Y="3.5" Width="1.5" />
+    <Position X="35.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABACQAAAKBACBAACggAAACAACAAgIIkAAjAAAhYQAJA=</HashCode>
       <FileName>Parameters\Camera\ProjectionParameters.cs</FileName>
@@ -363,29 +426,29 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.RailParameters" Collapsed="true">
-    <Position X="32.25" Y="3.5" Width="1.5" />
+    <Position X="37.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAYQAAACECAAgAAgAEAAgABAgAAAAIEAAAAAAAAAAgA=</HashCode>
       <FileName>Parameters\Camera\RailParameters.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.ColorParameters" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="34" Y="0.5" Width="1.5" />
+    <Position X="30.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAAAAAAAAAAABQCAgAAAAAAAAAAAAJCAAAAQkAAAABA=</HashCode>
+      <HashCode>EAAAAAAAAAAABQCAgAAAAAAAAAAgAJCAAAAQkAAAABA=</HashCode>
       <FileName>Parameters\Other\ColorParameters.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.TrigonometricParameters" Collapsed="true">
-    <Position X="32.25" Y="5.5" Width="1.5" />
+    <Position X="35.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAEAAAAAAAAAEAgAABAQAAAAEAAIAAAAAAAAAAABA=</HashCode>
       <FileName>Parameters\Other\TrigonometricParameters.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.Transform2D" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="32.25" Y="4.5" Width="1.5" />
+    <Position X="35.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CQAAAAgAAFIADQgCgAIAAAACACAESIgAAAgiAAgAAxI=</HashCode>
       <FileName>Parameters\Transforms\Transform2D.cs</FileName>
@@ -393,36 +456,43 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.Transform3D" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="37.5" Y="4.5" Width="1.5" />
+    <Position X="30.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAAQEAAAERIABYgCgAKAACACAQAAAIkAAAKACiAABBI=</HashCode>
+      <HashCode>EAAQGAAAERIABYgCgAKAACACAQAAAIkAIAKACiAABBI=</HashCode>
       <FileName>Parameters\Transforms\Transform3D.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.PausableDrawableGameComponent" Collapsed="true">
-    <Position X="14" Y="9.5" Width="1.5" />
+    <Position X="3.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAQAAACACAAAAggAAAAAAAAAIAAQAAAAEAAAAIAAAAg=</HashCode>
       <FileName>Templates\PausableDrawableGameComponent.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="GDLibrary.PausableGameComponent" Collapsed="true">
+    <Position X="10.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAAACACAAAAAgAAAAAAAAAIAAQAAAAEAAAAIAAAAA=</HashCode>
+      <FileName>Templates\PausableGameComponent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="GDLibrary.SimpleDrawableComponent" Collapsed="true">
-    <Position X="35.75" Y="3.5" Width="1.5" />
+    <Position X="30.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Templates\SimpleDrawableComponent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.CollisionUtility" Collapsed="true">
-    <Position X="32.25" Y="0.5" Width="1.5" />
+    <Position X="28.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAEABAAAAQAAAAAAAAAAAAAAAAAAIQAAEAAAAAAAg=</HashCode>
       <FileName>Utility\CollisionUtility.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.Integer2" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="30.5" Y="2.5" Width="1.5" />
+    <Position X="34" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAIAAAAAAAAAAEIAAAQAAAAQAAAAAAAABgAAAAYJA=</HashCode>
       <FileName>Utility\Integer2.cs</FileName>
@@ -430,7 +500,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.Integer3" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="32.25" Y="2.5" Width="1.5" />
+    <Position X="35.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAIgAAAAAAAAAEIAAAQAAAAQAAAAAAAABgAQAAYJE=</HashCode>
       <FileName>Utility\Integer3.cs</FileName>
@@ -438,28 +508,28 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GDLibrary.MathUtility" Collapsed="true">
-    <Position X="35.75" Y="2.5" Width="1.5" />
+    <Position X="28.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAABAACAAAAAAAAAgAIAAAIAAAA=</HashCode>
+      <HashCode>QAAEAAAAAAAAAAAAAAABAACAAAAAAAAAgAIAAAIAAAA=</HashCode>
       <FileName>Utility\MathUtility.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.ScreenUtility" Collapsed="true">
-    <Position X="34" Y="3.5" Width="1.5" />
+    <Position X="28.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAZIAAQAAEAAgQAAAAAAAAAAAAQAEAYQABAAAAQAAA=</HashCode>
       <FileName>Utility\ScreenUtility.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.StatefulBool" Collapsed="true">
-    <Position X="28.75" Y="4.5" Width="1.5" />
+    <Position X="32.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAACAAAAAAEEAMAAAAAAAAAAAIAAAAAAABAAAA=</HashCode>
       <FileName>Utility\StatefulBool.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GDLibrary.StringUtility" Collapsed="true">
-    <Position X="30.5" Y="4.5" Width="1.5" />
+    <Position X="34" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>Utility\StringUtility.cs</FileName>
@@ -482,7 +552,7 @@
   <Enum Name="GDLibrary.ActorType" Collapsed="true">
     <Position X="28.75" Y="7.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AARCAAABAAAACAAAABACAAAEAAAAAAABAAAAAQAAAAA=</HashCode>
+      <HashCode>AARCAEABAAAACAAAABACAAAEABAAAAABAAAAAQAAAAA=</HashCode>
       <FileName>Enums\ActorType.cs</FileName>
     </TypeIdentifier>
   </Enum>
