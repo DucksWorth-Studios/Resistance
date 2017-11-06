@@ -43,5 +43,7 @@ namespace GDLibrary
         OnOpen,
         OnClose,
 
+        //used to center mouse at start-up
+        OnMouseCentre,
     }
 }

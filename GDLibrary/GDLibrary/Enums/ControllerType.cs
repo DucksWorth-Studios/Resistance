@@ -33,6 +33,9 @@ namespace GDLibrary
         //applied to any 2D actor (e.g. menu button, game state info)
         SineScaleLerp,
         SineRotationLerp,
-        SineColorLerp
+        SineColorLerp,
+
+        //JibLibX related
+        CollidableFirstPerson
     }
 }

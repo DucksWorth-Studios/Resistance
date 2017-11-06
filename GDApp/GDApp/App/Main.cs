@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using JigLibX.Geometry;
 using JigLibX.Collision;
-
-
 /*
  add collidable camera
  add a collidable player object
@@ -34,27 +32,28 @@ namespace GDApp
         public KeyboardManager keyboardManager { get; private set; }
         public ScreenManager screenManager { get; private set; }
         public MyAppMenuManager menuManager { get; private set; }
+        public PhysicsManager physicsManager { get; private set; }
 
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
 
         //default shader for rendering 3D models
         private BasicEffect modelEffect;
+        //user for the skybox since the lighting is baked into the textures used in the skybox
+        private BasicEffect unlitModelEffect;
 
         //stores loaded game resources
         private ContentDictionary<Model> modelDictionary;
         private ContentDictionary<Texture2D> textureDictionary;
         private ContentDictionary<SpriteFont> fontDictionary;
 
-
-#if DEBUG
-        //temp var - remove later
+        //demo remove later
         private ModelObject drivableBoxObject;
 
+#if DEBUG
+        //used to visualize debug info (e.g. FPS) and also to draw collision skins
         private DebugDrawer debugDrawer;
-        private PhysicsManager physicsManager;
         private PhysicsDebugDrawer physicsDebugDrawer;
-        private BasicEffect unlitModelEffect;
 #endif
         #endregion
 
@@ -105,9 +104,12 @@ namespace GDApp
 
             #region Add Camera(s)
             //add a first person camera only
-           // InitializeFirstPersonCamera(screenResolution);
+            // InitializeFirstPersonCamera(screenResolution);
             //add a third person camera
-            InitializeThirdPersonCamera(screenResolution, this.drivableBoxObject);
+            //InitializeThirdPersonCamera(screenResolution, this.drivableBoxObject);
+
+            //add a collidable first person camera
+            InitializeCollidableFirstPersonCamera(screenResolution);
             #endregion
 
             #region Publish Start Event(s)
@@ -121,6 +123,7 @@ namespace GDApp
             base.Initialize();
         }
 
+      
         private void InitializeManagers(Integer2 screenResolution, bool isMouseVisible)
         {
             this.cameraManager = new CameraManager(this, 1);
@@ -128,12 +131,8 @@ namespace GDApp
 
             //create the object manager - notice that its not a drawablegamecomponent. See ScreeManager::Draw()
             this.objectManager = new ObjectManager(this, this.cameraManager, 10);
-
-            //add mouse and keyboard managers
-            this.mouseManager = new MouseManager(this, isMouseVisible,
-                new Vector2(screenResolution.X / 2.0f, screenResolution.Y / 2.0f) /*screen centre*/);
-            Components.Add(this.mouseManager);
-
+            
+            //add keyboard manager
             this.keyboardManager = new KeyboardManager(this);
             Components.Add(this.keyboardManager);
 
@@ -142,6 +141,10 @@ namespace GDApp
                 this.objectManager, this.cameraManager, this.keyboardManager, AppData.KeyPauseShowMenu,
                 this.eventDispatcher, StatusType.Off);
             Components.Add(this.screenManager);
+        
+            //add mouse manager
+            this.mouseManager = new MouseManager(this, this.eventDispatcher, this.screenManager, isMouseVisible);
+            Components.Add(this.mouseManager);
 
             //CD-CR using JigLibX and add debug drawer to visualise collision skins
             this.physicsManager = new PhysicsManager(this, this.eventDispatcher, StatusType.Off);
@@ -223,18 +226,13 @@ namespace GDApp
         #region Initialize Drawn Assets
         private void LoadGame(int level)
         {
-
-            int worldScale = 250;
+            int worldScale = 500;
 
             //Non-collidable
             InitializeNonCollidableSkyBox(worldScale);
-
             InitializeNonCollidableFoliage(worldScale);
-
             InitializeNonCollidableDriveableObject();
-
             InitializeNonCollidableDecoratorObjects();
-
 
             //Collidable
             InitializeCollidableGround(worldScale);
@@ -425,8 +423,9 @@ namespace GDApp
                 collidableObject.AddPrimitive(
                     new Box(transform3D.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * transform3D.Scale),
                     new MaterialProperties(0.2f, 0.8f, 0.7f));
-
-                collidableObject.Enable(false, 1);
+            
+                //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
+                collidableObject.Enable(false, 100);
                 this.objectManager.Add(collidableObject);
             }
 
@@ -485,6 +484,9 @@ namespace GDApp
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
             EventDispatcher.Publish(new EventData("this doesnt matter", this, EventActionType.OnPause, EventCategoryType.MainMenu));
+            
+            //centre the mouse
+            EventDispatcher.Publish(new EventData("centre mouse at startup bla bla", this, EventActionType.OnMouseCentre, EventCategoryType.Mouse));
         }
 
         private void InitializeEventDispatcher()
@@ -737,7 +739,7 @@ namespace GDApp
             //set the camera to occupy the the full width but only half the height of the full viewport
             Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), 0, 0, 0, 0);
 
-            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Update);
+            camera = new Camera3D("first person camera 1", ActorType.Camera, transform, ProjectionParameters.StandardMediumSixteenNine, viewPort, 1, StatusType.Update);
             //attach a FirstPersonCameraController
             camera.AttachController(new FirstPersonCameraController("firstPersonCameraController1", ControllerType.FirstPerson,
                 AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager));
@@ -846,6 +848,38 @@ namespace GDApp
             #endregion
 
         }
+
+        private void InitializeCollidableFirstPersonCamera(Integer2 screenResolution)
+        {
+            Transform3D transform = null;
+            Camera3D camera = null;
+
+            #region Initialise the first person camera
+            transform = new Transform3D(new Vector3(0, 5, 10), -Vector3.UnitZ, Vector3.UnitY);
+            //set the camera to occupy the the full width but only half the height of the full viewport
+            Viewport viewPort = ScreenUtility.Pad(new Viewport(0, 0, screenResolution.X, (int)(screenResolution.Y)), 0, 0, 0, 0);
+
+            camera = new Camera3D("collidable first person camera 1", ActorType.Camera, transform, 
+                ProjectionParameters.StandardDeepSixteenNine, viewPort, 1, StatusType.Update);
+            
+            //attach a CollidableFirstPersonController
+            camera.AttachController(new CollidableFirstPersonCameraController(
+                    camera + " controller",
+                    ControllerType.CollidableFirstPerson,
+                    AppData.CameraMoveKeys, 
+                    AppData.CollidableCameraMoveSpeed, AppData.CollidableCameraStrafeSpeed, AppData.CameraRotationSpeed,
+                    this.mouseManager, this.keyboardManager, this.cameraManager, this.screenManager,
+                    camera, //parent
+                    2f, 10, //radius, height
+                    1, 1, //accel, decel
+                    10, //mass
+                    AppData.CollidableCameraJumpHeight,
+                    Vector3.Zero)); //translation offset
+
+            this.cameraManager.Add(camera);
+            #endregion
+        }
+
         #endregion
 
         #region Content, Update, Draw        

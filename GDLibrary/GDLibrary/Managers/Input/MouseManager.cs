@@ -17,6 +17,7 @@ namespace GDLibrary
     {
         #region Fields
         private MouseState newState, oldState;
+        private ScreenManager screenManager;
         #endregion
 
         #region Properties
@@ -36,12 +37,33 @@ namespace GDLibrary
         }
         #endregion
 
-        public MouseManager(Game game, bool isVisible, Vector2 initialPosition)
+        public MouseManager(Game game, EventDispatcher eventDispatcher, ScreenManager screenManager,
+            bool isVisible)
             : base(game)
         {
             game.IsMouseVisible = isVisible;
-            SetPosition(initialPosition);
+
+            //used to centre mouse
+            this.screenManager = screenManager;
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
         }
+
+        #region Event Handling
+        protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.MouseChanged += EventDispatcher_MouseChanged;
+        }
+
+        private void EventDispatcher_MouseChanged(EventData eventData)
+        {
+            if (eventData.EventCategoryType == EventCategoryType.Mouse && eventData.EventType == EventActionType.OnMouseCentre)
+            {
+                this.SetPosition(this.screenManager.ScreenCentre);
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Allows the game component to perform any initialization it needs to before starting

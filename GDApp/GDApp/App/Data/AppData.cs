@@ -42,12 +42,11 @@ namespace GDLibrary
         public static readonly float CameraRotationSpeed = 0.005f;
         public static readonly float CameraMoveSpeed = 0.025f;
         public static readonly float CameraStrafeSpeed = 0.6f * CameraMoveSpeed;
-
-        public static readonly float CameraJumpHeight = 30;
-        public static readonly float CollidableCameraRotationSpeed = 0.05f;
-        public static readonly float CollidableCameraMoveSpeed = 0.1f;
+    
+        //JigLib related collidable camera properties
+        public static readonly float CollidableCameraJumpHeight = 12;
+        public static readonly float CollidableCameraMoveSpeed = 0.6f;
         public static readonly float CollidableCameraStrafeSpeed = 0.6f * CollidableCameraMoveSpeed;
-
 
         public static readonly Keys[] CameraMoveKeys = { Keys.W, Keys.S, Keys.A, Keys.D, 
                                          Keys.Space, Keys.C, Keys.LeftShift, Keys.RightShift};

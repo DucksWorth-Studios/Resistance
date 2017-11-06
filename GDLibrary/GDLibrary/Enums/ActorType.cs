@@ -28,6 +28,7 @@ namespace GDLibrary
         //new with JigLibX
         CollidableGround,
         CollidableDecorator,
-        CollidableProp     //could be an inventory item
+        CollidableProp,     //could be an inventory item
+        CollidableCamera    //used by first person collidable camera controller
     }
 }

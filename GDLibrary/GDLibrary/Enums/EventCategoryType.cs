@@ -19,6 +19,7 @@ namespace GDLibrary
         NonPlayer,
         Pickup,
         Door,
+        Mouse,
         //all other categories of sender...
     }
 }

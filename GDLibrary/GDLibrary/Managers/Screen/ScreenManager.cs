@@ -32,6 +32,14 @@ namespace GDLibrary
         #endregion
 
         #region Properties 
+        //used to position the mouse
+        public Vector2 ScreenCentre
+        {
+            get
+            {
+                return new Vector2(graphics.PreferredBackBufferWidth / 2.0f, graphics.PreferredBackBufferHeight / 2.0f);
+            }
+        }
         public Integer2 ScreenResolution
         {
             get
@@ -56,6 +64,14 @@ namespace GDLibrary
             {
                 this.screenType = value;
             }
+        }
+        public float AspectRatio
+        {
+            get
+            {
+                return (float)graphics.PreferredBackBufferWidth / graphics.PreferredBackBufferHeight;
+            }
+
         }
         #endregion
 
