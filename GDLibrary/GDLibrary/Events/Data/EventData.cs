@@ -93,7 +93,7 @@ namespace GDLibrary
 
         }
 
-        //used to pass multiple parameter objects within an event
+        //supports passing of multiple parameter objects within an event
         public EventData(string id, object sender, object[] eventParameters, EventActionType eventType, EventCategoryType eventCategoryType)
         {
             this.id = id;                           //id of sender
