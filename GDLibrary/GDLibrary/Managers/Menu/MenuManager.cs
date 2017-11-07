@@ -15,6 +15,9 @@ namespace GDLibrary
         private SpriteBatch spriteBatch;
         private MouseManager mouseManager;
         private KeyboardManager keyboardManager;
+        private CameraManager cameraManager;
+
+        //tracks last object mouse-ed over by the cursor
         private UIObject oldUIObjectMouseOver;
         #endregion
 
@@ -36,7 +39,9 @@ namespace GDLibrary
         }
         #endregion
 
-        public MenuManager(Game game, MouseManager mouseManager, KeyboardManager keyboardManager, SpriteBatch spriteBatch, 
+        public MenuManager(Game game, MouseManager mouseManager, KeyboardManager keyboardManager, 
+            CameraManager cameraManager,
+            SpriteBatch spriteBatch, 
             EventDispatcher eventDispatcher, 
             StatusType statusType)
             : base(game, eventDispatcher, statusType)
@@ -46,6 +51,7 @@ namespace GDLibrary
             //used to listen for input
             this.mouseManager = mouseManager;
             this.keyboardManager = keyboardManager;
+            this.cameraManager = cameraManager;
 
             //used to render menu and UI elements
             this.spriteBatch = spriteBatch;
@@ -67,6 +73,9 @@ namespace GDLibrary
                 //turn on update and draw i.e. show the menu since the game is paused
                 this.StatusType = StatusType.Update | StatusType.Drawn;
             }
+
+            //set the mouse to look directly forward otherwise the camera would move forward based on some random mouse orientation
+            this.mouseManager.SetPosition(this.cameraManager.ActiveCamera.ViewportCentre);
         }
         #endregion
 

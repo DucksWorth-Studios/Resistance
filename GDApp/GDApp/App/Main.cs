@@ -6,10 +6,17 @@ using Microsoft.Xna.Framework.Input;
 using JigLibX.Geometry;
 using JigLibX.Collision;
 /*
+ check clone on new eventdata
  add collidable camera
  add a collidable player object
  add a collidable pickup object and remove on collision with player
  add mouse picking to select and remove objects
+ frustum culling
+ low poly
+
+
+ scripting camera changes using event data read from XML?
+
  menu - click sound
  menu transparency
  */
@@ -122,8 +129,7 @@ namespace GDApp
 
             base.Initialize();
         }
-
-      
+    
         private void InitializeManagers(Integer2 screenResolution, bool isMouseVisible)
         {
             this.cameraManager = new CameraManager(this, 1);
@@ -143,7 +149,7 @@ namespace GDApp
             Components.Add(this.screenManager);
         
             //add mouse manager
-            this.mouseManager = new MouseManager(this, this.eventDispatcher, this.screenManager, isMouseVisible);
+            this.mouseManager = new MouseManager(this, isMouseVisible);
             Components.Add(this.mouseManager);
 
             //CD-CR using JigLibX and add debug drawer to visualise collision skins
@@ -186,7 +192,10 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/box2", "box2");
             this.modelDictionary.Load("Assets/Models/torus");
             this.modelDictionary.Load("Assets/Models/sphere");
+
+            //triangle mesh high/low poly demo
             this.modelDictionary.Load("Assets/Models/teapot");
+            this.modelDictionary.Load("Assets/Models/teapot_lowpoly");
 
             #region Textures
             //environment
@@ -226,7 +235,7 @@ namespace GDApp
         #region Initialize Drawn Assets
         private void LoadGame(int level)
         {
-            int worldScale = 500;
+            int worldScale = 250;
 
             //Non-collidable
             InitializeNonCollidableSkyBox(worldScale);
@@ -237,6 +246,7 @@ namespace GDApp
             //Collidable
             InitializeCollidableGround(worldScale);
             InitializeStaticCollidableTriangleMeshObjects();
+            InitializeStaticCollidableLowPolyTriangleMeshObjects();
             InitializeDynamicCollidableObjects();
         }
 
@@ -364,6 +374,27 @@ namespace GDApp
             transform3D, this.modelEffect,
             ColorParameters.WhiteOpaque,
             this.textureDictionary["ml"], this.modelDictionary["torus"],
+                  new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
+
+
+        //Demos use of a low-polygon model to generate the triangle mesh collision skin - saving CPU cycles on CDCR checking
+        private void InitializeStaticCollidableLowPolyTriangleMeshObjects()
+        {
+           
+            CollidableObject collidableObject = null;
+            Transform3D transform3D = null;
+
+            transform3D = new Transform3D(new Vector3(-15, 0, 0),
+                new Vector3(0, 0, 0), 0.06f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject = new TriangleMeshObject("teapot", ActorType.CollidableProp,
+            transform3D, this.modelEffect,
+            ColorParameters.WhiteOpaque,
+            this.textureDictionary["checkerboard"], this.modelDictionary["teapot"],
+            this.modelDictionary["teapot_lowpoly"], 
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
@@ -484,9 +515,6 @@ namespace GDApp
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
             EventDispatcher.Publish(new EventData("this doesnt matter", this, EventActionType.OnPause, EventCategoryType.MainMenu));
-            
-            //centre the mouse
-            EventDispatcher.Publish(new EventData("centre mouse at startup bla bla", this, EventActionType.OnMouseCentre, EventCategoryType.Mouse));
         }
 
         private void InitializeEventDispatcher()
@@ -502,7 +530,8 @@ namespace GDApp
         #region Menu
         private void InitializeMenu()
         {
-            this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, spriteBatch, 
+            this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, this.cameraManager,
+                spriteBatch, 
                 this.eventDispatcher, StatusType.Off);
             //set the main menu to be the active menu scene
             this.menuManager.SetActiveList("mainmenu");

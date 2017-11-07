@@ -23,13 +23,11 @@ namespace GDLibrary
         //a delegate is basically a list - the list contains a pointer to a function - this function pointer comes from the object wishing to be notified when the event occurs.
         public delegate void CameraEventHandler(EventData eventData);
         public delegate void MenuEventHandler(EventData eventData);
-        public delegate void MouseEventHandler(EventData eventData);
-
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
         public event MenuEventHandler MenuChanged;
-        public event MouseEventHandler MouseChanged;
+
 
         public EventDispatcher(Game game, int initialSize)
             : base(game)
@@ -71,10 +69,6 @@ namespace GDLibrary
                     OnMenu(eventData);
                     break;
 
-                case EventCategoryType.Mouse:
-                    OnMouse(eventData);
-                    break;
-
                 //add a case to handle the On...() method for each type
 
                 default:
@@ -82,24 +76,18 @@ namespace GDLibrary
             }
         }
 
-        //called when a mouse centre is requested
-        protected virtual void OnMouse(EventData eventData)
-        {
-            //non-null if an object has subscribed to this event
-            MouseChanged?.Invoke(eventData);
-
-            /*
-             //Old form:
-              if (MouseChanged != null)
-                MouseChanged(eventData);
-             */
-        }
 
         //called when a menu change is requested
         protected virtual void OnMenu(EventData eventData)
         {
             //non-null if an object has subscribed to this event
             MenuChanged?.Invoke(eventData);
+
+            /*
+             //Old form:
+              if (MenuChanged != null)
+                MenuChanged(eventData);
+             */
         }
 
         //called when a camera event needs to be generated

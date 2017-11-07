@@ -17,7 +17,6 @@ namespace GDLibrary
     {
         #region Fields
         private MouseState newState, oldState;
-        private ScreenManager screenManager;
         #endregion
 
         #region Properties
@@ -37,33 +36,11 @@ namespace GDLibrary
         }
         #endregion
 
-        public MouseManager(Game game, EventDispatcher eventDispatcher, ScreenManager screenManager,
-            bool isVisible)
+        public MouseManager(Game game, bool isVisible)
             : base(game)
         {
             game.IsMouseVisible = isVisible;
-
-            //used to centre mouse
-            this.screenManager = screenManager;
-
-            //register with the event dispatcher for the events of interest
-            RegisterForEventHandling(eventDispatcher);
         }
-
-        #region Event Handling
-        protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
-        {
-            eventDispatcher.MouseChanged += EventDispatcher_MouseChanged;
-        }
-
-        private void EventDispatcher_MouseChanged(EventData eventData)
-        {
-            if (eventData.EventCategoryType == EventCategoryType.Mouse && eventData.EventType == EventActionType.OnMouseCentre)
-            {
-                this.SetPosition(this.screenManager.ScreenCentre);
-            }
-        }
-        #endregion
 
         /// <summary>
         /// Allows the game component to perform any initialization it needs to before starting
@@ -176,41 +153,29 @@ namespace GDLibrary
         }
 
         //tests if mouse on the screen vertical screen edge
-        public bool IsMouseOnScreenEdgeVertical(float activationSensitivity, ref Vector2 mouseDelta, Rectangle screenRectangle)
+        public CompassDirectionType GetCompassDirection(float padding, Rectangle screenRectangle)
         {
+            CompassDirectionType compassDirectionType = CompassDirectionType.Centre;
             //left
-            if (this.newState.X <= (screenRectangle.Width * (1 - activationSensitivity)))
+            if (this.newState.X <= screenRectangle.Left)
             {
-                mouseDelta += Vector2.UnitY;
-                return true;
+                compassDirectionType = CompassDirectionType.West;
             }
-            //right
-            else if (this.newState.X >= (screenRectangle.Width * activationSensitivity))
+            else if (this.newState.X > screenRectangle.Right)
             {
-                mouseDelta += -Vector2.UnitY;
-                return true;
+                compassDirectionType = CompassDirectionType.East;
             }
 
-            return false;
-        }
-
-        //tests if mouse on the screen horizontal screen edge
-        public bool IsMouseOnScreenEdgeHorizontal(float activationSensitivity, ref Vector2 mouseDelta, Rectangle screenRectangle)
-        {          
-            //top
-            if (this.newState.Y <= (screenRectangle.Height * (1 - activationSensitivity)))
+            if (this.newState.Y <= screenRectangle.Top)
             {
-                mouseDelta += Vector2.UnitX;
-                return true;
+                compassDirectionType |= CompassDirectionType.North;
             }
-            //bottom
-            else if (this.newState.Y >= (screenRectangle.Height * activationSensitivity))
+            else if (this.newState.Y > screenRectangle.Bottom)
             {
-                mouseDelta += -Vector2.UnitX;
-                return true;
+                compassDirectionType |= CompassDirectionType.South;
             }
 
-            return false;
+            return compassDirectionType;
         }
     }
 }

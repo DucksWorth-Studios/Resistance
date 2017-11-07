@@ -84,7 +84,6 @@ namespace GDLibrary
                 this.drawDepth = value;
             }
         }
-
         #endregion
 
         public Camera3D(string id, ActorType actorType,
@@ -95,6 +94,7 @@ namespace GDLibrary
             this.projectionParameters = projectionParameters;
             this.Viewport = viewPort;
             this.DrawDepth = drawDepth;
+
         }
 
         //creates a default camera3D - we can use this for a fixed camera archetype i.e. one we will clone - see MainApp::InitialiseCameras()

@@ -119,8 +119,6 @@ namespace GDLibrary
              null, ColorParameters.WhiteOpaque, null, null, this.MoveKeys, radius, height, accelerationRate, decelerationRate, translationOffset);
             playerObject.Enable(false, mass);
 
-            //set the mouse to look directly forward otherwise the camera would move forward based on some random mouse orientation
-            //this.MouseManager.SetPosition(screenManager.ScreenCentre);
         }
 
         public override void Update(GameTime gameTime, IActor actor)
@@ -139,7 +137,7 @@ namespace GDLibrary
              * 
              * Q. Why do we still use the rotation methods of Transform3D? 
              * A. Rotating the camera doesnt affect CD/CR since the camera is modelled by a player object which has a capsule shape.
-             *    A capsule's collision response won't alter as a result of any rotation since its cross-section is spherical alone the Y-axis.
+             *    A capsule's collision response won't alter as a result of any rotation since its cross-section is spherical across the XZ-plane.
              */
 
             if ((parentActor != null) && (parentActor != null))

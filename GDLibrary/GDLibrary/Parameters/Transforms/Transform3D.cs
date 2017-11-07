@@ -232,7 +232,9 @@ namespace GDLibrary
 
         public void RotateBy(Vector3 rotateBy) //in degrees
         {
-            this.rotation = this.OriginalTransform3D.Rotation + rotateBy;
+         //   this.rotation = this.OriginalTransform3D.Rotation + rotateBy;
+
+            this.rotation = this.Rotation + rotateBy;
 
             //update the look and up - RADIANS!!!!
             Matrix rot = Matrix.CreateFromYawPitchRoll(MathHelper.ToRadians(this.rotation.X),

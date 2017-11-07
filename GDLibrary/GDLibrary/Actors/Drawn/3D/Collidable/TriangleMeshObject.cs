@@ -37,6 +37,19 @@ namespace GDLibrary
             this.Body.CollisionSkin.AddPrimitive(triangleMesh, materialProperties);
         }
 
+        public TriangleMeshObject(string id, ActorType actorType, Transform3D transform,
+           BasicEffect effect, ColorParameters colorParameters, Texture2D texture, Model model,
+           Model lowPolygonModel,
+           MaterialProperties materialProperties)
+           : base(id, actorType, transform, effect, colorParameters, texture, model)
+        {
+            //get the primitive mesh which forms the skin
+            TriangleMesh triangleMesh = GetTriangleMesh(lowPolygonModel, this.Transform);
+
+            //add the primitive mesh to the collision skin
+            this.Body.CollisionSkin.AddPrimitive(triangleMesh, materialProperties);
+        }
+
         public override Matrix GetWorldMatrix()
         {
             return Matrix.CreateScale(this.Transform.Scale) *

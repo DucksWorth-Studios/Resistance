@@ -106,6 +106,7 @@
     <Compile Include="Debug\DebugDrawer.cs" />
     <Compile Include="Debug\Physics\PhysicsDebugDrawer.cs" />
     <Compile Include="Enums\ActorType.cs" />
+    <Compile Include="Enums\CompassDirectionType.cs" />
     <Compile Include="Enums\ControllerType.cs" />
     <Compile Include="Enums\EventActionType.cs" />
     <Compile Include="Enums\EventCategoryType.cs" />
