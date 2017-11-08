@@ -19,14 +19,18 @@ namespace GDLibrary
         //See Queue doc - https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.queue-1?view=netframework-4.7.1
         private static Queue<EventData> queue; //stores events in arrival sequence
         private static HashSet<EventData> uniqueSet; //prevents the same event from existing in the stack for a single update cycle (e.g. when playing a sound based on keyboard press)
+      
 
         //a delegate is basically a list - the list contains a pointer to a function - this function pointer comes from the object wishing to be notified when the event occurs.
         public delegate void CameraEventHandler(EventData eventData);
         public delegate void MenuEventHandler(EventData eventData);
+        public delegate void ScreenEventHandler(EventData eventData);
+
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
         public event MenuEventHandler MenuChanged;
+        public event ScreenEventHandler ScreenChanged;
 
 
         public EventDispatcher(Game game, int initialSize)
@@ -70,6 +74,9 @@ namespace GDLibrary
                     break;
 
                 //add a case to handle the On...() method for each type
+                case EventCategoryType.Screen:
+                    OnScreen(eventData);
+                    break;
 
                 default:
                     break;
@@ -94,6 +101,12 @@ namespace GDLibrary
         protected virtual void OnCamera(EventData eventData)
         {
             CameraChanged?.Invoke(eventData);
+        }
+
+        //called when a screen event needs to be generated (e.g. change screen layout)
+        protected virtual void OnScreen(EventData eventData)
+        {
+            ScreenChanged?.Invoke(eventData);
         }
     }
 }

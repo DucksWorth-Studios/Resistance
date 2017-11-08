@@ -37,8 +37,10 @@ namespace GDLibrary
         public static int IndexStrafeLeft = 6;
         public static int IndexStrafeRight = 7;
         #endregion
-        
+
         #region Camera
+        public static readonly int CurveEvaluationPrecision = 4;
+
         public static readonly float CameraRotationSpeed = 0.005f;
         public static readonly float CameraMoveSpeed = 0.025f;
         public static readonly float CameraStrafeSpeed = 0.6f * CameraMoveSpeed;

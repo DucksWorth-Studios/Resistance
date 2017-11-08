@@ -17,7 +17,7 @@ namespace GDLibrary
         private object sender;
         private string id;
         //an optional array to pass multiple parameters within an event (used for camera, sound, or video based events)
-        private object[] eventParameters;
+        private object[] additionalEventParameters;
         #endregion
 
         #region Properties
@@ -43,25 +43,17 @@ namespace GDLibrary
                 this.sender = value;
             }
         }
-        public object[] EventParameters
+        public object[] AdditionalEventParameters
         {
             get
             {
-                return this.eventParameters;
+                return this.additionalEventParameters;
             }
             set
             {
-                this.eventParameters = value;
+                this.additionalEventParameters = value;
             }
         }
-        public int ParameterCount
-        {
-            get
-            {
-                return this.eventParameters.Length;
-            }
-        }
-
         public EventActionType EventType
         {
             get
@@ -88,19 +80,21 @@ namespace GDLibrary
 
         //pre-object[] compatability constructor
         public EventData(string id, object sender, EventActionType eventType, EventCategoryType eventCategoryType)
-            : this(id, sender, null, eventType, eventCategoryType)
+            : this(id, sender, eventType, eventCategoryType, null)
         {
 
         }
 
         //supports passing of multiple parameter objects within an event
-        public EventData(string id, object sender, object[] eventParameters, EventActionType eventType, EventCategoryType eventCategoryType)
+        public EventData(string id, object sender, EventActionType eventType, EventCategoryType eventCategoryType, object[] additionalEventParameters)
         {
             this.id = id;                           //id of sender
             this.sender = sender;                   //object reference of sender
-            this.eventParameters = eventParameters;
             this.eventType = eventType;             //is it play, mute, volume, zone?   
             this.eventCategoryType = eventCategoryType; //where did it originate? ui, menu, video
+
+            //used to pass extra information between sender and registered recipient(s)
+            this.additionalEventParameters = additionalEventParameters;
         }
 
         public object Clone() //deep copy
@@ -114,7 +108,7 @@ namespace GDLibrary
             EventData other = obj as EventData;
             return this.id.Equals(other) 
                 && this.sender == other.Sender 
-                && ((this.eventParameters != null && this.eventParameters.Length != 0) ? this.eventParameters.Equals(other.EventParameters) : true)
+                && ((this.additionalEventParameters != null && this.additionalEventParameters.Length != 0) ? this.additionalEventParameters.Equals(other.additionalEventParameters) : true)
                 && this.eventType == other.EventType 
                 && this.eventCategoryType == other.EventCategoryType;
         }
@@ -124,8 +118,10 @@ namespace GDLibrary
             int hash = 1;
             hash = hash * 7 + this.id.GetHashCode();
             hash = hash * 11 + this.sender.GetHashCode();
-            if(this.eventParameters != null && this.eventParameters.Length != 0)
-                hash = hash * 31 + this.eventParameters.GetHashCode();
+
+            if(this.additionalEventParameters != null && this.additionalEventParameters.Length != 0)
+                hash = hash * 31 + this.additionalEventParameters.GetHashCode();
+
             hash = hash * 47 + this.eventType.GetHashCode();
             hash = hash * 79 + this.eventCategoryType.GetHashCode();
             return hash;

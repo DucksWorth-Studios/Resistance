@@ -40,15 +40,40 @@ namespace GDLibrary
             }
             set
             {
-                this.activeCameraIndex = (value >= 0 && value <= this.cameraList.Count) ? value : 0;
+                this.activeCameraIndex = (value >= 0 && value < this.cameraList.Count) ? value : 0;
             }
         }
         #endregion
 
-        public CameraManager(Game game, int initialSize) : base(game)
+        public CameraManager(Game game, int initialSize, EventDispatcher eventDispatcher) 
+            : base(game)
         {
             this.cameraList = new List<Camera3D>(initialSize);
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
         }
+
+        #region Event Handling
+        protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.CameraChanged += EventDispatcher_CameraChanged;
+        }
+
+        protected void EventDispatcher_CameraChanged(EventData eventData)
+        {
+            //cycle to the next camera
+            if (eventData.EventType == EventActionType.OnCameraCycle)
+            {
+                CycleActiveCamera();
+            }
+            else if (eventData.EventType == EventActionType.OnCameraSetActive)
+            {
+                //using the additional parameters channel of the event data object - ensure that the ID is set as first element in the array
+                SetActiveCamera(x => x.ID.Equals(eventData.AdditionalEventParameters[0] as string));
+            }
+        }
+        #endregion
 
         public void Add(Camera3D camera)
         {
@@ -71,6 +96,18 @@ namespace GDLibrary
         public int RemoveAll(Predicate<Camera3D> predicate)
         {
             return this.cameraList.RemoveAll(predicate);
+        }
+
+        public bool SetActiveCamera(Predicate<Camera3D> predicate)
+        {
+            int index = this.cameraList.FindIndex(predicate);
+            this.ActiveCameraIndex = index;
+            return (index != -1) ? true : false;
+        }
+
+        public void CycleActiveCamera()
+        {
+            this.ActiveCameraIndex = this.activeCameraIndex + 1;
         }
 
         //sorts cameras by Camera3D::drawDepth - used for PIP screen layout - see ScreenManager

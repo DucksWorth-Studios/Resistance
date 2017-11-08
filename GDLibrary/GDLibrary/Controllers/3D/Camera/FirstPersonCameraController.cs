@@ -38,11 +38,10 @@ namespace GDLibrary
             this.cameraManager = cameraManager;
         }
 
-        int count = 0;
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
             CompassDirectionType compassDirectionType = this.MouseManager.GetCompassDirection(10, this.cameraManager.ActiveCamera.Viewport.Bounds);
-
+            int count = 0;
             if (compassDirectionType == CompassDirectionType.Centre)
             {
                 count = 0;

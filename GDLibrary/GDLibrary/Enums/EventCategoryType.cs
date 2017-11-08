@@ -18,7 +18,8 @@ namespace GDLibrary
         Player,
         NonPlayer,
         Pickup,
-        Door
+        Door,
+        Screen
         //all other categories of sender...
     }
 }

@@ -29,7 +29,8 @@ namespace GDLibrary
         OnHover,
 
         //sent by camera manager
-        OnCameraChanged,
+        OnCameraSetActive,
+        OnCameraCycle,
 
         //sent by player
         OnLoseHealth,
@@ -41,7 +42,9 @@ namespace GDLibrary
 
         OnPickup,
         OnOpen,
-        OnClose
+        OnClose,
 
+        //sent whenever we want to change from single to multi-screen and vice verse
+        OnScreenLayoutChange
     }
 }

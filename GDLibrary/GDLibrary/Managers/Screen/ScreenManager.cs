@@ -63,18 +63,31 @@ namespace GDLibrary
             {
                 return (float)graphics.PreferredBackBufferWidth / graphics.PreferredBackBufferHeight;
             }
-
+        }
+        public Viewport FullScreenViewport
+        {
+            get
+            {
+                return fullScreenViewport;
+            }
         }
         #endregion
 
+        //removes necessity to specify starting screen type layout (e.g. single, multi)
+        public ScreenManager(Game game, GraphicsDeviceManager graphics, Integer2 screenResolution,
+          ObjectManager objectManager, CameraManager cameraManager, KeyboardManager keyboardManager, 
+          Keys pauseKey, EventDispatcher eventDispatcher, StatusType statusType)
+          : this(game, graphics, screenResolution, ScreenUtility.ScreenType.SingleScreen, objectManager, cameraManager,
+          keyboardManager, pauseKey, eventDispatcher, statusType)
+        {
+          
+        }
+
         public ScreenManager(Game game, GraphicsDeviceManager graphics, Integer2 screenResolution, 
-            ScreenUtility.ScreenType screenType, ObjectManager objectManager, CameraManager cameraManager,
-            KeyboardManager keyboardManager, Keys pauseKey,
-            EventDispatcher eventDispatcher, 
-            StatusType statusType)
+            ScreenUtility.ScreenType screenType, ObjectManager objectManager, CameraManager cameraManager, KeyboardManager keyboardManager, 
+            Keys pauseKey, EventDispatcher eventDispatcher, StatusType statusType)
             : base(game, eventDispatcher, statusType)
         {
-            
             this.screenType = screenType;
             this.objectManager = objectManager;
             this.cameraManager = cameraManager;
@@ -91,24 +104,40 @@ namespace GDLibrary
         }
 
         #region Event Handling
+        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.ScreenChanged += EventDispatcher_ScreenChanged;
+            base.RegisterForEventHandling(eventDispatcher);
+        }
+
+        protected virtual void EventDispatcher_ScreenChanged(EventData eventData)
+        {
+            //has someone requested a change to the screen layout
+            if (eventData.EventType == EventActionType.OnScreenLayoutChange)
+            {
+                //this.ScreenType = (ScreenUtilityScreenType)eventData.AdditionalEventParameters[0];
+
+                this.ScreenType = ScreenUtility.ScreenType.SingleScreen;
+            }
+        }
+
         //See MenuManager::EventDispatcher_MenuChanged to see how it does the reverse i.e. they are mutually exclusive
         protected override void EventDispatcher_MenuChanged(EventData eventData)
         {
             //did the event come from the main menu and is it a start game event
-            if (eventData.EventCategoryType == EventCategoryType.MainMenu && eventData.EventType == EventActionType.OnStart)
+            if (eventData.EventType == EventActionType.OnStart)
             {
                 //turn on update and draw i.e. hide the menu
                 this.StatusType = StatusType.Update | StatusType.Drawn;
             }
             //did the event come from the main menu and is it a start game event
-            else if (eventData.EventCategoryType == EventCategoryType.MainMenu && eventData.EventType == EventActionType.OnPause)
+            else if (eventData.EventType == EventActionType.OnPause)
             {
                 //turn off update and draw i.e. show the menu since the game is paused
                 this.StatusType = StatusType.Off;
             }
         }
         #endregion
-
 
         public bool ToggleFullScreen()
         {

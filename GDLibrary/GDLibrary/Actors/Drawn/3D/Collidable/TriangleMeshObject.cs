@@ -28,23 +28,22 @@ namespace GDLibrary
         public TriangleMeshObject(string id, ActorType actorType, Transform3D transform,
             BasicEffect effect, ColorParameters colorParameters, Texture2D texture, Model model, 
             MaterialProperties materialProperties)
-            : base(id, actorType, transform, effect, colorParameters, texture, model)
+            : this(id, actorType, transform, effect, colorParameters, texture, model, null, materialProperties)
         {
-            //get the primitive mesh which forms the skin
-            TriangleMesh triangleMesh = GetTriangleMesh(this.Model, this.Transform);
-
-            //add the primitive mesh to the collision skin
-            this.Body.CollisionSkin.AddPrimitive(triangleMesh, materialProperties);
+ 
         }
 
         public TriangleMeshObject(string id, ActorType actorType, Transform3D transform,
            BasicEffect effect, ColorParameters colorParameters, Texture2D texture, Model model,
-           Model lowPolygonModel,
-           MaterialProperties materialProperties)
+           Model lowPolygonModel, MaterialProperties materialProperties)
            : base(id, actorType, transform, effect, colorParameters, texture, model)
         {
-            //get the primitive mesh which forms the skin
-            TriangleMesh triangleMesh = GetTriangleMesh(lowPolygonModel, this.Transform);
+            //get the primitive mesh which forms the skin - use low poly if it has been provided in the constructor
+            TriangleMesh triangleMesh = null;
+            if (lowPolygonModel != null)
+                triangleMesh = GetTriangleMesh(lowPolygonModel, this.Transform);
+            else
+                triangleMesh = GetTriangleMesh(model, this.Transform);
 
             //add the primitive mesh to the collision skin
             this.Body.CollisionSkin.AddPrimitive(triangleMesh, materialProperties);

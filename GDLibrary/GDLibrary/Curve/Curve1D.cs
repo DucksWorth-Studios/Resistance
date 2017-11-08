@@ -59,8 +59,8 @@ namespace GDLibrary
 
         public float Evaluate(float timeInSecs, int decimalPrecision)
         {
-            if (!bSet)
-                Set();
+            //if (!bSet)
+            //    Set();
 
             return (float)Math.Round(this.curve.Evaluate(timeInSecs), decimalPrecision);
         }
