@@ -52,12 +52,12 @@ namespace GDLibrary
             set
             {
                 //opaque to transparent AND valid (i.e. 0 <= x < 1)
-                if(this.colorParameters.Alpha == 1 && value >= 0 && value < 1)
+                if(this.colorParameters.Alpha == 1 && value < 1)
                 {
                     EventDispatcher.Publish(new EventData("OpTr", this, EventActionType.OnOpaqueToTransparent, EventCategoryType.Opacity));
                 }
                 //transparent to opaque
-                else if (this.colorParameters.Alpha < 1 && value >= 0 && value == 1)
+                else if (this.colorParameters.Alpha < 1 && value == 1)
                 {
                     EventDispatcher.Publish(new EventData("TrOp", this, EventActionType.OnTransparentToOpaque, EventCategoryType.Opacity));
                 }

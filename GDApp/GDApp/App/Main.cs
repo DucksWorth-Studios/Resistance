@@ -9,14 +9,11 @@ using System.Collections.Generic;
 /*
 ScreenManager - enum - this.ScreenType = (ScreenUtilityScreenType)eventData.AdditionalEventParameters[0];
 check clone on new eventdata
-add collidable camera
 add a collidable player object
 add a collidable pickup object and remove on collision with player
 add mouse picking to select and remove objects
-frustum culling
 PiP
 scripting camera changes using event data read from XML?
-
 menu - click sound
 menu transparency
 */

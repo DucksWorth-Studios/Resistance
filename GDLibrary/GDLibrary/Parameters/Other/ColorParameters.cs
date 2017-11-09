@@ -46,9 +46,12 @@ namespace GDLibrary
             }
             set
             {
-                this.alpha = ((value >= 0) && (value <= 1))
-                    ? value : 1;
-                this.alpha = (float)Math.Round(this.alpha, 3);
+                if (value < 0)
+                    this.alpha = 0;
+                else if (value > 1)
+                    this.alpha = 1;
+                else
+                    this.alpha = (float)Math.Round(value, 3);
             }
         }
         public ColorParameters OriginalColorParameters
