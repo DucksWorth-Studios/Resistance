@@ -16,6 +16,7 @@ namespace GDLibrary
         #region Fields
         private RailParameters railParameters;
         private bool bFirstUpdate = true;
+        private Vector3 oldCameraToTarget;
         #endregion
 
         #region Properties
@@ -55,9 +56,11 @@ namespace GDLibrary
 
                 //get look vector to target
                 Vector3 cameraToTarget = MathUtility.GetNormalizedObjectToTargetVector(parentActor.Transform, targetDrawnActor.Transform);
+                cameraToTarget = MathUtility.Round(cameraToTarget, 3); //round to prevent floating-point precision errors across updates
 
                 //new position for camera if it is positioned between start and the end points of the rail
-                Vector3 projectedCameraPosition = parentActor.Transform.Translation + Vector3.Dot(cameraToTarget, railParameters.Look) * railParameters.Look * gameTime.ElapsedGameTime.Milliseconds;
+                Vector3 projectedCameraPosition = parentActor.Transform.Translation + Vector3.Dot(cameraToTarget, railParameters.Look) * railParameters.Look; //removed gameTime multiplier - was causing camera judder when object close to camera
+                projectedCameraPosition = MathUtility.Round(projectedCameraPosition, 3); //round to prevent floating-point precision errors across updates
 
                 //do not allow the camera to move outside the rail
                 if (railParameters.InsideRail(projectedCameraPosition))

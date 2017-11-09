@@ -244,7 +244,7 @@ namespace GDApp
 
             #region Rails
             //create the track to be applied to the non-collidable track camera 1
-            this.railDictionary.Add("rail1 - parallel to x-axis", new RailParameters("rail1 - parallel to x-axis", new Vector3(-20, 10, 40), new Vector3(20, 10, 40)));
+            this.railDictionary.Add("rail1 - parallel to x-axis", new RailParameters("rail1 - parallel to x-axis", new Vector3(-80, 10, 40), new Vector3(80, 10, 40)));
             #endregion
 
         }
@@ -275,7 +275,7 @@ namespace GDApp
         {
             //add debug info in top left hand corner of the screen
             this.debugDrawer = new DebugDrawer(this, this.screenManager, this.cameraManager, this.objectManager, spriteBatch,
-                this.fontDictionary["debug"], Color.White, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
+                this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
             Components.Add(this.debugDrawer);
 
         }
@@ -567,13 +567,14 @@ namespace GDApp
         //demo of some semi-transparent non-collidable ModelObjects
         private void InitializeNonCollidableDecoratorObjects()
         {
-            //use one of our static defaults to position the object at the origin
-            Transform3D transform = Transform3D.Zero;
+            //position the object
+            Transform3D transform = new Transform3D(new Vector3(0, 5, 10), Vector3.Zero, Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
             //loading model, texture
 
             //initialise the boxObject
-            ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, new ColorParameters(Color.White, 0.5f),
+            ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, 
+                new ColorParameters(Color.White, 0.5f),
                 this.textureDictionary["crate1"], this.modelDictionary["box2"]);
             //add to the objectManager so that it will be drawn and updated
             this.objectManager.Add(boxObject);
@@ -665,7 +666,7 @@ namespace GDApp
 
             id = "collidable first person camera";
             viewportDictionaryKey = "full viewport";
-            transform = new Transform3D(new Vector3(0, 5, 10), -Vector3.UnitZ, Vector3.UnitY);
+            transform = new Transform3D(new Vector3(0, 10, 60), -Vector3.UnitZ, Vector3.UnitY);
 
             Camera3D camera = new Camera3D(id, ActorType.Camera, transform,
                     ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], 1, StatusType.Update);
