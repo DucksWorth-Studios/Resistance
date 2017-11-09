@@ -25,13 +25,13 @@ namespace GDLibrary
         public delegate void CameraEventHandler(EventData eventData);
         public delegate void MenuEventHandler(EventData eventData);
         public delegate void ScreenEventHandler(EventData eventData);
-
+        public delegate void OpacityEventHandler(EventData eventData);
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
         public event MenuEventHandler MenuChanged;
         public event ScreenEventHandler ScreenChanged;
-
+        public event OpacityEventHandler OpacityChanged;
 
         public EventDispatcher(Game game, int initialSize)
             : base(game)
@@ -78,6 +78,10 @@ namespace GDLibrary
                     OnScreen(eventData);
                     break;
 
+                case EventCategoryType.Opacity:
+                    OnOpacity(eventData);
+                    break;
+
                 default:
                     break;
             }
@@ -107,6 +111,12 @@ namespace GDLibrary
         protected virtual void OnScreen(EventData eventData)
         {
             ScreenChanged?.Invoke(eventData);
+        }
+
+        //called when a drawn objects opacity changes - which necessitates moving from opaque <-> transparent list in ObjectManager - see ObjectManager::RegisterForEventHandling()
+        protected virtual void OnOpacity(EventData eventData)
+        {
+            OpacityChanged?.Invoke(eventData);
         }
     }
 }

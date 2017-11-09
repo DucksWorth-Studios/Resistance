@@ -7,6 +7,7 @@ Bugs:			None
 Fixes:			None
 */
 
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -31,15 +32,36 @@ namespace GDLibrary
                 this.effect = value;
             }
         }
-        public ColorParameters ColorParameters
+        public Color Color
         {
             get
             {
-                return this.colorParameters;
+                return this.colorParameters.Color;
             }
             set
             {
-                this.colorParameters = value;
+                this.colorParameters.Color = value;
+            }
+        }
+        public float Alpha
+        {
+            get
+            {
+                return this.colorParameters.Alpha;
+            }
+            set
+            {
+                //opaque to transparent AND valid (i.e. 0 <= x < 1)
+                if(this.colorParameters.Alpha == 1 && value >= 0 && value < 1)
+                {
+                    EventDispatcher.Publish(new EventData("OpTr", this, EventActionType.OnOpaqueToTransparent, EventCategoryType.Opacity));
+                }
+                //transparent to opaque
+                else if (this.colorParameters.Alpha < 1 && value >= 0 && value == 1)
+                {
+                    EventDispatcher.Publish(new EventData("TrOp", this, EventActionType.OnTransparentToOpaque, EventCategoryType.Opacity));
+                }
+                this.colorParameters.Alpha = value;
             }
         }
         #endregion
@@ -71,13 +93,14 @@ namespace GDLibrary
             else if (this == other)
                 return true;
 
-            return this.ColorParameters.Equals(other.ColorParameters) && base.Equals(obj);
+            return this.Color.Equals(other.Color) && this.Alpha.Equals(other.Alpha) && base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
             int hash = 1;
-            hash = hash * 31 + this.ColorParameters.GetHashCode();
+            hash = hash * 7 + this.Color.GetHashCode();
+            hash = hash * 11 + this.Alpha.GetHashCode();
             hash = hash * 17 + base.GetHashCode();
             return hash;
         }
@@ -88,7 +111,7 @@ namespace GDLibrary
                 this.ActorType, //deep
                 (Transform3D)this.Transform.Clone(), //deep - calls the clone for Transform3D explicitly
                 this.effect, //shallow - its ok if all objects refer to the same effect
-                (ColorParameters)this.ColorParameters.Clone(), //deep 
+                new ColorParameters(this.Color, this.Alpha), //deep 
                 this.StatusType); //deep - a simple numeric type
 
             //clone each of the (behavioural) controllers

@@ -121,7 +121,7 @@ namespace GDLibrary
                 this.ActorType,   //deep
                 (Transform3D)this.Transform.Clone(),  //deep
                 this.Effect, //shallow i.e. a reference
-                (ColorParameters)this.ColorParameters.Clone(), //deep 
+                new ColorParameters(this.Color, this.Alpha), //deep 
                 this.texture, //shallow i.e. a reference
                 this.model); //shallow i.e. a reference
         }

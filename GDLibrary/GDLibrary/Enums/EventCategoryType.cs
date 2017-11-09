@@ -19,7 +19,8 @@ namespace GDLibrary
         NonPlayer,
         Pickup,
         Door,
-        Screen
+        Screen,
+        Opacity
         //all other categories of sender...
     }
 }

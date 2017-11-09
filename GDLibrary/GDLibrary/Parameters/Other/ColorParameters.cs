@@ -48,6 +48,7 @@ namespace GDLibrary
             {
                 this.alpha = ((value >= 0) && (value <= 1))
                     ? value : 1;
+                this.alpha = (float)Math.Round(this.alpha, 3);
             }
         }
         public ColorParameters OriginalColorParameters

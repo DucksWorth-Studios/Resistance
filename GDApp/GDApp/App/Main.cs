@@ -140,7 +140,7 @@ namespace GDApp
             Components.Add(this.cameraManager);
 
             //create the object manager - notice that its not a drawablegamecomponent. See ScreeManager::Draw()
-            this.objectManager = new ObjectManager(this, this.cameraManager, 10);
+            this.objectManager = new ObjectManager(this, this.cameraManager, this.eventDispatcher, 10);
             
             //add keyboard manager
             this.keyboardManager = new KeyboardManager(this);
@@ -590,7 +590,7 @@ namespace GDApp
                         //scale it to make it look different
                         clone.Transform.Scale = new Vector3(1, 4, 1);
                         //change its color
-                        clone.ColorParameters.Color = Color.Red;
+                        clone.Color = Color.Red;
                         this.objectManager.Add(clone);
 
                         //add more clones here...
@@ -982,6 +982,18 @@ namespace GDApp
             {
                 EventDispatcher.Publish(new EventData("set camera please", this, EventActionType.OnCameraCycle, EventCategoryType.Camera));
             }
+
+            //testing event generation on opacity change - see DrawnActor3D::Alpha setter
+            if(this.keyboardManager.IsFirstKeyPress(Keys.F5))
+            {
+                this.drivableBoxObject.Alpha -= 0.1f;
+            }
+            if (this.keyboardManager.IsFirstKeyPress(Keys.F6))
+            {
+                this.drivableBoxObject.Alpha += 0.1f;
+            }
+
+            System.Diagnostics.Debug.WriteLine("drivableBoxObject.Alpha:" + drivableBoxObject.Alpha);
 
             #endregion
 

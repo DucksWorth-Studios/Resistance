@@ -45,6 +45,10 @@ namespace GDLibrary
         OnClose,
 
         //sent whenever we want to change from single to multi-screen and vice verse
-        OnScreenLayoutChange
+        OnScreenLayoutChange,
+
+        //sent whenever we change the opacity of a drawn object - remember ObjectManager has two draw lists (opaque and transparent)
+        OnOpaqueToTransparent,
+        OnTransparentToOpaque
     }
 }

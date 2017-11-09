@@ -56,7 +56,7 @@ namespace GDLibrary
         }
 #endif
 
-        public ObjectManager(Game game, CameraManager cameraManager, int initialSize)
+        public ObjectManager(Game game, CameraManager cameraManager, EventDispatcher eventDispatcher, int initialSize)
         {
             this.game = game;
             this.cameraManager = cameraManager;
@@ -68,7 +68,36 @@ namespace GDLibrary
 
             //set up graphic settings
             InitializeGraphics();
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
         }
+
+        #region Event Handling
+        protected virtual void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.OpacityChanged += EventDispatcher_OpacityChanged;
+        }
+
+        private void EventDispatcher_OpacityChanged(EventData eventData)
+        {
+            Actor3D actor = eventData.Sender as Actor3D;
+
+            if (eventData.EventType == EventActionType.OnOpaqueToTransparent)
+            {
+                //remove from opaque and add to transparent
+                this.opaqueDrawList.Remove(actor);
+                this.transparentDrawList.Add(actor);
+            }
+            else if (eventData.EventType == EventActionType.OnTransparentToOpaque)
+            {
+                //remove from transparent and add to opaque
+                this.transparentDrawList.Remove(actor);
+                this.opaqueDrawList.Add(actor);
+            }
+        }
+
+        #endregion
 
         private void InitializeGraphics()
         {
@@ -249,8 +278,8 @@ namespace GDLibrary
                     effect.Projection = activeCamera.ProjectionParameters.Projection;
 
                     effect.Texture = modelObject.Texture;
-                    effect.DiffuseColor = modelObject.ColorParameters.Color.ToVector3();
-                    effect.Alpha = modelObject.ColorParameters.Alpha;
+                    effect.DiffuseColor = modelObject.Color.ToVector3();
+                    effect.Alpha = modelObject.Alpha;
 
                     //apply or serialise the variables above to the GFX card
                     effect.CurrentTechnique.Passes[0].Apply();
