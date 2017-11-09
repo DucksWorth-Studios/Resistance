@@ -84,6 +84,13 @@ namespace GDLibrary
                 this.drawDepth = value;
             }
         }
+        public BoundingFrustum BoundingFrustum
+        {
+            get
+            {
+                return new BoundingFrustum(this.View * this.projectionParameters.Projection);
+            }
+        }
         #endregion
 
         public Camera3D(string id, ActorType actorType,

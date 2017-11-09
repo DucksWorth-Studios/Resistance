@@ -65,6 +65,7 @@ namespace GDApp
         //used to visualize debug info (e.g. FPS) and also to draw collision skins
         private DebugDrawer debugDrawer;
         private PhysicsDebugDrawer physicsDebugDrawer;
+        private Curve1D xCurve;
 
 
 #endif
@@ -122,13 +123,13 @@ namespace GDApp
                 InitializeMultiScreenCameraDemo(screenResolution);
             }
           
-
             //Publish Start Event(s)
             StartGame();
 
 #if DEBUG
             InitializeDebugCollisionSkinInfo();
 #endif
+
 
             base.Initialize();
         }
@@ -274,7 +275,7 @@ namespace GDApp
         private void InitializeDebugTextInfo()
         {
             //add debug info in top left hand corner of the screen
-            this.debugDrawer = new DebugDrawer(this, this.screenManager, this.cameraManager, spriteBatch,
+            this.debugDrawer = new DebugDrawer(this, this.screenManager, this.cameraManager, this.objectManager, spriteBatch,
                 this.fontDictionary["debug"], Color.White, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
             Components.Add(this.debugDrawer);
 
@@ -981,7 +982,8 @@ namespace GDApp
             {
                 EventDispatcher.Publish(new EventData("set camera please", this, EventActionType.OnCameraCycle, EventCategoryType.Camera));
             }
-#endregion
+
+            #endregion
 
             base.Update(gameTime);
         }

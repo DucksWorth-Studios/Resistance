@@ -55,6 +55,13 @@ namespace GDLibrary
                 this.boneTransforms = value;
             }
         }
+        public BoundingSphere BoundingSphere
+        {
+            get
+            {
+                return this.model.Meshes[model.Root.Index].BoundingSphere.Transform(this.GetWorldMatrix());
+            }
+        }
         #endregion
 
         public ModelObject(string id, ActorType actorType, 
@@ -84,38 +91,6 @@ namespace GDLibrary
                 model.CopyAbsoluteBoneTransformsTo(this.boneTransforms);
             }
         }
-
-
-        //See ObjectManager::Draw()
-        //public override void Draw(GameTime gameTime)
-        //{
-        //    BasicEffect basicEffect = this.Effect as BasicEffect;
-
-        //    basicEffect.View = cameraManager.ActiveCamera.View;
-        //    basicEffect.Projection = cameraManager.ActiveCamera.Projection;
-        //    basicEffect.World = this.Transform3D.World;
-        //    basicEffect.DiffuseColor = this.Color.ToVector3();
-        //    basicEffect.Alpha = this.Alpha;
-        //    basicEffect.Texture = this.texture;
-        //    basicEffect.CurrentTechnique.Passes[0].Apply();
-
-        //    foreach (ModelMesh mesh in this.Model.Meshes)
-        //    {
-        //        foreach (ModelMeshPart part in mesh.MeshParts)
-        //        {
-        //            part.Effect = this.Effect;
-        //        }
-
-        //        basicEffect.World
-        //            = this.BoneTransforms[mesh.ParentBone.Index]
-        //                                * GetWorldMatrix(); //CD-CR support
-        //        *this.Transform3D.World;
-        //        mesh.Draw();
-        //    }
-
-        //    base.Draw(gameTime);
-        //}
-
 
         public override bool Equals(object obj)
         {

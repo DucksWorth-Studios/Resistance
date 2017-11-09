@@ -43,10 +43,10 @@ namespace GDLibrary
             timeInSecs *= 1000; //convert to milliseconds
             this.curve.Keys.Add(new CurveKey(timeInSecs, value));
             this.bSet = false;
-            Set();
+            //Set();
         }
 
-        public void Set()
+        private void Set()
         {
             SetTangents(curve);
             this.bSet = true;
@@ -59,8 +59,8 @@ namespace GDLibrary
 
         public float Evaluate(float timeInSecs, int decimalPrecision)
         {
-            //if (!bSet)
-            //    Set();
+            if (!bSet)
+                Set();
 
             return (float)Math.Round(this.curve.Evaluate(timeInSecs), decimalPrecision);
         }

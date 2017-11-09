@@ -40,38 +40,16 @@ namespace GDLibrary
 
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
-            CompassDirectionType compassDirectionType = this.MouseManager.GetCompassDirection(10, this.cameraManager.ActiveCamera.Viewport.Bounds);
-            int count = 0;
-            if (compassDirectionType == CompassDirectionType.Centre)
-            {
-                count = 0;
-                mouseDelta = Vector2.Zero;
-                mouseDelta = -this.MouseManager.GetDeltaFromCentre(this.cameraManager.ActiveCamera.ViewportCentre);
-                mouseDelta *= gameTime.ElapsedGameTime.Milliseconds;
-                mouseDelta *= this.RotationSpeed * 0.03f;
-                if (mouseDelta.Length() != 0)
-                    parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
-            }
-            //else if (compassDirectionType == CompassDirectionType.East)
-            //{
-            //    count++;
+            //  CompassDirectionType compassDirectionType = this.MouseManager.GetCompassDirection(10, this.cameraManager.ActiveCamera.Viewport.Bounds);
 
-            //   // if (this.KeyboardManager.IsKeyDown(Keys.G))
-            //  //  {
-            //        parentActor.Transform.RotateBy(new Vector3(-count, 0, 0));
-            //  //  }
-            //}
-            //else if (compassDirectionType == CompassDirectionType.West)
-            //{
-            //    count++;
+            Vector2 mouseDelta = Vector2.Zero;
+            mouseDelta = -this.MouseManager.GetDeltaFromCentre(this.cameraManager.ActiveCamera.ViewportCentre);
+            mouseDelta *= gameTime.ElapsedGameTime.Milliseconds;
+            mouseDelta *= this.RotationSpeed;
 
-            //    // if (this.KeyboardManager.IsKeyDown(Keys.G))
-            //    //  {
-            //    parentActor.Transform.RotateBy(new Vector3(count, 0, 0));
-            //    //  }
-            //}
-
-
+            //only rotate if something has changed with the mouse
+            if (mouseDelta.Length() != 0)
+                parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
         }
 
         public override void HandleKeyboardInput(GameTime gameTime, Actor3D parentActor)

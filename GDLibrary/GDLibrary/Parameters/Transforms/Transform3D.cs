@@ -234,8 +234,6 @@ namespace GDLibrary
         {
             this.rotation = this.OriginalTransform3D.Rotation + rotateBy;
 
-          //  this.rotation = this.Rotation + rotateBy;
-
             //update the look and up - RADIANS!!!!
             Matrix rot = Matrix.CreateFromYawPitchRoll(MathHelper.ToRadians(this.rotation.X),
                 MathHelper.ToRadians(this.rotation.Y), MathHelper.ToRadians(this.rotation.Z));

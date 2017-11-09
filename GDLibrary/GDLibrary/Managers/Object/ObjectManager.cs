@@ -42,6 +42,20 @@ namespace GDLibrary
         }
         #endregion
 
+
+#if DEBUG
+        //count the number of drawn objects to show frustum culling is happening - see DebugDrawer::Draw()
+        private int debugDrawCount;
+
+        public int DebugDrawCount
+        {
+            get
+            {
+                return this.debugDrawCount;
+            }
+        }
+#endif
+
         public ObjectManager(Game game, CameraManager cameraManager, int initialSize)
         {
             this.game = game;
@@ -190,6 +204,11 @@ namespace GDLibrary
             //set the viewport dimensions to the size defined by the active camera
             this.game.GraphicsDevice.Viewport = activeCamera.Viewport;
 
+#if DEBUG
+            //count the number of drawn objects to show frustum culling is happening - see DebugDrawer::Draw()
+            this.debugDrawCount = 0;
+#endif
+
             SetGraphicsStateObjects(true);
             foreach (Actor3D actor in this.opaqueDrawList)
             {
@@ -201,6 +220,7 @@ namespace GDLibrary
             {
                 DrawByType(gameTime, actor as Actor3D, activeCamera);
             }
+
         }
 
         //calls the correct DrawObject() based on underlying object type
@@ -220,28 +240,34 @@ namespace GDLibrary
         //draw a model object 
         private void DrawObject(GameTime gameTime, ModelObject modelObject, Camera3D activeCamera)
         {
-            if (modelObject.Model != null)
+            if (activeCamera.BoundingFrustum.Intersects(modelObject.BoundingSphere))
             {
-                BasicEffect effect = modelObject.Effect as BasicEffect;
-                effect.View = activeCamera.View;
-                effect.Projection = activeCamera.ProjectionParameters.Projection;
-
-                effect.Texture = modelObject.Texture;
-                effect.DiffuseColor = modelObject.ColorParameters.Color.ToVector3();
-                effect.Alpha = modelObject.ColorParameters.Alpha;
-
-                //apply or serialise the variables above to the GFX card
-                effect.CurrentTechnique.Passes[0].Apply();
-
-                foreach (ModelMesh mesh in modelObject.Model.Meshes)
+                if (modelObject.Model != null)
                 {
-                    foreach (ModelMeshPart part in mesh.MeshParts)
+                    BasicEffect effect = modelObject.Effect as BasicEffect;
+                    effect.View = activeCamera.View;
+                    effect.Projection = activeCamera.ProjectionParameters.Projection;
+
+                    effect.Texture = modelObject.Texture;
+                    effect.DiffuseColor = modelObject.ColorParameters.Color.ToVector3();
+                    effect.Alpha = modelObject.ColorParameters.Alpha;
+
+                    //apply or serialise the variables above to the GFX card
+                    effect.CurrentTechnique.Passes[0].Apply();
+
+                    foreach (ModelMesh mesh in modelObject.Model.Meshes)
                     {
-                        part.Effect = effect;
+                        foreach (ModelMeshPart part in mesh.MeshParts)
+                        {
+                            part.Effect = effect;
+                        }
+                        effect.World = modelObject.BoneTransforms[mesh.ParentBone.Index] * modelObject.GetWorldMatrix();
+                        mesh.Draw();
                     }
-                    effect.World = modelObject.BoneTransforms[mesh.ParentBone.Index] * modelObject.GetWorldMatrix();
-                    mesh.Draw();
                 }
+#if DEBUG
+                debugDrawCount++;
+#endif
             }
         }
     }
