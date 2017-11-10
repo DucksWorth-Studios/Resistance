@@ -150,7 +150,7 @@ namespace GDApp
             Components.Add(this.screenManager);
 
             //add mouse manager
-            this.mouseManager = new MouseManager(this, isMouseVisible);
+            this.mouseManager = new MouseManager(this, isMouseVisible, this.physicsManager);
             Components.Add(this.mouseManager);
 
             //CD-CR using JigLibX and add debug drawer to visualise collision skins
@@ -568,7 +568,7 @@ namespace GDApp
         private void InitializeNonCollidableDecoratorObjects()
         {
             //position the object
-            Transform3D transform = new Transform3D(new Vector3(0, 5, 10), Vector3.Zero, Vector3.One, Vector3.UnitX, Vector3.UnitY);
+            Transform3D transform = new Transform3D(new Vector3(0, 5, 0), Vector3.Zero, Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
             //loading model, texture
 
@@ -618,7 +618,8 @@ namespace GDApp
             id = "non-collidable FPC 1";
             viewportDictionaryKey = "column1 row0";
             transform = new Transform3D(new Vector3(0, cameraHeight, 10), -Vector3.UnitZ, Vector3.UnitY);
-            controller = new FirstPersonCameraController(id + " controller", ControllerType.FirstPerson, AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, this.mouseManager, this.keyboardManager, this.cameraManager);
+            controller = new FirstPersonCameraController(id + " controller", ControllerType.FirstPerson, AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, 
+                this.mouseManager, this.keyboardManager, this.cameraManager, this.screenManager);
             InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
 
             //security camera 1

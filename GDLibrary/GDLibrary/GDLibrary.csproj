@@ -124,6 +124,7 @@
     <Compile Include="Managers\Object\ObjectManager.cs" />
     <Compile Include="Managers\Physics\PhysicsManager.cs" />
     <Compile Include="Managers\Screen\ScreenManager.cs" />
+    <Compile Include="Managers\UI\UIManager.cs" />
     <Compile Include="Parameters\Other\ColorParameters.cs" />
     <Compile Include="Parameters\Other\TrigonometricParameters.cs" />
     <Compile Include="Templates\PausableDrawableGameComponent.cs" />
@@ -146,6 +147,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GDLibrary.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Managers\Sound\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

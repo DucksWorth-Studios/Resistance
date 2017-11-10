@@ -40,20 +40,24 @@ namespace GDLibrary
                 return new Vector2(this.newState.X, this.newState.Y);
             }
         }
+        public bool MouseVisible
+        {
+            get
+            {
+                return this.Game.IsMouseVisible;
+            }
+            set
+            {
+                this.Game.IsMouseVisible = value;
+            }
+        }
         #endregion
 
-        //pre-mouse picking compatability constructor
-        public MouseManager(Game game, bool isVisible)
-            : this(game, null, isVisible)
-        {
-
-        }
-
-        //support mouse picking
-        public MouseManager(Game game, PhysicsManager physicsManager, bool isVisible)
+        //supports mouse picking
+        public MouseManager(Game game, bool bMouseVisible, PhysicsManager physicsManager)
             : base(game)
         {
-            game.IsMouseVisible = isVisible;
+            this.MouseVisible = bMouseVisible;
             this.physicsManager = physicsManager;
         }
 

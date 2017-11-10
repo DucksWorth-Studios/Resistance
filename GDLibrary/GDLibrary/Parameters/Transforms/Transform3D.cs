@@ -232,6 +232,7 @@ namespace GDLibrary
 
         public void RotateBy(Vector3 rotateBy) //in degrees
         {
+
             this.rotation = this.OriginalTransform3D.Rotation + rotateBy;
 
             //update the look and up - RADIANS!!!!

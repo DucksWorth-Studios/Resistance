@@ -45,7 +45,7 @@ namespace GDLibrary
             else
             {
                 this.bEnabled = false;
-                this.Reset(uiObject);
+                this.SetActor(uiObject);
             }
 
             //if mouse over then apply the controller's behaviour

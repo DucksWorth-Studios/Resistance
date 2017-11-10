@@ -63,7 +63,7 @@ namespace GDLibrary
             this.colorMax = colorMax;
         }
 
-        public override void Reset(IActor actor)
+        public override void SetActor(IActor actor)
         {
             UIObject uiObject = actor as UIObject;
             uiObject.ColorParameters.Color = uiObject.ColorParameters.OriginalColorParameters.Color;

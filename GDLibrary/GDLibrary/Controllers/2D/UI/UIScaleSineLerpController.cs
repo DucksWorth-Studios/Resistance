@@ -38,7 +38,7 @@ namespace GDLibrary
             this.TrigonometricParameters = trigonometricParameters;
         }
 
-        public override void Reset(IActor actor)
+        public override void SetActor(IActor actor)
         {
             UIObject uiObject = actor as UIObject;
             uiObject.Transform.Scale = uiObject.Transform.OriginalTransform2D.Scale;

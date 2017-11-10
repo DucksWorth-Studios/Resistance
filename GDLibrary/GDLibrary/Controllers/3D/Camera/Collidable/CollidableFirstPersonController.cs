@@ -99,7 +99,7 @@ namespace GDLibrary
             IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
             float mass, float jumpHeight, Vector3 translationOffset)
             : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed,
-            mouseManager, keyboardManager, cameraManager)
+            mouseManager, keyboardManager, cameraManager, screenManager)
         {
             this.Radius = radius;
             this.height = height;

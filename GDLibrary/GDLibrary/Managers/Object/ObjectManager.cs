@@ -64,6 +64,7 @@ namespace GDLibrary
             //create two lists - opaque and transparent
             this.opaqueDrawList = new List<Actor3D>(initialSize);
             this.transparentDrawList = new List<Actor3D>(initialSize);
+            //create list to store objects to be removed at start of each update
             this.removeList = new List<Actor3D>(initialSize);
 
             //set up graphic settings

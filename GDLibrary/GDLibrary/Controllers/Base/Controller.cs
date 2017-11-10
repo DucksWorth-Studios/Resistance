@@ -7,6 +7,7 @@ Bugs:			None
 Fixes:			None
 */
 
+using System;
 using Microsoft.Xna.Framework;
 namespace GDLibrary
 {
@@ -48,20 +49,43 @@ namespace GDLibrary
             this.controllerType = controllerType;
         }
 
-        public virtual void Update(GameTime gameTime, IActor actor)
-        {
-            //does nothing - no point in child classes calling this.
-        }
-
-        public virtual void Reset(IActor actor)
-        {
-            //does nothing - no point in child classes calling this - see UIScaleLerpController::Reset()
-        }
-
 
         public virtual string GetID()
         {
             return this.ID;
+        }
+
+        public virtual void SetActor(IActor actor)
+        {
+            //does nothing - no point in child classes calling this - see UIScaleLerpController::Reset()
+        }
+
+        public virtual bool PlayController()
+        {
+            //does nothing
+            return false;
+        }
+
+        public virtual bool PauseController()
+        {
+            //does nothing
+            return false;
+        }
+
+        public virtual bool StopController()
+        {
+            //does nothing
+            return false;
+        }
+
+        public virtual void ResetController()
+        {
+            //does nothing
+        }
+
+        public virtual void Update(GameTime gameTime, IActor actor)
+        {
+            //does nothing - no point in child classes calling this.
         }
 
         public override bool Equals(object obj)

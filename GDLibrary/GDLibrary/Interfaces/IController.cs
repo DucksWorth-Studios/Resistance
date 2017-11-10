@@ -16,7 +16,12 @@ namespace GDLibrary
     public interface IController : ICloneable
     {
         void Update(GameTime gameTime, IActor actor); //update the actor controller by this controller
-        void Reset(IActor actor); //reset the actor controller by this controller
+        void SetActor(IActor actor); //reset the actor controller by this controller
         string GetID(); //used when we want to interrogate a controller and see if it is "the one" that we want to enable/disable, based on ID.
+
+        bool PlayController();
+        bool PauseController();
+        bool StopController();
+        void ResetController();
     }
 }
