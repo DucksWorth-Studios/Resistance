@@ -66,17 +66,34 @@ namespace GDLibrary
         }
 
         #region Event Handling
+        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.RemoveActorChanged += EventDispatcher_RemoveActorChanged;
+            base.RegisterForEventHandling(eventDispatcher);
+        }
+
+        private void EventDispatcher_RemoveActorChanged(EventData eventData)
+        {
+            if (eventData.EventType == EventActionType.Remove)
+            {
+                //using the "sender" property of the event to pass reference to object to be removed - use "as" to access Body since sender is defined as a raw object.
+                CollidableObject collidableObject = eventData.Sender as CollidableObject;
+                //what would happen if we did not remove the physics body? would the CD/CR skin remain?
+                this.PhysicsSystem.RemoveBody(collidableObject.Body);
+            }
+        }
+
         //See MenuManager::EventDispatcher_MenuChanged to see how it does the reverse i.e. they are mutually exclusive
         protected override void EventDispatcher_MenuChanged(EventData eventData)
         {
             //did the event come from the main menu and is it a start game event
-            if (eventData.EventCategoryType == EventCategoryType.MainMenu && eventData.EventType == EventActionType.OnStart)
+            if (eventData.EventType == EventActionType.OnStart)
             {
                 //turn on update and draw i.e. hide the menu
                 this.StatusType = StatusType.Update | StatusType.Drawn;
             }
             //did the event come from the main menu and is it a start game event
-            else if (eventData.EventCategoryType == EventCategoryType.MainMenu && eventData.EventType == EventActionType.OnPause)
+            else if (eventData.EventType == EventActionType.OnPause)
             {
                 //turn off update and draw i.e. show the menu since the game is paused
                 this.StatusType = StatusType.Off;

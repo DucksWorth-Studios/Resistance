@@ -68,6 +68,7 @@
     <Compile Include="Actors\Camera\Camera3D.cs" />
     <Compile Include="Actors\Drawn\2D\DrawnActor2D.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UIButtonObject.cs" />
+    <Compile Include="Actors\Drawn\2D\UI\UIMouseObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UIObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UITextObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UITextureObject.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Managers\Screen\ScreenManager.cs" />
     <Compile Include="Managers\UI\UIManager.cs" />
     <Compile Include="Parameters\Other\ColorParameters.cs" />
+    <Compile Include="Parameters\Other\GroupParameters.cs" />
     <Compile Include="Parameters\Other\TrigonometricParameters.cs" />
     <Compile Include="Templates\PausableDrawableGameComponent.cs" />
     <Compile Include="Templates\PausableGameComponent.cs" />

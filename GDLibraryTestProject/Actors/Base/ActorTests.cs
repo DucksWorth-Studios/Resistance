@@ -11,7 +11,10 @@ namespace GDLibrary.Tests
         public void EqualsTest()
         {
             Actor actorA = new Actor("testid", ActorType.Camera, StatusType.Drawn | StatusType.Update);
+            actorA.GroupParameters = new GroupParameters("group0", 0, 1);
             Actor actorB = new Actor("testid", ActorType.Camera, StatusType.Drawn | StatusType.Update);
+            actorB.GroupParameters = new GroupParameters("group0", 0, 1);
+
             Actor actorC = null;
 
             Assert.IsNotNull(actorA);
@@ -23,6 +26,8 @@ namespace GDLibrary.Tests
         public void CloneTest()
         {
             Actor actor = new Actor("testid", ActorType.Camera, StatusType.Drawn | StatusType.Update);
+            actor.GroupParameters = new GroupParameters("group0", 0, 1);
+
             Actor clone1 = actor.Clone() as Actor; //another way to call the clone vs. clone = (Actor)actor.Clone();
             Actor clone2 = actor.Clone() as Actor; 
             Actor clone3 = actor.Clone() as Actor; 
@@ -35,6 +40,9 @@ namespace GDLibrary.Tests
             Assert.AreNotEqual(actor, clone2);
 
             clone3.StatusType = StatusType.Drawn;
+            Assert.AreNotEqual(actor, clone3);
+
+            clone3.GroupParameters.Name = "group1"; //random value
             Assert.AreNotEqual(actor, clone3);
         }
     }

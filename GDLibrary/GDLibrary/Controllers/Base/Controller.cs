@@ -60,27 +60,10 @@ namespace GDLibrary
             //does nothing - no point in child classes calling this - see UIScaleLerpController::Reset()
         }
 
-        public virtual bool PlayController()
+        public virtual bool SetControllerPlayStatus(PlayStatusType playStatusType)
         {
             //does nothing
             return false;
-        }
-
-        public virtual bool PauseController()
-        {
-            //does nothing
-            return false;
-        }
-
-        public virtual bool StopController()
-        {
-            //does nothing
-            return false;
-        }
-
-        public virtual void ResetController()
-        {
-            //does nothing
         }
 
         public virtual void Update(GameTime gameTime, IActor actor)

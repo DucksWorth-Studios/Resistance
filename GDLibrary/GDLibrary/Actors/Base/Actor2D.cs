@@ -9,7 +9,6 @@ Fixes:			None
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
 namespace GDLibrary
 {
@@ -17,17 +16,9 @@ namespace GDLibrary
     {
         #region Fields
         private Transform2D transform;
-        private List<IController> controllerList;
         #endregion
 
         #region Properties
-        public List<IController> ControllerList
-        {
-            get
-            {
-                return this.controllerList;
-            }
-        }
         public Transform2D Transform
         {
             get
@@ -59,37 +50,10 @@ namespace GDLibrary
             return this.transform.World;
         }
 
-        public override void AttachController(IController controller)
-        {
-            if (this.controllerList == null)
-                this.controllerList = new List<IController>();
-
-            this.controllerList.Add(controller); //do we allow duplicates?
-        }
-        public override bool DetachController(string id)
-        {
-            return false; //to do...
-        }
-        public bool DetachController(IController controller)
-        {
-            return false; //to do...
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            if (this.controllerList != null)
-            {
-                foreach (IController controller in this.controllerList)
-                    controller.Update(gameTime, this); //you control me, update!
-            }
-            base.Update(gameTime);
-        }
-
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
 
         }
-
 
         public override bool Equals(object obj)
         {
@@ -119,7 +83,7 @@ namespace GDLibrary
                this.StatusType); //deep
 
             //clone each of the (behavioural) controllers
-            foreach (IController controller in this.controllerList)
+            foreach (IController controller in this.ControllerList)
                 actor.AttachController((IController)controller.Clone());
 
             return actor;
@@ -129,16 +93,8 @@ namespace GDLibrary
         {
             //tag for garbage collection
             this.transform = null;
-            if (this.controllerList != null)
-            {
-                this.controllerList.Clear();
-                this.controllerList = null;
-            }
-
-            return true;
-
-            //don't bother returning the base since it doesnt do anything
-            //return base.Remove();
+            return base.Remove();
         }
+
     }
 }

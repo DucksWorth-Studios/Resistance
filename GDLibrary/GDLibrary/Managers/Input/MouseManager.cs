@@ -253,14 +253,14 @@ namespace GDLibrary
         //used when in 1st person collidable camera mode
         //start distance allows us to start the ray outside the collidable skin of the 1st person colliable camera object
         //otherwise the only thing we would ever collide with would be ourselves!
-        protected Actor GetPickedObject(Camera3D camera, Vector2 screenPosition, float startDistance, float distance, out Vector3 pos, out Vector3 normal)
+        public Actor GetPickedObject(Camera3D camera, Vector2 screenPosition, float startDistance, float endDistance, out Vector3 pos, out Vector3 normal)
         {
 
             Vector3 ray = GetMouseRayDirection(camera, screenPosition);
             ImmovableSkinPredicate pred = new ImmovableSkinPredicate();
 
             this.physicsManager.PhysicsSystem.CollisionSystem.SegmentIntersect(out frac, out skin, out pos, out normal,
-                new Segment(camera.Transform.Translation + startDistance * Vector3.Normalize(ray), ray * distance), pred);
+                new Segment(camera.Transform.Translation + startDistance * Vector3.Normalize(ray), ray * endDistance), pred);
 
             if (skin != null && skin.Owner != null)
                 return skin.Owner.ExternalData as Actor;

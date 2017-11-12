@@ -20,7 +20,8 @@ namespace GDLibrary
         Pickup,
         Door,
         Screen,
-        Opacity
+        Opacity,
+        SystemRemove
         //all other categories of sender...
     }
 }

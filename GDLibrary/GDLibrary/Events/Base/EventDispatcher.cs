@@ -26,12 +26,14 @@ namespace GDLibrary
         public delegate void MenuEventHandler(EventData eventData);
         public delegate void ScreenEventHandler(EventData eventData);
         public delegate void OpacityEventHandler(EventData eventData);
+        public delegate void RemoveActorEventHandler(EventData eventData);
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
         public event MenuEventHandler MenuChanged;
         public event ScreenEventHandler ScreenChanged;
         public event OpacityEventHandler OpacityChanged;
+        public event RemoveActorEventHandler RemoveActorChanged;
 
         public EventDispatcher(Game game, int initialSize)
             : base(game)
@@ -82,6 +84,10 @@ namespace GDLibrary
                     OnOpacity(eventData);
                     break;
 
+                case EventCategoryType.SystemRemove:
+                    OnRemoveActor(eventData);
+                    break;
+
                 default:
                     break;
             }
@@ -117,6 +123,12 @@ namespace GDLibrary
         protected virtual void OnOpacity(EventData eventData)
         {
             OpacityChanged?.Invoke(eventData);
+        }
+
+        //called when a drawn objects needs to be removed - see UIMouseObject::HandlePickedObject()
+        protected virtual void OnRemoveActor(EventData eventData)
+        {
+            RemoveActorChanged?.Invoke(eventData);
         }
     }
 }

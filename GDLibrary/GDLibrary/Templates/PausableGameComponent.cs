@@ -57,7 +57,7 @@ namespace GDLibrary
         }
 
         #region Event Handling
-        protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        protected virtual void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
             eventDispatcher.MenuChanged += EventDispatcher_MenuChanged;
         }

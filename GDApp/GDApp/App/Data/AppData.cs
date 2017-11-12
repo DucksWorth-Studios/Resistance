@@ -22,11 +22,6 @@ namespace GDLibrary
     }
     public sealed class AppData
     {
-        #region Mouse
-        //defines how much the mouse has to move in pixels before a movement is registered - see MouseManager::HasMoved()
-        public static readonly float MouseSensitivity = 1;
-        #endregion
-
         #region Common
         public static int IndexMoveForward = 0;
         public static int IndexMoveBackward = 1;
@@ -41,7 +36,7 @@ namespace GDLibrary
         #region Camera
         public static readonly int CurveEvaluationPrecision = 4;
 
-        public static readonly float CameraRotationSpeed = 0.00025f;
+        public static readonly float CameraRotationSpeed = 0.0125f;
         public static readonly float CameraMoveSpeed = 0.025f;
         public static readonly float CameraStrafeSpeed = 0.6f * CameraMoveSpeed;
     
@@ -49,6 +44,9 @@ namespace GDLibrary
         public static readonly float CollidableCameraJumpHeight = 12;
         public static readonly float CollidableCameraMoveSpeed = 0.6f;
         public static readonly float CollidableCameraStrafeSpeed = 0.6f * CollidableCameraMoveSpeed;
+        public static readonly float CollidableCameraCapsuleRadius = 2;
+        public static readonly float CollidableCameraViewHeight = 5; //how tall is the first person player?
+        public static readonly float CollidableCameraMass = 10;
 
         public static readonly Keys[] CameraMoveKeys = { Keys.W, Keys.S, Keys.A, Keys.D, 
                                          Keys.Space, Keys.C, Keys.LeftShift, Keys.RightShift};
@@ -80,6 +78,15 @@ namespace GDLibrary
         #region Menu
         public static readonly Keys KeyPauseShowMenu = Keys.Escape;
         public static readonly Keys KeyToggleCameraLayout = Keys.F1;
+        #endregion
+
+        #region Mouse
+        //defines how much the mouse has to move in pixels before a movement is registered - see MouseManager::HasMoved()
+        public static readonly float MouseSensitivity = 1;
+
+        //always ensure that we start picking OUTSIDE the collidable first person camera radius - otherwise we will always pick ourself!
+        public static readonly float PickStartDistance = CollidableCameraCapsuleRadius * 1.1f;
+        public static readonly float PickEndDistance = 1000; //can be related to camera far clip plane radius but should be limited to typical level max diameter
         #endregion
     }
 }

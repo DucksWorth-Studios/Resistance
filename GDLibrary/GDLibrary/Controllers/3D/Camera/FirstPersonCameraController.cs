@@ -19,8 +19,6 @@ namespace GDLibrary
         #region Fields
         private CameraManager cameraManager;
         private ScreenManager screenManager;
-        private int totalElapsedTimeInMsOutsideBounds;
-        private Vector2 totalRotation;
 
         //local vars
         private Vector3 translation;
@@ -50,12 +48,10 @@ namespace GDLibrary
 
             mouseDelta = -this.MouseManager.GetDeltaFromCentre(this.cameraManager.ActiveCamera.ViewportCentre);
             mouseDelta *= gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed;
-            this.totalRotation += mouseDelta;
-
 
             //only rotate if something has changed with the mouse
             if (mouseDelta.Length() != 0)
-                parentActor.Transform.RotateBy(new Vector3(this.totalRotation, 0));
+                parentActor.Transform.RotateBy(new Vector3(mouseDelta, 0));
 
         }
 

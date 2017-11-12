@@ -16,7 +16,6 @@ namespace GDLibrary
         #region Fields
         private RailParameters railParameters;
         private bool bFirstUpdate = true;
-        private Vector3 oldCameraToTarget;
         #endregion
 
         #region Properties

@@ -130,10 +130,7 @@ namespace GDLibrary
 
         public override bool Remove()
         {
-            //what would happen if we did not remove the physics body? would the CD/CR skin remain?
-            //game.PhysicsManager.PhysicsSystem.RemoveBody(this.body);
             this.body = null;
-
             return base.Remove();
         }
     }

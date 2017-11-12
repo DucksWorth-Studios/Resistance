@@ -35,6 +35,7 @@ namespace GDApp
         public ScreenManager screenManager { get; private set; }
         public MyAppMenuManager menuManager { get; private set; }
         public PhysicsManager physicsManager { get; private set; }
+        public UIManager uiManager { get; private set; }
 
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
@@ -62,9 +63,6 @@ namespace GDApp
         //used to visualize debug info (e.g. FPS) and also to draw collision skins
         private DebugDrawer debugDrawer;
         private PhysicsDebugDrawer physicsDebugDrawer;
-        private Curve1D xCurve;
-
-
 #endif
         #endregion
 
@@ -149,13 +147,13 @@ namespace GDApp
                 AppData.KeyPauseShowMenu, this.eventDispatcher, StatusType.Off);
             Components.Add(this.screenManager);
 
-            //add mouse manager
-            this.mouseManager = new MouseManager(this, isMouseVisible, this.physicsManager);
-            Components.Add(this.mouseManager);
-
             //CD-CR using JigLibX and add debug drawer to visualise collision skins
             this.physicsManager = new PhysicsManager(this, this.eventDispatcher, StatusType.Off);
             Components.Add(this.physicsManager);
+
+            //add mouse manager
+            this.mouseManager = new MouseManager(this, isMouseVisible, this.physicsManager);
+            Components.Add(this.mouseManager);
         }
 
         private void LoadDictionaries()
@@ -215,14 +213,24 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/controlsmenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/exitmenuwithtrans");
 
+            //ui (or hud) elements
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
+
+#if DEBUG
             //demo
             this.textureDictionary.Load("Assets/Debug/Textures/ml");
             this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");
-            #endregion
+#endif
+
+#endregion
 
             #region Fonts
+#if DEBUG
             this.fontDictionary.Load("Assets/Debug/Fonts/debug");
+#endif
             this.fontDictionary.Load("Assets/Fonts/menu");
+            this.fontDictionary.Load("Assets/Fonts/mouse");
+
             #endregion
         }
 
@@ -497,7 +505,7 @@ namespace GDApp
 
             //make once then clone
             sphereArchetype = new CollidableObject("sphere ",
-                 ActorType.CollidableProp, Transform3D.Zero, this.modelEffect,
+                 ActorType.CollidablePickup, Transform3D.Zero, this.modelEffect,
                  ColorParameters.WhiteOpaque,
                  texture, model);
 
@@ -529,7 +537,7 @@ namespace GDApp
                         Vector3.UnitX, Vector3.UnitY);
 
                 collidableObject = new CollidableObject("box - " + i,
-                    ActorType.CollidableProp, transform3D, this.modelEffect,
+                    ActorType.CollidablePickup, transform3D, this.modelEffect,
                     ColorParameters.WhiteOpaque,
                     texture, model);
 
@@ -680,9 +688,10 @@ namespace GDApp
                     AppData.CollidableCameraMoveSpeed, AppData.CollidableCameraStrafeSpeed, AppData.CameraRotationSpeed,
                     this.mouseManager, this.keyboardManager, this.cameraManager, this.screenManager,
                     camera, //parent
-                    2f, 10, //radius, height
+                    AppData.CollidableCameraCapsuleRadius, 
+                    AppData.CollidableCameraViewHeight,
                     1, 1, //accel, decel
-                    10, //mass
+                    AppData.CollidableCameraMass, 
                     AppData.CollidableCameraJumpHeight,
                     Vector3.Zero)); //translation offset
 
@@ -744,8 +753,7 @@ namespace GDApp
         private void InitializeMenu()
         {
             this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, this.cameraManager,
-                spriteBatch,
-                this.eventDispatcher, StatusType.Off);
+                spriteBatch, this.eventDispatcher, StatusType.Off);
             //set the main menu to be the active menu scene
             this.menuManager.SetActiveList("mainmenu");
             Components.Add(this.menuManager);
@@ -915,12 +923,53 @@ namespace GDApp
 
         private void InitializeUI()
         {
-            //to do - add a hud manager to show game state
+            //holds UI elements (e.g. reticule, inventory, progress)
+            this.uiManager = new UIManager(this, this.spriteBatch, this.eventDispatcher, 10, StatusType.Off);
+            Components.Add(this.uiManager);
         }
 
         private void AddUIElements()
+        { 
+            InitializeUIMousePointer();
+            InitializeUIProgress();
+            InitializeUIInventoryMenu();
+        }
+
+        private void InitializeUIMousePointer()
         {
-            //to do - add hud elements with game state
+            Texture2D texture = this.textureDictionary["reticuleDefault"];
+            //show complete texture
+            Microsoft.Xna.Framework.Rectangle sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height);
+
+            UITextureObject texture2DObject = new UIMouseObject("mouseObject",
+                ActorType.UIDynamicTexture,
+                StatusType.Drawn | StatusType.Update,
+                new Transform2D(Vector2.One), 
+                new ColorParameters(Color.Yellow, 0.5f),
+                SpriteEffects.None,
+                this.fontDictionary["mouse"], 
+                "hello world!", 
+                new Vector2(0, -40), 
+                Color.White,
+                1,
+                texture,
+                sourceRectangle,
+                new Vector2(sourceRectangle.Width / 2.0f, sourceRectangle.Height / 2.0f),
+                this.mouseManager,
+                this.cameraManager,
+                AppData.PickStartDistance,
+                AppData.PickEndDistance);
+            this.uiManager.Add(texture2DObject);
+        }
+
+        private void InitializeUIProgress()
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void InitializeUIInventoryMenu()
+        {
+            //throw new NotImplementedException();
         }
         #endregion
 

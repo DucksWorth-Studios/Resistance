@@ -19,9 +19,7 @@ namespace GDLibrary
         void SetActor(IActor actor); //reset the actor controller by this controller
         string GetID(); //used when we want to interrogate a controller and see if it is "the one" that we want to enable/disable, based on ID.
 
-        bool PlayController();
-        bool PauseController();
-        bool StopController();
-        void ResetController();
+        //allows us to play, pause, reset, stop a controller
+        bool SetControllerPlayStatus(PlayStatusType playStatusType);
     }
 }

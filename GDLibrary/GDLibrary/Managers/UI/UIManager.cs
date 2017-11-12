@@ -16,34 +16,38 @@ namespace GDLibrary
     public class UIManager : PausableDrawableGameComponent
     {
         #region Variables
-        private bool bMouseVisible;
         private List<Actor2D> drawList, removeList;
         private SpriteBatch spriteBatch;
         #endregion
 
         #region Properties
-        public bool MouseVisible
-        {
-            get
-            {
-                return this.Game.IsMouseVisible;
-            }
-            set
-            {
-                this.Game.IsMouseVisible = value;
-            }
-        }
         #endregion
 
         public UIManager(Game game, SpriteBatch spriteBatch, EventDispatcher eventDispatcher, int initialSize, StatusType statusType)
           : base(game, eventDispatcher, statusType)
         {
-            game.IsMouseVisible = bMouseVisible;
             this.spriteBatch = spriteBatch;
 
             this.drawList = new List<Actor2D>(initialSize);
             //create list to store objects to be removed at start of each update
             this.removeList = new List<Actor2D>(initialSize);
+        }
+
+        //See MenuManager::EventDispatcher_MenuChanged to see how it does the reverse i.e. they are mutually exclusive
+        protected override void EventDispatcher_MenuChanged(EventData eventData)
+        {
+            //did the event come from the main menu and is it a start game event
+            if (eventData.EventType == EventActionType.OnStart)
+            {
+                //turn on update and draw i.e. hide the menu
+                this.StatusType = StatusType.Update | StatusType.Drawn;
+            }
+            //did the event come from the main menu and is it a start game event
+            else if (eventData.EventType == EventActionType.OnPause)
+            {
+                //turn off update and draw i.e. show the menu since the game is paused
+                this.StatusType = StatusType.Off;
+            }
         }
 
         public void Add(Actor2D actor)

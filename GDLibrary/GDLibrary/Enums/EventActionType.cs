@@ -49,6 +49,10 @@ namespace GDLibrary
 
         //sent whenever we change the opacity of a drawn object - remember ObjectManager has two draw lists (opaque and transparent)
         OnOpaqueToTransparent,
-        OnTransparentToOpaque
+        OnTransparentToOpaque,
+
+        //sent when we want to remove an Actor from the game - see UIMouseObject::HandlePickedObject()
+        Remove
+
     }
 }
