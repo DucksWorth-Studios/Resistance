@@ -58,7 +58,7 @@ namespace GDLibrary
                 cameraToTarget = MathUtility.Round(cameraToTarget, 3); //round to prevent floating-point precision errors across updates
 
                 //new position for camera if it is positioned between start and the end points of the rail
-                Vector3 projectedCameraPosition = parentActor.Transform.Translation + Vector3.Dot(cameraToTarget, railParameters.Look) * railParameters.Look; //removed gameTime multiplier - was causing camera judder when object close to camera
+                Vector3 projectedCameraPosition = parentActor.Transform.Translation + Vector3.Dot(cameraToTarget, railParameters.Look) * railParameters.Look;// gameTime.ElapsedGameTime.Milliseconds; //removed gameTime multiplier - was causing camera judder when object close to camera
                 projectedCameraPosition = MathUtility.Round(projectedCameraPosition, 3); //round to prevent floating-point precision errors across updates
 
                 //do not allow the camera to move outside the rail

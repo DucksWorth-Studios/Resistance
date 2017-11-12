@@ -106,7 +106,6 @@ namespace GDLibrary
                 CollidableObject collidableObject = this.mouseManager.GetPickedObject(this.cameraManager.ActiveCamera, this.cameraManager.ActiveCamera.ViewportCentre, 
                                                 this.pickStartDistance, 
                                                 this.pickEndDistance, out pos, out normal) as CollidableObject;
-
                 //did we pick something?
                 if(collidableObject != null)
                     HandlePickedObject(collidableObject, pos, normal);

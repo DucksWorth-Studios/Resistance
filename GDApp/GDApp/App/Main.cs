@@ -222,7 +222,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");
 #endif
 
-#endregion
+            #endregion
 
             #region Fonts
 #if DEBUG
@@ -242,7 +242,7 @@ namespace GDApp
             //create the camera curve to be applied to the track controller
             Transform3DCurve curveA = new Transform3DCurve(CurveLoopType.Oscillate); //experiment with other CurveLoopTypes
             curveA.Add(new Vector3(40, cameraHeight, 80), -Vector3.UnitX, Vector3.UnitY, 0); //start position
-            curveA.Add(new Vector3(0, 10, 60), -Vector3.UnitZ, Vector3.UnitY, 4); 
+            curveA.Add(new Vector3(0, 10, 60), -Vector3.UnitZ, Vector3.UnitY, 4);
             curveA.Add(new Vector3(0, 40, 0), -Vector3.UnitY, -Vector3.UnitZ, 8); //curve mid-point
             curveA.Add(new Vector3(0, 10, 60), -Vector3.UnitZ, Vector3.UnitY, 12);
             curveA.Add(new Vector3(40, cameraHeight, 80), -Vector3.UnitX, Vector3.UnitY, 16); //end position - same as start for zero-discontinuity on cycle
@@ -359,7 +359,7 @@ namespace GDApp
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.Texture = this.textureDictionary["left"];
             clonePlane.Transform.Rotation = new Vector3(90, 90, 0);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f,0, 0);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f, 0, 0);
             this.objectManager.Add(clonePlane);
 
             //add the right skybox plane
@@ -581,7 +581,7 @@ namespace GDApp
             //loading model, texture
 
             //initialise the boxObject
-            ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect, 
+            ModelObject boxObject = new ModelObject("some box 1", ActorType.Decorator, transform, this.modelEffect,
                 new ColorParameters(Color.White, 0.5f),
                 this.textureDictionary["crate1"], this.modelDictionary["box2"]);
             //add to the objectManager so that it will be drawn and updated
@@ -626,7 +626,7 @@ namespace GDApp
             id = "non-collidable FPC 1";
             viewportDictionaryKey = "column1 row0";
             transform = new Transform3D(new Vector3(0, cameraHeight, 10), -Vector3.UnitZ, Vector3.UnitY);
-            controller = new FirstPersonCameraController(id + " controller", ControllerType.FirstPerson, AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed, 
+            controller = new FirstPersonCameraController(id + " controller", ControllerType.FirstPerson, AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed,
                 this.mouseManager, this.keyboardManager, this.cameraManager, this.screenManager);
             InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
 
@@ -688,10 +688,10 @@ namespace GDApp
                     AppData.CollidableCameraMoveSpeed, AppData.CollidableCameraStrafeSpeed, AppData.CameraRotationSpeed,
                     this.mouseManager, this.keyboardManager, this.cameraManager, this.screenManager,
                     camera, //parent
-                    AppData.CollidableCameraCapsuleRadius, 
+                    AppData.CollidableCameraCapsuleRadius,
                     AppData.CollidableCameraViewHeight,
                     1, 1, //accel, decel
-                    AppData.CollidableCameraMass, 
+                    AppData.CollidableCameraMass,
                     AppData.CollidableCameraJumpHeight,
                     Vector3.Zero)); //translation offset
 
@@ -741,7 +741,7 @@ namespace GDApp
             EventDispatcher.Publish(new EventData("this doesnt matter", this, EventActionType.OnPause, EventCategoryType.MainMenu));
 
             //publish an event to set the camera
-            object[] additionalEventParamsB = { "collidable first person camera 1" };
+            object[] additionalEventParamsB = { "collidable first person camera 1"};
             EventDispatcher.Publish(new EventData("set camera bla", this, EventActionType.OnCameraSetActive, EventCategoryType.Camera, additionalEventParamsB));
             //we could also just use the line below, but why not use our event dispatcher?
             //this.cameraManager.SetActiveCamera(x => x.ID.Equals("collidable first person camera 1"));
@@ -929,7 +929,7 @@ namespace GDApp
         }
 
         private void AddUIElements()
-        { 
+        {
             InitializeUIMousePointer();
             InitializeUIProgress();
             InitializeUIInventoryMenu();
@@ -944,12 +944,12 @@ namespace GDApp
             UITextureObject texture2DObject = new UIMouseObject("mouseObject",
                 ActorType.UIDynamicTexture,
                 StatusType.Drawn | StatusType.Update,
-                new Transform2D(Vector2.One), 
+                new Transform2D(Vector2.One),
                 new ColorParameters(Color.Yellow, 0.5f),
                 SpriteEffects.None,
-                this.fontDictionary["mouse"], 
-                "hello world!", 
-                new Vector2(0, -40), 
+                this.fontDictionary["mouse"],
+                "hello world!",
+                new Vector2(0, -40),
                 Color.White,
                 1,
                 texture,

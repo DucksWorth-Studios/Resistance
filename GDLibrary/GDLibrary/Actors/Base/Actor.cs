@@ -187,7 +187,6 @@ namespace GDLibrary
                 this.controllerList = new List<IController>();
             this.controllerList.Add(controller); //duplicates?
         }
-
         public virtual bool DetachController(IController controller)
         {
             if (this.controllerList != null)
@@ -195,7 +194,6 @@ namespace GDLibrary
 
             return false;
         }
-
         public virtual int DetachControllers(Predicate<IController> predicate)
         {
             List<IController> findList = FindControllers(predicate);
@@ -208,12 +206,10 @@ namespace GDLibrary
 
             return findList.Count;
         }
-
         public List<IController> FindControllers(Predicate<IController> predicate)
         {
             return this.controllerList.FindAll(predicate);
         }
-
         //allows us to set the PlayStatus for all controllers simultaneously (e.g. play all, reset all, stop all)
         public virtual void SetAllControllers(PlayStatusType playStatusType)
         {
@@ -223,7 +219,6 @@ namespace GDLibrary
                     controller.SetControllerPlayStatus(playStatusType);
             }
         }
-
         //allows us to set the PlayStatus for all controllers with the same GROUP parameters simultaneously (e.g. "play" all controllers with a group ID of 1)
         public virtual void SetAllControllers(PlayStatusType playStatusType, Predicate<IController> predicate)
         {

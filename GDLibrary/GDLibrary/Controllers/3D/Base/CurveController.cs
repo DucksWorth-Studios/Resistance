@@ -13,6 +13,8 @@ namespace GDLibrary
     //used to cause an object (or camera) to move along a predefined track
     public class CurveController : Controller
     {
+        private static readonly int DefaultCurveEvaluationPrecision = 4;
+
         #region Fields
         private Transform3DCurve transform3DCurve;
         private PlayStatusType playStatusType;
@@ -59,7 +61,7 @@ namespace GDLibrary
         //pre-curveEvaluationPrecision compatability constructor
         public CurveController(string id, ControllerType controllerType,
             Transform3DCurve transform3DCurve, PlayStatusType playStatusType)
-            : this(id, controllerType, transform3DCurve, playStatusType, 4)
+            : this(id, controllerType, transform3DCurve, playStatusType, DefaultCurveEvaluationPrecision)
         {
         }
 

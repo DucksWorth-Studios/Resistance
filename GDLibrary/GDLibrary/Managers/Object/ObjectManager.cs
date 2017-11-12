@@ -78,10 +78,10 @@ namespace GDLibrary
         protected virtual void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
             eventDispatcher.OpacityChanged += EventDispatcher_OpacityChanged;
-            eventDispatcher.RemoveActorChanged += EventDispatcher_RemoveActorChanged1;
+            eventDispatcher.RemoveActorChanged += EventDispatcher_RemoveActorChanged;
         }
 
-        private void EventDispatcher_RemoveActorChanged1(EventData eventData)
+        private void EventDispatcher_RemoveActorChanged(EventData eventData)
         {
             if (eventData.EventType == EventActionType.Remove)
             {
