@@ -215,6 +215,7 @@ namespace GDApp
 
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/progress_gradient");
 
 #if DEBUG
             //demo
@@ -920,7 +921,9 @@ namespace GDApp
             this.menuManager.Add(sceneID, clone);
             #endregion
         }
+        #endregion
 
+        #region UI
         private void InitializeUI()
         {
             //holds UI elements (e.g. reticule, inventory, progress)
@@ -964,7 +967,53 @@ namespace GDApp
 
         private void InitializeUIProgress()
         {
-            //throw new NotImplementedException();
+            float separation = 20; //spacing between progress bars
+
+            Transform2D transform = null;
+            Texture2D texture = null;
+            UITextureObject textureObject = null;
+            Vector2 position = Vector2.Zero;
+            Vector2 scale = Vector2.Zero;
+            float verticalOffset = 20;
+
+            texture = this.textureDictionary["progress_gradient"];
+            scale = new Vector2(1, 0.75f);
+
+            #region Player 1 Progress Bar
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f - texture.Width * scale.X - separation, verticalOffset);
+            transform = new Transform2D(position, 0, scale, Vector2.Zero, new Integer2(texture.Width, texture.Height));
+
+            textureObject = new UITextureObject("leftprogress",
+                    ActorType.UIDynamicTexture,
+                    StatusType.Drawn | StatusType.Update,
+                    transform, new ColorParameters(Color.Green, 1),
+                    SpriteEffects.None,
+                    0,
+                    texture);
+
+            //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
+            textureObject.AttachController(new UIProgressController("player1progresscontroller", ControllerType.UIProgress, 2, 10, this.eventDispatcher));
+            this.uiManager.Add(textureObject);
+            #endregion
+
+
+            #region Player 2 Progress Bar
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f + separation, verticalOffset);
+            transform = new Transform2D(position, 0, scale, Vector2.Zero, new Integer2(texture.Width, texture.Height));
+
+            textureObject = new UITextureObject("rightprogress",
+                    ActorType.UIDynamicTexture,
+                    StatusType.Drawn | StatusType.Update,
+                    transform, 
+                    new ColorParameters(Color.Red, 1),
+                    SpriteEffects.None,
+                    0,
+                    texture);
+
+            //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
+            textureObject.AttachController(new UIProgressController("player2progresscontroller", ControllerType.UIProgress, 8, 10, this.eventDispatcher));
+            this.uiManager.Add(textureObject);
+            #endregion
         }
 
         private void InitializeUIInventoryMenu()
@@ -1036,13 +1085,37 @@ namespace GDApp
             {
                 this.drivableBoxObject.Alpha -= 0.1f;
             }
-            if (this.keyboardManager.IsFirstKeyPress(Keys.F6))
+            else if (this.keyboardManager.IsFirstKeyPress(Keys.F6))
             {
                 this.drivableBoxObject.Alpha += 0.1f;
             }
 
-            System.Diagnostics.Debug.WriteLine("drivableBoxObject.Alpha:" + drivableBoxObject.Alpha);
+            //testing event generation for UIProgressController
+            if (this.keyboardManager.IsFirstKeyPress(Keys.F9))
+            {
+                //increase the left progress controller by 2
+                object[] additionalEventParams = { "player1progresscontroller", (Integer)(-1)/*need brackets around number because of sign*/};
+                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+            }
+            else if (this.keyboardManager.IsFirstKeyPress(Keys.F10))
+            {
+                //increase the left progress controller by 2
+                object[] additionalEventParams = { "player1progresscontroller", (Integer)1};
+                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+            }
 
+            if (this.keyboardManager.IsFirstKeyPress(Keys.F11))
+            {
+                //increase the left progress controller by 2
+                object[] additionalEventParams = { "player2progresscontroller", (Integer)(-1)/*need brackets around number because of sign*/};
+                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+            }
+            else if (this.keyboardManager.IsFirstKeyPress(Keys.F12))
+            {
+                //increase the left progress controller by 2
+                object[] additionalEventParams = { "player2progresscontroller", (Integer)1 };
+                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+            }
             #endregion
 
             base.Update(gameTime);

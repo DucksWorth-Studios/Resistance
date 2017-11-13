@@ -32,9 +32,8 @@ namespace GDLibrary
         OnCameraSetActive,
         OnCameraCycle,
 
-        //sent by player
-        OnLoseHealth,
-        OnGainHealth,
+        //sent by player when gains or loses health 
+        OnHealthChange,
 
         //sent by game state manager
         OnLose,

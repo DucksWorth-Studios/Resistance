@@ -36,6 +36,9 @@ namespace GDLibrary
         SineColorLerp,
 
         //JibLibX related
-        CollidableFirstPerson
+        CollidableFirstPerson,
+
+        //UI related
+        UIProgress //see UIProgressController demo
     }
 }

@@ -74,7 +74,7 @@ namespace GDLibrary
 
         public static Integer3 operator *(int multiplier, Integer3 value)
         {
-            return new Integer3(value.X * multiplier, value.Y * multiplier, value.Z * multiplier);
+            return value * multiplier;
         }
 
         //to do - add /, + - operator methods

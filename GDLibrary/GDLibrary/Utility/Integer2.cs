@@ -67,9 +67,10 @@ namespace GDLibrary
 
         public static Integer2 operator *(int multiplier, Integer2 value)
         {
-            return new Integer2(value.X * multiplier, value.Y * multiplier);
+            return value * multiplier;
         }
 
+    
         //to do - add /, + - operator methods
 
         public object Clone()
