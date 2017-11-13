@@ -74,7 +74,7 @@ namespace GDLibrary
 
         private void EventDispatcher_RemoveActorChanged(EventData eventData)
         {
-            if (eventData.EventType == EventActionType.Remove)
+            if (eventData.EventType == EventActionType.OnRemoveActor)
             {
                 //using the "sender" property of the event to pass reference to object to be removed - use "as" to access Body since sender is defined as a raw object.
                 CollidableObject collidableObject = eventData.Sender as CollidableObject;

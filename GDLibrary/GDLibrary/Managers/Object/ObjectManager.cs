@@ -83,7 +83,7 @@ namespace GDLibrary
 
         private void EventDispatcher_RemoveActorChanged(EventData eventData)
         {
-            if (eventData.EventType == EventActionType.Remove)
+            if (eventData.EventType == EventActionType.OnRemoveActor)
             {
                 this.Remove(eventData.Sender as Actor3D);
             }

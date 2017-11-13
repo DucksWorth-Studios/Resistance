@@ -21,7 +21,9 @@ namespace GDLibrary
         Door,
         Screen,
         Opacity,
-        SystemRemove
+        SystemAdd, //used to send add related events e.g. remove objects from ojectmanager, camera manager, ui manager
+        SystemRemove, //used to send remove related events e.g. remove objects from ojectmanager, camera manager, ui manager
+        Debug   //used to send debug related events e.g. show/hide debug info
         //all other categories of sender...
     }
 }

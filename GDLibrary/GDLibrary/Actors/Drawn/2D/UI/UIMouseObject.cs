@@ -123,7 +123,7 @@ namespace GDLibrary
                 if (this.mouseManager.IsLeftButtonClickedOnce())
                 {
                     //what would we like to do here? remove the item since its ammo or some sort of pickup?
-                    EventDispatcher.Publish(new EventData("bla", collidableObject, EventActionType.Remove, EventCategoryType.SystemRemove));               
+                    EventDispatcher.Publish(new EventData("bla", collidableObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));               
                 }
             }
             else

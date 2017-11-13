@@ -1117,6 +1117,13 @@ namespace GDApp
                 object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)1 };
                 EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
             }
+
+            //show/hide debug info
+            if (this.keyboardManager.IsFirstKeyPress(Keys.F7))
+            {
+                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnToggleDebug, EventCategoryType.Debug));
+            }
+
             #endregion
 
             base.Update(gameTime);

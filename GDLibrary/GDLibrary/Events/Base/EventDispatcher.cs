@@ -28,6 +28,7 @@ namespace GDLibrary
         public delegate void OpacityEventHandler(EventData eventData);
         public delegate void RemoveActorEventHandler(EventData eventData);
         public delegate void PlayerEventHandler(EventData eventData);
+        public delegate void DebugEventHandler(EventData eventData);
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
@@ -36,6 +37,7 @@ namespace GDLibrary
         public event OpacityEventHandler OpacityChanged;
         public event RemoveActorEventHandler RemoveActorChanged;
         public event PlayerEventHandler PlayerChanged;
+        public event DebugEventHandler DebugChanged;
 
         public EventDispatcher(Game game, int initialSize)
             : base(game)
@@ -94,6 +96,10 @@ namespace GDLibrary
                     OnPlayer(eventData);
                     break;
 
+                case EventCategoryType.Debug:
+                    OnDebug(eventData);
+                    break;
+
                 default:
                     break;
             }
@@ -142,5 +148,13 @@ namespace GDLibrary
         {
             PlayerChanged?.Invoke(eventData);
         }
+
+        //called when a debug related event occurs (e.g. show/hide debug info)
+        protected virtual void OnDebug(EventData eventData)
+        {
+            DebugChanged?.Invoke(eventData);
+        }
+
+        
     }
 }

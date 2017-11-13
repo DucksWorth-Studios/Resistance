@@ -50,8 +50,12 @@ namespace GDLibrary
         OnOpaqueToTransparent,
         OnTransparentToOpaque,
 
-        //sent when we want to remove an Actor from the game - see UIMouseObject::HandlePickedObject()
-        Remove
+        //sent when we want to add/remove an Actor from the game - see UIMouseObject::HandlePickedObject()
+        OnAddActor,
+        OnRemoveActor,
+
+        //sent to show/hide info
+        OnToggleDebug,
 
     }
 }
