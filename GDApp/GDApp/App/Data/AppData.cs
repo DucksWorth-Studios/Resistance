@@ -69,6 +69,9 @@ namespace GDLibrary
         #endregion
 
         #region Player
+        public static readonly string PlayerOneID = "player1";
+        public static readonly string PlayerTwoID = "player2";
+
         public static readonly Keys[] PlayerMoveKeys = { Keys.U, Keys.J, Keys.H, Keys.K, Keys.Y, Keys.I, Keys.N, Keys.M};
         public static readonly float PlayerMoveSpeed = 0.05f;
         public static readonly float PlayerStrafeSpeed = 0.7f * PlayerMoveSpeed;
@@ -87,6 +90,13 @@ namespace GDLibrary
         //always ensure that we start picking OUTSIDE the collidable first person camera radius - otherwise we will always pick ourself!
         public static readonly float PickStartDistance = CollidableCameraCapsuleRadius * 1.1f;
         public static readonly float PickEndDistance = 1000; //can be related to camera far clip plane radius but should be limited to typical level max diameter
+        #endregion
+
+        #region UI
+        public static readonly string PlayerOneProgressID = PlayerOneID + " progress";
+        public static readonly string PlayerTwoProgressID = PlayerTwoID + " progress";
+        public static readonly string PlayerOneProgressControllerID = PlayerOneProgressID + " ctrllr";
+        public static readonly string PlayerTwoProgressControllerID = PlayerTwoProgressID + " ctrllr";
         #endregion
     }
 }

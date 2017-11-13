@@ -88,10 +88,27 @@ namespace GDLibrary
                 //set the source rectangle according to whatever start value the user supplies
                 UpdateSourceRectangle();
                 this.bDirty = false;
+
+                HandleWinLose();
             }
             base.Update(gameTime, actor);
         }
-        private void UpdateSourceRectangle()
+
+        protected virtual void HandleWinLose()
+        {
+            //if we lose/win all health then generate an event here that will be handled by SoundManager (play win/lose sound) and other game components.
+
+            if (this.currentValue == this.maxValue)
+            {
+
+            }
+            else if (this.currentValue == 0)
+            {
+
+            }
+        }
+
+        protected virtual void UpdateSourceRectangle()
         {
             //how much of a percentage of the width of the image does the current value represent?
             float widthMultiplier = (float)this.currentValue / this.maxValue;

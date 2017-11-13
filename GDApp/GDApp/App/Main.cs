@@ -7,11 +7,12 @@ using JigLibX.Geometry;
 using JigLibX.Collision;
 using System.Collections.Generic;
 /*
+Issue with one side of SkyBox frustum culling.
+Physics is not updating when boxes are removed.
 ScreenManager - enum - this.ScreenType = (ScreenUtilityScreenType)eventData.AdditionalEventParameters[0];
 check clone on new eventdata
 add a collidable player object
 add a collidable pickup object and remove on collision with player
-add mouse picking to select and remove objects
 PiP
 scripting camera changes using event data read from XML?
 menu - click sound
@@ -983,7 +984,7 @@ namespace GDApp
             position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f - texture.Width * scale.X - separation, verticalOffset);
             transform = new Transform2D(position, 0, scale, Vector2.Zero, new Integer2(texture.Width, texture.Height));
 
-            textureObject = new UITextureObject("leftprogress",
+            textureObject = new UITextureObject(AppData.PlayerOneProgressID,
                     ActorType.UIDynamicTexture,
                     StatusType.Drawn | StatusType.Update,
                     transform, new ColorParameters(Color.Green, 1),
@@ -992,7 +993,7 @@ namespace GDApp
                     texture);
 
             //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
-            textureObject.AttachController(new UIProgressController("player1progresscontroller", ControllerType.UIProgress, 2, 10, this.eventDispatcher));
+            textureObject.AttachController(new UIProgressController(AppData.PlayerOneProgressControllerID, ControllerType.UIProgress, 2, 10, this.eventDispatcher));
             this.uiManager.Add(textureObject);
             #endregion
 
@@ -1001,7 +1002,7 @@ namespace GDApp
             position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f + separation, verticalOffset);
             transform = new Transform2D(position, 0, scale, Vector2.Zero, new Integer2(texture.Width, texture.Height));
 
-            textureObject = new UITextureObject("rightprogress",
+            textureObject = new UITextureObject(AppData.PlayerTwoProgressID,
                     ActorType.UIDynamicTexture,
                     StatusType.Drawn | StatusType.Update,
                     transform, 
@@ -1011,7 +1012,7 @@ namespace GDApp
                     texture);
 
             //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
-            textureObject.AttachController(new UIProgressController("player2progresscontroller", ControllerType.UIProgress, 8, 10, this.eventDispatcher));
+            textureObject.AttachController(new UIProgressController(AppData.PlayerTwoProgressControllerID, ControllerType.UIProgress, 8, 10, this.eventDispatcher));
             this.uiManager.Add(textureObject);
             #endregion
         }
@@ -1094,26 +1095,26 @@ namespace GDApp
             if (this.keyboardManager.IsFirstKeyPress(Keys.F9))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { "player1progresscontroller", (Integer)(-1)/*need brackets around number because of sign*/};
+                object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)(-1)/*need brackets around number because of sign*/};
                 EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
             }
             else if (this.keyboardManager.IsFirstKeyPress(Keys.F10))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { "player1progresscontroller", (Integer)1};
+                object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)1};
                 EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
             }
 
             if (this.keyboardManager.IsFirstKeyPress(Keys.F11))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { "player2progresscontroller", (Integer)(-1)/*need brackets around number because of sign*/};
+                object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)(-1)/*need brackets around number because of sign*/};
                 EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
             }
             else if (this.keyboardManager.IsFirstKeyPress(Keys.F12))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { "player2progresscontroller", (Integer)1 };
+                object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)1 };
                 EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
             }
             #endregion
