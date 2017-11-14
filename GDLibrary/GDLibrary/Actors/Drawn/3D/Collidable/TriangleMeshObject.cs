@@ -22,15 +22,15 @@ namespace GDLibrary
         #endregion
 
         #region Properties
-     
+
         #endregion
 
         public TriangleMeshObject(string id, ActorType actorType, Transform3D transform,
-            BasicEffect effect, ColorParameters colorParameters, Texture2D texture, Model model, 
+            BasicEffect effect, ColorParameters colorParameters, Texture2D texture, Model model,
             MaterialProperties materialProperties)
             : this(id, actorType, transform, effect, colorParameters, texture, model, null, materialProperties)
         {
- 
+
         }
 
         public TriangleMeshObject(string id, ActorType actorType, Transform3D transform,

@@ -93,11 +93,23 @@ namespace GDLibrary
         }
         #endregion
 
+        //uses the default PlayerObject as the collidable object for the camera
+        public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
+           MouseManager mouseManager, KeyboardManager keyboardManager, CameraManager cameraManager, ScreenManager screenManager,
+           IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
+           float mass, float jumpHeight, Vector3 translationOffset)
+           : this(id, controllerType,moveKeys, moveSpeed, strafeSpeed, rotationSpeed,
+            mouseManager, keyboardManager, cameraManager, screenManager,
+            parentActor, radius, height, accelerationRate, decelerationRate,
+            mass, jumpHeight, translationOffset, null)
+        {
+        }
 
+        //allows developer to specify the type of collidable object to be used as basis for the camera
         public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
             MouseManager mouseManager, KeyboardManager keyboardManager, CameraManager cameraManager, ScreenManager screenManager,
             IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
-            float mass, float jumpHeight, Vector3 translationOffset)
+            float mass, float jumpHeight, Vector3 translationOffset, PlayerObject collidableObject)
             : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed,
             mouseManager, keyboardManager, cameraManager, screenManager)
         {
@@ -114,9 +126,20 @@ namespace GDLibrary
             /* Create the collidable player object which comes with a collision skin and position the parentActor (i.e. the camera) inside the player object.
              * notice that we don't pass any effect, model or texture information, since in 1st person perspective we dont want to look from inside a model.
              * Therefore, we wont actually render any drawn object - the effect, texture, model (and also Color) information are unused.
+             * 
+             * This code allows the user to pass in their own PlayerObject (e.g. HeroPlayerObject) to be used for the collidable object basis for the camera.
              */
-            this.playerObject = new PlayerObject(this.ID + " - player object", ActorType.CollidableCamera, (parentActor as Actor3D).Transform,
-             null, ColorParameters.WhiteOpaque, null, null, this.MoveKeys, radius, height, accelerationRate, decelerationRate, translationOffset);
+            if (collidableObject != null)
+            {
+                this.playerObject = collidableObject;
+            }
+            else
+            {
+                this.playerObject = new PlayerObject(this.ID + " - player object", ActorType.CollidableCamera, (parentActor as Actor3D).Transform,
+                 null, ColorParameters.WhiteOpaque, null, null, this.MoveKeys, radius, height, accelerationRate, decelerationRate, jumpHeight,
+                 translationOffset, keyboardManager);
+            }
+
             playerObject.Enable(false, mass);
 
         }

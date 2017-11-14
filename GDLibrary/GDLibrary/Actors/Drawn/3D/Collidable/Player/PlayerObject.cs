@@ -12,10 +12,29 @@ namespace GDLibrary
         #region Variables
         private Keys[] moveKeys;
         private Vector3 translationOffset;
+        private KeyboardManager keyboardManager;
+        private float jumpHeight;
         #endregion
 
         #region Properties
-      
+        public KeyboardManager KeyboardManager
+        {
+            get
+            {
+                return keyboardManager;
+            }
+        }
+        public float JumpHeight
+        {
+            get
+            {
+                return jumpHeight;
+            }
+            set
+            {
+                jumpHeight = (value > 0) ? value : 1;
+            }
+        }
         public Vector3 TranslationOffset
         {
             get
@@ -41,12 +60,15 @@ namespace GDLibrary
         #endregion
 
         public PlayerObject(string id, ActorType actorType, Transform3D transform,
-            BasicEffect effect, ColorParameters colorParameters, Texture2D texture, Model model, 
-            Keys[] moveKeys, float radius, float height, float accelerationRate, float decelerationRate, Vector3 translationOffset)
+            Effect effect, ColorParameters colorParameters, Texture2D texture, Model model, 
+            Keys[] moveKeys, float radius, float height, float accelerationRate, float decelerationRate, float jumpHeight, 
+            Vector3 translationOffset, KeyboardManager keyboardManager)
             : base(id, actorType, transform, effect, colorParameters, texture, model, radius, height, accelerationRate, decelerationRate)
         {
             this.moveKeys = moveKeys;
             this.translationOffset = translationOffset;
+            this.keyboardManager = keyboardManager;
+            this.jumpHeight = jumpHeight;
         }
 
         public override Matrix GetWorldMatrix()
@@ -74,25 +96,25 @@ namespace GDLibrary
         protected virtual void HandleKeyboardInput(GameTime gameTime)
         {
             /*
-            //jump
-            if (game.KeyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveJump]))
+                         //jump
+            if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveJump]))
             {
-                this.CharacterBody.DoJump(1.0f);
+                this.CharacterBody.DoJump(this.JumpHeight);
             }
             //crouch
-            else if (game.KeyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveCrouch]))
+            else if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveCrouch]))
             {
                 this.CharacterBody.IsCrouching = !this.CharacterBody.IsCrouching;
             }
 
             //forward/backward
-            if (game.KeyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveForward]))
+            if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveForward]))
             {
-                this.CharacterBody.Velocity += this.Transform3D.Look * 1 * gameTime.ElapsedGameTime.Milliseconds;
+                this.CharacterBody.Velocity += this.Transform.Look * 1 * gameTime.ElapsedGameTime.Milliseconds;
             }
-            else if (game.KeyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveBackward]))
+            else if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveBackward]))
             {
-                this.CharacterBody.Velocity -= this.Transform3D.Look * 1 * gameTime.ElapsedGameTime.Milliseconds;
+                this.CharacterBody.Velocity -= this.Transform.Look * 1 * gameTime.ElapsedGameTime.Milliseconds;
             }
             else //decelerate to zero when not pressed
             {
@@ -100,13 +122,13 @@ namespace GDLibrary
             }
 
             //strafe left/right
-            if (game.KeyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexRotateLeft]))
+            if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexRotateLeft]))
             {
-                this.Transform3D.RotateAroundYBy(0.1f * gameTime.ElapsedGameTime.Milliseconds);
+                this.Transform.RotateAroundYBy(0.1f * gameTime.ElapsedGameTime.Milliseconds);
             }
-            else if (game.KeyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexRotateRight]))
+            else if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexRotateRight]))
             {
-                this.Transform3D.RotateAroundYBy(-0.1f * gameTime.ElapsedGameTime.Milliseconds);
+                this.Transform.RotateAroundYBy(-0.1f * gameTime.ElapsedGameTime.Milliseconds);
             }
             else //decelerate to zero when not pressed
             {
@@ -114,7 +136,7 @@ namespace GDLibrary
             }
 
             //update the camera position to reflect the collision skin position
-            this.Transform3D.Translation = this.CharacterBody.Position;
+            this.Transform.Translation = this.CharacterBody.Position;
              */
         }
 

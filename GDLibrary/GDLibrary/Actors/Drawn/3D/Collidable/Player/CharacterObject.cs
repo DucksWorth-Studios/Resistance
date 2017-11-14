@@ -26,7 +26,7 @@ namespace GDLibrary
         }
 
         public CharacterObject(string id, ActorType actorType, Transform3D transform,
-            BasicEffect effect, ColorParameters colorParameters, Texture2D texture, Model model, 
+            Effect effect, ColorParameters colorParameters, Texture2D texture, Model model, 
             float radius, float height, float accelerationRate, float decelerationRate)
             : base(id, actorType, transform, effect, colorParameters, texture, model)
         {
@@ -64,6 +64,7 @@ namespace GDLibrary
                 Matrix.CreateTranslation(this.Body.Position);
         }
 
+
         //add equals, gethashcode, clone, remove...
     }
 
@@ -81,15 +82,23 @@ namespace GDLibrary
     public class Character : Body
     {
         #region Fields
-        private bool doJump, isCrouching;
+        private bool isJumping, isCrouching;
         private float jumpHeight=5;
 
         public float accelerationRate { get; set; }
         public float decelerationRate { get; set; }
         public Vector3 DesiredVelocity { get; set; }
+
         #endregion
 
         #region Properties
+        public bool IsJumping
+        {
+            get
+            {
+                return this.isJumping;
+            }
+        }
         public bool IsCrouching
         {
             get
@@ -113,14 +122,14 @@ namespace GDLibrary
         public void DoJump(float jumpHeight)
         {
             this.jumpHeight = jumpHeight;
-            doJump = true;
+            this.isJumping = true;
         }
 
         public override void AddExternalForces(float dt)
         {
             ClearForces();
 
-            if (doJump)
+            if (this.isJumping)
             {
                 foreach (CollisionInfo info in CollisionSkin.Collisions)
                 {
@@ -157,7 +166,7 @@ namespace GDLibrary
 
             float forceFactor = 500.0f;
             AddBodyForce(deltaVel * Mass * dt * forceFactor);
-            doJump = false;
+            this.isJumping = false;
             AddGravityToExternalForce();
         }
     }

@@ -24,7 +24,7 @@ namespace GDLibrary
         private KeyboardManager keyboardManager;
         private Keys pauseKey;
 
-        private bool bFirstTime = true;
+        private bool bLayoutDirty = true;
         private GraphicsDeviceManager graphics;
         private Viewport fullScreenViewport;
 
@@ -55,6 +55,7 @@ namespace GDLibrary
             set
             {
                 this.screenType = value;
+                this.bLayoutDirty = true;
             }
         }
         public float AspectRatio
@@ -88,7 +89,7 @@ namespace GDLibrary
             Keys pauseKey, EventDispatcher eventDispatcher, StatusType statusType)
             : base(game, eventDispatcher, statusType)
         {
-            this.screenType = screenType;
+            this.ScreenType = screenType;
             this.objectManager = objectManager;
             this.cameraManager = cameraManager;
 
@@ -152,12 +153,12 @@ namespace GDLibrary
         protected override void ApplyUpdate(GameTime gameTime)
         {          
             #region Update Views
-            //if one camera needs to be drawn on top of another then we need to do a depth sort the first time the game is run
-            if (this.bFirstTime && this.screenType == ScreenUtility.ScreenType.MultiPictureInPicture)
+            //if one camera needs to be drawn on top of another then we need to do a depth sort each time we change the layout
+            if (this.bLayoutDirty && this.screenType == ScreenUtility.ScreenType.MultiPictureInPicture)
             {
                 //sort so that the top-most camera (i.e. closest draw depth to 0 will be the last camera drawn)
-                this.cameraManager.SortByDepth(SortDirectionType.Descending);
-                this.bFirstTime = false;
+                this.cameraManager.SortByDepth(SortDirectionType.Ascending);
+                this.bLayoutDirty = false;
             }
 
             //explicit call, as mentioned in Wiki - 2.4. Camera Viewports

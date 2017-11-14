@@ -57,6 +57,9 @@ namespace GDApp
         //stores viewport layouts for multi-screen layout
         private Dictionary<string, Viewport> viewPortDictionary;
 
+        //player
+        private HeroPlayerObject heroPlayerObject;
+
         //demo remove later
         private ModelObject drivableBoxObject;
 
@@ -112,11 +115,17 @@ namespace GDApp
             {
                 // InitializeSingleScreenCameraDemo(screenResolution);
                 //or
-                InitializeSingleScreenCycleableCameraDemo(screenResolution);
+                //InitializeSingleScreenCycleableCameraDemo(screenResolution);
+                //or
+                InitializeCollidableThirdPersonDemo(screenResolution);
             }
-            else //multi-screen or picture-in-picture
+            else if (screenType == ScreenUtility.ScreenType.MultiScreen)//multi-screen
             {
                 InitializeMultiScreenCameraDemo(screenResolution);
+            }
+            else //picture-in-picture
+            {
+                InitializePictureInPictureCameraDemo(screenResolution);
             }
 
             //Publish Start Event(s)
@@ -190,6 +199,10 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/teapot");
             this.modelDictionary.Load("Assets/Models/teapot_mediumpoly");
             this.modelDictionary.Load("Assets/Models/teapot_lowpoly");
+
+            //player - replace with animation eventually
+            this.modelDictionary.Load("Assets/Models/cylinder");
+
             #endregion
 
             #region Textures
@@ -278,6 +291,13 @@ namespace GDApp
             this.viewPortDictionary.Add("column0 row4", new Viewport(0, 4 * smallViewPortHeight, smallViewPortWidth, smallViewPortHeight));
             //the larger view to the right in column 1
             this.viewPortDictionary.Add("column1 row0", new Viewport(smallViewPortWidth, 0, screenResolution.X - smallViewPortWidth, screenResolution.Y));
+
+            //picture-in-picture viewport
+            Integer2 viewPortDimensions = new Integer2(240, 150); //set to 16:10 ratio as with screen dimensions
+            int verticalOffset = 20;
+            int rightHorizontalOffset = 20;
+            this.viewPortDictionary.Add("PIP viewport", new Viewport((screenResolution.X - viewPortDimensions.X - rightHorizontalOffset), 
+                verticalOffset,  viewPortDimensions.X, viewPortDimensions.Y));
         }
 
 #if DEBUG
@@ -321,6 +341,35 @@ namespace GDApp
             InitializeStaticCollidableLowPolyTriangleMeshObjects();
             //demo dynamic collidable objects with user-defined collision primitives
             InitializeDynamicCollidableObjects();
+
+            //adds the hero of the game - see InitializeSingleScreenFirstThirdPersonDemo()
+            InitializeCollidableHeroPlayerObject();
+
+        }
+
+        private void InitializeCollidableHeroPlayerObject()
+        {
+            Transform3D transform = new Transform3D(new Vector3(0, 25, 20), 
+                new Vector3(90,0,0),
+                new Vector3(1,3.5f,1), -Vector3.UnitZ, Vector3.UnitY);
+
+            //make the hero a field since we need to point the third person camera controller at this object
+            this.heroPlayerObject = new HeroPlayerObject(AppData.PlayerOneID, 
+                AppData.PlayerOneProgressControllerID, //used to increment/decrement progress on pickup, win, or lose
+                ActorType.Player, transform, this.modelEffect,
+                new ColorParameters(Color.Goldenrod, 1), 
+                this.textureDictionary["checkerboard"], 
+                this.modelDictionary["cylinder"], 
+                AppData.PlayerTwoMoveKeys,
+                AppData.PlayerRadius, AppData.PlayerHeight,
+                1.8f, 1.7f,
+                AppData.PlayerJumpHeight,
+                new Vector3(0, 5, 0), 
+                this.keyboardManager);
+            this.heroPlayerObject.Enable(false, AppData.PlayerMass);
+
+            //don't forget to add it - or else we wont see it!
+            this.objectManager.Add(this.heroPlayerObject);
         }
 
         //skybox is a non-collidable series of ModelObjects with no lighting
@@ -521,7 +570,7 @@ namespace GDApp
                     Vector3.UnitX, Vector3.UnitY);
 
                 collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 2.54f), new MaterialProperties(0.2f, 0.8f, 0.7f));
-                collidableObject.Enable(false, 1);
+                collidableObject.Enable(false, 5);
                 this.objectManager.Add(collidableObject);
             }
             #endregion
@@ -568,7 +617,7 @@ namespace GDApp
 
             //attach a DriveController
             drivableBoxObject.AttachController(new DriveController("driveController1", ControllerType.Drive,
-                AppData.PlayerMoveKeys, AppData.PlayerMoveSpeed, AppData.PlayerStrafeSpeed, AppData.PlayerRotationSpeed, this.mouseManager, this.keyboardManager));
+                AppData.PlayerOneMoveKeys, AppData.PlayerMoveSpeed, AppData.PlayerStrafeSpeed, AppData.PlayerRotationSpeed, this.mouseManager, this.keyboardManager));
 
             //add to the objectManager so that it will be drawn and updated
             this.objectManager.Add(drivableBoxObject);
@@ -606,9 +655,9 @@ namespace GDApp
         #endregion
 
         #region Initialize Cameras
-        private void InitializeCamera(Integer2 screenResolution, string id, Viewport viewPort, Transform3D transform, IController controller)
+        private void InitializeCamera(Integer2 screenResolution, string id, Viewport viewPort, Transform3D transform, IController controller, float drawDepth)
         {
-            Camera3D camera = new Camera3D(id, ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, 1, StatusType.Update);
+            Camera3D camera = new Camera3D(id, ActorType.Camera, transform, ProjectionParameters.StandardMediumFiveThree, viewPort, drawDepth, StatusType.Update);
 
             if (controller != null)
                 camera.AttachController(controller);
@@ -630,35 +679,35 @@ namespace GDApp
             transform = new Transform3D(new Vector3(0, cameraHeight, 10), -Vector3.UnitZ, Vector3.UnitY);
             controller = new FirstPersonCameraController(id + " controller", ControllerType.FirstPerson, AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed,
                 this.mouseManager, this.keyboardManager, this.cameraManager, this.screenManager);
-            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
             //security camera 1
             id = "non-collidable security 1";
             viewportDictionaryKey = "column0 row0";
             transform = new Transform3D(new Vector3(0, cameraHeight, 20), -Vector3.UnitZ, Vector3.UnitY);
             controller = new SecurityCameraController(id + " controller", ControllerType.Security, 60, AppData.SecurityCameraRotationSpeedSlow, AppData.SecurityCameraRotationAxisYaw);
-            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
             //security camera 2
             id = "non-collidable security 2";
             viewportDictionaryKey = "column0 row1";
             transform = new Transform3D(new Vector3(0, cameraHeight, 20), -Vector3.UnitZ, Vector3.UnitY);
             controller = new SecurityCameraController(id + " controller", ControllerType.Security, 45, AppData.SecurityCameraRotationSpeedMedium, new Vector3(1, 1, 0));
-            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
             //security camera 3
             id = "non-collidable security 3";
             viewportDictionaryKey = "column0 row2";
             transform = new Transform3D(new Vector3(0, cameraHeight, 20), -Vector3.UnitZ, Vector3.UnitY);
             controller = new SecurityCameraController(id + " controller", ControllerType.Security, 30, AppData.SecurityCameraRotationSpeedFast, new Vector3(4, 1, 0));
-            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
             //track camera 1
             id = "non-collidable track 1";
             viewportDictionaryKey = "column0 row3";
             transform = new Transform3D(new Vector3(0, cameraHeight, 20), -Vector3.UnitZ, Vector3.UnitY);
             controller = new CurveController(id + " controller", ControllerType.Track, this.curveDictionary["unique curve name 1"], PlayStatusType.Play);
-            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
             //rail camera 1
             id = "non-collidable rail 1";
@@ -666,10 +715,10 @@ namespace GDApp
             //since the camera will be set on a rail it doesnt matter what the initial transform is set to
             transform = Transform3D.Zero;
             controller = new RailController(id + " controller", ControllerType.Rail, this.drivableBoxObject, this.railDictionary["rail1 - parallel to x-axis"]);
-            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
         }
 
-        private void InitializeSingleScreenCameraDemo(Integer2 screenResolution)
+        private void InitializeSingleScreenCameraDemo(Integer2 screenResolution, float drawDepth)
         {
             Transform3D transform = null;
             string id = "";
@@ -680,7 +729,7 @@ namespace GDApp
             transform = new Transform3D(new Vector3(0, 10, 60), -Vector3.UnitZ, Vector3.UnitY);
 
             Camera3D camera = new Camera3D(id, ActorType.Camera, transform,
-                    ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], 1, StatusType.Update);
+                    ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], drawDepth, StatusType.Update);
 
             //attach a CollidableFirstPersonController
             camera.AttachController(new CollidableFirstPersonCameraController(
@@ -704,7 +753,7 @@ namespace GDApp
         private void InitializeSingleScreenCycleableCameraDemo(Integer2 screenResolution)
         {
 
-            InitializeSingleScreenCameraDemo(screenResolution);
+            InitializeSingleScreenCameraDemo(screenResolution, 0);
 
             Transform3D transform = null;
             IController controller = null;
@@ -715,16 +764,51 @@ namespace GDApp
             id = "non-collidable track 1";
             transform = new Transform3D(new Vector3(0, 0, 20), -Vector3.UnitZ, Vector3.UnitY);
             controller = new CurveController(id + " controller", ControllerType.Track, this.curveDictionary["unique curve name 1"], PlayStatusType.Play);
-            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
             //rail camera 1
             id = "non-collidable rail 1";
             //since the camera will be set on a rail it doesnt matter what the initial transform is set to
             transform = Transform3D.Zero;
             controller = new RailController(id + " controller", ControllerType.Rail, this.drivableBoxObject, this.railDictionary["rail1 - parallel to x-axis"]);
-            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
         }
+
+        //adds two camera - first person collidable and picture-in-picture rear view mirror
+        private void InitializePictureInPictureCameraDemo(Integer2 screenResolution)
+        {
+            InitializeSingleScreenCameraDemo(screenResolution, 0.1f);
+
+            //static camera 1 - looking straight down on the scene above the origin
+            string viewportDictionaryKey = "PIP viewport";
+            string id = "non-collidable static 1";
+            Transform3D transform = new Transform3D(new Vector3(0, 60, 0), -Vector3.UnitY, Vector3.UnitZ);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, null, 0);
+
+        }
+
+        //adds a third person looking at collidable HeroPlayerObject
+        private void InitializeCollidableThirdPersonDemo(Integer2 screenResolution)
+        {
+            Transform3D transform = null;
+            IController controller = null;
+            string id = "";
+            string viewportDictionaryKey = "full viewport";
+
+            //track camera 1
+            id = "third person collidable";
+            //doesnt matter since it will reset based on target actor data
+            transform = Transform3D.Zero;
+
+            controller = new ThirdPersonController(id + "ctrllr", ControllerType.ThirdPerson, this.heroPlayerObject,
+                AppData.CameraThirdPersonDistance, AppData.CameraThirdPersonScrollSpeedDistanceMultiplier,
+                AppData.CameraThirdPersonElevationAngleInDegrees, AppData.CameraThirdPersonScrollSpeedElevatationMultiplier,
+                LerpSpeed.Fast, LerpSpeed.Medium, this.mouseManager);
+            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
+
+        }
+
         #endregion
 
         #region Events

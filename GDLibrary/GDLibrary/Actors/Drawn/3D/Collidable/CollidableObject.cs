@@ -60,9 +60,8 @@ namespace GDLibrary
             this.collision = new CollisionSkin(this.body);
             this.body.CollisionSkin = this.collision;
 
-            //register for callback collision to see who just walked into the zone
-            //we will only normally register for this event in a class that sub-classes CollidableObject e.g. PickupCollidableObject or PlayerCollidableObject
-            this.Body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
+            //register for callback collision
+            //this.Body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
         }
 
         public override Matrix GetWorldMatrix()
@@ -75,10 +74,10 @@ namespace GDLibrary
         }
 
         //we will only normally provide this method in a class that sub-classes CollidableObject e.g. PickupCollidableObject or PlayerCollidableObject
-        public virtual bool CollisionSkin_callbackFn(CollisionSkin skin0, CollisionSkin skin1)
-        {
-            return true;
-        }
+        //public virtual bool CollisionSkin_callbackFn(CollisionSkin skin0, CollisionSkin skin1)
+        //{
+        //    return true;
+        //}
 
         protected Vector3 SetMass(float mass)
         {
@@ -133,5 +132,6 @@ namespace GDLibrary
             this.body = null;
             return base.Remove();
         }
+
     }
 }
