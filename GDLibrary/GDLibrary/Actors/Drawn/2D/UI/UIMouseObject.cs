@@ -68,22 +68,21 @@ namespace GDLibrary
             this.cameraManager = cameraManager;
             this.pickStartDistance = pickStartDistance;
             this.pickEndDistance = pickEndDistance;
-
-            //put the reticule in the centre of the screen
-            this.Transform.Translation = this.cameraManager.ActiveCamera.ViewportCentre;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             //draw icon
-            spriteBatch.Draw(this.Texture, this.Transform.Translation, 
-                this.SourceRectangle, this.ColorParameters.Color, this.Transform.RotationInRadians, this.Origin, 
-                    this.Transform.Scale, this.SpriteEffects, this.LayerDepth);
+            //spriteBatch.Draw(this.Texture, this.Transform.Translation, 
+            //    this.SourceRectangle, this.ColorParameters.Color, this.Transform.RotationInRadians, this.Origin, 
+            //        this.Transform.Scale, this.SpriteEffects, this.LayerDepth);
 
             //draw any additional text
             if (this.text != null)
                 spriteBatch.DrawString(this.spriteFont, this.text,
-                    ((this.Transform.Translation - this.textOrigin) - this.textOffsetPosition), this.textColor);
+                    ((this.Transform.Translation - this.textOrigin) + new Vector2(this.textDimensions.X/2.0f, this.textOffsetPosition.Y)), this.textColor);
+
+            base.Draw(gameTime, spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
@@ -106,13 +105,12 @@ namespace GDLibrary
                 CollidableObject collidableObject = this.mouseManager.GetPickedObject(this.cameraManager.ActiveCamera, this.cameraManager.ActiveCamera.ViewportCentre, 
                                                 this.pickStartDistance, 
                                                 this.pickEndDistance, out pos, out normal) as CollidableObject;
-                //did we pick something?
-                if(collidableObject != null)
-                    HandlePickedObject(collidableObject, pos, normal);
+
+                HandlePickedObject(collidableObject, pos, normal);
             }
         }
 
-        private void HandlePickedObject(CollidableObject collidableObject, Vector3 pos, Vector3 normal /*unused - could use for bullet decals*/)
+        protected virtual void HandlePickedObject(CollidableObject collidableObject, Vector3 pos, Vector3 normal /*unused - could use for bullet decals*/)
         {
             if ((collidableObject != null) && (collidableObject.ActorType == ActorType.CollidablePickup))
             {
@@ -123,8 +121,13 @@ namespace GDLibrary
                 if (this.mouseManager.IsLeftButtonClickedOnce())
                 {
                     //what would we like to do here? remove the item since its ammo or some sort of pickup?
-                    EventDispatcher.Publish(new EventData("bla", collidableObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));               
+                    EventDispatcher.Publish(new EventData(collidableObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));               
                 }
+
+              //  this.Transform.RotationInDegrees += 1;
+
+
+                //to do add object pick and placement and/or firing a projectile here...
             }
             else
             {

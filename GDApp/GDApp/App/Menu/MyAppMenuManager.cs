@@ -66,7 +66,7 @@ namespace GDApp
         private void DoStart()
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
-            EventDispatcher.Publish(new EventData("unused id", this, EventActionType.OnStart, EventCategoryType.MainMenu));
+            EventDispatcher.Publish(new EventData(EventActionType.OnStart, EventCategoryType.MainMenu));
         }
 
         private void DoExit()

@@ -115,7 +115,7 @@ namespace GDLibrary
             this.body.EnableBody();
         }
 
-        //to do remove
+     
         public new object Clone()
         {
             return new CollidableObject("clone - " + ID, //deep

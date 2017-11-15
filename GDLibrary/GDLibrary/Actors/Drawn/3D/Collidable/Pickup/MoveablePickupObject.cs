@@ -54,5 +54,23 @@ namespace GDLibrary
             //add your response code here...
         }
         #endregion
+
+        //public new object Clone()
+        //{
+        //    return new CollidableObject("clone - " + ID, //deep
+        //        this.ActorType,   //deep
+        //        (Transform3D)this.Transform.Clone(),  //deep
+        //        this.Effect, //shallow i.e. a reference
+        //        new ColorParameters(this.Color, this.Alpha),  //deep
+        //        this.Texture, //shallow i.e. a reference
+        //        this.Model); //shallow i.e. a reference
+        //}
+
+        //public override bool Remove()
+        //{
+        //    this.body = null;
+        //    return base.Remove();
+        //}
+
     }
 }

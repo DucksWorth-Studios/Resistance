@@ -75,6 +75,8 @@ namespace GDLibrary
             return resultList != null ? resultList.Count : 0;
         }
 
+        //to do as an exercise...FindAll(Predicate<Actor2D> predicate)
+
         //batch remove on all objects that were requested to be removed
         protected virtual void ApplyRemove()
         {

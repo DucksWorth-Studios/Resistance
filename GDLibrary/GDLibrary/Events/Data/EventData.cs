@@ -78,6 +78,27 @@ namespace GDLibrary
         }
         #endregion
 
+        //when we don't have any pertinent string data in ID AND sender
+        public EventData(EventActionType eventType, EventCategoryType eventCategoryType)
+           : this(null, null, eventType, eventCategoryType, null)
+        {
+
+        }
+
+        //when we don't have any pertinent string data in ID AND sender but have additional event parameters
+        public EventData(EventActionType eventType, EventCategoryType eventCategoryType, object[] additionalEventParameters)
+           : this(null, null, eventType, eventCategoryType, additionalEventParameters)
+        {
+
+        }
+
+        //when we don't have any pertinent string data in ID
+        public EventData(object sender, EventActionType eventType, EventCategoryType eventCategoryType)
+           : this(null, sender, eventType, eventCategoryType, null)
+        {
+
+        }
+
         //pre-object[] compatability constructor
         public EventData(string id, object sender, EventActionType eventType, EventCategoryType eventCategoryType)
             : this(id, sender, eventType, eventCategoryType, null)
@@ -106,18 +127,28 @@ namespace GDLibrary
         public override bool Equals(object obj)
         {
             EventData other = obj as EventData;
-            return this.id.Equals(other) 
-                && this.sender == other.Sender 
-                && ((this.additionalEventParameters != null && this.additionalEventParameters.Length != 0) ? this.additionalEventParameters.Equals(other.additionalEventParameters) : true)
+            bool bEquals = false;
+
+            if(this.id != null)
+                bEquals = bEquals && this.id.Equals(other.ID);
+
+            if (this.sender != null)
+                bEquals = bEquals && this.sender.Equals(other.Sender);
+
+            bEquals = bEquals && ((this.additionalEventParameters != null && this.additionalEventParameters.Length != 0) ? this.additionalEventParameters.Equals(other.additionalEventParameters) : true)
                 && this.eventType == other.EventType 
                 && this.eventCategoryType == other.EventCategoryType;
+
+            return bEquals;
         }
 
         public override int GetHashCode()
         {
             int hash = 1;
-            hash = hash * 7 + this.id.GetHashCode();
-            hash = hash * 11 + this.sender.GetHashCode();
+            if(this.id != null)
+                hash = hash * 7 + this.id.GetHashCode();
+            if(this.sender != null)
+                hash = hash * 11 + this.sender.GetHashCode();
 
             if(this.additionalEventParameters != null && this.additionalEventParameters.Length != 0)
                 hash = hash * 31 + this.additionalEventParameters.GetHashCode();

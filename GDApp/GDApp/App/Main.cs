@@ -824,11 +824,11 @@ namespace GDApp
         private void StartGame()
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
-            EventDispatcher.Publish(new EventData("this doesnt matter", this, EventActionType.OnPause, EventCategoryType.MainMenu));
+            EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
 
             //publish an event to set the camera
             object[] additionalEventParamsB = { "collidable first person camera 1"};
-            EventDispatcher.Publish(new EventData("set camera bla", this, EventActionType.OnCameraSetActive, EventCategoryType.Camera, additionalEventParamsB));
+            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, additionalEventParamsB));
             //we could also just use the line below, but why not use our event dispatcher?
             //this.cameraManager.SetActiveCamera(x => x.ID.Equals("collidable first person camera 1"));
 
@@ -1033,11 +1033,11 @@ namespace GDApp
                 ActorType.UIDynamicTexture,
                 StatusType.Drawn | StatusType.Update,
                 new Transform2D(Vector2.One),
-                new ColorParameters(Color.Yellow, 0.5f),
+                new ColorParameters(Color.Yellow, 1),
                 SpriteEffects.None,
                 this.fontDictionary["mouse"],
-                "hello world!",
-                new Vector2(0, -40),
+                "",
+                new Vector2(0, 60),
                 Color.White,
                 1,
                 texture,
@@ -1060,6 +1060,7 @@ namespace GDApp
             Vector2 position = Vector2.Zero;
             Vector2 scale = Vector2.Zero;
             float verticalOffset = 20;
+            int startValue = 0;
 
             texture = this.textureDictionary["progress_gradient"];
             scale = new Vector2(1, 0.75f);
@@ -1077,7 +1078,7 @@ namespace GDApp
                     texture);
 
             //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
-            textureObject.AttachController(new UIProgressController(AppData.PlayerOneProgressControllerID, ControllerType.UIProgress, 2, 10, this.eventDispatcher));
+            textureObject.AttachController(new UIProgressController(AppData.PlayerOneProgressControllerID, ControllerType.UIProgress, startValue, 10, this.eventDispatcher));
             this.uiManager.Add(textureObject);
             #endregion
 
@@ -1096,7 +1097,7 @@ namespace GDApp
                     texture);
 
             //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
-            textureObject.AttachController(new UIProgressController(AppData.PlayerTwoProgressControllerID, ControllerType.UIProgress, 8, 10, this.eventDispatcher));
+            textureObject.AttachController(new UIProgressController(AppData.PlayerTwoProgressControllerID, ControllerType.UIProgress, startValue, 10, this.eventDispatcher));
             this.uiManager.Add(textureObject);
             #endregion
         }
@@ -1162,7 +1163,7 @@ namespace GDApp
             //only single in single screen layout since cycling in multi-screen is meaningless
             if (this.screenManager.ScreenType == ScreenUtility.ScreenType.SingleScreen && this.keyboardManager.IsFirstKeyPress(Keys.F1))
             {
-                EventDispatcher.Publish(new EventData("set camera please", this, EventActionType.OnCameraCycle, EventCategoryType.Camera));
+                EventDispatcher.Publish(new EventData(EventActionType.OnCameraCycle, EventCategoryType.Camera));
             }
 
             //testing event generation on opacity change - see DrawnActor3D::Alpha setter
@@ -1180,32 +1181,32 @@ namespace GDApp
             {
                 //increase the left progress controller by 2
                 object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)(-1)/*need brackets around number because of sign*/};
-                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+                EventDispatcher.Publish(new EventData(EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
             }
             else if (this.keyboardManager.IsFirstKeyPress(Keys.F10))
             {
                 //increase the left progress controller by 2
                 object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)1};
-                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+                EventDispatcher.Publish(new EventData(EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
             }
 
             if (this.keyboardManager.IsFirstKeyPress(Keys.F11))
             {
                 //increase the left progress controller by 2
                 object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)(-1)/*need brackets around number because of sign*/};
-                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+                EventDispatcher.Publish(new EventData(EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
             }
             else if (this.keyboardManager.IsFirstKeyPress(Keys.F12))
             {
                 //increase the left progress controller by 2
                 object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)1 };
-                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+                EventDispatcher.Publish(new EventData(EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
             }
 
             //show/hide debug info
             if (this.keyboardManager.IsFirstKeyPress(Keys.F7))
             {
-                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnToggleDebug, EventCategoryType.Debug));
+                EventDispatcher.Publish(new EventData(EventActionType.OnToggleDebug, EventCategoryType.Debug));
             }
 
             #endregion

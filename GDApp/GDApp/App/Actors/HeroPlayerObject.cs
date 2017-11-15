@@ -45,13 +45,8 @@ namespace GDApp
             if(collidableObjectCollidee.ActorType == ActorType.CollidablePickup)
             {
                 //remove the object?
-                EventDispatcher.Publish(new EventData("removing bla", collidableObjectCollidee, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
-                //play a sound?
-
-                //decrement/increment score to the controller
-                object[] additionalEventParams = { this.progressControllerID, (Integer)1 };
-                EventDispatcher.Publish(new EventData("bla", this, EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
-
+                EventDispatcher.Publish(new EventData(collidableObjectCollidee, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
+                //publish an event to play a sound, increment a score
             }
         }
         #endregion
