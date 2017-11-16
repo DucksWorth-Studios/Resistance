@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace GDLibrary
 {
@@ -14,8 +14,8 @@ namespace GDLibrary
         private Color textColor;
         private Vector2 textDimensions;
         private Vector2 textOrigin;
-        private readonly MouseManager mouseManager;
-        private readonly CameraManager cameraManager;
+        private MouseManager mouseManager;
+        private CameraManager cameraManager;
         private float pickStartDistance;
         private float pickEndDistance;
 
@@ -50,6 +50,20 @@ namespace GDLibrary
                 this.spriteFont = value;
             }
         }
+        public MouseManager MouseManager
+        {
+            get
+            {
+                return this.mouseManager;
+            }
+        }
+        public CameraManager CameraManager
+        {
+            get
+            {
+                return this.cameraManager;
+            }
+        }
         #endregion
 
         public UIMouseObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
@@ -72,17 +86,15 @@ namespace GDLibrary
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            //draw icon
-            //spriteBatch.Draw(this.Texture, this.Transform.Translation, 
-            //    this.SourceRectangle, this.ColorParameters.Color, this.Transform.RotationInRadians, this.Origin, 
-            //        this.Transform.Scale, this.SpriteEffects, this.LayerDepth);
+            //draw mouse reticule
+            spriteBatch.Draw(this.Texture, this.Transform.Translation,
+                this.SourceRectangle, this.ColorParameters.Color,
+                MathHelper.ToRadians(this.Transform.RotationInDegrees),
+                this.Origin, this.Transform.Scale, this.SpriteEffects, this.LayerDepth);
 
             //draw any additional text
             if (this.text != null)
-                spriteBatch.DrawString(this.spriteFont, this.text,
-                    ((this.Transform.Translation - this.textOrigin) + new Vector2(this.textDimensions.X/2.0f, this.textOffsetPosition.Y)), this.textColor);
-
-            base.Draw(gameTime, spriteBatch);
+                spriteBatch.DrawString(this.spriteFont, this.text,(this.Transform.Translation + this.textOrigin), this.textColor);
         }
 
         public override void Update(GameTime gameTime)
@@ -103,36 +115,28 @@ namespace GDLibrary
             if (this.cameraManager.ActiveCamera != null)
             {
                 CollidableObject collidableObject = this.mouseManager.GetPickedObject(this.cameraManager.ActiveCamera, this.cameraManager.ActiveCamera.ViewportCentre, 
-                                                this.pickStartDistance, 
-                                                this.pickEndDistance, out pos, out normal) as CollidableObject;
+                                                this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
 
-                HandlePickedObject(collidableObject, pos, normal);
+                //did we collide with something?
+                if (collidableObject != null)
+                {
+                    HandleCollision(collidableObject, pos, normal);
+                }
+                else
+                    HandleNoCollision();
             }
         }
 
-        protected virtual void HandlePickedObject(CollidableObject collidableObject, Vector3 pos, Vector3 normal /*unused - could use for bullet decals*/)
+        //resets when no mouse over collidable
+        protected virtual void HandleNoCollision()
         {
-            if ((collidableObject != null) && (collidableObject.ActorType == ActorType.CollidablePickup))
-            {
-                float distanceToObject = Vector3.Distance(this.cameraManager.ActiveCamera.Transform.Translation, pos);
-                distanceToObject = (float)Math.Round(distanceToObject, 1);
-                this.Text = collidableObject.ID + "- distance[" + distanceToObject + "]";
+            
+        }
 
-                if (this.mouseManager.IsLeftButtonClickedOnce())
-                {
-                    //what would we like to do here? remove the item since its ammo or some sort of pickup?
-                    EventDispatcher.Publish(new EventData(collidableObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));               
-                }
-
-              //  this.Transform.RotationInDegrees += 1;
-
-
-                //to do add object pick and placement and/or firing a projectile here...
-            }
-            else
-            {
-                this.Text = "no object selected";
-            }
+        //called when over collidable/pickable object
+        protected virtual void HandleCollision(CollidableObject collidableObject, Vector3 pos, Vector3 normal /*unused - could use for bullet decals*/)
+        {
+            
         }
     }
 }

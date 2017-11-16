@@ -93,6 +93,14 @@ namespace GDLibrary
         }
         #endregion
 
+        //constructor with default drawDepth set to 0
+        public Camera3D(string id, ActorType actorType,
+            Transform3D transform, ProjectionParameters projectionParameters,
+            Viewport viewPort, StatusType statusType)
+            : this(id, actorType, transform, projectionParameters, viewPort, 0, statusType)
+        {
+        }
+
         public Camera3D(string id, ActorType actorType,
             Transform3D transform, ProjectionParameters projectionParameters,
             Viewport viewPort, float drawDepth, StatusType statusType)

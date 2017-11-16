@@ -7,6 +7,9 @@ using JigLibX.Geometry;
 using JigLibX.Collision;
 using System.Collections.Generic;
 /*
+Origin of mouse reticule
+Draw depth on UI elements
+Elevation angle on 3rd person view
 Issue with one side of SkyBox frustum culling.
 Physics is not updating when boxes are removed.
 ScreenManager - enum - this.ScreenType = (ScreenUtilityScreenType)eventData.AdditionalEventParameters[0];
@@ -113,7 +116,7 @@ namespace GDApp
             //Initialize cameras based on the desired screen layout
             if (screenType == ScreenUtility.ScreenType.SingleScreen)
             {
-                // InitializeSingleScreenCameraDemo(screenResolution);
+                InitializeCollidableFirstPersonDemo(screenResolution);
                 //or
                 //InitializeSingleScreenCycleableCameraDemo(screenResolution);
                 //or
@@ -122,10 +125,6 @@ namespace GDApp
             else if (screenType == ScreenUtility.ScreenType.MultiScreen)//multi-screen
             {
                 InitializeMultiScreenCameraDemo(screenResolution);
-            }
-            else //picture-in-picture
-            {
-                InitializePictureInPictureCameraDemo(screenResolution);
             }
 
             //Publish Start Event(s)
@@ -718,11 +717,12 @@ namespace GDApp
             InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
         }
 
-        private void InitializeSingleScreenCameraDemo(Integer2 screenResolution, float drawDepth)
+        private void InitializeCollidableFirstPersonDemo(Integer2 screenResolution)
         {
             Transform3D transform = null;
             string id = "";
             string viewportDictionaryKey = "";
+            float drawDepth = 0;
 
             id = "collidable first person camera";
             viewportDictionaryKey = "full viewport";
@@ -753,7 +753,7 @@ namespace GDApp
         private void InitializeSingleScreenCycleableCameraDemo(Integer2 screenResolution)
         {
 
-            InitializeSingleScreenCameraDemo(screenResolution, 0);
+            InitializeCollidableFirstPersonDemo(screenResolution);
 
             Transform3D transform = null;
             IController controller = null;
@@ -772,19 +772,6 @@ namespace GDApp
             transform = Transform3D.Zero;
             controller = new RailController(id + " controller", ControllerType.Rail, this.drivableBoxObject, this.railDictionary["rail1 - parallel to x-axis"]);
             InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
-
-        }
-
-        //adds two camera - first person collidable and picture-in-picture rear view mirror
-        private void InitializePictureInPictureCameraDemo(Integer2 screenResolution)
-        {
-            InitializeSingleScreenCameraDemo(screenResolution, 0.1f);
-
-            //static camera 1 - looking straight down on the scene above the origin
-            string viewportDictionaryKey = "PIP viewport";
-            string id = "non-collidable static 1";
-            Transform3D transform = new Transform3D(new Vector3(0, 60, 0), -Vector3.UnitY, Vector3.UnitZ);
-            InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, null, 0);
 
         }
 
@@ -1029,7 +1016,7 @@ namespace GDApp
             //show complete texture
             Microsoft.Xna.Framework.Rectangle sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height);
 
-            UITextureObject texture2DObject = new UIMouseObject("mouseObject",
+            MyUIMouseObject myUIMouseObject = new MyUIMouseObject("mouseObject",
                 ActorType.UIDynamicTexture,
                 StatusType.Drawn | StatusType.Update,
                 new Transform2D(Vector2.One),
@@ -1047,7 +1034,7 @@ namespace GDApp
                 this.cameraManager,
                 AppData.PickStartDistance,
                 AppData.PickEndDistance);
-            this.uiManager.Add(texture2DObject);
+            this.uiManager.Add(myUIMouseObject);
         }
 
         private void InitializeUIProgress()
@@ -1060,7 +1047,7 @@ namespace GDApp
             Vector2 position = Vector2.Zero;
             Vector2 scale = Vector2.Zero;
             float verticalOffset = 20;
-            int startValue = 0;
+            int startValue;
 
             texture = this.textureDictionary["progress_gradient"];
             scale = new Vector2(1, 0.75f);
@@ -1078,6 +1065,7 @@ namespace GDApp
                     texture);
 
             //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
+            startValue = 3; //just a random number between 0 and max to demonstrate we can set initial progress value
             textureObject.AttachController(new UIProgressController(AppData.PlayerOneProgressControllerID, ControllerType.UIProgress, startValue, 10, this.eventDispatcher));
             this.uiManager.Add(textureObject);
             #endregion
@@ -1097,6 +1085,7 @@ namespace GDApp
                     texture);
 
             //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
+            startValue = 7; //just a random number between 0 and max to demonstrate we can set initial progress value
             textureObject.AttachController(new UIProgressController(AppData.PlayerTwoProgressControllerID, ControllerType.UIProgress, startValue, 10, this.eventDispatcher));
             this.uiManager.Add(textureObject);
             #endregion

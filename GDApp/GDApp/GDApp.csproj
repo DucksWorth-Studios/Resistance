@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\Actors\HeroPlayerObject.cs" />
+    <Compile Include="App\Actors\MyUIMouseObject.cs" />
     <Compile Include="App\Menu\MyAppMenuManager.cs" />
     <Compile Include="App\Data\AppData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

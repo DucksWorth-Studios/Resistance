@@ -106,9 +106,9 @@
     <Compile Include="Curve\Curve3D.cs" />
     <Compile Include="Curve\Transform2DCurve.cs" />
     <Compile Include="Curve\Transform3DCurve.cs" />
-    <Compile Include="Debug\Physics\BoundingBoxDrawer.cs" />
-    <Compile Include="Debug\DebugDrawer.cs" />
-    <Compile Include="Debug\Physics\PhysicsDebugDrawer.cs" />
+    <Compile Include="GDDebug\Physics\BoundingBoxDrawer.cs" />
+    <Compile Include="GDDebug\DebugDrawer.cs" />
+    <Compile Include="GDDebug\Physics\PhysicsDebugDrawer.cs" />
     <Compile Include="Enums\ActorType.cs" />
     <Compile Include="Enums\CompassDirectionType.cs" />
     <Compile Include="Enums\ControllerType.cs" />
@@ -124,6 +124,7 @@
     <Compile Include="Interfaces\IController.cs" />
     <Compile Include="Managers\Camera\CameraManager.cs" />
     <Compile Include="Managers\Content\ContentDictionary.cs" />
+    <Compile Include="Managers\Game\GameStateManager.cs" />
     <Compile Include="Managers\Menu\MenuManager.cs" />
     <Compile Include="Managers\Object\ObjectManager.cs" />
     <Compile Include="Managers\Physics\PhysicsManager.cs" />
