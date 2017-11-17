@@ -1,5 +1,5 @@
 ﻿/*
-Function: 		Represents a your player. We override the  CollisionSkin_callbackFn() to define how the HeroPlayerObject responds to collidable objects in the environment.
+Function: 		Represents a player in the game. We override the CollisionSkin_callbackFn() to define how the HeroPlayerObject responds to collidable objects in the environment.
 Author: 		NMCG
 Version:		1.0
 Date Updated:	13/11/17
@@ -12,7 +12,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using JigLibX.Collision;
-using System;
 
 namespace GDApp
 {
@@ -52,8 +51,7 @@ namespace GDApp
         #endregion
 
         protected override void HandleKeyboardInput(GameTime gameTime)
-        {
-            
+        {           
             //jump
             if (this.KeyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveJump]))
             {

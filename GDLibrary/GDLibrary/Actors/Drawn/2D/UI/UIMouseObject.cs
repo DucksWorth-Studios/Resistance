@@ -90,7 +90,8 @@ namespace GDLibrary
             spriteBatch.Draw(this.Texture, this.Transform.Translation,
                 this.SourceRectangle, this.ColorParameters.Color,
                 MathHelper.ToRadians(this.Transform.RotationInDegrees),
-                this.Origin, this.Transform.Scale, this.SpriteEffects, this.LayerDepth);
+                Origin, //bug fix for off centre rotation - uses explicitly specified origin and not this.Transform.Origin
+                this.Transform.Scale, this.SpriteEffects, this.LayerDepth);
 
             //draw any additional text
             if (this.text != null)

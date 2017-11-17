@@ -13,6 +13,9 @@ namespace GDLibrary
         #region Fields
         private string description;
         private float value;
+
+        //an optional array to store multiple parameters (used for play with sound/video when we pickup this object)
+        private object[] additionalParameters;
         #endregion
 
         #region Properties
@@ -38,19 +41,38 @@ namespace GDLibrary
                 this.value = (value >= 0) ? value : 0;
             }
         }
+        public object[] AdditionalParameters
+        {
+            get
+            {
+                return this.additionalParameters;
+            }
+            set
+            {
+                this.additionalParameters = value;
+            }
+        }
+
         #endregion
 
         public PickupParameters(string description, float value)
+            : this(description, value, null)
+        {
+
+        }
+
+        public PickupParameters(string description, float value, object[] additionalParameters)
         {
             this.value = value;
             this.description = description;
+            this.additionalParameters = additionalParameters;
         }
 
         public override bool Equals(object obj)
         {
             PickupParameters other = obj as PickupParameters;
-            return this.description.Equals(other.Description)
-                && this.value == other.Value;
+            bool bEquals = this.description.Equals(other.Description) && this.value == other.Value;
+            return bEquals && ((this.additionalParameters != null && this.additionalParameters.Length != 0) ? this.additionalParameters.Equals(other.additionalParameters) : true);
         }
 
         public override int GetHashCode()
@@ -58,6 +80,10 @@ namespace GDLibrary
             int hash = 1;
             hash = hash * 11 + this.description.GetHashCode();
             hash = hash * 17 + this.value.GetHashCode();
+
+            if (this.additionalParameters != null && this.additionalParameters.Length != 0)
+                hash = hash * 31 + this.additionalParameters.GetHashCode();
+
             return hash;
         }
 

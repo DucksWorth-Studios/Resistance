@@ -1054,7 +1054,9 @@ namespace GDApp
 
             #region Player 1 Progress Bar
             position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f - texture.Width * scale.X - separation, verticalOffset);
-            transform = new Transform2D(position, 0, scale, Vector2.Zero, new Integer2(texture.Width, texture.Height));
+            transform = new Transform2D(position, 0, scale, 
+                Vector2.Zero, /*new Vector2(texture.Width/2.0f, texture.Height/2.0f),*/
+                new Integer2(texture.Width, texture.Height));
 
             textureObject = new UITextureObject(AppData.PlayerOneProgressID,
                     ActorType.UIDynamicTexture,
@@ -1170,26 +1172,26 @@ namespace GDApp
             {
                 //increase the left progress controller by 2
                 object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)(-1)/*need brackets around number because of sign*/};
-                EventDispatcher.Publish(new EventData(EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+                EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
             else if (this.keyboardManager.IsFirstKeyPress(Keys.F10))
             {
                 //increase the left progress controller by 2
                 object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)1};
-                EventDispatcher.Publish(new EventData(EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+                EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
 
             if (this.keyboardManager.IsFirstKeyPress(Keys.F11))
             {
                 //increase the left progress controller by 2
                 object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)(-1)/*need brackets around number because of sign*/};
-                EventDispatcher.Publish(new EventData(EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+                EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
             else if (this.keyboardManager.IsFirstKeyPress(Keys.F12))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)1 };
-                EventDispatcher.Publish(new EventData(EventActionType.OnHealthChange, EventCategoryType.Player, additionalEventParams));
+                object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)3 };
+                EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
 
             //show/hide debug info

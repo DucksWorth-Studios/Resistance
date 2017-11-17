@@ -37,14 +37,8 @@ namespace GDLibrary
                 this.StatusType = StatusType.Off;
             }
         }
+
+
         #endregion
-
-
-        protected override void ApplyUpdate(GameTime gameTime)
-        {
-            //to do...
-
-            base.ApplyUpdate(gameTime);
-        }
     }
 }

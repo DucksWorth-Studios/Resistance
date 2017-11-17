@@ -6,7 +6,6 @@ Date Updated:	13/11/17
 Bugs:			None
 Fixes:			None
 */
-using GDLibrary;
 using JigLibX.Collision;
 using Microsoft.Xna.Framework.Graphics;
 

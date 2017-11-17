@@ -67,14 +67,43 @@ namespace GDLibrary
         protected virtual void EventDispatcher_PlayerChanged(EventData eventData)
         {
             //the second value in additionalParameters holds target ID for the event
-            string targetID = eventData.AdditionalEventParameters[0] as string;
+            string targetID = eventData.AdditionalParameters[0] as string;
 
             //was this event targeted at me?
-            if (targetID.Equals(this.ID) && eventData.EventType == EventActionType.OnHealthChange)
+            if (targetID.Equals(this.ID))
             {
-                //the second value in additionalParameters holds the gain/lose health value
-                Integer healthInteger = (eventData.AdditionalEventParameters[1] as Integer);
-                this.CurrentValue = this.currentValue + (int)healthInteger;
+                /*
+                 * Let's use a switch since its more efficient than "if...else if" and we rarely use switches. Why is it more efficient?
+                 * 
+                 * Search for "switch vs if else c# jump table"
+                 * 
+                 */
+                switch (eventData.EventType)
+                {
+                    //delta to health
+                    case EventActionType.OnHealthDelta:
+                        {
+                            //the second value in additionalParameters holds the gain/lose health value
+                            this.CurrentValue = this.currentValue + (eventData.AdditionalParameters[1] as Integer).Value;
+
+                            System.Diagnostics.Debug.WriteLine("OnHealthDelta");
+                        }
+                        break;
+
+                    //set health
+                    case EventActionType.OnHealthSet: //game start events
+                        {
+                            //the second value in additionalParameters holds the gain/lose health value
+                            this.CurrentValue = (eventData.AdditionalParameters[1] as Integer).Value;
+
+                            System.Diagnostics.Debug.WriteLine("OnHealthSet");
+                        }
+                        break;
+
+                    default:
+                        break;
+
+                }
             }
         }
         #endregion

@@ -28,6 +28,9 @@ namespace GDApp
                 {
                     //what would we like to do here? remove the item since its ammo or some sort of pickup?
                     EventDispatcher.Publish(new EventData(collidableObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
+
+                    //increase the appropriate controller
+
                 }
 
                 //make the reticule rotate and change color when over a collidable object

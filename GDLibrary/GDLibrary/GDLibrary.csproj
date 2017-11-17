@@ -154,10 +154,10 @@
     <Compile Include="Utility\StringUtility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GDLibrary.cd" />
+    <Folder Include="Managers\Sound\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Managers\Sound\" />
+    <None Include="GDLibrary.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
