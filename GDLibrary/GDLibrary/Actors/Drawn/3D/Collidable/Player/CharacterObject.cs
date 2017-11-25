@@ -26,9 +26,9 @@ namespace GDLibrary
         }
 
         public CharacterObject(string id, ActorType actorType, Transform3D transform,
-            Effect effect, ColorParameters colorParameters, Texture2D texture, Model model, 
+            EffectParameters effectParameters, Model model, 
             float radius, float height, float accelerationRate, float decelerationRate)
-            : base(id, actorType, transform, effect, colorParameters, texture, model)
+            : base(id, actorType, transform, effectParameters, model)
         {
             this.Body = new Character(accelerationRate, decelerationRate);
             this.Collision = new CollisionSkin(Body);

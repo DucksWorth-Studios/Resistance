@@ -19,11 +19,11 @@ namespace GDApp
     {
         private string progressControllerID;
 
-        public HeroPlayerObject(string id, string progressControllerID, ActorType actorType, Transform3D transform, Effect effect, 
-            ColorParameters colorParameters, Texture2D texture, Model model, Keys[] moveKeys, float radius, 
+        public HeroPlayerObject(string id, string progressControllerID, ActorType actorType, Transform3D transform, EffectParameters effectParameters, 
+             Model model, Keys[] moveKeys, float radius, 
             float height, float accelerationRate, float decelerationRate, float jumpHeight, Vector3 translationOffset,
             KeyboardManager keyboardManager) 
-            : base(id, actorType, transform, effect, colorParameters, texture, model, moveKeys, radius, 
+            : base(id, actorType, transform, effectParameters, model, moveKeys, radius, 
                   height, accelerationRate, decelerationRate, jumpHeight, translationOffset, keyboardManager)
         {
             //id of the progress controller associated with this player object - see HandleCollisions()

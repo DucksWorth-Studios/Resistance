@@ -136,7 +136,7 @@ namespace GDLibrary
             else
             {
                 this.playerObject = new PlayerObject(this.ID + " - player object", ActorType.CollidableCamera, (parentActor as Actor3D).Transform,
-                 null, ColorParameters.WhiteOpaque, null, null, this.MoveKeys, radius, height, accelerationRate, decelerationRate, jumpHeight,
+                 null, null, this.MoveKeys, radius, height, accelerationRate, decelerationRate, jumpHeight,
                  translationOffset, keyboardManager);
             }
 

@@ -50,9 +50,9 @@ namespace GDLibrary
         #endregion
 
         public UIButtonObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
-            ColorParameters textureColorParameters, SpriteEffects spriteEffects, float layerDepth, Texture2D texture,
+            Color color, SpriteEffects spriteEffects, float layerDepth, Texture2D texture,
             string text, SpriteFont spriteFont, Color textColor, Vector2 textOffset)
-            : base(id, actorType, statusType, transform, textureColorParameters, spriteEffects, layerDepth, texture)
+            : base(id, actorType, statusType, transform, color, spriteEffects, layerDepth, texture)
             {
                 this.spriteFont = spriteFont;
                 //set using the property to also set the text origin
@@ -110,7 +110,7 @@ namespace GDLibrary
                 this.ActorType, //deep
                 this.StatusType, //deep - enum type
                 (Transform2D)this.Transform.Clone(), //deep - calls the clone for Transform3D explicitly
-                (ColorParameters)this.ColorParameters.Clone(), //deep 
+                this.Color, //deep 
                 this.SpriteEffects, //deep - enum type
                 this.LayerDepth, //deep
                 this.Texture, //shallow

@@ -213,7 +213,7 @@ namespace GDLibrary
                     collidableObject.Body.TransformWireframe(wf);
                 }
 
-                AddVertexDataForShape(wf, collidableObject.Color);
+                AddVertexDataForShape(wf, collidableObject.EffectParameters.DiffuseColor);
             }
         }
     }

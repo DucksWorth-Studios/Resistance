@@ -157,11 +157,16 @@ namespace GDLibrary
         {
             //get magnitude and direction of scroll change
             float scrollWheelDelta = -this.mouseManager.GetDeltaFromScrollWheel() * gameTime.ElapsedGameTime.Milliseconds;
-            //move camera closer to, or further, from the target
-            this.Distance += this.scrollSpeedDistanceMultiplier * scrollWheelDelta;
 
-            //try uncommenting this line and see how we can affect the elevation angle also
-            //this.ElevationAngle += this.scrollSpeedElevationMultiplier * scrollWheelDelta;
+            //if something changed then update
+            if (scrollWheelDelta != 0)
+            {
+                //move camera closer to, or further, from the target
+                this.Distance += this.scrollSpeedDistanceMultiplier * scrollWheelDelta;
+
+                //try uncommenting this line and see how we can affect the elevation angle also
+                //this.ElevationAngle += this.scrollSpeedElevationMultiplier * scrollWheelDelta;
+            }
         }
 
         public override bool Equals(object obj)

@@ -31,10 +31,10 @@ namespace GDLibrary
         }
         #endregion
 
-        public ImmovablePickupObject(string id, ActorType actorType, Transform3D transform, BasicEffect effect, 
-            ColorParameters colorParameters, Texture2D texture, Model model, Model lowPolygonModel, 
+        public ImmovablePickupObject(string id, ActorType actorType, Transform3D transform, EffectParameters effectParameters,
+            Model model, Model lowPolygonModel, 
             MaterialProperties materialProperties, PickupParameters pickupParameters) 
-            : base(id, actorType, transform, effect, colorParameters, texture, model, lowPolygonModel, materialProperties)
+            : base(id, actorType, transform, effectParameters, model, lowPolygonModel, materialProperties)
         {
             this.pickupParameters = pickupParameters;
             //register for callback on CDCR

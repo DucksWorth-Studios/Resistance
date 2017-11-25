@@ -7,8 +7,6 @@ Bugs:			None
 Fixes:			None
 */
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace GDLibrary
@@ -16,72 +14,60 @@ namespace GDLibrary
     public class DrawnActor3D : Actor3D, ICloneable
     {
         #region Fields
-        private Effect effect;
-        private ColorParameters colorParameters;
+        private EffectParameters effectParameters;
         #endregion
 
         #region Properties
-        public Effect Effect
+        public EffectParameters EffectParameters
         {
             get
             {
-                return this.effect;
+                return this.effectParameters;
             }
             set
             {
-                this.effect = value;
+                this.effectParameters = value;
             }
         }
-        public Color Color
-        {
-            get
-            {
-                return this.colorParameters.Color;
-            }
-            set
-            {
-                this.colorParameters.Color = value;
-            }
-        }
+
         public float Alpha
         {
             get
             {
-                return this.colorParameters.Alpha;
+                return this.EffectParameters.Alpha;
             }
             set
             {
                 //opaque to transparent AND valid (i.e. 0 <= x < 1)
-                if(this.colorParameters.Alpha == 1 && value < 1)
+                if(this.EffectParameters.Alpha == 1 && value < 1)
                 {
                     EventDispatcher.Publish(new EventData("OpTr", this, EventActionType.OnOpaqueToTransparent, EventCategoryType.Opacity));
                 }
                 //transparent to opaque
-                else if (this.colorParameters.Alpha < 1 && value == 1)
+                else if (this.EffectParameters.Alpha < 1 && value == 1)
                 {
                     EventDispatcher.Publish(new EventData("TrOp", this, EventActionType.OnTransparentToOpaque, EventCategoryType.Opacity));
                 }
-                this.colorParameters.Alpha = value;
+                this.EffectParameters.Alpha = value;
             }
         }
         #endregion
 
-        //used when we don't want to specify color and alpha
-        public DrawnActor3D(string id, ActorType actorType, Transform3D transform, Effect effect)
-            : this(id, actorType, transform, effect, ColorParameters.WhiteOpaque, StatusType.Drawn | StatusType.Update) 
+        //used when we don't want to specify status type
+        public DrawnActor3D(string id, ActorType actorType, Transform3D transform, EffectParameters effectParameters)
+            : this(id, actorType, transform, effectParameters, StatusType.Drawn | StatusType.Update) 
         {
         }
 
-        public DrawnActor3D(string id, ActorType actorType, Transform3D transform, Effect effect, 
-            ColorParameters colorParameters, StatusType statusType) : base(id, actorType, transform, statusType)
+        public DrawnActor3D(string id, ActorType actorType, Transform3D transform, EffectParameters effectParameters, StatusType statusType) 
+            : base(id, actorType, transform, statusType)
         {
-            this.effect = effect;
-            this.colorParameters = colorParameters;
+            this.effectParameters = effectParameters;
         }
 
         public override float GetAlpha()
         {
-            return this.colorParameters.Alpha;
+            return this.EffectParameters.Alpha;
         }
 
         public override bool Equals(object obj)
@@ -93,15 +79,14 @@ namespace GDLibrary
             else if (this == other)
                 return true;
 
-            return this.Color.Equals(other.Color) && this.Alpha.Equals(other.Alpha) && base.Equals(obj);
+            return this.effectParameters.Equals(other.EffectParameters) && this.Alpha.Equals(other.Alpha) && base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
             int hash = 1;
-            hash = hash * 7 + this.Color.GetHashCode();
-            hash = hash * 11 + this.Alpha.GetHashCode();
-            hash = hash * 17 + base.GetHashCode();
+            hash = hash * 31 + this.effectParameters.GetHashCode();
+            hash = hash * 43 + base.GetHashCode();
             return hash;
         }
 
@@ -110,8 +95,7 @@ namespace GDLibrary
             IActor actor = new DrawnActor3D("clone - " + ID, //deep
                 this.ActorType, //deep
                 (Transform3D)this.Transform.Clone(), //deep - calls the clone for Transform3D explicitly
-                this.effect, //shallow - its ok if all objects refer to the same effect
-                new ColorParameters(this.Color, this.Alpha), //deep 
+                this.EffectParameters.GetDeepCopy(), //hybrid - shallow (texture and effect) and deep (all other fields) 
                 this.StatusType); //deep - a simple numeric type
 
             //clone each of the (behavioural) controllers
@@ -123,7 +107,7 @@ namespace GDLibrary
 
         public override bool Remove()
         {
-            this.colorParameters = null;
+            this.effectParameters = null;
             return base.Remove();
         }
 

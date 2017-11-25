@@ -51,9 +51,8 @@ namespace GDLibrary
         }
         #endregion
 
-        public CollidableObject(string id, ActorType actorType, Transform3D transform, Effect effect,
-             ColorParameters colorParameters, Texture2D texture, Model model)
-            : base(id, actorType, transform, effect, colorParameters, texture, model)
+        public CollidableObject(string id, ActorType actorType, Transform3D transform, EffectParameters effectParameters, Model model)
+            : base(id, actorType, transform, effectParameters, model)
         {
             this.body = new Body();
             this.body.ExternalData = this;
@@ -121,9 +120,7 @@ namespace GDLibrary
             return new CollidableObject("clone - " + ID, //deep
                 this.ActorType,   //deep
                 (Transform3D)this.Transform.Clone(),  //deep
-                this.Effect, //shallow i.e. a reference
-                new ColorParameters(this.Color, this.Alpha),  //deep
-                this.Texture, //shallow i.e. a reference
+                this.EffectParameters.GetDeepCopy(), //hybrid - shallow (texture and effect) and deep (all other fields) 
                 this.Model); //shallow i.e. a reference
         }
 

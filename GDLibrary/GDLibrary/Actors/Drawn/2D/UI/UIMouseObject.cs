@@ -67,12 +67,12 @@ namespace GDLibrary
         #endregion
 
         public UIMouseObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
-            ColorParameters colorParameters, SpriteEffects spriteEffects, SpriteFont spriteFont, 
+            Color color, SpriteEffects spriteEffects, SpriteFont spriteFont, 
             string text, Vector2 textOffsetPosition, Color textColor,
             float layerDepth, Texture2D texture, Rectangle sourceRectangle, Vector2 origin, 
             MouseManager mouseManager, CameraManager cameraManager,
             float pickStartDistance, float pickEndDistance)
-            : base(id, actorType, statusType, transform, colorParameters, spriteEffects, layerDepth, texture, sourceRectangle, origin)
+            : base(id, actorType, statusType, transform, color, spriteEffects, layerDepth, texture, sourceRectangle, origin)
         {
             this.spriteFont = spriteFont;
             this.Text = text;
@@ -88,7 +88,7 @@ namespace GDLibrary
         {
             //draw mouse reticule
             spriteBatch.Draw(this.Texture, this.Transform.Translation,
-                this.SourceRectangle, this.ColorParameters.Color,
+                this.SourceRectangle, this.Color,
                 MathHelper.ToRadians(this.Transform.RotationInDegrees),
                 Origin, //bug fix for off centre rotation - uses explicitly specified origin and not this.Transform.Origin
                 this.Transform.Scale, this.SpriteEffects, this.LayerDepth);

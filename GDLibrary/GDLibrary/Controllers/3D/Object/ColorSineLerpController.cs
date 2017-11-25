@@ -64,7 +64,7 @@ namespace GDLibrary
 
                 //sine wave in the range 0 -> max amplitude
                 float lerpFactor = MathUtility.SineLerpByElapsedTime(this.TrigonometricParameters, this.totalElapsedTime);
-                parentActor.Color = MathUtility.Lerp(this.startColor, this.endColor, lerpFactor);
+                parentActor.EffectParameters.DiffuseColor = MathUtility.Lerp(this.startColor, this.endColor, lerpFactor);
             }
         }
 

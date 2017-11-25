@@ -8,10 +8,10 @@ namespace GDApp
     public class MyUIMouseObject : UIMouseObject
     {
         public MyUIMouseObject(string id, ActorType actorType, StatusType statusType, Transform2D transform, 
-            ColorParameters colorParameters, SpriteEffects spriteEffects, SpriteFont spriteFont, string text, 
+            Color color, SpriteEffects spriteEffects, SpriteFont spriteFont, string text, 
             Vector2 textOffsetPosition, Color textColor, float layerDepth, Texture2D texture, Rectangle sourceRectangle, 
             Vector2 origin, MouseManager mouseManager, CameraManager cameraManager, float pickStartDistance, float pickEndDistance) 
-            : base(id, actorType, statusType, transform, colorParameters, spriteEffects, spriteFont, text, textOffsetPosition, textColor, layerDepth, texture, sourceRectangle, origin, mouseManager, cameraManager, pickStartDistance, pickEndDistance)
+            : base(id, actorType, statusType, transform, color, spriteEffects, spriteFont, text, textOffsetPosition, textColor, layerDepth, texture, sourceRectangle, origin, mouseManager, cameraManager, pickStartDistance, pickEndDistance)
         {
 
         }
@@ -35,7 +35,7 @@ namespace GDApp
 
                 //make the reticule rotate and change color when over a collidable object
                 this.Transform.RotationInDegrees += 1;
-                this.ColorParameters.Color = Color.Red;
+                this.Color = Microsoft.Xna.Framework.Color.Red;
                 //to do add object pick and placement and/or firing a projectile here...
             }
           
@@ -51,7 +51,7 @@ namespace GDApp
                 this.Text = "no object selected";
                 //reset the rotation and color when not over collidable object
                 this.Transform.RotationInDegrees = this.Transform.OriginalTransform2D.RotationInDegrees;
-                this.ColorParameters.Color = this.ColorParameters.OriginalColorParameters.Color;
+                this.Color = this.OriginalColor;
                 //set collidable object back to null
             }
         }

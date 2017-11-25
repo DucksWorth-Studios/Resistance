@@ -1,11 +1,11 @@
 ﻿/*
 Function: 		Store, update, and draw all visible objects
 Author: 		NMCG
-Version:		1.1
-Date Updated:	17/8/17
+Version:		1.2
+Date Updated:	21/11/17
 Bugs:			None
 Fixes:			None
-Mods:           Removed DrawableGameComponent to support ScreenManager
+Mods:           Removed DrawableGameComponent to support ScreenManager, added support for EffectParameters
 */
 
 using Microsoft.Xna.Framework;
@@ -114,8 +114,8 @@ namespace GDLibrary
             //set the graphics card to repeat the end pixel value for any UV value outside 0-1
             //See http://what-when-how.com/xna-game-studio-4-0-programmingdeveloping-for-windows-phone-7-and-xbox-360/samplerstates-xna-game-studio-4-0-programming/
             SamplerState samplerState = new SamplerState();
-            samplerState.AddressU = TextureAddressMode.Clamp;
-            samplerState.AddressV = TextureAddressMode.Clamp;
+            samplerState.AddressU = TextureAddressMode.Mirror;
+            samplerState.AddressV = TextureAddressMode.Mirror;
             game.GraphicsDevice.SamplerStates[0] = samplerState;
 
             //opaque objects
@@ -125,6 +125,7 @@ namespace GDLibrary
             //transparent objects
             this.rasterizerStateTransparent = new RasterizerState();
             this.rasterizerStateTransparent.CullMode = CullMode.None;
+            
         }
         private void SetGraphicsStateObjects(bool isOpaque)
         {
@@ -250,7 +251,7 @@ namespace GDLibrary
 
             SetGraphicsStateObjects(true);
             foreach (Actor3D actor in this.opaqueDrawList)
-            {
+            {            
                 DrawByType(gameTime, actor as Actor3D, activeCamera);
             }
 
@@ -281,26 +282,17 @@ namespace GDLibrary
         {
             if (activeCamera.BoundingFrustum.Intersects(modelObject.BoundingSphere))
             {
+                game.GraphicsDevice.RasterizerState = modelObject.EffectParameters.rsState;
                 if (modelObject.Model != null)
                 {
-                    BasicEffect effect = modelObject.Effect as BasicEffect;
-                    effect.View = activeCamera.View;
-                    effect.Projection = activeCamera.ProjectionParameters.Projection;
-
-                    effect.Texture = modelObject.Texture;
-                    effect.DiffuseColor = modelObject.Color.ToVector3();
-                    effect.Alpha = modelObject.Alpha;
-
-                    //apply or serialise the variables above to the GFX card
-                    effect.CurrentTechnique.Passes[0].Apply();
-
+                    modelObject.EffectParameters.SetParameters(activeCamera);
                     foreach (ModelMesh mesh in modelObject.Model.Meshes)
                     {
                         foreach (ModelMeshPart part in mesh.MeshParts)
                         {
-                            part.Effect = effect;
+                            part.Effect = modelObject.EffectParameters.Effect;
                         }
-                        effect.World = modelObject.BoneTransforms[mesh.ParentBone.Index] * modelObject.GetWorldMatrix();
+                        modelObject.EffectParameters.SetWorld(modelObject.BoneTransforms[mesh.ParentBone.Index] * modelObject.GetWorldMatrix());
                         mesh.Draw();
                     }
                 }

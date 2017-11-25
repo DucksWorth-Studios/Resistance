@@ -66,7 +66,7 @@ namespace GDLibrary
         public override void SetActor(IActor actor)
         {
             UIObject uiObject = actor as UIObject;
-            uiObject.ColorParameters.Color = uiObject.ColorParameters.OriginalColorParameters.Color;
+            uiObject.Color = uiObject.OriginalColor;
         }
 
         protected override void ApplyController(GameTime gameTime, UIObject uiObject, float totalElapsedTime)
@@ -74,7 +74,7 @@ namespace GDLibrary
             //sine wave in the range 0 -> max amplitude
             float lerpFactor = MathUtility.SineLerpByElapsedTime(this.TrigonometricParameters, totalElapsedTime);
             //apply color change
-            uiObject.ColorParameters.Color = MathUtility.Lerp(this.colorMin, this.colorMax, lerpFactor);
+            uiObject.Color = MathUtility.Lerp(this.colorMin, this.colorMax, lerpFactor);
         }
 
         public override bool Equals(object obj)

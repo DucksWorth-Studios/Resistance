@@ -20,8 +20,8 @@ namespace GDLibrary
         #endregion
 
         public UIObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
-            ColorParameters colorParameters, SpriteEffects spriteEffects, float layerDepth)
-            : base(id, actorType, transform, statusType, colorParameters, spriteEffects, layerDepth)
+            Color color, SpriteEffects spriteEffects, float layerDepth)
+            : base(id, actorType, transform, statusType, color, spriteEffects, layerDepth)
         {
             this.mouseOverState = new StatefulBool(2); 
         }

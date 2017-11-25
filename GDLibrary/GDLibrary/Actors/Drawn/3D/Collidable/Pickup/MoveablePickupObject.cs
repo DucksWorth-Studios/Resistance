@@ -32,9 +32,9 @@ namespace GDLibrary
         }
         #endregion
 
-        public MoveablePickupObject(string id, ActorType actorType, Transform3D transform, Effect effect,
-            ColorParameters colorParameters, Texture2D texture, Model model, PickupParameters pickupParameters)
-            : base(id, actorType, transform, effect, colorParameters, texture, model)
+        public MoveablePickupObject(string id, ActorType actorType, Transform3D transform, EffectParameters effectParameters,
+            Model model, PickupParameters pickupParameters)
+            : base(id, actorType, transform, effectParameters, model)
         {
             this.pickupParameters = pickupParameters;
 

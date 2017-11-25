@@ -45,7 +45,7 @@ namespace GDLibrary
         public static readonly float CollidableCameraMoveSpeed = 0.6f;
         public static readonly float CollidableCameraStrafeSpeed = 0.6f * CollidableCameraMoveSpeed;
         public static readonly float CollidableCameraCapsuleRadius = 2;
-        public static readonly float CollidableCameraViewHeight = 5; //how tall is the first person player?
+        public static readonly float CollidableCameraViewHeight = 15; //how tall is the first person player?
         public static readonly float CollidableCameraMass = 10;
 
         public static readonly Keys[] CameraMoveKeys = { Keys.W, Keys.S, Keys.A, Keys.D, 
@@ -53,7 +53,7 @@ namespace GDLibrary
         public static readonly Keys[] CameraMoveKeys_Alt1 = { Keys.T, Keys.G, Keys.F, Keys.H };
 
         public static readonly float CameraThirdPersonScrollSpeedDistanceMultiplier = 0.00125f;
-        public static readonly float CameraThirdPersonScrollSpeedElevatationMultiplier = 0.1f;
+        public static readonly float CameraThirdPersonScrollSpeedElevatationMultiplier = 0.01f;
         public static readonly float CameraThirdPersonDistance = 20;
         public static readonly float CameraThirdPersonElevationAngleInDegrees = 160;
 

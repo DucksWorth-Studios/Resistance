@@ -6,6 +6,7 @@ Date Updated:	27/9/17
 Bugs:			None
 Fixes:			None
 */
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GDLibrary
@@ -13,21 +14,32 @@ namespace GDLibrary
     public class DrawnActor2D : Actor2D
     {
         #region Fields
-        private ColorParameters colorParameters;
+        private Color color, originalColor;
         private float layerDepth, originalLayerDepth;
         private SpriteEffects originalSpriteEffects, spriteEffects;
         #endregion
 
         #region Properties
-        public ColorParameters ColorParameters
+        public Color Color
         {
             get
             {
-                return this.colorParameters;
+                return this.color;
             }
             set
             {
-                this.colorParameters = value;
+                this.color = value;
+            }
+        }
+        public Color OriginalColor
+        {
+            get
+            {
+                return this.color;
+            }
+            set
+            {
+                this.originalColor = value;
             }
         }
 
@@ -79,11 +91,11 @@ namespace GDLibrary
         #endregion
 
         public DrawnActor2D(string id, ActorType actorType, Transform2D transform, StatusType statusType, 
-            ColorParameters colorParameters, SpriteEffects spriteEffects, float layerDepth)
+            Color color, SpriteEffects spriteEffects, float layerDepth)
             : base(id, actorType, transform, statusType)
         {
-            this.colorParameters = colorParameters;
-
+            this.color = color;
+            this.originalColor = color;
             this.spriteEffects = spriteEffects;
             this.LayerDepth = layerDepth;
             this.originalLayerDepth = LayerDepth;
@@ -99,13 +111,13 @@ namespace GDLibrary
             else if (this == other)
                 return true;
 
-            return this.ColorParameters.Equals(other.ColorParameters) && base.Equals(obj);
+            return this.Color.Equals(other.Color) && base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
             int hash = 1;
-            hash = hash * 31 + this.ColorParameters.GetHashCode();
+            hash = hash * 31 + this.Color.GetHashCode();
             hash = hash * 17 + base.GetHashCode();
             return hash;
         }
@@ -116,7 +128,7 @@ namespace GDLibrary
                 this.ActorType, //deep
                 (Transform2D)this.Transform.Clone(), //deep - calls the clone for Transform3D explicitly
                 this.StatusType, //deep - enum type
-                (ColorParameters)this.ColorParameters.Clone(), //deep 
+                this.Color, //deep 
                 this.spriteEffects, //deep - enum type
                 this.LayerDepth); //deep - a simple numeric type
 
@@ -125,11 +137,6 @@ namespace GDLibrary
                 actor.AttachController((IController)controller.Clone());
 
             return actor;
-        }
-        public override bool Remove()
-        {
-            this.colorParameters = null;
-            return base.Remove();
         }
     }
 }

@@ -85,9 +85,9 @@ namespace GDLibrary
         #endregion
 
         public UITextureObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
-            ColorParameters colorParameters, SpriteEffects spriteEffects, float layerDepth, Texture2D texture, 
+            Color color, SpriteEffects spriteEffects, float layerDepth, Texture2D texture, 
             Rectangle sourceRectangle, Vector2 origin)
-            : base(id, actorType, statusType, transform, colorParameters, spriteEffects, layerDepth)
+            : base(id, actorType, statusType, transform, color, spriteEffects, layerDepth)
         {
             this.Texture = texture;
             this.SourceRectangle = sourceRectangle;
@@ -97,8 +97,8 @@ namespace GDLibrary
 
         //draws texture using full source rectangle with origin in centre
         public UITextureObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
-         ColorParameters colorParameters, SpriteEffects spriteEffects, float layerDepth, Texture2D texture)
-            : this(id, actorType, statusType, transform, colorParameters, spriteEffects, layerDepth, texture, 
+         Color color, SpriteEffects spriteEffects, float layerDepth, Texture2D texture)
+            : this(id, actorType, statusType, transform, color, spriteEffects, layerDepth, texture, 
                 new Rectangle(0, 0, texture.Width, texture.Height), 
                     new Vector2(texture.Width/2.0f, texture.Height/2.0f))
         {
@@ -108,7 +108,7 @@ namespace GDLibrary
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(this.texture,  this.Transform.Translation, 
-                this.sourceRectangle, this.ColorParameters.Color, 
+                this.sourceRectangle, this.Color, 
                 MathHelper.ToRadians(this.Transform.RotationInDegrees),
                 this.Transform.Origin, this.Transform.Scale, this.SpriteEffects, this.LayerDepth);
         }
@@ -142,7 +142,7 @@ namespace GDLibrary
                 this.ActorType, //deep
                 this.StatusType, //deep - enum type
                 (Transform2D)this.Transform.Clone(), //deep - calls the clone for Transform3D explicitly
-                (ColorParameters)this.ColorParameters.Clone(), //deep 
+                this.Color, //deep 
                 this.SpriteEffects, //deep - enum type
                 this.LayerDepth,  //deep 
                 this.texture, //shallow

@@ -26,17 +26,16 @@ namespace GDLibrary
         #endregion
 
         public TriangleMeshObject(string id, ActorType actorType, Transform3D transform,
-            BasicEffect effect, ColorParameters colorParameters, Texture2D texture, Model model,
-            MaterialProperties materialProperties)
-            : this(id, actorType, transform, effect, colorParameters, texture, model, null, materialProperties)
+            EffectParameters effectParameters, Model model, MaterialProperties materialProperties)
+            : this(id, actorType, transform, effectParameters, model, null, materialProperties)
         {
 
         }
 
+        //allows us to specify a lowPoly collision skin model
         public TriangleMeshObject(string id, ActorType actorType, Transform3D transform,
-           BasicEffect effect, ColorParameters colorParameters, Texture2D texture, Model model,
-           Model lowPolygonModel, MaterialProperties materialProperties)
-           : base(id, actorType, transform, effect, colorParameters, texture, model)
+           EffectParameters effectParameters, Model model, Model lowPolygonModel, MaterialProperties materialProperties)
+           : base(id, actorType, transform, effectParameters, model)
         {
             //get the primitive mesh which forms the skin - use low poly if it has been provided in the constructor
             TriangleMesh triangleMesh = null;

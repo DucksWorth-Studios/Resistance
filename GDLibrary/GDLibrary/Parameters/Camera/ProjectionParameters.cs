@@ -27,7 +27,7 @@ namespace GDLibrary
 
         //Medium relates to the distance between the near and far clipping planes i.e. 1 to 1000
         public static ProjectionParameters StandardMediumFiveThree
-            = new ProjectionParameters(MathHelper.PiOver2, 5.0f / 3, 1, 1000);
+            = new ProjectionParameters(MathHelper.PiOver2, 5.0f / 3, 0.1f, 1000);
         public static ProjectionParameters StandardMediumFourThree
            = new ProjectionParameters(MathHelper.PiOver2, 4.0f / 3, 1, 1000);
         public static ProjectionParameters StandardMediumSixteenTen

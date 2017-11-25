@@ -16,23 +16,11 @@ namespace GDLibrary
     public class ModelObject : DrawnActor3D, ICloneable
     {
         #region Fields
-        private Texture2D texture;
         private Model model;
         private Matrix[] boneTransforms;
         #endregion
 
         #region Properties
-        public Texture2D Texture
-        {
-            get
-            {
-                return this.texture;
-            }
-            set
-            {
-                this.texture = value;
-            }
-        }
         public Model Model
         {
             get
@@ -59,16 +47,25 @@ namespace GDLibrary
         {
             get
             {
-                return this.model.Meshes[model.Root.Index].BoundingSphere.Transform(this.GetWorldMatrix());
+                //bug fix for disappearing skybox plane - scale the bounding sphere up by 10%
+                return this.model.Meshes[model.Root.Index].BoundingSphere.Transform(Matrix.CreateScale(1.1f) * this.GetWorldMatrix());
             }
         }
         #endregion
 
-        public ModelObject(string id, ActorType actorType, 
-            Transform3D transform, Effect effect, ColorParameters colorParameters, Texture2D texture, Model model)
-            : base(id, actorType, transform, effect, colorParameters, StatusType.Drawn | StatusType.Update)
+
+        //default draw and update settings for statusType
+        public ModelObject(string id, ActorType actorType,
+           Transform3D transform, EffectParameters effectParameters, Model model)
+           : this(id, actorType, transform, effectParameters, model, StatusType.Update | StatusType.Drawn)
         {
-            this.texture = texture;
+
+        }
+
+        public ModelObject(string id, ActorType actorType, 
+            Transform3D transform, EffectParameters effectParameters, Model model, StatusType statusType)
+            : base(id, actorType, transform, effectParameters, statusType)
+        {
             this.model = model;
 
             /* 3DS Max models contain meshes (e.g. a table might have 5 meshes i.e. a top and 4 legs) and each mesh contains a bone.
@@ -101,17 +98,14 @@ namespace GDLibrary
             else if (this == other)
                 return true;
 
-            return this.texture.Equals(other.Texture)
-                    && this.model.Equals(other.Model)
-                        && base.Equals(obj);
+            return this.model.Equals(other.Model) && base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
             int hash = 1;
-            hash = hash * 31 + this.texture.GetHashCode();
-            hash = hash * 17 + this.model.GetHashCode();
-            hash = hash * 7 + base.GetHashCode();
+            hash = hash * 11 + this.model.GetHashCode();
+            hash = hash * 17 + base.GetHashCode();
             return hash;
         }
 
@@ -120,9 +114,7 @@ namespace GDLibrary
             return new ModelObject("clone - " + ID, //deep
                 this.ActorType,   //deep
                 (Transform3D)this.Transform.Clone(),  //deep
-                this.Effect, //shallow i.e. a reference
-                new ColorParameters(this.Color, this.Alpha), //deep 
-                this.texture, //shallow i.e. a reference
+                this.EffectParameters.GetDeepCopy(), //hybrid - shallow (texture and effect) and deep (all other fields) 
                 this.model); //shallow i.e. a reference
         }
 

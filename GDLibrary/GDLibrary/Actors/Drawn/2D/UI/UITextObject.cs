@@ -44,8 +44,8 @@ namespace GDLibrary
         #endregion
 
         public UITextObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
-            ColorParameters colorParameters, SpriteEffects spriteEffects, float layerDepth, string text, SpriteFont spriteFont)
-            : base(id, actorType, statusType, transform, colorParameters, spriteEffects, layerDepth)
+            Color color, SpriteEffects spriteEffects, float layerDepth, string text, SpriteFont spriteFont)
+            : base(id, actorType, statusType, transform, color, spriteEffects, layerDepth)
         {
             this.spriteFont = spriteFont;
             this.text = text;
@@ -53,7 +53,7 @@ namespace GDLibrary
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(this.spriteFont, this.text, this.Transform.Translation, this.ColorParameters.Color,
+            spriteBatch.DrawString(this.spriteFont, this.text, this.Transform.Translation, this.Color,
                 MathHelper.ToRadians(this.Transform.RotationInDegrees),
                 this.Transform.Origin, this.Transform.Scale, this.SpriteEffects, this.LayerDepth);
         }
@@ -87,7 +87,7 @@ namespace GDLibrary
                 this.ActorType, //deep
                 this.StatusType, //deep - enum type
                 (Transform2D)this.Transform.Clone(), //deep - calls the clone for Transform3D explicitly
-                (ColorParameters)this.ColorParameters.Clone(), //deep 
+                this.Color, //deep 
                 this.SpriteEffects, //deep - enum type
                 this.LayerDepth, //deep
                 this.text, //deep

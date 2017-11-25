@@ -60,10 +60,10 @@ namespace GDLibrary
         #endregion
 
         public PlayerObject(string id, ActorType actorType, Transform3D transform,
-            Effect effect, ColorParameters colorParameters, Texture2D texture, Model model, 
+            EffectParameters effectParameters, Model model, 
             Keys[] moveKeys, float radius, float height, float accelerationRate, float decelerationRate, float jumpHeight, 
             Vector3 translationOffset, KeyboardManager keyboardManager)
-            : base(id, actorType, transform, effect, colorParameters, texture, model, radius, height, accelerationRate, decelerationRate)
+            : base(id, actorType, transform, effectParameters, model, radius, height, accelerationRate, decelerationRate)
         {
             this.moveKeys = moveKeys;
             this.translationOffset = translationOffset;
@@ -140,6 +140,6 @@ namespace GDLibrary
              */
         }
 
-        //add clone, remove...
+        //add clone, equals, gethashcode, remove...
     }
 }
