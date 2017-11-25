@@ -13,8 +13,10 @@ namespace GDLibrary
     {
         //sent by audio, video
         OnPlay,
-        OnStop,
         OnPause,
+        OnResume,
+        OnStop,
+        OnStopAll,
 
         //sent by menu manager
         OnStart,

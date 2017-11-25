@@ -20,8 +20,6 @@ namespace GDLibrary
         protected static readonly int DefaultAlphaRoundPrecision = 3; //rounding on alpha setter
         protected static readonly float DefaultAlpha = 1;
 
-        public RasterizerState rsState = new RasterizerState();
-
         //shader reference
         private Effect effect;
         //texture
@@ -99,8 +97,7 @@ namespace GDLibrary
         //used to set originalEffectParameters only
         private EffectParameters()
         {
-            rsState.CullMode = CullMode.None;
-            rsState.FillMode = FillMode.WireFrame;
+
         }
 
         //used to create the simplest instance of the class - fields will be set by each instanciating object - see Main::InitializeEffects()
@@ -114,13 +111,12 @@ namespace GDLibrary
         public EffectParameters(Effect effect, Color diffusecolor, float alpha)
             : this(effect, null, diffusecolor, alpha)
         {
-            rsState.CullMode = CullMode.None;
-            rsState.FillMode = FillMode.WireFrame;
+
         }
 
         //for objects with texture and alpha but no specular or emmissive
         public EffectParameters(Effect effect, Texture2D texture, Color diffusecolor, float alpha)
-        { 
+        {
             Initialize(effect, texture, diffuseColor, alpha);
 
             //store original values in case of reset

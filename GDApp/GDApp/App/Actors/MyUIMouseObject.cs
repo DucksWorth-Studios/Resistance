@@ -30,6 +30,8 @@ namespace GDApp
                     EventDispatcher.Publish(new EventData(collidableObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
 
                     //increase the appropriate controller
+                    object[] additionalParameters = { "boing" };
+                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
 
                 }
 

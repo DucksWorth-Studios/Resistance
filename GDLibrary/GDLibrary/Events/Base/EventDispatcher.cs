@@ -28,6 +28,8 @@ namespace GDLibrary
         public delegate void OpacityEventHandler(EventData eventData);
         public delegate void RemoveActorEventHandler(EventData eventData);
         public delegate void PlayerEventHandler(EventData eventData);
+        public delegate void Sound3DEventHandler(EventData eventData);
+        public delegate void Sound2DEventHandler(EventData eventData);
         public delegate void DebugEventHandler(EventData eventData);
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
@@ -37,6 +39,8 @@ namespace GDLibrary
         public event OpacityEventHandler OpacityChanged;
         public event RemoveActorEventHandler RemoveActorChanged;
         public event PlayerEventHandler PlayerChanged;
+        public event Sound3DEventHandler Sound3DChanged;
+        public event Sound2DEventHandler Sound2DChanged;
         public event DebugEventHandler DebugChanged;
 
         public EventDispatcher(Game game, int initialSize)
@@ -100,6 +104,14 @@ namespace GDLibrary
                     OnDebug(eventData);
                     break;
 
+                case EventCategoryType.Sound3D:
+                    OnSound3D(eventData);
+                    break;
+
+                case EventCategoryType.Sound2D:
+                    OnSound2D(eventData);
+                    break;
+
                 default:
                     break;
             }
@@ -155,6 +167,18 @@ namespace GDLibrary
             DebugChanged?.Invoke(eventData);
         }
 
-        
+        //called when a 3D sound event is sent e.g. play "boom"
+        protected virtual void OnSound3D(EventData eventData)
+        {
+            Sound3DChanged?.Invoke(eventData);
+        }
+
+        //called when a 2D sound event is sent e.g. play "menu music"
+        protected virtual void OnSound2D(EventData eventData)
+        {
+            Sound2DChanged?.Invoke(eventData);
+        }
+
+
     }
 }

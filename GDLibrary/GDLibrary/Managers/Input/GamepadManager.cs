@@ -37,7 +37,10 @@ namespace GDLibrary
             set
             {
                 //max number of 4 connected players with an XBox controller
-                this.numberOfConnectedPlayers = (value > 0 && value <= 4) ? value : 1;
+                numberOfConnectedPlayers = (value > 0 && value <= 4) ? value : 1;
+                //a new and old state for each of the 1-4 controllers
+                newState = new GamePadState[numberOfConnectedPlayers];
+                oldState = new GamePadState[numberOfConnectedPlayers];
             }
         }
         #endregion
@@ -46,18 +49,15 @@ namespace GDLibrary
             : base(game)
         {
             this.NumberOfConnectedPlayers = numberOfConnectedPlayers;
-            //a new and old state for each of the 1-4 controllers
-            this.newState = new GamePadState[this.NumberOfConnectedPlayers];
-            this.oldState = new GamePadState[this.NumberOfConnectedPlayers];
         }
-  
+
         public override void Initialize()
         {
             // TODO: Add your initialization code here
 
             base.Initialize();
         }
-        
+
         public override void Update(GameTime gameTime)
         {
             //store the old states
@@ -76,69 +76,77 @@ namespace GDLibrary
         }
 
         //is a specific button pressed on the gamepad for a specific connected player?
-        public bool IsButtonPressed(int playerIndexAsInt, Buttons button)
+        public bool IsButtonPressed(PlayerIndex playerIndex, Buttons button)
         {
-            if (IsPlayerIndexValidAndConnected(playerIndexAsInt))
-                return this.newState[playerIndexAsInt].IsButtonDown(button);
+            if (IsPlayerConnected(playerIndex))
+                return this.newState[(int)playerIndex].IsButtonDown(button);
             else
                 return false;
         }
 
         //is a specific button pressed now that was not pressed in the last update for a specific connected player?
-        public bool IsFirstButtonPress(int playerIndexAsInt, Buttons button)
+        public bool IsFirstButtonPress(PlayerIndex playerIndex, Buttons button)
         {
-            if (IsPlayerIndexValidAndConnected(playerIndexAsInt))
-                return this.newState[playerIndexAsInt].IsButtonDown(button) && this.oldState[playerIndexAsInt].IsButtonUp(button);
+            if (IsPlayerConnected(playerIndex))
+                return this.newState[(int)playerIndex].IsButtonDown(button) && this.oldState[(int)playerIndex].IsButtonUp(button);
             else
                 return false;
         }
 
         //has the gamepad state changed since the last update for a specific connected player?
-        public bool IsStateChanged(int playerIndexAsInt)
+        public bool IsStateChanged(PlayerIndex playerIndex)
         {
-            return !this.newState[playerIndexAsInt].Equals(oldState[playerIndexAsInt]); //false if no change, otherwise true
+            if (IsPlayerConnected(playerIndex))
+                return !this.newState[(int)playerIndex].Equals(oldState[(int)playerIndex]); //false if no change, otherwise true
+            else
+                return false;
         }
 
         //returns the position of the thumbsticks for a specific connected player
-        public GamePadThumbSticks GetThumbSticks(int playerIndexAsInt)
+        public GamePadThumbSticks GetThumbSticks(PlayerIndex playerIndex)
         {
-            GamePadThumbSticks gamePadThumbSticks = new GamePadThumbSticks();
-
-            if (IsPlayerIndexValidAndConnected(playerIndexAsInt))
-                gamePadThumbSticks = this.newState[playerIndexAsInt].ThumbSticks;
-            
-            return gamePadThumbSticks;
+            if (IsPlayerConnected(playerIndex))
+                return this.newState[(int)playerIndex].ThumbSticks;
+            else
+                return default(GamePadThumbSticks);
         }
 
         //returns the state of the triggers (i.e. front of controller) for a specific connected player
-        public GamePadTriggers GetTriggers(int playerIndexAsInt)
+        public GamePadTriggers GetTriggers(PlayerIndex playerIndex)
         {
-            GamePadTriggers gamePadTriggers = new GamePadTriggers();
-
-            if (IsPlayerIndexValidAndConnected(playerIndexAsInt))
-                gamePadTriggers = this.newState[playerIndexAsInt].Triggers;
-
-            return gamePadTriggers;
+            if (IsPlayerConnected(playerIndex))
+                return this.newState[(int)playerIndex].Triggers;
+            else
+                return default(GamePadTriggers);
         }
 
         //returns the state of the DPad (i.e. front of controller) for a specific connected player
-        public GamePadDPad GetDPad(int playerIndexAsInt)
+        public GamePadDPad GetDPad(PlayerIndex playerIndex)
         {
-            GamePadDPad gamePadDPad = new GamePadDPad();
+            if (IsPlayerConnected(playerIndex))
+                return this.newState[(int)playerIndex].DPad;
+            else
+                return default(GamePadDPad);
+        }
 
-            if (IsPlayerIndexValidAndConnected(playerIndexAsInt))
-                gamePadDPad = this.newState[playerIndexAsInt].DPad;
-
-            return gamePadDPad;
+        //returns the state of the buttons for a specific connected player
+        public GamePadButtons GetButtons(PlayerIndex playerIndex)
+        {
+            if (IsPlayerConnected(playerIndex))
+                return this.newState[(int)playerIndex].Buttons;
+            else
+                return default(GamePadButtons);
         }
 
         //is player index for a controller within 1-4 range and connected?
-        private bool IsPlayerIndexValidAndConnected(int playerIndexAsInt)
+        public bool IsPlayerConnected(PlayerIndex playerIndex)
         {
-            if (playerIndexAsInt > 0 && playerIndexAsInt < this.numberOfConnectedPlayers && this.newState[playerIndexAsInt].IsConnected) 
+            if (this.newState[(int)playerIndex].IsConnected)
                 return true;
             else
-                throw new GamePadException("Player index " + playerIndexAsInt + " is not connected");
+                return false;
+            //or more aggressively we can throw an exception
+                //throw new GamePadException(DebugUtility.GetCurrentMethod(), playerIndex, "not connected");
         }
     }
 }

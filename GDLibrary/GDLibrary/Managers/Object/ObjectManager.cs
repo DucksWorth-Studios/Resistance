@@ -282,7 +282,6 @@ namespace GDLibrary
         {
             if (activeCamera.BoundingFrustum.Intersects(modelObject.BoundingSphere))
             {
-                game.GraphicsDevice.RasterizerState = modelObject.EffectParameters.rsState;
                 if (modelObject.Model != null)
                 {
                     modelObject.EffectParameters.SetParameters(activeCamera);

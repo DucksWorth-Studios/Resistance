@@ -10,12 +10,9 @@ using System.Collections.Generic;
 Origin of mouse reticule
 Draw depth on UI elements
 Elevation angle on 3rd person view
-Issue with one side of SkyBox frustum culling.
 Physics is not updating when boxes are removed.
 ScreenManager - enum - this.ScreenType = (ScreenUtilityScreenType)eventData.AdditionalEventParameters[0];
 check clone on new eventdata
-add a collidable player object
-add a collidable pickup object and remove on collision with player
 PiP
 scripting camera changes using event data read from XML?
 menu - click sound
@@ -28,6 +25,12 @@ namespace GDApp
     {
 
         #region Fields
+#if DEBUG
+        //used to visualize debug info (e.g. FPS) and also to draw collision skins
+        private DebugDrawer debugDrawer;
+        private PhysicsDebugDrawer physicsDebugDrawer;
+#endif
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -41,6 +44,7 @@ namespace GDApp
         public PhysicsManager physicsManager { get; private set; }
         public UIManager uiManager { get; private set; }
         public GamePadManager gamePadManager { get; private set; }
+        public SoundManager soundManager { get; private set; }
 
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
@@ -50,26 +54,16 @@ namespace GDApp
         private ContentDictionary<Texture2D> textureDictionary;
         private ContentDictionary<SpriteFont> fontDictionary;
 
-        //stores curves and rails used by cameras
+        //stores curves and rails used by cameras, viewport, effect parameters
         private Dictionary<string, Transform3DCurve> curveDictionary;
         private Dictionary<string, RailParameters> railDictionary;
-        //stores viewport layouts for multi-screen layout
         private Dictionary<string, Viewport> viewPortDictionary;
-        //effect
         private Dictionary<string, EffectParameters> effectDictionary;
 
-        //player
-        private HeroPlayerObject heroPlayerObject;
-
         //demo remove later
+        private HeroPlayerObject heroPlayerObject;
         private ModelObject drivableBoxObject;
 
-#if DEBUG
-        //used to visualize debug info (e.g. FPS) and also to draw collision skins
-        private DebugDrawer debugDrawer;
-        private PhysicsDebugDrawer physicsDebugDrawer;
-
-#endif
         #endregion
 
         #region Properties
@@ -171,6 +165,9 @@ namespace GDApp
                 Components.Add(this.gamePadManager);
             }
 
+            //add sound manager
+            this.soundManager = new SoundManager(this, this.eventDispatcher, StatusType.Off, "Content/Assets/Audio/", "Demo2DSound.xgs", "WaveBank1.xwb", "SoundBank1.xsb");
+            Components.Add(this.soundManager);
         }
 
         private void LoadDictionaries()
@@ -1247,28 +1244,47 @@ namespace GDApp
 
         protected override void Update(GameTime gameTime)
         {
-
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            //exit using new gamepad manager
+            if(this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
                 this.Exit();
 
-            #region DEMO
+
+#if DEBUG
+            #region Demo
+            demoCameraChange();
+            demoAlphaChange();
+            demoUIProgressUpdate();
+            demoHideDebugInfo();
+            #endregion
+#endif
+
+
+            base.Update(gameTime);
+        }
+
+#if DEBUG
+        #region DEMO
+        private void demoCameraChange()
+        {
             //only single in single screen layout since cycling in multi-screen is meaningless
             if (this.screenManager.ScreenType == ScreenUtility.ScreenType.SingleScreen && this.keyboardManager.IsFirstKeyPress(Keys.F1))
             {
                 EventDispatcher.Publish(new EventData(EventActionType.OnCameraCycle, EventCategoryType.Camera));
             }
+        }
 
-            //testing event generation on opacity change - see DrawnActor3D::Alpha setter
-            if (this.keyboardManager.IsFirstKeyPress(Keys.F5))
+        private void demoHideDebugInfo()
+        {
+            //show/hide debug info
+            if (this.keyboardManager.IsFirstKeyPress(Keys.F7))
             {
-                this.drivableBoxObject.Alpha -= 0.05f;
+                EventDispatcher.Publish(new EventData(EventActionType.OnToggleDebug, EventCategoryType.Debug));
             }
-            else if (this.keyboardManager.IsFirstKeyPress(Keys.F6))
-            {
-                this.drivableBoxObject.Alpha += 0.05f;
-            }
+        }
 
+
+        private void demoUIProgressUpdate()
+        {
             //testing event generation for UIProgressController
             if (this.keyboardManager.IsFirstKeyPress(Keys.F9))
             {
@@ -1279,7 +1295,7 @@ namespace GDApp
             else if (this.keyboardManager.IsFirstKeyPress(Keys.F10))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)1};
+                object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)1 };
                 EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
 
@@ -1295,17 +1311,22 @@ namespace GDApp
                 object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)3 };
                 EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
-
-            //show/hide debug info
-            if (this.keyboardManager.IsFirstKeyPress(Keys.F7))
-            {
-                EventDispatcher.Publish(new EventData(EventActionType.OnToggleDebug, EventCategoryType.Debug));
-            }
-
-            #endregion
-
-            base.Update(gameTime);
         }
+
+        private void demoAlphaChange()
+        {
+            //testing event generation on opacity change - see DrawnActor3D::Alpha setter
+            if (this.keyboardManager.IsFirstKeyPress(Keys.F5))
+            {
+                this.drivableBoxObject.Alpha -= 0.05f;
+            }
+            else if (this.keyboardManager.IsFirstKeyPress(Keys.F6))
+            {
+                this.drivableBoxObject.Alpha += 0.05f;
+            }
+        }
+        #endregion
+#endif
 
         protected override void Draw(GameTime gameTime)
         {

@@ -7,13 +7,16 @@ namespace GDLibrary
     {
         #region Fields
         //statics
-        protected static readonly int DefaultSpecularPower = 16; //1 - 256 - higher value (e.g. > 128) is more computationally expensive  
+        protected static readonly Color DefaultWorldAmbientColor = Color.DarkGray;
+        protected static readonly Color DefaultSpecularColor = Color.White;
+        protected static readonly int DefaultSpecularPower = 32; //1 - 256 - higher value (e.g. > 128) is more computationally expensive  
+        protected static readonly Color DefaultEmissiveColor = Color.Black;
 
         //color specific
-        private Color ambientColor;
-        private Color specularColor;
-        private Color emissiveColor;
-        private int specularPower;
+        private Color ambientColor = DefaultWorldAmbientColor; //brighten the objects a little vs using Color.Black
+        private Color specularColor = DefaultSpecularColor;
+        private Color emissiveColor = DefaultEmissiveColor;
+        private int specularPower = DefaultSpecularPower;
 
         //reset
         private BasicEffectParameters originalEffectParameters;

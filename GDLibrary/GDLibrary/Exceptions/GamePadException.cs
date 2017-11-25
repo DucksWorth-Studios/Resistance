@@ -7,6 +7,7 @@ Bugs:			None
 Fixes:			None
 */
 
+using Microsoft.Xna.Framework;
 using System;
 using System.Runtime.Serialization;
 
@@ -17,6 +18,13 @@ namespace GDLibrary
     {
         public GamePadException()
         {
+        }
+
+        //we could use a method like this to silently log what method created an exception and at what time
+        public GamePadException(string currentMethod, PlayerIndex playerIndex, string message) 
+            : this(" Error[" + currentMethod + "," + playerIndex.ToString() + "]:" + message)
+        {
+
         }
 
         public GamePadException(string message) : base(message)
@@ -39,5 +47,6 @@ namespace GDLibrary
             string timeNow = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt");
             System.Diagnostics.Debug.WriteLine(timeNow + ": " + message);
         }
+
     }
 }

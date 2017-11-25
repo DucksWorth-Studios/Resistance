@@ -50,6 +50,10 @@
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Sound\Microsoft.Xna.Framework.Xact.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -131,6 +135,8 @@
     <Compile Include="Managers\Object\ObjectManager.cs" />
     <Compile Include="Managers\Physics\PhysicsManager.cs" />
     <Compile Include="Managers\Screen\ScreenManager.cs" />
+    <Compile Include="Managers\Sound\Cue3D.cs" />
+    <Compile Include="Managers\Sound\SoundManager.cs" />
     <Compile Include="Managers\UI\UIManager.cs" />
     <Compile Include="Interfaces\IEffectParameters.cs" />
     <Compile Include="Parameters\Effect\BasicEffectParameters.cs" />
@@ -150,6 +156,7 @@
     <Compile Include="Parameters\Transforms\Transform3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\CollisionUtility.cs" />
+    <Compile Include="Utility\DebugUtility.cs" />
     <Compile Include="Utility\Integer.cs" />
     <Compile Include="Utility\Integer2.cs" />
     <Compile Include="Utility\Integer3.cs" />
@@ -158,9 +165,7 @@
     <Compile Include="Utility\StatefulBool.cs" />
     <Compile Include="Utility\StringUtility.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Managers\Sound\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="GDLibrary.cd" />
   </ItemGroup>
