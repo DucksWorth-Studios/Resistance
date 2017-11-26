@@ -46,13 +46,17 @@ namespace GDLibrary
 
             //add cd/cr system
             this.physicSystem.CollisionSystem = new CollisionSystemSAP();
-            this.physicSystem.EnableFreezing = true;
+
+            //25/11/17 - prevents bug where objects would show correct CDCR response when velocity == Vector3.Zero
+            //this.physicSystem.EnableFreezing = true;
+
             this.physicSystem.SolverType = PhysicsSystem.Solver.Normal;
             this.physicSystem.CollisionSystem.UseSweepTests = true;
+
             //affect accuracy and the overhead == time required
             this.physicSystem.NumCollisionIterations = 8; //8
             this.physicSystem.NumContactIterations = 8; //8
-            this.physicSystem.NumPenetrationRelaxtionTimesteps = 12; //15
+            this.physicSystem.NumPenetrationRelaxtionTimesteps = 12; //15          
 
             #region SETTING_COLLISION_ACCURACY
             //affect accuracy of the collision detection

@@ -95,7 +95,8 @@ namespace GDLibrary
 
             //draw any additional text
             if (this.text != null)
-                spriteBatch.DrawString(this.spriteFont, this.text,(this.Transform.Translation + this.textOrigin), this.textColor);
+                spriteBatch.DrawString(this.spriteFont, this.text,
+                    this.Transform.Translation + textOffsetPosition, this.textColor, 0, this.textOrigin, 1, SpriteEffects.None, this.LayerDepth);
         }
 
         public override void Update(GameTime gameTime)
@@ -115,15 +116,19 @@ namespace GDLibrary
         {
             if (this.cameraManager.ActiveCamera != null)
             {
+                bool bValidCollision = false;
+
                 CollidableObject collidableObject = this.mouseManager.GetPickedObject(this.cameraManager.ActiveCamera, this.cameraManager.ActiveCamera.ViewportCentre, 
                                                 this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
 
                 //did we collide with something?
                 if (collidableObject != null)
                 {
-                    HandleCollision(collidableObject, pos, normal);
+                    bValidCollision = HandleCollision(collidableObject, pos, normal);
                 }
-                else
+
+                //not colliding with anything of interest
+                if(!bValidCollision)
                     HandleNoCollision();
             }
         }
@@ -135,9 +140,9 @@ namespace GDLibrary
         }
 
         //called when over collidable/pickable object
-        protected virtual void HandleCollision(CollidableObject collidableObject, Vector3 pos, Vector3 normal /*unused - could use for bullet decals*/)
+        protected virtual bool HandleCollision(CollidableObject collidableObject, Vector3 pos, Vector3 normal /*unused - could use for bullet decals*/)
         {
-            
+            return false;
         }
     }
 }

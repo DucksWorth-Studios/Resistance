@@ -1,4 +1,5 @@
-using System;
+#define DEMO
+
 using GDLibrary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,14 +8,11 @@ using JigLibX.Geometry;
 using JigLibX.Collision;
 using System.Collections.Generic;
 /*
-Origin of mouse reticule
-Draw depth on UI elements
+Z-fighting on ground plane in 3rd person mode
 Elevation angle on 3rd person view
-Physics is not updating when boxes are removed.
 ScreenManager - enum - this.ScreenType = (ScreenUtilityScreenType)eventData.AdditionalEventParameters[0];
 check clone on new eventdata
 PiP
-scripting camera changes using event data read from XML?
 menu - click sound
 menu transparency
 */
@@ -134,6 +132,10 @@ namespace GDApp
         private void InitializeManagers(Integer2 screenResolution, 
             ScreenUtility.ScreenType screenType, bool isMouseVisible, int numberOfGamePadPlayers) //1 - 4
         {
+            //add sound manager
+            this.soundManager = new SoundManager(this, this.eventDispatcher, StatusType.Off, "Content/Assets/Audio/", "Demo2DSound.xgs", "WaveBank1.xwb", "SoundBank1.xsb");
+            Components.Add(this.soundManager);
+
             this.cameraManager = new CameraManager(this, 1, this.eventDispatcher);
             Components.Add(this.cameraManager);
 
@@ -165,9 +167,7 @@ namespace GDApp
                 Components.Add(this.gamePadManager);
             }
 
-            //add sound manager
-            this.soundManager = new SoundManager(this, this.eventDispatcher, StatusType.Off, "Content/Assets/Audio/", "Demo2DSound.xgs", "WaveBank1.xwb", "SoundBank1.xsb");
-            Components.Add(this.soundManager);
+
         }
 
         private void LoadDictionaries()
@@ -1114,11 +1114,11 @@ namespace GDApp
                 ActorType.UIDynamicTexture,
                 StatusType.Drawn | StatusType.Update,
                 new Transform2D(Vector2.One),
-                Color.Yellow,
+                Color.Red,
                 SpriteEffects.None,
                 this.fontDictionary["mouse"],
-                "",
-                new Vector2(0, 60),
+                "start text ignored",
+                new Vector2(0, 40),
                 Color.White,
                 1,
                 texture,
@@ -1249,8 +1249,9 @@ namespace GDApp
                 this.Exit();
 
 
-#if DEBUG
+#if DEMO
             #region Demo
+            demoSoundManager();
             demoCameraChange();
             demoAlphaChange();
             demoUIProgressUpdate();
@@ -1262,8 +1263,18 @@ namespace GDApp
             base.Update(gameTime);
         }
 
-#if DEBUG
+
+
+#if DEMO
         #region DEMO
+        private void demoSoundManager()
+        {
+            if (this.keyboardManager.IsFirstKeyPress(Keys.F2))
+            {
+                object[] additionalParameters = {"boing"};
+                EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+            }
+        }
         private void demoCameraChange()
         {
             //only single in single screen layout since cycling in multi-screen is meaningless

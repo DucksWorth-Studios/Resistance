@@ -13,9 +13,27 @@ namespace GDApp
 
         }
 
+        #region Event Handling
+        protected override void EventDispatcher_MenuChanged(EventData eventData)
+        {
+            //call base method to show/hide the menu
+            base.EventDispatcher_MenuChanged(eventData);
+
+            //then generate sound events particular to your game e.g. play background music in a menu
+            if (eventData.EventType == EventActionType.OnPlay)
+            {
+                //add event to stop background menu music here...
+            }
+            else if (eventData.EventType == EventActionType.OnPause)
+            {
+                //add event to play background menu music here...
+            }
+        }
+        #endregion
+
         protected override void HandleMouseOver(UIObject currentUIObject)
         {
-            //to do - play a sound - click sound
+            //add event to play mouse over sound here...
         }
 
 
@@ -61,7 +79,10 @@ namespace GDApp
                     default:
                         break;
                 }
-        }     
+
+            //add event to play mouse click sound here...
+
+        }
 
         private void DoStart()
         {

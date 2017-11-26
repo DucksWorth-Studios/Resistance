@@ -7,7 +7,7 @@ namespace GDLibrary
     {
         #region Fields
         //statics
-        protected static readonly Color DefaultWorldAmbientColor = Color.DarkGray;
+        protected static readonly Color DefaultWorldAmbientColor = Color.Black;
         protected static readonly Color DefaultSpecularColor = Color.White;
         protected static readonly int DefaultSpecularPower = 32; //1 - 256 - higher value (e.g. > 128) is more computationally expensive  
         protected static readonly Color DefaultEmissiveColor = Color.Black;

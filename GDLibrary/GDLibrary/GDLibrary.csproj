@@ -142,6 +142,7 @@
     <Compile Include="Parameters\Effect\BasicEffectParameters.cs" />
     <Compile Include="Parameters\Effect\DualTextureEffectParameters.cs" />
     <Compile Include="Parameters\Effect\EffectParameters.cs" />
+    <Compile Include="Parameters\Effect\SkinnedModelEffectParameters.cs" />
     <Compile Include="Parameters\Other\GroupParameters.cs" />
     <Compile Include="Parameters\Other\PickupParameters.cs" />
     <Compile Include="Parameters\Other\TrigonometricParameters.cs" />
@@ -165,7 +166,9 @@
     <Compile Include="Utility\StatefulBool.cs" />
     <Compile Include="Utility\StringUtility.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Actors\Drawn\3D\Collidable\Player\Animated\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="GDLibrary.cd" />
   </ItemGroup>
