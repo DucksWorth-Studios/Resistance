@@ -41,7 +41,7 @@ namespace GDApp
         //how do we want this object to respond to collisions?
         private void HandleCollisions(CollidableObject collidableObjectCollider, CollidableObject collidableObjectCollidee)
         {
-            if(collidableObjectCollidee.ActorType == ActorType.Pickup)
+            if(collidableObjectCollidee.ActorType == ActorType.CollidablePickup)
             {
                 //remove the object?
                 EventDispatcher.Publish(new EventData(collidableObjectCollidee, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));

@@ -94,8 +94,10 @@ namespace GDLibrary
         public static readonly float MouseSensitivity = 1;
 
         //always ensure that we start picking OUTSIDE the collidable first person camera radius - otherwise we will always pick ourself!
-        public static readonly float PickStartDistance = CollidableCameraCapsuleRadius * 1.1f;
+        public static readonly float PickStartDistance = CollidableCameraCapsuleRadius * 2f;
         public static readonly float PickEndDistance = 1000; //can be related to camera far clip plane radius but should be limited to typical level max diameter
+        public static readonly bool EnablePickAndPlace = true;
+
         #endregion
 
         #region UI
@@ -103,6 +105,7 @@ namespace GDLibrary
         public static readonly string PlayerTwoProgressID = PlayerTwoID + " progress";
         public static readonly string PlayerOneProgressControllerID = PlayerOneProgressID + " ctrllr";
         public static readonly string PlayerTwoProgressControllerID = PlayerTwoProgressID + " ctrllr";
+        
         #endregion
     }
 }

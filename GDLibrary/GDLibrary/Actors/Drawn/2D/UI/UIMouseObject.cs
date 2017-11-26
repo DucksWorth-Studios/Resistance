@@ -15,8 +15,12 @@ namespace GDLibrary
 {
     public class UIMouseObject : UITextureObject
     {
-
         #region Variables
+        protected static readonly string NoObjectSelectedText = "no object selected";
+        protected static readonly float DefaultMinPickPlaceDistance = 20;
+        protected static readonly float DefaultMaxPickPlaceDistance = 100;
+
+        private float actualPickPlaceDistance = DefaultMinPickPlaceDistance;
         private string text;
         private SpriteFont spriteFont;
         private Vector2 textOffsetPosition;
@@ -31,14 +35,49 @@ namespace GDLibrary
 
         private float pickStartDistance;
         private float pickEndDistance;
+        private bool bPickAndPlaceEnabled;
 
-
-        //temp vars
-        private Vector3 pos, normal;
-
+        //local vars
+        private CollidableObject currentPickedCollidableObject; // currently picked object
+        private Vector3 pos, normal; //position and normal of point of collision - could be useful for decals!
         #endregion
 
+
         #region Properties
+        public bool IsPickAndPlaceEnabled
+        {
+            get
+            {
+                return this.bPickAndPlaceEnabled;
+            }
+            set
+            {
+                this.bPickAndPlaceEnabled = value;
+            }
+        }
+        public float ActualPickPlaceDistance
+        {
+            get
+            {
+                return this.actualPickPlaceDistance;
+            }
+            set
+            {
+                //keep within bounds of min->max to stop objects disappearing either behind (i.e. < 0), or far ahead (i.e. > FCP distance) of camera
+                this.actualPickPlaceDistance =  MathHelper.Clamp(value, DefaultMinPickPlaceDistance, DefaultMaxPickPlaceDistance);
+            }
+        }
+        protected CollidableObject CurrentPickedCollidableObject
+        {
+            get
+            {
+                return this.currentPickedCollidableObject;
+            }
+            set
+            {
+                this.currentPickedCollidableObject = value;
+            }
+        }
         public string Text
         {
             get
@@ -77,7 +116,7 @@ namespace GDLibrary
             string text, Vector2 textOffsetPosition, Color textColor,
             float layerDepth, Texture2D texture, Rectangle sourceRectangle, Vector2 origin,
             ManagerParameters managerParameters,
-            float pickStartDistance, float pickEndDistance, Predicate<CollidableObject> collisionPredicate)
+            float pickStartDistance, float pickEndDistance, bool bPickAndPlaceEnabled, Predicate<CollidableObject> collisionPredicate)
             : base(id, actorType, statusType, transform, color, spriteEffects, layerDepth, texture, sourceRectangle, origin)
         {
             this.spriteFont = spriteFont;
@@ -88,6 +127,7 @@ namespace GDLibrary
             this.pickStartDistance = pickStartDistance;
             this.pickEndDistance = pickEndDistance;
 
+            this.bPickAndPlaceEnabled = bPickAndPlaceEnabled;
             this.collisionPredicate = collisionPredicate;
         }
 
@@ -113,42 +153,75 @@ namespace GDLibrary
             base.Update(gameTime);
         }
 
+        #region Handle Picking
         private void HandleMousePick(GameTime gameTime)
         {
-            if (this.managerParameters.CameraManager.ActiveCamera != null)
+            if (this.managerParameters.CameraManager.ActiveCamera != null)               
             {
-                Camera3D camera = this.managerParameters.CameraManager.ActiveCamera;
-                CollidableObject collidableObject = this.managerParameters.MouseManager.GetPickedObject(camera, camera.ViewportCentre,
-                    this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
-
-
-                //if the collision was valid (i.e. validity as defined by the if() statement in MyUIMouseObject::HandleCollision()) 
-                if (IsValidCollision(collidableObject, pos, normal))
+                if (this.currentPickedCollidableObject == null) //nothing picked so allow user to pick 
                 {
-                    HandleCollision(gameTime, collidableObject, pos, normal);
-                    UpdateMouseAppearanceOnCollision(gameTime, collidableObject, pos, normal);
+                    Camera3D camera = this.managerParameters.CameraManager.ActiveCamera;
+                    CollidableObject collidableObject = this.managerParameters.MouseManager.GetPickedObject(camera, camera.ViewportCentre,
+                        this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
+
+                    //if the collision was valid (i.e. validity as defined by the if() statement in MyUIMouseObject::HandleCollision()) 
+                    if (IsValidCollision(collidableObject, pos, normal))
+                    {
+                        HandleCollision(gameTime, collidableObject, pos, normal);
+
+                        if(this.bPickAndPlaceEnabled)
+                            PickupObject(gameTime, collidableObject, pos, normal);
+
+                        SetAppearanceOnCollision(gameTime, collidableObject, pos, normal);
+                    }
+                    else  //if not colliding with anything of interest
+                    {
+                        HandleNoCollision(gameTime);
+                        ResetAppearanceNoCollision(gameTime);
+                    }
                 }
-                else  //if not colliding with anything of interest
+                else //something was picked last update now decide to either move, or release it
                 {
-                    HandleNoCollision(gameTime);
-                    ResetMouseAppearanceOnNoCollision(gameTime);
+                    if (this.bPickAndPlaceEnabled)
+                        PlaceObject();
                 }
             }
         }
 
-        //move the texture for the mouse object to be where the mouse pointer is
-        protected virtual void UpdateMousePosition(GameTime gameTime)
+        protected virtual void PlaceObject()
         {
-            this.Transform.Translation = this.managerParameters.MouseManager.Position;
+            //pick object 
+            if (this.ManagerParameters.MouseManager.IsLeftButtonClicked())
+            {
+                int scrollDelta = this.ManagerParameters.MouseManager.GetDeltaFromScrollWheel();
+                if (scrollDelta != 0)
+                    this.ActualPickPlaceDistance += scrollDelta / 10.0f;
+
+                this.CurrentPickedCollidableObject.Body.DisableBody();
+                this.CurrentPickedCollidableObject.Body.MoveTo(this.ManagerParameters.CameraManager.ActiveCamera.Transform.Translation
+                            + this.ActualPickPlaceDistance * this.ManagerParameters.CameraManager.ActiveCamera.Transform.Look, Matrix.Identity);
+            }
+            else //place object 
+            {
+                this.CurrentPickedCollidableObject.Body.EnableBody();
+                this.CurrentPickedCollidableObject = null;
+            }
+        }
+
+        protected virtual void PickupObject(GameTime gameTime, CollidableObject collidableObject, Vector3 pos, Vector3 normal)
+        {
+            if (this.ManagerParameters.MouseManager.IsLeftButtonClicked())
+            {
+                //store the currently selected object by the mouse for pick-and-place
+                this.CurrentPickedCollidableObject = collidableObject;
+            }
         }
 
         //called when over collidable/pickable object
         protected virtual bool IsValidCollision(CollidableObject collidableObject, Vector3 pos, Vector3 normal)
         {
-            if (collidableObject != null)
-                return collisionPredicate(collidableObject);
-            else
-                return false;
+            //if not null then call method to see if its an object that conforms to our predicate (e.g. ActorType::CollidablePickup), otherwise return false
+            return (collidableObject != null) ? collisionPredicate(collidableObject) : false;
         }
 
         //handle collision and listen for input from all possibly input modalities (e.g. keyboard etc)
@@ -161,12 +234,14 @@ namespace GDLibrary
             UpdateMouseText(gameTime, collidableObject, pos, normal, distanceToObject);
         }
 
-        //update the text associated with the mouse accordingly
-        protected virtual void UpdateMouseText(GameTime gameTime, CollidableObject collidableObject, Vector3 pos, Vector3 normal, float distanceToObject)
+        //resets when no mouse over valid collidable object (i.e. validity as defined by the if() statement in MyUIMouseObject::HandleCollision()) 
+        protected virtual void HandleNoCollision(GameTime gameTime)
         {
 
         }
+        #endregion
 
+        #region Handle Input
         //call this method if mouse is over a valid collidable object to listen for any mouse events e.g. left click
         protected virtual void HandleMouseInputOnCollision(GameTime gameTime, CollidableObject collidableObject, Vector3 pos, Vector3 normal, out float distanceToObject)
         {
@@ -176,29 +251,40 @@ namespace GDLibrary
         //call this method if mouse is over a valid collidable object to listen for any keyboard events e.g. Enter
         protected virtual void HandleKeyboardInputOnCollision(GameTime gameTime, CollidableObject collidableObject, Vector3 pos, Vector3 normal, float distanceToObject)
         {
-
+            //override in child class to define behaviour
         }
 
         //call this method if mouse is over a valid collidable object to listen for any gamepad events e.g. DPad button press
         protected virtual void HandleGamePadInputOnCollision(GameTime gameTime, CollidableObject collidableObject, Vector3 pos, Vector3 normal, float distanceToObject)
         {
+            //override in child class to define behaviour
+        }
+        #endregion
 
+        #region Update Mouse
+        //update the text associated with the mouse accordingly
+        protected virtual void UpdateMouseText(GameTime gameTime, CollidableObject collidableObject, Vector3 pos, Vector3 normal, float distanceToObject)
+        {
+            //override in child class to define behaviour
         }
 
-        //resets when no mouse over valid collidable object (i.e. validity as defined by the if() statement in MyUIMouseObject::HandleCollision()) 
-        protected virtual void HandleNoCollision(GameTime gameTime)
+        //move the texture for the mouse object to be where the mouse pointer is
+        protected virtual void UpdateMousePosition(GameTime gameTime)
         {
-
+            this.Transform.Translation = this.managerParameters.MouseManager.Position;
         }
 
         //define what mouse does when we are OVER a valid collidable object
-        protected virtual void UpdateMouseAppearanceOnCollision(GameTime gameTime, CollidableObject collidableObject, Vector3 pos, Vector3 normal)
+        protected virtual void SetAppearanceOnCollision(GameTime gameTime, CollidableObject collidableObject, Vector3 pos, Vector3 normal)
         {
+            //override in child class to define behaviour
         }
 
         //define what mouse does when we are NOT OVER a valid collidable object
-        protected virtual void ResetMouseAppearanceOnNoCollision(GameTime gameTime)
+        protected virtual void ResetAppearanceNoCollision(GameTime gameTime)
         {
+            //override in child class to define behaviour
         }
+        #endregion
     }
 }

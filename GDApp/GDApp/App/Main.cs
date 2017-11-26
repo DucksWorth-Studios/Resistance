@@ -621,7 +621,7 @@ namespace GDApp
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //make once then clone
-            sphereArchetype = new CollidableObject("sphere ", ActorType.Pickup, Transform3D.Zero, effectParameters, model);
+            sphereArchetype = new CollidableObject("sphere ", ActorType.CollidablePickup, Transform3D.Zero, effectParameters, model);
 
             for (int i = 0; i < 10; i++)
             {
@@ -652,7 +652,7 @@ namespace GDApp
                         new Vector3(2, 4, 1),
                         Vector3.UnitX, Vector3.UnitY);
 
-                collidableObject = new CollidableObject("box - " + i, ActorType.Pickup, transform3D, effectParameters, model);
+                collidableObject = new CollidableObject("box - " + i, ActorType.CollidablePickup, transform3D, effectParameters, model);
 
                 collidableObject.AddPrimitive(
                     new Box(transform3D.Translation, Matrix.Identity, /*important do not change - cm to inch*/
@@ -1105,7 +1105,8 @@ namespace GDApp
 
         private static bool IsCollidableObjectOfInterest(CollidableObject collidableObject)
         {
-            return collidableObject.ActorType == ActorType.Pickup;
+            return collidableObject.ActorType == ActorType.CollidableProp
+                || collidableObject.ActorType == ActorType.CollidablePickup;
         }
 
         private void InitializeUIMousePointer()
@@ -1119,6 +1120,7 @@ namespace GDApp
                 this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager);
 
             //call this function in the UIMouseObject anytime we want to decide if a mouse over object is interesting to us
+            //See https://www.codeproject.com/Articles/114931/Understanding-Predicate-Delegates-in-C
             Predicate<CollidableObject> collisionPredicate = new Predicate<CollidableObject>(IsCollidableObjectOfInterest);
 
             MyUIMouseObject myUIMouseObject = new MyUIMouseObject("mouseObject",
@@ -1131,7 +1133,9 @@ namespace GDApp
                 managerParameters,
                 AppData.PickStartDistance,
                 AppData.PickEndDistance,
-                collisionPredicate);
+                AppData.EnablePickAndPlace, //enable pick and place
+                x => (x.ActorType == ActorType.CollidablePickup || x.ActorType == ActorType.CollidableProp) //we can use a formally defined predicate, collisionPredicate - see above, or just use a Lambda Expression (i.e. x such at...
+                );
 
             //or use the monstrously large full constructor!
             //MyUIMouseObject myUIMouseObject = new MyUIMouseObject("mouseObject",
@@ -1150,7 +1154,8 @@ namespace GDApp
             //    new Vector2(sourceRectangle.Width / 2.0f, sourceRectangle.Height / 2.0f),
             //    managerParameters,
             //    AppData.PickStartDistance,
-            //    AppData.PickEndDistance);
+            //    AppData.PickEndDistance,
+            //    collisionPredicate);
             this.uiManager.Add(myUIMouseObject);
         }
         private void InitializeUIProgress()

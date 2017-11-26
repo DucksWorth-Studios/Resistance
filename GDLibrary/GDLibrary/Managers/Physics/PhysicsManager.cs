@@ -83,6 +83,7 @@ namespace GDLibrary
                 //using the "sender" property of the event to pass reference to object to be removed - use "as" to access Body since sender is defined as a raw object.
                 CollidableObject collidableObject = eventData.Sender as CollidableObject;
                 //what would happen if we did not remove the physics body? would the CD/CR skin remain?
+                this.PhysicsSystem.CollisionSystem.RemoveCollisionSkin(collidableObject.Collision);
                 this.PhysicsSystem.RemoveBody(collidableObject.Body);
             }
         }
