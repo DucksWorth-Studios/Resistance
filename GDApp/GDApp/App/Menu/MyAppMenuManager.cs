@@ -31,15 +31,18 @@ namespace GDApp
         }
         #endregion
 
-        protected override void HandleMouseOver(UIObject currentUIObject)
+        protected override void HandleMouseOver(UIObject currentUIObject, GameTime gameTime)
         {
-            //add event to play mouse over sound here...
+            //accumulate time over menu item
+            //if greater than X milliseconds then play a boing and reset accumulated time
+            //object[] additionalParameters = { "boing" };
+            //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
         }
 
 
 
         //add the code here to say how click events are handled by your code
-        protected override void HandleMouseClick(UIObject clickedUIObject)
+        protected override void HandleMouseClick(UIObject clickedUIObject, GameTime gameTime)
         {
                 //notice that the IDs are the same as the button IDs specified when we created the menu in Main::AddMenuElements()
                 switch (clickedUIObject.ID)

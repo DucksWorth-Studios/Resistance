@@ -44,5 +44,12 @@ namespace GDLibrary
             return new Rectangle((int)Math.Round(min.X), (int)Math.Round(min.Y),
                                  (int)Math.Round(max.X - min.X), (int)Math.Round(max.Y - min.Y));
         }
+
+
+        public static bool IsCollidableObjectOfInterest(Actor actor)
+        {
+            return actor.ActorType == ActorType.CollidableProp
+                || actor.ActorType == ActorType.CollidablePickup;
+        }
     }
 }

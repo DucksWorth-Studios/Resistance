@@ -9,6 +9,7 @@ Fixes:			None
 
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace GDLibrary
 {
@@ -17,27 +18,17 @@ namespace GDLibrary
         #region Fields
         private Keys[] moveKeys;
         private float moveSpeed, strafeSpeed, rotationSpeed;
-        private MouseManager mouseManager;
-        private KeyboardManager keyboardManager;
+        private ManagerParameters managerParameters;
         #endregion
 
         #region Properties
-        public MouseManager MouseManager
+        public ManagerParameters ManagerParameters
         {
             get
             {
-                return this.mouseManager;
+                return this.managerParameters;
             }
         }
-
-        public KeyboardManager KeyboardManager
-        {
-            get
-            {
-                return this.keyboardManager;
-            }
-        }
-
         public Keys[] MoveKeys
         {
             get
@@ -86,7 +77,7 @@ namespace GDLibrary
         
         public UserInputController(string id,
             ControllerType controllerType, Keys[] moveKeys,
-            float moveSpeed, float strafeSpeed, float rotationSpeed, MouseManager mouseManager, KeyboardManager keyboardManager)
+            float moveSpeed, float strafeSpeed, float rotationSpeed, ManagerParameters managerParameters)
             : base(id, controllerType)
         {
             this.moveKeys = moveKeys;
@@ -94,8 +85,7 @@ namespace GDLibrary
             this.strafeSpeed = strafeSpeed;
             this.rotationSpeed = rotationSpeed;
 
-            this.mouseManager = mouseManager;
-            this.keyboardManager = keyboardManager;
+            this.managerParameters = managerParameters;
         }
 
         public override void Update(GameTime gameTime, IActor actor)
@@ -103,9 +93,14 @@ namespace GDLibrary
             Actor3D parentActor = actor as Actor3D;
             HandleMouseInput(gameTime, parentActor);
             HandleKeyboardInput(gameTime, parentActor);
+            HandleGamePadInput(gameTime, parentActor);
             base.Update(gameTime, actor);
         }
 
+        public virtual void HandleGamePadInput(GameTime gameTime, Actor3D parentActor)
+        {
+
+        }
 
         public virtual void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {

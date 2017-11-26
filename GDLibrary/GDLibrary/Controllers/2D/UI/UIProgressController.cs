@@ -85,8 +85,6 @@ namespace GDLibrary
                         {
                             //the second value in additionalParameters holds the gain/lose health value
                             this.CurrentValue = this.currentValue + (eventData.AdditionalParameters[1] as Integer).Value;
-
-                            System.Diagnostics.Debug.WriteLine("OnHealthDelta");
                         }
                         break;
 
@@ -95,8 +93,6 @@ namespace GDLibrary
                         {
                             //the second value in additionalParameters holds the gain/lose health value
                             this.CurrentValue = (eventData.AdditionalParameters[1] as Integer).Value;
-
-                            System.Diagnostics.Debug.WriteLine("OnHealthSet");
                         }
                         break;
 

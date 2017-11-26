@@ -16,6 +16,7 @@ namespace GDLibrary
         #region Fields
         private string id;
         private ControllerType controllerType;
+
         #endregion
 
         #region Properties

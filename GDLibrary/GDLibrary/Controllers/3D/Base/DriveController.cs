@@ -21,8 +21,8 @@ namespace GDLibrary
         #endregion
 
         public DriveController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
-            MouseManager mouseManager, KeyboardManager keyboardManager)
-            : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, mouseManager, keyboardManager)
+            ManagerParameters managerParameters)
+            : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, managerParameters)
         {
 
         }
@@ -37,25 +37,25 @@ namespace GDLibrary
             Vector3 translation = Vector3.Zero;
 
             //move forward/backward
-            if (this.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
+            if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
             {
                 translation = gameTime.ElapsedGameTime.Milliseconds
                              * this.MoveSpeed * parentActor.Transform.Look;
             }
-            else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
+            else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
             {
                 translation = -gameTime.ElapsedGameTime.Milliseconds
                             * this.MoveSpeed * parentActor.Transform.Look;
             }
 
             //strafe
-            if (this.KeyboardManager.IsKeyDown(this.MoveKeys[4]))
+            if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[4]))
             {
                 //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
                 translation += -gameTime.ElapsedGameTime.Milliseconds
                              * this.StrafeSpeed * parentActor.Transform.Right;
             }
-            else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
+            else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
             {
                 //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
                 translation += gameTime.ElapsedGameTime.Milliseconds
@@ -63,11 +63,11 @@ namespace GDLibrary
             }
 
             //rotate
-            if (this.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
+            if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
             {
                 parentActor.Transform.RotateAroundYBy(gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed);
             }
-            else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
+            else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
             {
                 parentActor.Transform.RotateAroundYBy(-gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed);
             }

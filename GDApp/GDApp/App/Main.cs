@@ -62,6 +62,7 @@ namespace GDApp
         //demo remove later
         private HeroPlayerObject heroPlayerObject;
         private ModelObject drivableBoxObject;
+        private ManagerParameters managerParameters;
 
         #endregion
 
@@ -144,7 +145,7 @@ namespace GDApp
             ScreenUtility.ScreenType screenType, bool isMouseVisible, int numberOfGamePadPlayers) //1 - 4
         {
             //add sound manager
-            this.soundManager = new SoundManager(this, this.eventDispatcher, StatusType.Off, "Content/Assets/Audio/", "Demo2DSound.xgs", "WaveBank1.xwb", "SoundBank1.xsb");
+            this.soundManager = new SoundManager(this, this.eventDispatcher, StatusType.Update, "Content/Assets/Audio/", "Demo2DSound.xgs", "WaveBank1.xwb", "SoundBank1.xsb");
             Components.Add(this.soundManager);
 
             this.cameraManager = new CameraManager(this, 1, this.eventDispatcher);
@@ -187,6 +188,11 @@ namespace GDApp
             //ui (e.g. reticule, inventory, progress)
             this.uiManager = new UIManager(this, this.spriteBatch, this.eventDispatcher, 10, StatusType.Off);
             Components.Add(this.uiManager);
+
+            //this object packages together all managers to give the mouse object the ability to listen for all forms of input from the user, as well as know where camera is etc.
+            this.managerParameters = new ManagerParameters(this.objectManager,
+                this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager);
+
         }
 
         private void LoadDictionaries()
@@ -405,7 +411,7 @@ namespace GDApp
                 new Vector3(1,3.5f,1), -Vector3.UnitZ, Vector3.UnitY);
 
             //clone the dictionary effect and set unique properties for the hero player object
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //make the hero a field since we need to point the third person camera controller at this object
@@ -540,7 +546,7 @@ namespace GDApp
             Model model = this.modelDictionary["box2"];
 
             //clone the dictionary effect and set unique properties for the hero player object
-            DualTextureEffectParameters effectParameters = this.effectDictionary["unlitModelDualEffect"].GetDeepCopy() as DualTextureEffectParameters;
+            DualTextureEffectParameters effectParameters = this.effectDictionary["unlitModelDualEffect"].Clone() as DualTextureEffectParameters;
             effectParameters.Texture = this.textureDictionary["grass1"];
             effectParameters.Texture2 = this.textureDictionary["checkerboard_greywhite"];
 
@@ -565,6 +571,8 @@ namespace GDApp
             BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["ml"];
             effectParameters.DiffuseColor = Color.White;
+            effectParameters.SpecularPower = 32; //pow((N, H), SpecularPower)
+            effectParameters.EmissiveColor = Color.Red;
 
             CollidableObject collidableObject = new TriangleMeshObject("torus", ActorType.CollidableProp, transform3D, effectParameters,
                             this.modelDictionary["torus"], new MaterialProperties(0.2f, 0.8f, 0.7f));
@@ -678,7 +686,8 @@ namespace GDApp
 
             //attach a DriveController
             drivableBoxObject.AttachController(new DriveController("driveController1", ControllerType.Drive,
-                AppData.PlayerOneMoveKeys, AppData.PlayerMoveSpeed, AppData.PlayerStrafeSpeed, AppData.PlayerRotationSpeed, this.mouseManager, this.keyboardManager));
+                AppData.PlayerOneMoveKeys, AppData.PlayerMoveSpeed, AppData.PlayerStrafeSpeed, AppData.PlayerRotationSpeed,
+                this.managerParameters));
 
             //add to the objectManager so that it will be drawn and updated
             this.objectManager.Add(drivableBoxObject);
@@ -769,7 +778,7 @@ namespace GDApp
             viewportDictionaryKey = "column1 row0";
             transform = new Transform3D(new Vector3(0, cameraHeight, 10), -Vector3.UnitZ, Vector3.UnitY);
             controller = new FirstPersonCameraController(id + " controller", ControllerType.FirstPerson, AppData.CameraMoveKeys, AppData.CameraMoveSpeed, AppData.CameraStrafeSpeed, AppData.CameraRotationSpeed,
-                this.mouseManager, this.keyboardManager, this.cameraManager, this.screenManager);
+                this.managerParameters);
             InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
             //security camera 1
@@ -832,7 +841,7 @@ namespace GDApp
                     ControllerType.CollidableFirstPerson,
                     AppData.CameraMoveKeys,
                     AppData.CollidableCameraMoveSpeed, AppData.CollidableCameraStrafeSpeed, AppData.CameraRotationSpeed,
-                    this.mouseManager, this.keyboardManager, this.cameraManager, this.screenManager,
+                    this.managerParameters,
                     camera, //parent
                     AppData.CollidableCameraCapsuleRadius,
                     AppData.CollidableCameraViewHeight,
@@ -1085,24 +1094,16 @@ namespace GDApp
             InitializeUIInventoryMenu();
         }
 
-        private static bool IsCollidableObjectOfInterest(CollidableObject collidableObject)
-        {
-            return collidableObject.ActorType == ActorType.CollidableProp
-                || collidableObject.ActorType == ActorType.CollidablePickup;
-        }
+
         private void InitializeUIMousePointer()
         {
             Texture2D texture = this.textureDictionary["reticuleDefault"];
             //show complete texture
             Microsoft.Xna.Framework.Rectangle sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height);
 
-            //this object packages together all managers to give the mouse object the ability to listen for all forms of input from the user, as well as know where camera is etc.
-            ManagerParameters managerParameters = new ManagerParameters(this.objectManager,
-                this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager);
-
             //call this function in the UIMouseObject anytime we want to decide if a mouse over object is interesting to us
             //See https://www.codeproject.com/Articles/114931/Understanding-Predicate-Delegates-in-C
-            Predicate<CollidableObject> collisionPredicate = new Predicate<CollidableObject>(IsCollidableObjectOfInterest);
+            Predicate<Actor> collisionPredicate = new Predicate<Actor>(CollisionUtility.IsCollidableObjectOfInterest);
 
             MyUIMouseObject myUIMouseObject = new MyUIMouseObject("mouseObject",
                 ActorType.UITexture,
@@ -1115,7 +1116,9 @@ namespace GDApp
                 AppData.PickStartDistance,
                 AppData.PickEndDistance,
                 AppData.EnablePickAndPlace, //enable pick and place
-                x => (x.ActorType == ActorType.CollidablePickup || x.ActorType == ActorType.CollidableProp) //we can use a formally defined predicate, collisionPredicate - see above, or just use a Lambda Expression (i.e. x such at...
+               collisionPredicate
+               //or use a Lambda Expression below
+                //x => (x.ActorType == ActorType.CollidablePickup || x.ActorType == ActorType.CollidableProp) //we can use a formally defined predicate, collisionPredicate - see above, or just use a Lambda Expression (i.e. x such at...
                 );
 
             //or use the monstrously large full constructor!
@@ -1205,6 +1208,7 @@ namespace GDApp
         {
             //create a BasicEffect and set the lighting conditions for all models that use this effect in their EffectParameters field
             BasicEffect litModelBasicEffect = new BasicEffect(graphics.GraphicsDevice);
+
             litModelBasicEffect.TextureEnabled = true;
             litModelBasicEffect.PreferPerPixelLighting = true;
             litModelBasicEffect.EnableDefaultLighting();
@@ -1255,7 +1259,6 @@ namespace GDApp
             if(this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
                 this.Exit();
 
-
 #if DEMO
             #region Demo
             demoSoundManager();
@@ -1263,25 +1266,31 @@ namespace GDApp
             demoAlphaChange();
             demoUIProgressUpdate();
             demoHideDebugInfo();
+            demoGamePadManager();
             #endregion
 #endif
-
-
-            System.Diagnostics.Debug.WriteLine("Main::Update()");
-
             base.Update(gameTime);
         }
 
-
-
-#if DEMO
         #region DEMO
+        private void demoGamePadManager()
+        {
+            if (this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.RightTrigger))
+            {
+                //do something....
+            }
+        }
         private void demoSoundManager()
         {
             if (this.keyboardManager.IsFirstKeyPress(Keys.F2))
             {
                 object[] additionalParameters = {"boing"};
                 EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+
+                //stopping a cue
+                //object[] additionalParameters = { "boing", new Integer(0) };
+                //EventDispatcher.Publish(new EventData(EventActionType.OnStop, EventCategoryType.Sound2D, additionalParameters));
+
             }
         }
         private void demoCameraChange()
@@ -1342,7 +1351,6 @@ namespace GDApp
             }
         }
         #endregion
-#endif
 
         protected override void Draw(GameTime gameTime)
         {

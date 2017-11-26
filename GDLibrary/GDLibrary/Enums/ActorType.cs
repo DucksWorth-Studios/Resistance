@@ -32,6 +32,7 @@ namespace GDLibrary
         CollidableProp,         //i.e. an interactable prop related to game narrative or game state e.g. door
         CollidableCamera,       //used by first person collidable camera controller
         CollidablePickup,        //i.e. something we can add to inventory e.g. ammo
-        CollidableArchitecture
+        CollidableArchitecture,
+        CollidableRecording      //audio recordings from players that can be picked up and played
     }
 }

@@ -95,11 +95,11 @@ namespace GDLibrary
 
         //uses the default PlayerObject as the collidable object for the camera
         public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
-           MouseManager mouseManager, KeyboardManager keyboardManager, CameraManager cameraManager, ScreenManager screenManager,
+           ManagerParameters managerParameters,
            IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
            float mass, float jumpHeight, Vector3 translationOffset)
            : this(id, controllerType,moveKeys, moveSpeed, strafeSpeed, rotationSpeed,
-            mouseManager, keyboardManager, cameraManager, screenManager,
+            managerParameters,
             parentActor, radius, height, accelerationRate, decelerationRate,
             mass, jumpHeight, translationOffset, null)
         {
@@ -107,11 +107,10 @@ namespace GDLibrary
 
         //allows developer to specify the type of collidable object to be used as basis for the camera
         public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
-            MouseManager mouseManager, KeyboardManager keyboardManager, CameraManager cameraManager, ScreenManager screenManager,
+            ManagerParameters managerParameters,
             IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
             float mass, float jumpHeight, Vector3 translationOffset, PlayerObject collidableObject)
-            : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed,
-            mouseManager, keyboardManager, cameraManager, screenManager)
+            : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, managerParameters)
         {
             this.Radius = radius;
             this.height = height;
@@ -137,7 +136,7 @@ namespace GDLibrary
             {
                 this.playerObject = new PlayerObject(this.ID + " - player object", ActorType.CollidableCamera, (parentActor as Actor3D).Transform,
                  null, null, this.MoveKeys, radius, height, accelerationRate, decelerationRate, jumpHeight,
-                 translationOffset, keyboardManager);
+                 translationOffset, this.ManagerParameters.KeyboardManager);
             }
 
             playerObject.Enable(false, mass);
@@ -166,24 +165,24 @@ namespace GDLibrary
             if ((parentActor != null) && (parentActor != null))
             {
                 //jump
-                if (this.KeyboardManager.IsKeyDown(this.MoveKeys[4])) //check AppData.CameraMoveKeys for correct index of each move key
+                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[4])) //check AppData.CameraMoveKeys for correct index of each move key
                 {
                     this.playerObject.CharacterBody.DoJump(this.jumpHeight);
                 }
                 //crouch
-                else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
+                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
                 {
                     this.playerObject.CharacterBody.IsCrouching = !this.playerObject.CharacterBody.IsCrouching;
                 }
 
                 //forward/backward
-                if (this.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
+                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
                 {
                     Vector3 restrictedLook = parentActor.Transform.Look;
                     restrictedLook.Y = 0;
                     this.playerObject.CharacterBody.Velocity += restrictedLook * this.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
                 }
-                else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
+                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
                 {
                     Vector3 restrictedLook = parentActor.Transform.Look;
                     restrictedLook.Y = 0;
@@ -195,13 +194,13 @@ namespace GDLibrary
                 }
 
                 //strafe left/right
-                if (this.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
+                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
                 {
                     Vector3 restrictedRight = parentActor.Transform.Right;
                     restrictedRight.Y = 0;
                     this.playerObject.CharacterBody.Velocity -= restrictedRight * this.StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
                 }
-                else if (this.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
+                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
                 {
                     Vector3 restrictedRight = parentActor.Transform.Right;
                     restrictedRight.Y = 0;

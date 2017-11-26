@@ -46,6 +46,26 @@ namespace GDApp
             //remove and play sound
             if (this.ManagerParameters.MouseManager.IsLeftButtonClicked())
             {
+                //create a projectile
+                    //pass in an archetypal projectile of type CollidableObject
+                    //clone the archetype
+                    //set the velocity of the clone.Body i.e.collidableObject.Body.Velocity
+                    //add to the objectmanager
+
+
+                ////not fully functional but its not far off!
+                //if(collidableObject.ActorType == ActorType.CollidableRecording)
+                //{
+                //    MoveablePickupObject pickupObject = collidableObject as MoveablePickupObject;
+                //    string audioRecording = pickupObject.PickupParameters.AdditionalParameters[0] as string;
+
+                //    object[] additionalParameters = { audioRecording };
+                //    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+
+                //    EventDispatcher.Publish(new EventData(collidableObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
+                //}
+
+
                 //do what you want here...
 
                 #region Remove Object - Uncomment to try out
@@ -79,6 +99,9 @@ namespace GDApp
         {
             this.Transform.RotationInDegrees += rotationSpeedInDegreesPerSecond * gameTime.ElapsedGameTime.Milliseconds/1000.0f;
             this.Color = Color.Yellow;
+
+            //texture of 120 x 40 with three reticule icons
+           // this.SourceRectangle = new Rectangle(80, 0, 40, 40);
         }
 
         //reset the rotation and color when not over collidable object
@@ -87,6 +110,9 @@ namespace GDApp
             this.Text = NoObjectSelectedText;
             this.Transform.RotationInDegrees = this.Transform.OriginalTransform2D.RotationInDegrees;
             this.Color = this.OriginalColor;
+
+            //texture of 120 x 40 with three reticule icons
+            // this.SourceRectangle = new Rectangle(0, 0, 40, 40);
         }
     }
 }

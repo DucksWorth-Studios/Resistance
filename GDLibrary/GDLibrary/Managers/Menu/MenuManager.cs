@@ -179,9 +179,9 @@ namespace GDLibrary
                         currentUIObject.MouseOverState.Update(true);
 
                         //apply any mouse over or mouse click actions
-                        HandleMouseOver(currentUIObject);
+                        HandleMouseOver(currentUIObject, gameTime);
                         if (this.mouseManager.IsLeftButtonClickedOnce())
-                            HandleMouseClick(currentUIObject);
+                            HandleMouseClick(currentUIObject, gameTime);
 
                         //store the current as old for the next update
                         this.oldUIObjectMouseOver = currentUIObject;
@@ -209,12 +209,12 @@ namespace GDLibrary
             }
         }
 
-        protected virtual void HandleMouseOver(UIObject currentUIObject)
+        protected virtual void HandleMouseOver(UIObject currentUIObject, GameTime gameTime)
         {
             //developer implements in subclass of MenuManager - see MyMenuManager.cs
         }
 
-        protected virtual void HandleMouseClick(UIObject clickedUIObject)
+        protected virtual void HandleMouseClick(UIObject clickedUIObject, GameTime gameTime)
         {
             //developer implements in subclass of MenuManager - see MyMenuManager.cs
         }

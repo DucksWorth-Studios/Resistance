@@ -165,7 +165,7 @@ namespace GDLibrary
         }
 
         //since we CANNOT alter the signature of clone we need to override using the NEW keyword (unlike our typical approach of virtual and override)
-        public object Clone()
+        public virtual object Clone()
         {
             return GetDeepCopy();
         }

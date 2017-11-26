@@ -112,12 +112,14 @@ namespace GDLibrary
             {
                 //turn on update and draw i.e. hide the menu
                 this.StatusType = StatusType.Update;
+              
             }
             //did the event come from the main menu and is it a start game event
             else if (eventData.EventType == EventActionType.OnPause)
             {
                 //turn off update and draw i.e. show the menu since the game is paused
                 this.StatusType = StatusType.Off;
+      
             }
         }
         #endregion
@@ -276,8 +278,6 @@ namespace GDLibrary
 
         public override void Update(GameTime gameTime)
         {
-            System.Diagnostics.Debug.WriteLine("\t\tSoundManager::Update()");
-
             this.audioEngine.Update();
             for (int i = 0; i < cueList3D.Count; i++)
             {
