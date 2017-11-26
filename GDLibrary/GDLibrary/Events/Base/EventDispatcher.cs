@@ -60,6 +60,8 @@ namespace GDLibrary
         }
         public override void Update(GameTime gameTime)
         {
+            System.Diagnostics.Debug.WriteLine("\tEventDispatcher::Update()");
+
             for (int i = 0; i < queue.Count; i++)
                 Process(queue.Dequeue());
 

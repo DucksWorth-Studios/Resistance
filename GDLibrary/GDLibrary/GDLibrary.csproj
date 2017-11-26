@@ -144,6 +144,7 @@
     <Compile Include="Parameters\Effect\EffectParameters.cs" />
     <Compile Include="Parameters\Effect\SkinnedModelEffectParameters.cs" />
     <Compile Include="Parameters\Other\GroupParameters.cs" />
+    <Compile Include="Parameters\Other\ManagerParameters.cs" />
     <Compile Include="Parameters\Other\PickupParameters.cs" />
     <Compile Include="Parameters\Other\TrigonometricParameters.cs" />
     <Compile Include="Templates\PausableDrawableGameComponent.cs" />

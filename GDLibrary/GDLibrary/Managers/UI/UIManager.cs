@@ -90,6 +90,9 @@ namespace GDLibrary
 
         protected override void ApplyUpdate(GameTime gameTime)
         {
+
+            System.Diagnostics.Debug.WriteLine("\t\t\t\tUIManager::Update()");
+
             //remove any outstanding objects since the last update
             ApplyRemove();
 

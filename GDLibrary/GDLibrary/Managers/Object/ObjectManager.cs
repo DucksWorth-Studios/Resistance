@@ -207,6 +207,8 @@ namespace GDLibrary
 
         public void Update(GameTime gameTime)
         {
+            System.Diagnostics.Debug.WriteLine("\t\t\tObjectManager::Update()");
+
             //remove any outstanding objects since the last update
             ApplyRemove();
 

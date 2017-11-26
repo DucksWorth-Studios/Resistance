@@ -268,14 +268,14 @@ namespace GDLibrary
             return null;
         }
 
-        protected Actor GetPickedObject(Camera3D camera, float distance, out Vector3 pos, out Vector3 normal)
+        protected Actor GetPickedObject(CameraManager cameraManager, float distance, out Vector3 pos, out Vector3 normal)
         {
-            return GetPickedObject(camera, new Vector2(this.newState.X, this.newState.Y), 0, distance, out pos, out normal);
+            return GetPickedObject(cameraManager.ActiveCamera, new Vector2(this.newState.X, this.newState.Y), 0, distance, out pos, out normal);
         }
 
-        protected Actor GetPickedObject(Camera3D camera, float startDistance, float distance, out Vector3 pos, out Vector3 normal)
+        protected Actor GetPickedObject(CameraManager cameraManager, float startDistance, float distance, out Vector3 pos, out Vector3 normal)
         {
-            return GetPickedObject(camera, new Vector2(this.newState.X, this.newState.Y), startDistance, distance, out pos, out normal);
+            return GetPickedObject(cameraManager.ActiveCamera, new Vector2(this.newState.X, this.newState.Y), startDistance, distance, out pos, out normal);
         }
 
         protected Vector3 GetMouseRayDirection(Camera3D camera)

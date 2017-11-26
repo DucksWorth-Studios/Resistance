@@ -276,6 +276,8 @@ namespace GDLibrary
 
         public override void Update(GameTime gameTime)
         {
+            System.Diagnostics.Debug.WriteLine("\t\tSoundManager::Update()");
+
             this.audioEngine.Update();
             for (int i = 0; i < cueList3D.Count; i++)
             {

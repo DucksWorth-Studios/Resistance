@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using JigLibX.Geometry;
 using JigLibX.Collision;
 using System.Collections.Generic;
+using System;
 /*
 Z-fighting on ground plane in 3rd person mode
 Elevation angle on 3rd person view
@@ -19,7 +20,7 @@ menu transparency
 
 namespace GDApp
 {
-    public class Main : Microsoft.Xna.Framework.Game
+    public class Main : Game
     {
 
         #region Fields
@@ -78,6 +79,9 @@ namespace GDApp
         #region Initialization
         protected override void Initialize()
         {
+            //moved instanciation here to allow menu and ui managers to be moved to InitializeManagers()
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
             int gameLevel = 1;
             bool isMouseVisible = true;
             Integer2 screenResolution = ScreenUtility.HD720;
@@ -101,6 +105,13 @@ namespace GDApp
 
             //Initialize Effects
             InitializeEffects();
+
+            //add menu and UI elements
+            AddMenuElements();
+            AddUIElements();
+#if DEBUG
+            InitializeDebugTextInfo();
+#endif
 
             //load game happens before cameras are loaded because we may add a third person camera that needs a reference to a loaded Actor
             LoadGame(gameLevel);
@@ -167,7 +178,15 @@ namespace GDApp
                 Components.Add(this.gamePadManager);
             }
 
+            //menu manager
+            this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, this.cameraManager, spriteBatch, this.eventDispatcher, StatusType.Off);
+            //set the main menu to be the active menu scene
+            this.menuManager.SetActiveList("mainmenu");
+            Components.Add(this.menuManager);
 
+            //ui (e.g. reticule, inventory, progress)
+            this.uiManager = new UIManager(this, this.spriteBatch, this.eventDispatcher, 10, StatusType.Off);
+            Components.Add(this.uiManager);
         }
 
         private void LoadDictionaries()
@@ -602,7 +621,7 @@ namespace GDApp
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //make once then clone
-            sphereArchetype = new CollidableObject("sphere ", ActorType.CollidablePickup, Transform3D.Zero, effectParameters, model);
+            sphereArchetype = new CollidableObject("sphere ", ActorType.Pickup, Transform3D.Zero, effectParameters, model);
 
             for (int i = 0; i < 10; i++)
             {
@@ -633,7 +652,7 @@ namespace GDApp
                         new Vector3(2, 4, 1),
                         Vector3.UnitX, Vector3.UnitY);
 
-                collidableObject = new CollidableObject("box - " + i, ActorType.CollidablePickup, transform3D, effectParameters, model);
+                collidableObject = new CollidableObject("box - " + i, ActorType.Pickup, transform3D, effectParameters, model);
 
                 collidableObject.AddPrimitive(
                     new Box(transform3D.Translation, Matrix.Identity, /*important do not change - cm to inch*/
@@ -912,20 +931,10 @@ namespace GDApp
             EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, additionalEventParamsB));
             //we could also just use the line below, but why not use our event dispatcher?
             //this.cameraManager.SetActiveCamera(x => x.ID.Equals("collidable first person camera 1"));
-
         }
-        #endregion
+#endregion
 
-        #region Menu
-        private void InitializeMenu()
-        {
-            this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, this.cameraManager,
-                spriteBatch, this.eventDispatcher, StatusType.Off);
-            //set the main menu to be the active menu scene
-            this.menuManager.SetActiveList("mainmenu");
-            Components.Add(this.menuManager);
-        }
-
+        #region Menu & UI
         private void AddMenuElements()
         {
             Transform2D transform = null;
@@ -1087,21 +1096,16 @@ namespace GDApp
             this.menuManager.Add(sceneID, clone);
             #endregion
         }
-        #endregion
-
-        #region UI
-        private void InitializeUI()
-        {
-            //holds UI elements (e.g. reticule, inventory, progress)
-            this.uiManager = new UIManager(this, this.spriteBatch, this.eventDispatcher, 10, StatusType.Off);
-            Components.Add(this.uiManager);
-        }
-
         private void AddUIElements()
         {
             InitializeUIMousePointer();
             InitializeUIProgress();
             InitializeUIInventoryMenu();
+        }
+
+        private static bool IsCollidableObjectOfInterest(CollidableObject collidableObject)
+        {
+            return collidableObject.ActorType == ActorType.Pickup;
         }
 
         private void InitializeUIMousePointer()
@@ -1110,27 +1114,45 @@ namespace GDApp
             //show complete texture
             Microsoft.Xna.Framework.Rectangle sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height);
 
+            //this object packages together all managers to give the mouse object the ability to listen for all forms of input from the user, as well as know where camera is etc.
+            ManagerParameters managerParameters = new ManagerParameters(this.objectManager,
+                this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager);
+
+            //call this function in the UIMouseObject anytime we want to decide if a mouse over object is interesting to us
+            Predicate<CollidableObject> collisionPredicate = new Predicate<CollidableObject>(IsCollidableObjectOfInterest);
+
             MyUIMouseObject myUIMouseObject = new MyUIMouseObject("mouseObject",
-                ActorType.UIDynamicTexture,
-                StatusType.Drawn | StatusType.Update,
+                ActorType.UITexture,
                 new Transform2D(Vector2.One),
-                Color.Red,
-                SpriteEffects.None,
                 this.fontDictionary["mouse"],
                 "start text ignored",
                 new Vector2(0, 40),
-                Color.White,
-                1,
                 texture,
-                sourceRectangle,
-                new Vector2(sourceRectangle.Width / 2.0f, sourceRectangle.Height / 2.0f),
-                this.mouseManager,
-                this.cameraManager,
+                managerParameters,
                 AppData.PickStartDistance,
-                AppData.PickEndDistance);
+                AppData.PickEndDistance,
+                collisionPredicate);
+
+            //or use the monstrously large full constructor!
+            //MyUIMouseObject myUIMouseObject = new MyUIMouseObject("mouseObject",
+            //    ActorType.UIDynamicTexture,
+            //    StatusType.Drawn | StatusType.Update,
+            //    new Transform2D(Vector2.One),
+            //    Color.Red,
+            //    SpriteEffects.None,
+            //    this.fontDictionary["mouse"],
+            //    "start text ignored",
+            //    new Vector2(0, 40),
+            //    Color.White,
+            //    1,
+            //    texture,
+            //    sourceRectangle,
+            //    new Vector2(sourceRectangle.Width / 2.0f, sourceRectangle.Height / 2.0f),
+            //    managerParameters,
+            //    AppData.PickStartDistance,
+            //    AppData.PickEndDistance);
             this.uiManager.Add(myUIMouseObject);
         }
-
         private void InitializeUIProgress()
         {
             float separation = 20; //spacing between progress bars
@@ -1153,7 +1175,7 @@ namespace GDApp
                 new Integer2(texture.Width, texture.Height));
 
             textureObject = new UITextureObject(AppData.PlayerOneProgressID,
-                    ActorType.UIDynamicTexture,
+                    ActorType.UITexture,
                     StatusType.Drawn | StatusType.Update,
                     transform, Color.Green,
                     SpriteEffects.None,
@@ -1172,7 +1194,7 @@ namespace GDApp
             transform = new Transform2D(position, 0, scale, Vector2.Zero, new Integer2(texture.Width, texture.Height));
 
             textureObject = new UITextureObject(AppData.PlayerTwoProgressID,
-                    ActorType.UIDynamicTexture,
+                    ActorType.UITexture,
                     StatusType.Drawn | StatusType.Update,
                     transform, 
                     Color.Red,
@@ -1186,7 +1208,6 @@ namespace GDApp
             this.uiManager.Add(textureObject);
             #endregion
         }
-
         private void InitializeUIInventoryMenu()
         {
             //throw new NotImplementedException();
@@ -1219,18 +1240,18 @@ namespace GDApp
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            //spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            #region Add Menu & UI
-            InitializeMenu();
-            AddMenuElements();
-            InitializeUI();
-            AddUIElements();
-            #endregion
+//            #region Add Menu & UI
+//            InitializeMenu();
+//            AddMenuElements();
+//            InitializeUI();
+//            AddUIElements();
+//            #endregion
 
-#if DEBUG
-            InitializeDebugTextInfo();
-#endif
+//#if DEBUG
+//            InitializeDebugTextInfo();
+//#endif
 
         }
 
@@ -1260,6 +1281,8 @@ namespace GDApp
 #endif
 
 
+            System.Diagnostics.Debug.WriteLine("Main::Update()");
+
             base.Update(gameTime);
         }
 
@@ -1283,7 +1306,6 @@ namespace GDApp
                 EventDispatcher.Publish(new EventData(EventActionType.OnCameraCycle, EventCategoryType.Camera));
             }
         }
-
         private void demoHideDebugInfo()
         {
             //show/hide debug info
@@ -1292,8 +1314,6 @@ namespace GDApp
                 EventDispatcher.Publish(new EventData(EventActionType.OnToggleDebug, EventCategoryType.Debug));
             }
         }
-
-
         private void demoUIProgressUpdate()
         {
             //testing event generation for UIProgressController
@@ -1323,7 +1343,6 @@ namespace GDApp
                 EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
         }
-
         private void demoAlphaChange()
         {
             //testing event generation on opacity change - see DrawnActor3D::Alpha setter
