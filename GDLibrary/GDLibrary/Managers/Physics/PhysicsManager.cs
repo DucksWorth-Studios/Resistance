@@ -39,13 +39,24 @@ namespace GDLibrary
         }
         #endregion
 
+        //gravity pre-defined
         public PhysicsManager(Game game, EventDispatcher eventDispatcher, StatusType statusType)
+            : this(game, eventDispatcher, statusType, -10 * Vector3.UnitY)
+        {
+
+        }
+
+        //user-defined gravity
+        public PhysicsManager(Game game, EventDispatcher eventDispatcher, StatusType statusType, Vector3 gravity)
             : base(game, eventDispatcher, statusType)
         {
             this.physicSystem = new PhysicsSystem();
 
             //add cd/cr system
             this.physicSystem.CollisionSystem = new CollisionSystemSAP();
+
+            //allows us to define the direction and magnitude of gravity - default is (0, -9.8f, 0)
+            this.physicSystem.Gravity = gravity;
 
             //25/11/17 - prevents bug where objects would show correct CDCR response when velocity == Vector3.Zero
             //this.physicSystem.EnableFreezing = true;
@@ -83,7 +94,6 @@ namespace GDLibrary
                 //using the "sender" property of the event to pass reference to object to be removed - use "as" to access Body since sender is defined as a raw object.
                 CollidableObject collidableObject = eventData.Sender as CollidableObject;
                 //what would happen if we did not remove the physics body? would the CD/CR skin remain?
-                this.PhysicsSystem.CollisionSystem.RemoveCollisionSkin(collidableObject.Collision);
                 this.PhysicsSystem.RemoveBody(collidableObject.Body);
             }
         }

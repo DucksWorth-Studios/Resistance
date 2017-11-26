@@ -15,7 +15,7 @@ namespace GDLibrary
 {
     public class UIMouseObject : UITextureObject
     {
-        #region Variables
+        #region Fields
         protected static readonly string NoObjectSelectedText = "no object selected";
         protected static readonly float DefaultMinPickPlaceDistance = 20;
         protected static readonly float DefaultMaxPickPlaceDistance = 100;
@@ -42,8 +42,18 @@ namespace GDLibrary
         private Vector3 pos, normal; //position and normal of point of collision - could be useful for decals!
         #endregion
 
-
         #region Properties
+        private Predicate<CollidableObject> CollisionPredicate
+        {
+            get
+            {
+                return this.collisionPredicate;
+            }
+            set
+            {
+                this.collisionPredicate = value;
+            }
+        }
         public bool IsPickAndPlaceEnabled
         {
             get
@@ -64,7 +74,7 @@ namespace GDLibrary
             set
             {
                 //keep within bounds of min->max to stop objects disappearing either behind (i.e. < 0), or far ahead (i.e. > FCP distance) of camera
-                this.actualPickPlaceDistance =  MathHelper.Clamp(value, DefaultMinPickPlaceDistance, DefaultMaxPickPlaceDistance);
+                this.actualPickPlaceDistance = MathHelper.Clamp(value, DefaultMinPickPlaceDistance, DefaultMaxPickPlaceDistance);
             }
         }
         protected CollidableObject CurrentPickedCollidableObject
@@ -156,9 +166,10 @@ namespace GDLibrary
         #region Handle Picking
         private void HandleMousePick(GameTime gameTime)
         {
-            if (this.managerParameters.CameraManager.ActiveCamera != null)               
+            if (this.managerParameters.CameraManager.ActiveCamera != null)
             {
-                if (this.currentPickedCollidableObject == null) //nothing picked so allow user to pick 
+                //if nothing selected for pick-and-place disabled then allow the next pick OR if pick-and-place disabled then just allow the next object to be selected
+                if (this.currentPickedCollidableObject == null || !this.bPickAndPlaceEnabled) 
                 {
                     Camera3D camera = this.managerParameters.CameraManager.ActiveCamera;
                     CollidableObject collidableObject = this.managerParameters.MouseManager.GetPickedObject(camera, camera.ViewportCentre,
@@ -168,11 +179,9 @@ namespace GDLibrary
                     if (IsValidCollision(collidableObject, pos, normal))
                     {
                         HandleCollision(gameTime, collidableObject, pos, normal);
-
+                        SetAppearanceOnCollision(gameTime, collidableObject, pos, normal);
                         if(this.bPickAndPlaceEnabled)
                             PickupObject(gameTime, collidableObject, pos, normal);
-
-                        SetAppearanceOnCollision(gameTime, collidableObject, pos, normal);
                     }
                     else  //if not colliding with anything of interest
                     {
@@ -183,19 +192,19 @@ namespace GDLibrary
                 else //something was picked last update now decide to either move, or release it
                 {
                     if (this.bPickAndPlaceEnabled)
-                        PlaceObject();
+                        PlaceObject(gameTime);
                 }
             }
         }
 
-        protected virtual void PlaceObject()
+        protected virtual void PlaceObject(GameTime gameTime)
         {
             //pick object 
             if (this.ManagerParameters.MouseManager.IsLeftButtonClicked())
             {
                 int scrollDelta = this.ManagerParameters.MouseManager.GetDeltaFromScrollWheel();
                 if (scrollDelta != 0)
-                    this.ActualPickPlaceDistance += scrollDelta / 10.0f;
+                    this.ActualPickPlaceDistance += gameTime.ElapsedGameTime.Milliseconds * scrollDelta / 1000.0f;
 
                 this.CurrentPickedCollidableObject.Body.DisableBody();
                 this.CurrentPickedCollidableObject.Body.MoveTo(this.ManagerParameters.CameraManager.ActiveCamera.Transform.Translation
@@ -205,6 +214,9 @@ namespace GDLibrary
             {
                 this.CurrentPickedCollidableObject.Body.EnableBody();
                 this.CurrentPickedCollidableObject = null;
+
+                //reset the pick and place distance at the start of a new pick
+                this.actualPickPlaceDistance = DefaultMinPickPlaceDistance;
             }
         }
 

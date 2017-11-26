@@ -48,15 +48,21 @@ namespace GDApp
             {
                 //do what you want here...
 
-               
-                //remove the object - obviously if you're picking and placing it makes no sense to remove the object
-                EventDispatcher.Publish(new EventData(collidableObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
-                //if you do remove dont forget to reset this variable to say that we're no longer picking anything
-                this.CurrentPickedCollidableObject = null;
+                #region Remove Object - Uncomment to try out
+                if (!this.IsPickAndPlaceEnabled)
+                {
+                    //remove the object - obviously if you're picking and placing it makes no sense to remove the object
+                    EventDispatcher.Publish(new EventData(collidableObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
+                    //if you do remove dont forget to reset this variable to say that we're no longer picking anything
+                    this.CurrentPickedCollidableObject = null;
+                }
+                #endregion
 
+                #region Play Sound- Uncomment to try out - Bug - Sound not playing - 25/11/17 - NMCG
                 //play a sound - you could store a audio cue in the PickupParameter of the Im-/MoveablePickupObject to play a recording like a tape recording in a game
                 //object[] additionalParameters = { "boing" };
                 //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+                #endregion
 
             }
 

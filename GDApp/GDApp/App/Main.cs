@@ -164,7 +164,7 @@ namespace GDApp
             Components.Add(this.screenManager);
 
             //CD-CR using JigLibX and add debug drawer to visualise collision skins
-            this.physicsManager = new PhysicsManager(this, this.eventDispatcher, StatusType.Off);
+            this.physicsManager = new PhysicsManager(this, this.eventDispatcher, StatusType.Off, AppData.BigGravity);
             Components.Add(this.physicsManager);
 
             //add mouse manager
@@ -394,8 +394,8 @@ namespace GDApp
             InitializeCollidableHeroPlayerObject();
 
             ////add level elements
-            //InitializeBuildings();
-            //InitializeWallsFences();
+            InitializeBuildings();
+            InitializeWallsFences();
         }
 
         private void InitializeCollidableHeroPlayerObject()
@@ -607,25 +607,22 @@ namespace GDApp
         //if you want objects to be collidable AND moveable then you must attach either a box, sphere, or capsule primitives to the object
         private void InitializeDynamicCollidableObjects()
         {
-            CollidableObject collidableObject, sphereArchetype = null;
-            Transform3D transform3D = null;
+            CollidableObject collidableObject, archetypeCollidableObject = null;
             Texture2D texture = null;
             Model model = null;
 
             #region Spheres
-            //these boxes, spheres and cylinders are all centered around (0,0,0) in 3DS Max
             model = this.modelDictionary["sphere"];
             texture = this.textureDictionary["checkerboard"];
-
             BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //make once then clone
-            sphereArchetype = new CollidableObject("sphere ", ActorType.CollidablePickup, Transform3D.Zero, effectParameters, model);
+            archetypeCollidableObject = new CollidableObject("sphere ", ActorType.CollidablePickup, Transform3D.Zero, effectParameters, model);
 
             for (int i = 0; i < 10; i++)
             {
-                collidableObject = (CollidableObject)sphereArchetype.Clone();
+                collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
 
                 collidableObject.ID += " - " + i;
                 collidableObject.Transform = new Transform3D(new Vector3(-50, 100 + 10 * i, i), new Vector3(0, 0, 0),
@@ -640,28 +637,27 @@ namespace GDApp
 
             #region Box
             model = this.modelDictionary["box2"];
-
             effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["crate2"];
+            //make once then clone
+            archetypeCollidableObject = new CollidableObject("box - ", ActorType.CollidablePickup, Transform3D.Zero, effectParameters, model);
 
+            int count = 0;
             for (int i = 0; i < 5; i++)
             {
-                transform3D = new Transform3D(
-                        new Vector3(25, 15 + 10 * i, 2 * i),
-                        new Vector3(0, 0, 0),
-                        new Vector3(2, 4, 1),
-                        Vector3.UnitX, Vector3.UnitY);
+                for (int j = 0; j < 5; j++)
+                {
+                    collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+                    collidableObject.ID += " - " + count;
+                    count++;
 
-                collidableObject = new CollidableObject("box - " + i, ActorType.CollidablePickup, transform3D, effectParameters, model);
+                    collidableObject.Transform = new Transform3D(new Vector3(25 + 5 * j, 15 + 10 * i, 0), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+                    collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
 
-                collidableObject.AddPrimitive(
-                    new Box(transform3D.Translation, Matrix.Identity, /*important do not change - cm to inch*/
-            2.54f * transform3D.Scale),
-                    new MaterialProperties(0.2f, 0.8f, 0.7f));
-
-                //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
-                collidableObject.Enable(false, 100);
-                this.objectManager.Add(collidableObject);
+                    //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
+                    collidableObject.Enable(false, 25);
+                    this.objectManager.Add(collidableObject);
+                }
             }
 
             #endregion
@@ -735,7 +731,7 @@ namespace GDApp
 
         private void InitializeWallsFences()
         {
-            Transform3D transform3D = new Transform3D(new Vector3(-138, 0, -8),
+            Transform3D transform3D = new Transform3D(new Vector3(-140, 0, -14),
                 new Vector3(0, -90, 0), 0.4f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
             BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
@@ -743,20 +739,6 @@ namespace GDApp
 
             CollidableObject collidableObject = new TriangleMeshObject("wall1", ActorType.CollidableArchitecture, transform3D, 
                             effectParameters, this.modelDictionary["wall"], new MaterialProperties(0.2f, 0.8f, 0.7f));
-            collidableObject.Enable(true, 1);
-            this.objectManager.Add(collidableObject);
-        }
-
-        private void InitializeCanyon()
-        {
-            Transform3D transform3D = new Transform3D(new Vector3(-60, 0.1f, 0),
-                new Vector3(0, 90, 0), 0.04f * new Vector3(4, 2, 4), Vector3.UnitX, Vector3.UnitY);
-
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["canyon"];
-
-            CollidableObject collidableObject = new TriangleMeshObject("canyon", ActorType.CollidableArchitecture,
-                        transform3D, effectParameters, this.modelDictionary["canyon"], new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }
@@ -1108,7 +1090,6 @@ namespace GDApp
             return collidableObject.ActorType == ActorType.CollidableProp
                 || collidableObject.ActorType == ActorType.CollidablePickup;
         }
-
         private void InitializeUIMousePointer()
         {
             Texture2D texture = this.textureDictionary["reticuleDefault"];
