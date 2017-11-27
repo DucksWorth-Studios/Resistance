@@ -26,22 +26,32 @@ namespace GDLibrary
         public delegate void MenuEventHandler(EventData eventData);
         public delegate void ScreenEventHandler(EventData eventData);
         public delegate void OpacityEventHandler(EventData eventData);
+        
+        public delegate void AddActorEventHandler(EventData eventData);
         public delegate void RemoveActorEventHandler(EventData eventData);
         public delegate void PlayerEventHandler(EventData eventData);
         public delegate void Sound3DEventHandler(EventData eventData);
         public delegate void Sound2DEventHandler(EventData eventData);
+        public delegate void ObjectPickingEventHandler(EventData eventData);
+        public delegate void MouseEventHandler(EventData eventData);
+        
         public delegate void DebugEventHandler(EventData eventData);
-
+        
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
         public event MenuEventHandler MenuChanged;
         public event ScreenEventHandler ScreenChanged;
         public event OpacityEventHandler OpacityChanged;
+        public event AddActorEventHandler AddActorChanged;
         public event RemoveActorEventHandler RemoveActorChanged;
         public event PlayerEventHandler PlayerChanged;
         public event Sound3DEventHandler Sound3DChanged;
         public event Sound2DEventHandler Sound2DChanged;
+        public event ObjectPickingEventHandler ObjectPickChanged;
+        public event MouseEventHandler MouseChanged;
         public event DebugEventHandler DebugChanged;
+        
+
 
         public EventDispatcher(Game game, int initialSize)
             : base(game)
@@ -92,6 +102,10 @@ namespace GDLibrary
                     OnOpacity(eventData);
                     break;
 
+                case EventCategoryType.SystemAdd:
+                    OnAddActor(eventData);
+                    break;
+
                 case EventCategoryType.SystemRemove:
                     OnRemoveActor(eventData);
                     break;
@@ -110,6 +124,14 @@ namespace GDLibrary
 
                 case EventCategoryType.Sound2D:
                     OnSound2D(eventData);
+                    break;
+
+                case EventCategoryType.ObjectPicking:
+                    OnObjectPicking(eventData);
+                    break;
+
+                case EventCategoryType.Mouse:
+                    OnMouse(eventData);
                     break;
 
                 default:
@@ -149,6 +171,12 @@ namespace GDLibrary
             OpacityChanged?.Invoke(eventData);
         }
 
+        //called when a drawn objects needs to be added - see PickingManager::DoFireNewObject()
+        protected virtual void OnAddActor(EventData eventData)
+        {
+            AddActorChanged?.Invoke(eventData);
+        }
+
         //called when a drawn objects needs to be removed - see UIMouseObject::HandlePickedObject()
         protected virtual void OnRemoveActor(EventData eventData)
         {
@@ -177,6 +205,18 @@ namespace GDLibrary
         protected virtual void OnSound2D(EventData eventData)
         {
             Sound2DChanged?.Invoke(eventData);
+        }
+
+        //called when the PickingManager picks an object
+        protected virtual void OnObjectPicking(EventData eventData)
+        {
+            ObjectPickChanged?.Invoke(eventData);
+        }
+
+        //called when the we want to set mouse position, appearance etc.
+        protected virtual void OnMouse(EventData eventData)
+        {
+            MouseChanged?.Invoke(eventData);
         }
 
 

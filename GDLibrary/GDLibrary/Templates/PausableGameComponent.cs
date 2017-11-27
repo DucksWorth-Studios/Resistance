@@ -70,9 +70,6 @@ namespace GDLibrary
 
         public override void Update(GameTime gameTime)
         {
-            //screen manager needs to listen to input even when paused i.e. hide/show menu - see ScreenManager::HandleInput()
-            HandleInput(gameTime);
-
             if ((this.statusType & StatusType.Update) != 0) //if update flag is set
             {
                 ApplyUpdate(gameTime);
@@ -88,6 +85,23 @@ namespace GDLibrary
 
         protected virtual void HandleInput(GameTime gameTime)
         {
+
         }
+
+        protected virtual void HandleMouse(GameTime gameTime)
+        {
+
+        }
+
+        protected virtual void HandleKeyboard(GameTime gameTime)
+        {
+
+        }
+
+        protected virtual void HandleGamePad(GameTime gameTime)
+        {
+
+        }
+
     }
 }

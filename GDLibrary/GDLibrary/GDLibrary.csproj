@@ -71,6 +71,7 @@
     <Compile Include="Actors\Base\Actor3D.cs" />
     <Compile Include="Actors\Camera\Camera3D.cs" />
     <Compile Include="Actors\Drawn\2D\DrawnActor2D.cs" />
+    <Compile Include="Actors\Drawn\2D\UI\UIPickingMouseObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UIButtonObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UIMouseObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UIObject.cs" />
@@ -134,6 +135,8 @@
     <Compile Include="Managers\Menu\MenuManager.cs" />
     <Compile Include="Managers\Object\ObjectManager.cs" />
     <Compile Include="Managers\Physics\PhysicsManager.cs" />
+    <Compile Include="Managers\Picking\PickingManager.cs" />
+    <Compile Include="Enums\PickingBehaviourType.cs" />
     <Compile Include="Managers\Screen\ScreenManager.cs" />
     <Compile Include="Managers\Sound\Cue3D.cs" />
     <Compile Include="Managers\Sound\SoundManager.cs" />

@@ -102,6 +102,22 @@ namespace GDLibrary
 
         protected virtual void HandleInput(GameTime gameTime)
         {
+
+        }
+
+        protected virtual void HandleMouse(GameTime gameTime)
+        {
+
+        }
+
+        protected virtual void HandleKeyboard(GameTime gameTime)
+        {
+
+        }
+
+        protected virtual void HandleGamePad(GameTime gameTime)
+        {
+
         }
     }
 }

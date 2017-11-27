@@ -17,9 +17,9 @@ namespace GDLibrary
     {
 
         #region Fields 
-        private CameraManager cameraManager;
-        private ScreenManager screenManager;
-        private ObjectManager objectManager;
+        //statics
+        private static readonly float DefaultLayerDepth = 0;
+        private ManagerParameters managerParameters;
         private SpriteFont spriteFont;
         private SpriteBatch spriteBatch;
         private Color textColor;
@@ -33,15 +33,13 @@ namespace GDLibrary
 
         #region Properties 
         #endregion
-        public DebugDrawer(Game game, ScreenManager screenManager, CameraManager cameraManager, ObjectManager objectManager,
+        public DebugDrawer(Game game, ManagerParameters managerParameters,
             SpriteBatch spriteBatch, SpriteFont spriteFont, Color textColor, Vector2 textHoriVertOffset, 
             EventDispatcher eventDispatcher,
             StatusType statusType)
             : base(game, eventDispatcher, statusType)
         {
-            this.screenManager = screenManager;
-            this.cameraManager = cameraManager;
-            this.objectManager = objectManager;
+            this.managerParameters = managerParameters;
             this.spriteBatch = spriteBatch;
             this.spriteFont = spriteFont;
             this.textColor = textColor;
@@ -91,6 +89,7 @@ namespace GDLibrary
 
         protected override void ApplyUpdate(GameTime gameTime)
         {
+
             //total time since last update to FPS text
             this.totalElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
             this.frameCount++;
@@ -109,13 +108,13 @@ namespace GDLibrary
         protected override void ApplyDraw(GameTime gameTime)
         {
             this.spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, null);
-            if (this.screenManager.ScreenType == ScreenUtility.ScreenType.SingleScreen)
+            if (this.managerParameters.ScreenManager.ScreenType == ScreenUtility.ScreenType.SingleScreen)
             {
-                DrawDebugInfo(this.cameraManager.ActiveCamera);
+                DrawDebugInfo(this.managerParameters.CameraManager.ActiveCamera);
             }
             else
             {
-                foreach (Camera3D camera in cameraManager)
+                foreach (Camera3D camera in this.managerParameters.CameraManager)
                     DrawDebugInfo(camera);
             }
             this.spriteBatch.End();
@@ -124,25 +123,27 @@ namespace GDLibrary
         private void DrawDebugInfo(Camera3D camera)
         {     
             this.textPosition = new Vector2(camera.Viewport.X, camera.Viewport.Y) + this.textHoriVertOffset;
-            this.spriteBatch.DrawString(this.spriteFont, "ID:" + camera.ID, this.textPosition, this.textColor);
+            this.spriteBatch.DrawString(this.spriteFont, "ID:" + camera.ID, this.textPosition, this.textColor, 
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth); 
 
             this.textPosition.Y += this.textHeight;
-            this.spriteBatch.DrawString(this.spriteFont, this.fpsText, this.textPosition, this.textColor);
+            this.spriteBatch.DrawString(this.spriteFont, this.fpsText, this.textPosition, this.textColor,
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
 
             this.textPosition.Y += this.textHeight;
             this.spriteBatch.DrawString(this.spriteFont, 
-                "Pos:" + MathUtility.Round(camera.Transform.Translation, 1).ToString(), 
-                this.textPosition, this.textColor);
+                "Pos:" + MathUtility.Round(camera.Transform.Translation, 1).ToString(), this.textPosition, this.textColor,
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
 
             this.textPosition.Y += this.textHeight;
             this.spriteBatch.DrawString(this.spriteFont,
-                "Look:" + MathUtility.Round(camera.Transform.Look, 1).ToString(),
-                this.textPosition, this.textColor);
+                "Look:" + MathUtility.Round(camera.Transform.Look, 1).ToString(), this.textPosition, this.textColor,
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
 
             this.textPosition.Y += this.textHeight;
             this.spriteBatch.DrawString(this.spriteFont,
-                "Nr. Drawn Obj.:" + this.objectManager.DebugDrawCount,
-                this.textPosition, this.textColor);
+                "Nr. Drawn Obj.:" + this.managerParameters.ObjectManager.DebugDrawCount, this.textPosition, this.textColor,
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
         }
     }
 }

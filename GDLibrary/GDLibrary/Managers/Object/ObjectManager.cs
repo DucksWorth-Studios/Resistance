@@ -79,6 +79,15 @@ namespace GDLibrary
         {
             eventDispatcher.OpacityChanged += EventDispatcher_OpacityChanged;
             eventDispatcher.RemoveActorChanged += EventDispatcher_RemoveActorChanged;
+            eventDispatcher.AddActorChanged += EventDispatcher_AddActorChanged;
+        }
+
+        private void EventDispatcher_AddActorChanged(EventData eventData)
+        {
+            if (eventData.EventType == EventActionType.OnAddActor)
+            {
+                this.Add(eventData.Sender as Actor3D);
+            }
         }
 
         private void EventDispatcher_RemoveActorChanged(EventData eventData)
@@ -280,7 +289,7 @@ namespace GDLibrary
         //draw a model object 
         private void DrawObject(GameTime gameTime, ModelObject modelObject, Camera3D activeCamera)
         {
-            if (activeCamera.BoundingFrustum.Intersects(modelObject.BoundingSphere))
+         //   if (activeCamera.BoundingFrustum.Intersects(modelObject.BoundingSphere))
             {
                 if (modelObject.Model != null)
                 {

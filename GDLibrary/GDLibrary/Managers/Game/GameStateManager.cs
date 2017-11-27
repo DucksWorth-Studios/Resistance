@@ -30,15 +30,13 @@ namespace GDLibrary
                 //turn on update and draw i.e. hide the menu
                 this.StatusType = StatusType.Update | StatusType.Drawn;
             }
-            //did the event come from the main menu and is it a start game event
+            //did the event come from the main menu and is it a pause game event
             else if (eventData.EventType == EventActionType.OnPause)
             {
                 //turn off update and draw i.e. show the menu since the game is paused
                 this.StatusType = StatusType.Off;
             }
         }
-
-
         #endregion
     }
 }

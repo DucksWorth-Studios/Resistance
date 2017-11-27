@@ -33,6 +33,7 @@ namespace GDLibrary
         CollidableCamera,       //used by first person collidable camera controller
         CollidablePickup,        //i.e. something we can add to inventory e.g. ammo
         CollidableArchitecture,
-        CollidableRecording      //audio recordings from players that can be picked up and played
+        CollidableRecording,      //audio recordings from players that can be picked up and played
+        CollidableProjectile
     }
 }

@@ -9,6 +9,11 @@ using JigLibX.Collision;
 using System.Collections.Generic;
 using System;
 /*
+override Clone()
+Reticule color not resetting
+No statustype on controllers
+mouse object text interleaving with progress controller
+progress controller not receiving events to increase progress
 Z-fighting on ground plane in 3rd person mode
 Elevation angle on 3rd person view
 ScreenManager - enum - this.ScreenType = (ScreenUtilityScreenType)eventData.AdditionalEventParameters[0];
@@ -44,6 +49,7 @@ namespace GDApp
         public UIManager uiManager { get; private set; }
         public GamePadManager gamePadManager { get; private set; }
         public SoundManager soundManager { get; private set; }
+        public PickingManager pickingManager { get; private set; }
 
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
@@ -59,11 +65,13 @@ namespace GDApp
         private Dictionary<string, Viewport> viewPortDictionary;
         private Dictionary<string, EffectParameters> effectDictionary;
 
+        private ManagerParameters managerParameters;
+
+
+
         //demo remove later
         private HeroPlayerObject heroPlayerObject;
         private ModelObject drivableBoxObject;
-        private ManagerParameters managerParameters;
-
         #endregion
 
         #region Properties
@@ -95,9 +103,6 @@ namespace GDApp
             //Initialize EventDispatcher
             InitializeEventDispatcher();
 
-            //Initialize the Managers
-            InitializeManagers(screenResolution, screenType, isMouseVisible, numberOfGamePadPlayers);
-
             //Load Dictionaries, Media Assets and Non-media Assets
             LoadDictionaries();
             LoadAssets();
@@ -106,6 +111,9 @@ namespace GDApp
 
             //Initialize Effects
             InitializeEffects();
+
+            //Initialize the Managers
+            InitializeManagers(screenResolution, screenType, isMouseVisible, numberOfGamePadPlayers);
 
             //add menu and UI elements
             AddMenuElements();
@@ -189,9 +197,24 @@ namespace GDApp
             this.uiManager = new UIManager(this, this.spriteBatch, this.eventDispatcher, 10, StatusType.Off);
             Components.Add(this.uiManager);
 
+        
             //this object packages together all managers to give the mouse object the ability to listen for all forms of input from the user, as well as know where camera is etc.
             this.managerParameters = new ManagerParameters(this.objectManager,
-                this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager);
+                this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager, this.screenManager);
+
+            #region Pick and Projectile Manager
+            //call this function anytime we want to decide if a mouse over object is interesting to the PickingManager
+            //See https://www.codeproject.com/Articles/114931/Understanding-Predicate-Delegates-in-C
+            Predicate<CollidableObject> collisionPredicate = new Predicate<CollidableObject>(CollisionUtility.IsCollidableObjectOfInterest);
+            //create the projectile archetype that the manager can fire
+
+            //listens for picking with the mouse on valid (based on specified predicate) collidable objects and pushes notification events to listeners
+            this.pickingManager = new PickingManager(this, this.eventDispatcher, StatusType.Off, 
+                this.managerParameters, 
+                PickingBehaviourType.PickAndRemove, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
+            Components.Add(this.pickingManager);
+            #endregion
+
 
         }
 
@@ -358,7 +381,7 @@ namespace GDApp
         private void InitializeDebugTextInfo()
         {
             //add debug info in top left hand corner of the screen
-            this.debugDrawer = new DebugDrawer(this, this.screenManager, this.cameraManager, this.objectManager, spriteBatch,
+            this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
                 this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
             Components.Add(this.debugDrawer);
 
@@ -439,7 +462,7 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale));
 
             //clone the dictionary effect and set unique properties for the hero player object
-            BasicEffectParameters effectParameters = (this.effectDictionary["unlitModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["unlitModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //create a archetype to use for cloning
@@ -503,7 +526,7 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale));
 
             //clone the dictionary effect and set unique properties for the hero player object
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
             //a fix to ensure that any image containing transparent pixels will be sent to the correct draw list in ObjectManager
             effectParameters.Alpha = 0.99f;
@@ -568,7 +591,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-50, 10, 0), new Vector3(45, 45, 0), 0.1f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
             //clone the dictionary effect and set unique properties for the hero player object
 
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["ml"];
             effectParameters.DiffuseColor = Color.White;
             effectParameters.SpecularPower = 32; //pow((N, H), SpecularPower)
@@ -586,7 +609,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-30, 3, 0),
                 new Vector3(0, 0, 0), 0.08f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             CollidableObject collidableObject = new TriangleMeshObject("teapot", ActorType.CollidableProp, transform3D, effectParameters, 
@@ -601,7 +624,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-10, 3, 0),
                 new Vector3(0, 0, 0), 0.08f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
             //lets set the diffuse color also, for fun.
             effectParameters.DiffuseColor = Color.Blue;
@@ -616,13 +639,11 @@ namespace GDApp
         private void InitializeDynamicCollidableObjects()
         {
             CollidableObject collidableObject, archetypeCollidableObject = null;
-            Texture2D texture = null;
             Model model = null;
 
             #region Spheres
             model = this.modelDictionary["sphere"];
-            texture = this.textureDictionary["checkerboard"];
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //make once then clone
@@ -632,13 +653,13 @@ namespace GDApp
             {
                 collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
 
-                collidableObject.ID += " - " + i;
+                collidableObject.ID += i;
                 collidableObject.Transform = new Transform3D(new Vector3(-50, 100 + 10 * i, i), new Vector3(0, 0, 0),
                     0.082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                     Vector3.UnitX, Vector3.UnitY);
 
                 collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 2.54f), new MaterialProperties(0.2f, 0.8f, 0.7f));
-                collidableObject.Enable(false, 5);
+                collidableObject.Enable(false, 1);
                 this.objectManager.Add(collidableObject);
             }
             #endregion
@@ -656,14 +677,14 @@ namespace GDApp
                 for (int j = 0; j < 5; j++)
                 {
                     collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
-                    collidableObject.ID += " - " + count;
+                    collidableObject.ID += count;
                     count++;
 
                     collidableObject.Transform = new Transform3D(new Vector3(25 + 5 * j, 15 + 10 * i, 0), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
                     collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
 
                     //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
-                    collidableObject.Enable(false, 25);
+                    collidableObject.Enable(false, 1);
                     this.objectManager.Add(collidableObject);
                 }
             }
@@ -677,7 +698,7 @@ namespace GDApp
             //place the drivable model to the left of the existing models and specify that forward movement is along the -ve z-axis
             Transform3D transform = new Transform3D(new Vector3(-10, 5, 25), -Vector3.UnitZ, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["crate1"];
             effectParameters.DiffuseColor = Color.Gold;
 
@@ -699,7 +720,7 @@ namespace GDApp
             //position the object
             Transform3D transform = new Transform3D(new Vector3(0, 5, 0), Vector3.Zero, Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["crate1"];
             effectParameters.DiffuseColor = Color.Gold;
             effectParameters.Alpha = 0.5f;
@@ -729,7 +750,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-100, 0, 0),
                 new Vector3(0, 90, 0), 0.4f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["house-low-texture"];
 
             CollidableObject collidableObject = new TriangleMeshObject("house1", ActorType.CollidableArchitecture, transform3D, 
@@ -743,7 +764,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-140, 0, -14),
                 new Vector3(0, -90, 0), 0.4f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = (this.effectDictionary["litModelBasicEffect"] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["wall"];
 
             CollidableObject collidableObject = new TriangleMeshObject("wall1", ActorType.CollidableArchitecture, transform3D, 
@@ -1101,45 +1122,16 @@ namespace GDApp
             //show complete texture
             Microsoft.Xna.Framework.Rectangle sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height);
 
-            //call this function in the UIMouseObject anytime we want to decide if a mouse over object is interesting to us
-            //See https://www.codeproject.com/Articles/114931/Understanding-Predicate-Delegates-in-C
-            Predicate<Actor> collisionPredicate = new Predicate<Actor>(CollisionUtility.IsCollidableObjectOfInterest);
-
-            MyUIMouseObject myUIMouseObject = new MyUIMouseObject("mouseObject",
+            //listens for object picking events from the object picking manager
+            UIPickingMouseObject myUIMouseObject = new UIPickingMouseObject("picking mouseObject",
                 ActorType.UITexture,
                 new Transform2D(Vector2.One),
                 this.fontDictionary["mouse"],
-                "start text ignored",
+                "",
                 new Vector2(0, 40),
                 texture,
-                managerParameters,
-                AppData.PickStartDistance,
-                AppData.PickEndDistance,
-                AppData.EnablePickAndPlace, //enable pick and place
-               collisionPredicate
-               //or use a Lambda Expression below
-                //x => (x.ActorType == ActorType.CollidablePickup || x.ActorType == ActorType.CollidableProp) //we can use a formally defined predicate, collisionPredicate - see above, or just use a Lambda Expression (i.e. x such at...
-                );
-
-            //or use the monstrously large full constructor!
-            //MyUIMouseObject myUIMouseObject = new MyUIMouseObject("mouseObject",
-            //    ActorType.UIDynamicTexture,
-            //    StatusType.Drawn | StatusType.Update,
-            //    new Transform2D(Vector2.One),
-            //    Color.Red,
-            //    SpriteEffects.None,
-            //    this.fontDictionary["mouse"],
-            //    "start text ignored",
-            //    new Vector2(0, 40),
-            //    Color.White,
-            //    1,
-            //    texture,
-            //    sourceRectangle,
-            //    new Vector2(sourceRectangle.Width / 2.0f, sourceRectangle.Height / 2.0f),
-            //    managerParameters,
-            //    AppData.PickStartDistance,
-            //    AppData.PickEndDistance,
-            //    collisionPredicate);
+                this.mouseManager,
+                this.eventDispatcher);
             this.uiManager.Add(myUIMouseObject);
         }
         private void InitializeUIProgress()
@@ -1168,7 +1160,7 @@ namespace GDApp
                     StatusType.Drawn | StatusType.Update,
                     transform, Color.Green,
                     SpriteEffects.None,
-                    0,
+                    1,
                     texture);
 
             //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
@@ -1188,7 +1180,7 @@ namespace GDApp
                     transform, 
                     Color.Red,
                     SpriteEffects.None,
-                    0,
+                    1,
                     texture);
 
             //add a controller which listens for pickupeventdata send when the player (or red box) collects the box on the left
@@ -1315,26 +1307,26 @@ namespace GDApp
             if (this.keyboardManager.IsFirstKeyPress(Keys.F9))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)(-1)/*need brackets around number because of sign*/};
+                object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, -1};
                 EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
             else if (this.keyboardManager.IsFirstKeyPress(Keys.F10))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, (Integer)1 };
+                object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, 1 };
                 EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
 
             if (this.keyboardManager.IsFirstKeyPress(Keys.F11))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)(-1)/*need brackets around number because of sign*/};
+                object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, -1};
                 EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
             else if (this.keyboardManager.IsFirstKeyPress(Keys.F12))
             {
                 //increase the left progress controller by 2
-                object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, (Integer)3 };
+                object[] additionalEventParams = { AppData.PlayerTwoProgressControllerID, 3 };
                 EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
             }
         }

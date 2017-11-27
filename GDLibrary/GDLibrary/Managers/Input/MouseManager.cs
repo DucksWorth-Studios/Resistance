@@ -100,6 +100,16 @@ namespace GDLibrary
             return ((newState.LeftButton.Equals(ButtonState.Pressed)) && (!oldState.LeftButton.Equals(ButtonState.Pressed)));
         }
 
+        public bool IsMiddleButtonClicked()
+        {
+            return (newState.MiddleButton.Equals(ButtonState.Pressed));
+        }
+
+        public bool IsMiddleButtonClickedOnce()
+        {
+            return ((newState.MiddleButton.Equals(ButtonState.Pressed)) && (!oldState.MiddleButton.Equals(ButtonState.Pressed)));
+        }
+
         public bool IsLeftButtonClicked()
         {
             return (newState.LeftButton.Equals(ButtonState.Pressed));
@@ -156,6 +166,11 @@ namespace GDLibrary
             return ((Math.Abs(newState.X - oldState.X) > mousePrecision) || (Math.Abs(newState.Y - oldState.Y) > mousePrecision));
         }
 
+        public int GetScrollWheelValue()
+        {
+            return newState.ScrollWheelValue;
+        }
+
 
         //how much has the scroll wheel been moved since the last update?
         public int GetDeltaFromScrollWheel()
@@ -197,7 +212,6 @@ namespace GDLibrary
             return compassDirectionType;
         }
 
-
         #region Ray Picking
         //inner class used for ray picking
         class ImmovableSkinPredicate : CollisionSkinPredicate1
@@ -211,7 +225,7 @@ namespace GDLibrary
             }
         }
         //get a ray positioned at the mouse's location on the screen - used for picking 
-        protected Microsoft.Xna.Framework.Ray GetMouseRay(Camera3D camera)
+        public Microsoft.Xna.Framework.Ray GetMouseRay(Camera3D camera)
         {
             //get the positions of the mouse in screen space
             Vector3 near = new Vector3(this.newState.X, this.Position.Y, 0);
@@ -223,7 +237,7 @@ namespace GDLibrary
         }
 
         //get a ray from a user-defined near position in world space and the mouse pointer
-        protected Microsoft.Xna.Framework.Ray GetMouseRayFromNearPosition(Camera3D camera, Vector3 near)
+        public Microsoft.Xna.Framework.Ray GetMouseRayFromNearPosition(Camera3D camera, Vector3 near)
         {
             //get the positions of the mouse in screen space
             Vector3 far = new Vector3(this.newState.X, this.Position.Y, 1);
@@ -236,7 +250,7 @@ namespace GDLibrary
         }
 
         //get a ray positioned at the screen position - used for picking when we have a centred reticule
-        protected Vector3 GetMouseRayDirection(Camera3D camera, Vector2 screenPosition)
+        public Vector3 GetMouseRayDirection(Camera3D camera, Vector2 screenPosition)
         {
             //get the positions of the mouse in screen space
             Vector3 near = new Vector3(screenPosition.X, screenPosition.Y, 0);
@@ -268,17 +282,17 @@ namespace GDLibrary
             return null;
         }
 
-        protected Actor GetPickedObject(CameraManager cameraManager, float distance, out Vector3 pos, out Vector3 normal)
+        public Actor GetPickedObject(CameraManager cameraManager, float distance, out Vector3 pos, out Vector3 normal)
         {
             return GetPickedObject(cameraManager.ActiveCamera, new Vector2(this.newState.X, this.newState.Y), 0, distance, out pos, out normal);
         }
 
-        protected Actor GetPickedObject(CameraManager cameraManager, float startDistance, float distance, out Vector3 pos, out Vector3 normal)
+        public Actor GetPickedObject(CameraManager cameraManager, float startDistance, float distance, out Vector3 pos, out Vector3 normal)
         {
             return GetPickedObject(cameraManager.ActiveCamera, new Vector2(this.newState.X, this.newState.Y), startDistance, distance, out pos, out normal);
         }
 
-        protected Vector3 GetMouseRayDirection(Camera3D camera)
+        public Vector3 GetMouseRayDirection(Camera3D camera)
         {
             return GetMouseRayDirection(camera, new Vector2(this.newState.X, this.newState.Y));
         }

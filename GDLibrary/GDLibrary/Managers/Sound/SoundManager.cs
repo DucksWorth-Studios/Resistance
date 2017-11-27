@@ -78,7 +78,7 @@ namespace GDLibrary
             else //OnStopAll - notice that the AdditionalParameters[0] parameter is now used to send the stop option (vs. above where it sent the cue name). be careful!
             {
                 //since we can only pass refereneces in AdditionalParameters and AudioStopOption is an enum (i.e. a primitive type) then we need to hack the code a little
-                if ((eventData.AdditionalParameters[0] as Integer).Value == 0)
+                if ((int)eventData.AdditionalParameters[0] == 0)
                     this.StopAll3DCues(AudioStopOptions.Immediate);
                 else
                     this.StopAll3DCues(AudioStopOptions.AsAuthored);
@@ -98,7 +98,7 @@ namespace GDLibrary
             else //OnStop
             {
                 //since we can only pass refereneces in AdditionalParameters and AudioStopOption is an enum (i.e. a primitive type) then we need to hack the code a little
-                if ((eventData.AdditionalParameters[1] as Integer).Value == 0)
+                if ((int)eventData.AdditionalParameters[0] == 0)
                     this.StopCue(cueName, AudioStopOptions.Immediate);
                 else
                     this.StopCue(cueName, AudioStopOptions.AsAuthored);
@@ -114,7 +114,7 @@ namespace GDLibrary
                 this.StatusType = StatusType.Update;
               
             }
-            //did the event come from the main menu and is it a start game event
+            //did the event come from the main menu and is it a pause game event
             else if (eventData.EventType == EventActionType.OnPause)
             {
                 //turn off update and draw i.e. show the menu since the game is paused
@@ -123,11 +123,6 @@ namespace GDLibrary
             }
         }
         #endregion
-
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
 
         /*************** Play, Pause, Resume, and Stop 2D sound cues ***************/
 

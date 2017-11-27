@@ -17,6 +17,7 @@ namespace GDLibrary
         private MouseManager mouseManager;
         private KeyboardManager keyboardManager;
         private GamePadManager gamePadManager;
+        private ScreenManager screenManager;
         #endregion
 
         #region Properties
@@ -56,6 +57,14 @@ namespace GDLibrary
                 return this.gamePadManager;
             }
         }
+        public ScreenManager ScreenManager
+        {
+            get
+            {
+                return this.screenManager;
+            }
+        }
+
         #endregion
 
         //useful for objects that need access ONLY to input specific managers
@@ -64,15 +73,25 @@ namespace GDLibrary
         {
 
         }
-        //useful for objects that need access to full range of managers
+       
+        //useful for objects that need access to most of managers EXCEPT ScreenManager
         public ManagerParameters(ObjectManager objectManager, CameraManager cameraManager, 
             MouseManager mouseManager, KeyboardManager keyboardManager, GamePadManager gamePadManager)
+            : this(objectManager, cameraManager, mouseManager, keyboardManager, gamePadManager, null)
+        {
+
+        }
+
+        //useful for objects that need access to ALL managers
+        public ManagerParameters(ObjectManager objectManager, CameraManager cameraManager,
+            MouseManager mouseManager, KeyboardManager keyboardManager, GamePadManager gamePadManager, ScreenManager screenManager)
         {
             this.objectManager = objectManager;
             this.cameraManager = cameraManager;
             this.mouseManager = mouseManager;
             this.keyboardManager = keyboardManager;
             this.gamePadManager = gamePadManager;
+            this.screenManager = screenManager;
         }
 
 

@@ -84,7 +84,7 @@ namespace GDLibrary
                     case EventActionType.OnHealthDelta:
                         {
                             //the second value in additionalParameters holds the gain/lose health value
-                            this.CurrentValue = this.currentValue + (eventData.AdditionalParameters[1] as Integer).Value;
+                            this.CurrentValue = this.currentValue + (int)eventData.AdditionalParameters[1];
                         }
                         break;
 
@@ -92,7 +92,7 @@ namespace GDLibrary
                     case EventActionType.OnHealthSet: //game start events
                         {
                             //the second value in additionalParameters holds the gain/lose health value
-                            this.CurrentValue = (eventData.AdditionalParameters[1] as Integer).Value;
+                            this.CurrentValue = (int)eventData.AdditionalParameters[1];
                         }
                         break;
 

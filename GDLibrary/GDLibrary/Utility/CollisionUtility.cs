@@ -45,11 +45,19 @@ namespace GDLibrary
                                  (int)Math.Round(max.X - min.X), (int)Math.Round(max.Y - min.Y));
         }
 
-
-        public static bool IsCollidableObjectOfInterest(Actor actor)
+        //a predicate function to be used by PickingManager for ray picking of collidable objects - defines what types are valid
+        public static bool IsCollidableObjectOfInterest(CollidableObject collidableObject)
         {
-            return actor.ActorType == ActorType.CollidableProp
-                || actor.ActorType == ActorType.CollidablePickup;
+            //shouldnt be able to pick immovable things
+            if (collidableObject.Collision.Owner.Immovable)
+                return false;
+
+            return collidableObject.ActorType == ActorType.CollidableProp || collidableObject.ActorType == ActorType.CollidablePickup;
+        }
+
+        public static string GetMouseStringFromCollidableObject(CollidableObject collidableObject, float distanceToObject)
+        {
+            return collidableObject.ID + " [" + distanceToObject + "]";
         }
     }
 }

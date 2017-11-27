@@ -70,7 +70,11 @@ namespace GDLibrary
             return value * multiplier;
         }
 
-    
+        public static implicit operator Vector2(Integer2 value)
+        {
+            return new Vector2(value.X, value.Y);
+        }
+
         //to do - add /, + - operator methods
 
         public object Clone()

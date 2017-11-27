@@ -61,5 +61,11 @@ namespace GDLibrary
         //sent to show/hide info
         OnToggleDebug,
 
+        //sent by object picking manager to update listeners e.g. the UI mouse ("no object selected")
+        OnObjectPicked,
+        OnNonePicked,
+
+        //used to set mouse position via an event
+        OnSetMousePosition,
     }
 }

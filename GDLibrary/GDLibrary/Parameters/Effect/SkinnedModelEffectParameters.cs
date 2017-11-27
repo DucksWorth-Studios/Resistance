@@ -5,7 +5,8 @@ using System.Text;
 
 namespace GDLibrary.Parameters.Effect
 {
-    class SkinnedModelEffectParameters
+    public class SkinnedModelEffectParameters
     {
+        //to do...
     }
 }
