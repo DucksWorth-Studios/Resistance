@@ -140,7 +140,7 @@ namespace GDLibrary
             else if (eventData.EventType == EventActionType.OnVolumeUp)
             {
                 //volume is in second channel of additionalParameters when we send OnVolumeUp/Down event
-                float volumeIncrement = (int)eventData.AdditionalParameters[1];
+                float volumeIncrement = (float)eventData.AdditionalParameters[1];
                 
                 //set through property to clamp range of valid values
                 this.Volume += volumeIncrement;
@@ -148,10 +148,23 @@ namespace GDLibrary
             else if (eventData.EventType == EventActionType.OnVolumeDown)
             {
                 //volume is in second channel of additionalParameters when we send OnVolumeUp/Down event
-                float volumeIncrement = (int)eventData.AdditionalParameters[1];
+                float volumeIncrement = (float)eventData.AdditionalParameters[1];
 
                 //set through property to clamp range of valid values
                 this.Volume -= volumeIncrement;
+            }
+            else if (eventData.EventType == EventActionType.OnVolumeSet)
+            {
+                //volume is in second channel of additionalParameters when we send OnVolumeUp/Down event
+                float volumeValue = (float)eventData.AdditionalParameters[1];
+
+                //set through property to clamp range of valid values
+                this.Volume = volumeValue;
+            }
+            else if (eventData.EventType == EventActionType.OnMute)
+            {
+                //turn off
+                this.Volume = 0;
             }
         }
         #endregion

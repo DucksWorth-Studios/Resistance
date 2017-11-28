@@ -793,7 +793,7 @@ namespace GDApp
             effectParameters.SpecularPower = 256;
 
             //put the display up on the Y-axis, obviously we can rotate by setting transform3D.Rotation
-            Transform3D transform3D = new Transform3D(new Vector3(0, 20, 0), new Vector3(0, 0, 0), new Vector3(16, 10, 0.1f), Vector3.UnitZ, Vector3.UnitY);
+            Transform3D transform3D = new Transform3D(new Vector3(0, 20, 0), new Vector3(16, 10, 0.1f));
 
             /* 
              * Does the display need to be collidable? if so use a CollidableObject and not a ModelObject.
@@ -1324,6 +1324,21 @@ namespace GDApp
                 object[] additonalParameters = { AppData.VideoIDMainHall + " video " + AppData.ControllerIDSuffix };
                 EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.Video, additonalParameters));
             }
+
+            if (this.keyboardManager.IsFirstKeyPress(Keys.Up))
+            {
+                //pass the target ID for the controller to play the right video
+                object[] additonalParameters = { AppData.VideoIDMainHall + " video " + AppData.ControllerIDSuffix, 0.05f};
+                EventDispatcher.Publish(new EventData(EventActionType.OnVolumeUp, EventCategoryType.Video, additonalParameters));
+            }
+            else if (this.keyboardManager.IsFirstKeyPress(Keys.Down))
+            {
+                //pass the target ID for the controller to play the right video
+                object[] additonalParameters = { AppData.VideoIDMainHall + " video " + AppData.ControllerIDSuffix, 0.05f};
+                EventDispatcher.Publish(new EventData(EventActionType.OnMute, EventCategoryType.Video, additonalParameters));
+            }
+
+
         }
         private void demoGamePadManager()
         {

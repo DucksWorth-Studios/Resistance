@@ -23,6 +23,7 @@ namespace GDLibrary
         OnRestart,
         OnVolumeUp,
         OnVolumeDown,
+        OnVolumeSet,
         OnMute,
         OnExit,
 
@@ -67,5 +68,6 @@ namespace GDLibrary
 
         //used to set mouse position via an event
         OnSetMousePosition,
+
     }
 }

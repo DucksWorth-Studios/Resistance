@@ -11,6 +11,7 @@ using JigLibX.Collision;
 using JigLibX.Physics;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace GDLibrary
 {
@@ -20,6 +21,7 @@ namespace GDLibrary
         private PhysicsSystem physicSystem;
         private PhysicsController physCont;
         private float timeStep = 0;
+        private List<CollidableObject> removeList;
         #endregion
 
         #region Properties
@@ -78,6 +80,9 @@ namespace GDLibrary
             this.physCont = new PhysicsController();
             this.physicSystem.AddController(physCont);
 
+            //batch removal - as in ObjectManager
+            this.removeList = new List<CollidableObject>();
+
         }
 
         #region Event Handling
@@ -92,9 +97,7 @@ namespace GDLibrary
             if (eventData.EventType == EventActionType.OnRemoveActor)
             {
                 //using the "sender" property of the event to pass reference to object to be removed - use "as" to access Body since sender is defined as a raw object.
-                CollidableObject collidableObject = eventData.Sender as CollidableObject;
-                //what would happen if we did not remove the physics body? would the CD/CR skin remain?
-                this.PhysicsSystem.RemoveBody(collidableObject.Body);
+                Remove(eventData.Sender as CollidableObject);
             }
         }
 
@@ -116,8 +119,28 @@ namespace GDLibrary
         }
         #endregion
 
+        //call when we want to remove a drawn object from the scene
+        public void Remove(CollidableObject collidableObject)
+        {
+            this.removeList.Add(collidableObject);
+        }
+
+        //batch remove on all objects that were requested to be removed
+        protected virtual void ApplyRemove()
+        {
+            foreach (CollidableObject collidableObject in this.removeList)
+            {
+                //what would happen if we did not remove the physics body? would the CD/CR skin remain?
+                this.PhysicsSystem.RemoveBody(collidableObject.Body);
+            }
+
+            this.removeList.Clear();
+        }
+
         protected override void ApplyUpdate(GameTime gameTime)
         {
+            ApplyRemove();
+
             timeStep = (float)gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
             //if the time between updates indicates a FPS of close to 60 fps or less then update CD/CR engine
             if (timeStep < 1.0f / 60.0f)
