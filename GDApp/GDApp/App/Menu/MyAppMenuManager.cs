@@ -60,16 +60,32 @@ namespace GDApp
                         break;
 
                     case "volumeUpbtn":
-                        //to do - generate an event to increase volume
+                        { //curly brackets scope additionalParameters to be local to this case
+                            object[] additionalParameters = { 0.1f };
+                            EventDispatcher.Publish(new EventData(EventActionType.OnVolumeUp, EventCategoryType.GlobalSound, additionalParameters));
+                        }
                         break;
 
                     case "volumeDownbtn":
-                        //to do - generate an event to decrease volume
+                        {  
+                            object[] additionalParameters = { 0.1f };
+                            EventDispatcher.Publish(new EventData(EventActionType.OnVolumeDown, EventCategoryType.GlobalSound, additionalParameters));
+                        }
                         break;
 
                     case "volumeMutebtn":
-                        //to do - generate an event to mute volume
+                        {
+                            object[] additionalParameters = { 0.0f, "Xact category name for game sounds goes here..."};
+                            EventDispatcher.Publish(new EventData(EventActionType.OnMute, EventCategoryType.GlobalSound, additionalParameters));
+                        }
                         break;
+
+                    case "volumeUnMutebtn":
+                    {
+                        object[] additionalParameters = { 0.5f, "Xact category name for game sounds goes here..." };
+                        EventDispatcher.Publish(new EventData(EventActionType.OnUnMute, EventCategoryType.GlobalSound, additionalParameters));
+                    }
+                    break;
 
                     case "backbtn":
                         SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
@@ -96,7 +112,6 @@ namespace GDApp
         private void DoExit()
         {
             this.Game.Exit();
-            //to do - add exit Yes|No comfirmation
         }
 
     }

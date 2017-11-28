@@ -5,12 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GDAnimationPipeline")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GDAnimationPipeline")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyTitle("SkinnedModelPipeline")]
+[assembly: AssemblyProduct("SkinnedModelPipeline")]
+[assembly: AssemblyDescription("Content Pipeline extension used by the Skinned Model sample.")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c18f94e1-5bce-41c2-8cdb-525fe36762fa")]
+[assembly: Guid("004749eb-b0cf-4c1f-bdf3-390054aa0da5")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -30,4 +29,3 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]

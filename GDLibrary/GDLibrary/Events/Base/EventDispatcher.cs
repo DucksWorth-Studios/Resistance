@@ -26,10 +26,10 @@ namespace GDLibrary
         public delegate void MenuEventHandler(EventData eventData);
         public delegate void ScreenEventHandler(EventData eventData);
         public delegate void OpacityEventHandler(EventData eventData);
-        
         public delegate void AddActorEventHandler(EventData eventData);
         public delegate void RemoveActorEventHandler(EventData eventData);
         public delegate void PlayerEventHandler(EventData eventData);
+        public delegate void GlobalSoundEventHandler(EventData eventData);
         public delegate void Sound3DEventHandler(EventData eventData);
         public delegate void Sound2DEventHandler(EventData eventData);
         public delegate void ObjectPickingEventHandler(EventData eventData);
@@ -45,6 +45,7 @@ namespace GDLibrary
         public event AddActorEventHandler AddActorChanged;
         public event RemoveActorEventHandler RemoveActorChanged;
         public event PlayerEventHandler PlayerChanged;
+        public event GlobalSoundEventHandler GlobalSoundChanged;
         public event Sound3DEventHandler Sound3DChanged;
         public event Sound2DEventHandler Sound2DChanged;
         public event ObjectPickingEventHandler ObjectPickChanged;
@@ -127,6 +128,10 @@ namespace GDLibrary
                     OnSound2D(eventData);
                     break;
 
+                case EventCategoryType.GlobalSound:
+                    OnGlobalSound(eventData);
+                    break;
+
                 case EventCategoryType.ObjectPicking:
                     OnObjectPicking(eventData);
                     break;
@@ -198,6 +203,12 @@ namespace GDLibrary
         protected virtual void OnDebug(EventData eventData)
         {
             DebugChanged?.Invoke(eventData);
+        }
+
+        //called when a global sound event is sent to set volume by category or mute all sounds
+        protected virtual void OnGlobalSound(EventData eventData)
+        {
+            GlobalSoundChanged?.Invoke(eventData);
         }
 
         //called when a 3D sound event is sent e.g. play "boom"

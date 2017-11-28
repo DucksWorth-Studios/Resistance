@@ -145,8 +145,9 @@ namespace GDLibrary
 
         public override void Update(GameTime gameTime, IActor actor)
         {
-            //updates the sound manager to tell it where the 1st person camera is right now
-           // game.SoundManager.UpdateListenerPosition((actor as Actor3D).Transform.Translation);
+            //updates the sound manager to tell it where the 1st person camera is right now for any 3D sounds
+            //did NOT use an event here as the frequency of calls to this event would FLOOD the system
+            this.ManagerParameters.SoundManager.UpdateListenerPosition((actor as Actor3D).Transform.Translation);
 
             base.Update(gameTime, actor);
         }

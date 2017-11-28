@@ -201,9 +201,9 @@ namespace GDApp
         
             //this object packages together all managers to give the mouse object the ability to listen for all forms of input from the user, as well as know where camera is etc.
             this.managerParameters = new ManagerParameters(this.objectManager,
-                this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager, this.screenManager);
+                this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager, this.screenManager, this.soundManager);
 
-            #region Pick and Projectile Manager
+            #region Pick Manager
             //call this function anytime we want to decide if a mouse over object is interesting to the PickingManager
             //See https://www.codeproject.com/Articles/114931/Understanding-Predicate-Delegates-in-C
             Predicate<CollidableObject> collisionPredicate = new Predicate<CollidableObject>(CollisionUtility.IsCollidableObjectOfInterest);
@@ -1022,7 +1022,7 @@ namespace GDApp
             position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, 200);
             texture = this.textureDictionary["genericbtn"];
             transform = new Transform2D(position,
-                0, new Vector2(1.5f, 0.6f),
+                0, new Vector2(1.8f, 0.6f),
                 new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
 
             uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
@@ -1115,10 +1115,20 @@ namespace GDApp
             clone.Color = Color.LightBlue;
             this.menuManager.Add(sceneID, clone);
 
-            //add back button - clone the audio button then just reset texture, ids etc in all the clones
+            //add volume mute button - clone the audio button then just reset texture, ids etc in all the clones
             clone = (UIButtonObject)uiButtonObject.Clone();
             //move down on Y-axis for next button
             clone.Transform.Translation += new Vector2(0, 3 * verticalBtnSeparation);
+            clone.ID = "volumeUnMutebtn";
+            clone.Text = "Volume Un-mute";
+            //change the texture blend color
+            clone.Color = Color.LightSalmon;
+            this.menuManager.Add(sceneID, clone);
+
+            //add back button - clone the audio button then just reset texture, ids etc in all the clones
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(0, 4 * verticalBtnSeparation);
             clone.ID = "backbtn";
             clone.Text = "Back";
             //change the texture blend color

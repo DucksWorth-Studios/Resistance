@@ -60,7 +60,7 @@ namespace GDLibrary
         }
 
         #region Event Handling
-        protected virtual void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
             eventDispatcher.PlayerChanged += EventDispatcher_PlayerChanged;
         }

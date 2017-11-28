@@ -9,6 +9,7 @@ Fixes:			None
 
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GDLibrary
@@ -22,7 +23,7 @@ namespace GDLibrary
         //centre for each cameras viewport - important when deciding how much to turn the camera when a particular camera view, in a multi-screen layout, is in focus
         private Vector2 viewportCentre;
         //used to sort cameras by depth on screen where 0 = top-most, 1 = bottom-most (i.e. 0 for rear-view mirror and > 0 for main game screen)
-        private float drawDepth; 
+        private float drawDepth;
         #endregion
 
         #region Properties

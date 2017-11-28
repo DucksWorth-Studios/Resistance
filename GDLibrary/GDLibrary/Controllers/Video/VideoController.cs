@@ -93,8 +93,27 @@ namespace GDLibrary
         #region Event Handling
         protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
+            eventDispatcher.MenuChanged += EventDispatcher_MenuChanged;
             eventDispatcher.VideoChanged += EventDispatcher_VideoChanged;
         }
+
+        //we need to explicitly tell the video object to pause if we're in the menu
+        private void EventDispatcher_MenuChanged(EventData eventData)
+        {
+            //did the event come from the main menu and is it a start game event
+            if (eventData.EventType == EventActionType.OnStart)
+            {
+                if(this.videoPlayer != null) //if video was paused when menu was hidden then play
+                    this.videoPlayer.Play(video);
+            }
+            //did the event come from the main menu and is it a pause game event
+            else if (eventData.EventType == EventActionType.OnPause)
+            {
+                if (this.videoPlayer != null) //if video was playing when menu was shown then pause
+                    this.videoPlayer.Pause();
+            }
+        }
+
         private void EventDispatcher_VideoChanged(EventData eventData)
         {
             //target controller name is in first channel of additionalParameters

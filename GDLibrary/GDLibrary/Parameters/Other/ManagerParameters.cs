@@ -18,6 +18,7 @@ namespace GDLibrary
         private KeyboardManager keyboardManager;
         private GamePadManager gamePadManager;
         private ScreenManager screenManager;
+        private SoundManager soundManager;
         #endregion
 
         #region Properties
@@ -64,27 +65,20 @@ namespace GDLibrary
                 return this.screenManager;
             }
         }
-
+        public SoundManager SoundManager
+        {
+            get
+            {
+                return this.soundManager;
+            }
+        }
         #endregion
 
-        //useful for objects that need access ONLY to input specific managers
-        public ManagerParameters(MouseManager mouseManager, KeyboardManager keyboardManager, GamePadManager gamePadManager)
-            : this(null, null, mouseManager, keyboardManager, gamePadManager)
-        {
-
-        }
-       
-        //useful for objects that need access to most of managers EXCEPT ScreenManager
-        public ManagerParameters(ObjectManager objectManager, CameraManager cameraManager, 
-            MouseManager mouseManager, KeyboardManager keyboardManager, GamePadManager gamePadManager)
-            : this(objectManager, cameraManager, mouseManager, keyboardManager, gamePadManager, null)
-        {
-
-        }
 
         //useful for objects that need access to ALL managers
         public ManagerParameters(ObjectManager objectManager, CameraManager cameraManager,
-            MouseManager mouseManager, KeyboardManager keyboardManager, GamePadManager gamePadManager, ScreenManager screenManager)
+            MouseManager mouseManager, KeyboardManager keyboardManager, GamePadManager gamePadManager, 
+            ScreenManager screenManager, SoundManager soundManager)
         {
             this.objectManager = objectManager;
             this.cameraManager = cameraManager;
@@ -92,6 +86,7 @@ namespace GDLibrary
             this.keyboardManager = keyboardManager;
             this.gamePadManager = gamePadManager;
             this.screenManager = screenManager;
+            this.soundManager = soundManager;
         }
 
 

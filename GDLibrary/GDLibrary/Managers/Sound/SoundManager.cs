@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using System;
 
 namespace GDLibrary
 {
 
-    public class SoundManager : PausableGameComponent
+    public class SoundManager : PausableGameComponent, IDisposable
     {
         #region Fields
+        //statics 
+        private static readonly float DefaultVolume = 0.5f;
+
         protected AudioEngine audioEngine;
         protected WaveBank waveBank;
         protected SoundBank soundBank;
@@ -23,9 +27,15 @@ namespace GDLibrary
 
         #region Properties
         public float Volume 
-        { 
-            get; 
-            private set; 
+        {
+            get
+            {
+                return this.volume;
+            }
+            set
+            {
+                this.volume = (value >= 0 && value <= 1) ? value : DefaultVolume;
+            }
         }
         #endregion
 
@@ -50,12 +60,48 @@ namespace GDLibrary
         #region Event Handling
         protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
+            eventDispatcher.GlobalSoundChanged += EventDispatcher_GlobalSoundChanged;
             eventDispatcher.Sound3DChanged += EventDispatcher_Sound3DChanged;
             eventDispatcher.Sound2DChanged += EventDispatcher_Sound2DChanged;
             base.RegisterForEventHandling(eventDispatcher);
         }
 
-        private void EventDispatcher_Sound3DChanged(EventData eventData)
+        protected virtual void EventDispatcher_GlobalSoundChanged(EventData eventData)
+        {
+            if (eventData.EventType == EventActionType.OnMute)
+            {
+                //any 2D sounds
+                SoundEffect.MasterVolume = 0;
+                //3d sounds
+                //construct event to pass in volume (e.g. 0.5f) and category (game_sound_effects) that you group the sounds by in XACT
+                //See https://www.youtube.com/watch?v=eG-FW6RAyHU
+                float volume = (float)eventData.AdditionalParameters[0];
+                string soundCategory = (string)eventData.AdditionalParameters[1];                
+                SetVolume(volume, soundCategory);
+
+            }
+            else if (eventData.EventType == EventActionType.OnUnMute)
+            {
+                //any 2D sounds
+                SoundEffect.MasterVolume = DefaultVolume;
+                //3d sounds
+                float volume = (float)eventData.AdditionalParameters[0];
+                string soundCategory = (string)eventData.AdditionalParameters[1];
+                SetVolume(volume, soundCategory);
+
+            }
+            else if (eventData.EventType == EventActionType.OnVolumeChange)
+            {
+                //any 2D sounds
+                float volumeDelta = (float)eventData.AdditionalParameters[0];
+                SoundEffect.MasterVolume = MathHelper.Clamp(SoundEffect.MasterVolume + volumeDelta, 0, 1);
+                //3d sounds
+                string soundCategory = (string)eventData.AdditionalParameters[1];
+                ChangeVolume(volumeDelta, soundCategory);
+            }
+        }
+
+        protected virtual void EventDispatcher_Sound3DChanged(EventData eventData)
         {
             //control 3D sounds through events
             if (eventData.EventType != EventActionType.OnStopAll)
@@ -85,7 +131,7 @@ namespace GDLibrary
             }
         }
 
-        private void EventDispatcher_Sound2DChanged(EventData eventData)
+        protected virtual void EventDispatcher_Sound2DChanged(EventData eventData)
         {
             string cueName = eventData.AdditionalParameters[0] as string;
 
@@ -226,25 +272,40 @@ namespace GDLibrary
         }
 
         //we can control the volume for each category in the sound bank (i.e. diegetic and non-diegetic)
-        public void SetVolume(float volume, string soundCategory)
+        public void SetVolume(float newVolume, string soundCategoryStr)
         {
-            //if volume will be in appropriate range (0-1) then set it
-            this.volume = ((volume >= 0) && (volume <= 1)) ? volume : 0.5f;
-            //set by category
-            this.audioEngine.GetCategory(soundCategory).SetVolume(volume);
+            try
+            {
+                AudioCategory soundCategory = this.audioEngine.GetCategory(soundCategoryStr);
+                if (soundCategory != null)
+                {
+                    //requested volume will be in appropriate range (0-1)
+                    this.volume = MathHelper.Clamp(newVolume, 0, 1);
+                    soundCategory.SetVolume(this.volume);
+                }
+            }
+            catch(InvalidOperationException e)
+            {
+                System.Diagnostics.Debug.WriteLine("Does category (soundCategoryStr) exist in your Xact file?");
+            }   
         }
-        public float GetVolume()
+
+        public void ChangeVolume(float deltaVolume, string soundCategoryStr)
         {
-            return volume;
-        }
-        public void ChangeVolume(float delta, string soundCategory)
-        {
-            //requested new volume
-            float newVolume = this.volume + delta;
-            //if requested volume will be in appropriate range (0-1) then set it
-            this.volume = ((newVolume >= 0) && (newVolume <= 1)) ? newVolume : 0.5f;
-            //set by category
-            this.audioEngine.GetCategory(soundCategory).SetVolume(volume);
+            try
+            {
+                AudioCategory soundCategory = this.audioEngine.GetCategory(soundCategoryStr);
+                if (soundCategory != null)
+                {
+                    //requested volume will be in appropriate range (0-1)
+                    this.volume = MathHelper.Clamp(this.volume + deltaVolume, 0, 1);
+                    soundCategory.SetVolume(this.volume);          
+                }
+            }
+            catch (InvalidOperationException e)
+            {
+                System.Diagnostics.Debug.WriteLine("Does category (soundCategoryStr) exist in your Xact file?");
+            }
         }
 
      
@@ -287,6 +348,12 @@ namespace GDLibrary
             base.Update(gameTime);
         }
 
-        //to do - dispose
+        protected override void Dispose(bool disposing)
+        {
+            this.audioEngine.Dispose();
+            this.soundBank.Dispose();
+            this.waveBank.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

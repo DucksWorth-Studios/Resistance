@@ -28,7 +28,8 @@ namespace GDLibrary
         Sound2D,
         ObjectPicking,   //used to notify listening objects that we have picked something with the mouse
         Mouse,              //used to send mouse related events e.g. set mouse position
-        Video
+        Video,
+        GlobalSound
         //all other categories of sender...
     }
 }

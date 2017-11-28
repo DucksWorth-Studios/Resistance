@@ -18,13 +18,15 @@ namespace GDLibrary
         OnStop,
         OnStopAll,
 
-        //sent by menu manager
+        //processed by many managers (incl. menu, sound, object, ui, physic) and video controller
         OnStart,
         OnRestart,
         OnVolumeUp,
         OnVolumeDown,
         OnVolumeSet,
+        OnVolumeChange,
         OnMute,
+        OnUnMute,
         OnExit,
 
         //send by mouse or gamepad manager
@@ -68,6 +70,5 @@ namespace GDLibrary
 
         //used to set mouse position via an event
         OnSetMousePosition,
-
     }
 }

@@ -59,6 +59,9 @@
       <HintPath>..\Dependencies\Sound\Microsoft.Xna.Framework.Xact.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="SkinnedModel">
+      <HintPath>..\SkinnedModelPipeline\bin\x86\Debug\SkinnedModel.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core">
@@ -84,6 +87,7 @@
     <Compile Include="Actors\Drawn\3D\Collidable\CollidableObject.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\Pickup\ImmovablePickupObject.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\Pickup\MoveablePickupObject.cs" />
+    <Compile Include="Actors\Drawn\3D\Collidable\Player\Animated\AnimatedPlayerObject.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\Player\CharacterObject.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\Player\PlayerObject.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\TriangleMeshObject.cs" />
@@ -175,9 +179,7 @@
     <Compile Include="Utility\StatefulBool.cs" />
     <Compile Include="Utility\StringUtility.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Actors\Drawn\3D\Collidable\Player\Animated\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="GDLibrary.cd" />
   </ItemGroup>

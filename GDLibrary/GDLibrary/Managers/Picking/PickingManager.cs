@@ -16,9 +16,6 @@ namespace GDLibrary
         private float pickEndDistance;
         private Predicate<CollidableObject> collisionPredicate;
         private PickingBehaviourType pickingBehaviourType;
-        private CollidableObject collidableProjectileArchetype;
-        private float collidableProjectileSpeedMultiplier;
-
 
         //local vars
         private CollidableObject currentPickedObject;

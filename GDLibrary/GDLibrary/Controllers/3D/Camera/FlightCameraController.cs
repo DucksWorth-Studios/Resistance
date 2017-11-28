@@ -16,7 +16,6 @@ namespace GDLibrary
     public class FlightCameraController : UserInputController
     {
         #region Fields
-        private CameraManager cameraManager;
         #endregion
 
         #region Properties
@@ -32,7 +31,7 @@ namespace GDLibrary
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
             Vector2 mouseDelta = Vector2.Zero;
-            mouseDelta = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.cameraManager.ActiveCamera.ViewportCentre);
+            mouseDelta = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
             mouseDelta *= gameTime.ElapsedGameTime.Milliseconds;
             mouseDelta *= this.RotationSpeed;
 

@@ -70,7 +70,6 @@ namespace GDLibrary
             }
         }
 
-
         public override void Update(GameTime gameTime)
         {
             //update player to return bone transforms for the appropriate frame in the animation
