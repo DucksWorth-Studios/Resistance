@@ -21,5 +21,6 @@ namespace GDLibrary
 
         //allows us to play, pause, reset, stop a controller
         bool SetControllerPlayStatus(PlayStatusType playStatusType);
+
     }
 }

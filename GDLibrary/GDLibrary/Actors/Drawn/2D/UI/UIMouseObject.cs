@@ -39,6 +39,17 @@ namespace GDLibrary
                 this.textOrigin = new Vector2(this.textDimensions.X / 2, this.textDimensions.Y / 2);
             }
         }
+        public Color TextColor
+        {
+            get
+            {
+                return this.textColor;
+            }
+            set
+            {
+                this.textColor = value;
+            }
+        }
         public SpriteFont SpriteFont
         {
             get

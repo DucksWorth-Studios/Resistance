@@ -34,7 +34,7 @@ namespace GDLibrary
         public delegate void Sound2DEventHandler(EventData eventData);
         public delegate void ObjectPickingEventHandler(EventData eventData);
         public delegate void MouseEventHandler(EventData eventData);
-        
+        public delegate void VideoEventHandler(EventData eventData);
         public delegate void DebugEventHandler(EventData eventData);
         
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
@@ -49,6 +49,7 @@ namespace GDLibrary
         public event Sound2DEventHandler Sound2DChanged;
         public event ObjectPickingEventHandler ObjectPickChanged;
         public event MouseEventHandler MouseChanged;
+        public event VideoEventHandler VideoChanged;
         public event DebugEventHandler DebugChanged;
         
 
@@ -134,6 +135,10 @@ namespace GDLibrary
                     OnMouse(eventData);
                     break;
 
+                case EventCategoryType.Video:
+                    OnVideo(eventData);
+                    break;
+
                 default:
                     break;
             }
@@ -217,6 +222,12 @@ namespace GDLibrary
         protected virtual void OnMouse(EventData eventData)
         {
             MouseChanged?.Invoke(eventData);
+        }
+
+        //called when the we want to set mouse position, appearance etc.
+        protected virtual void OnVideo(EventData eventData)
+        {
+            VideoChanged?.Invoke(eventData);
         }
 
 

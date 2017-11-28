@@ -1,7 +1,6 @@
 ﻿using GDLibrary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace GDApp
 {
@@ -9,8 +8,9 @@ namespace GDApp
     {
         #region Fields
         //statics
-        private static readonly int rotationSpeedInDegreesPerSecond = 45; //8 seconds for a full rotation
         private EventDispatcher eventDispatcher;
+
+        private int numberOfReticuleIconsPerTexture = 1;
         #endregion
 
         #region Properties
@@ -55,24 +55,38 @@ namespace GDApp
             {
                 //see PickingManager::UpdateEventListeners() for publish point
                 this.Text = CollisionUtility.GetMouseStringFromCollidableObject(eventData.AdditionalParameters[0] as CollidableObject, (float)eventData.AdditionalParameters[1]);
+
+                SetAppearance();
             }
             else if (eventData.EventType == EventActionType.OnNonePicked)
             {
                 //see PickingManager::UpdateEventListeners() for publish point
                 this.Text = eventData.AdditionalParameters[0] as string;
+
+                ResetAppearance();
             }
         }
         #endregion
 
-        protected virtual void SetPickedAppearance()
+        protected virtual void SetAppearance()
         {
+            //set reticule color and text color
+            this.TextColor = this.Color = Color.Red;
 
+            //we could change texture by setting the SourceRectangle (assuming texture contains "numberOfReticuleIconsPerTexture" images)
+            this.SourceRectangle = new Rectangle((numberOfReticuleIconsPerTexture - 1) * this.Texture.Width / numberOfReticuleIconsPerTexture, 0, 
+                this.Texture.Width / numberOfReticuleIconsPerTexture, this.Texture.Height / numberOfReticuleIconsPerTexture);
         }
 
 
         protected virtual void ResetAppearance()
         {
+            //reset reticule color and text color
+            this.TextColor = this.Color = this.OriginalColor;
 
+            //reset back to the first reticule icon in the texture
+            this.SourceRectangle = new Rectangle(0, 0,
+                this.Texture.Width / numberOfReticuleIconsPerTexture, this.Texture.Height / numberOfReticuleIconsPerTexture);
         }
 
     }

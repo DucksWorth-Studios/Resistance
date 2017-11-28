@@ -110,7 +110,13 @@ namespace GDLibrary
         #region JigLibX
         public static readonly Vector3 Gravity = -10 * Vector3.UnitY;
         public static readonly Vector3 BigGravity = 5 * Gravity;
+
         #endregion
 
+
+        #region Video
+        public static readonly string VideoIDMainHall;
+        public static readonly string ControllerIDSuffix = " controller";
+        #endregion
     }
 }

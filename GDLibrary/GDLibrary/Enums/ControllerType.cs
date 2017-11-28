@@ -39,6 +39,7 @@ namespace GDLibrary
         CollidableFirstPerson,
 
         //UI related
-        UIProgress //see UIProgressController demo
+        UIProgress, //see UIProgressController demo
+        Video
     }
 }

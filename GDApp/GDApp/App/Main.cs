@@ -8,6 +8,7 @@ using JigLibX.Geometry;
 using JigLibX.Collision;
 using System.Collections.Generic;
 using System;
+using Microsoft.Xna.Framework.Media;
 /*
 override Clone()
 Reticule color not resetting
@@ -64,14 +65,14 @@ namespace GDApp
         private Dictionary<string, RailParameters> railDictionary;
         private Dictionary<string, Viewport> viewPortDictionary;
         private Dictionary<string, EffectParameters> effectDictionary;
+        private ContentDictionary<Video> videoDictionary;
 
         private ManagerParameters managerParameters;
-
-
 
         //demo remove later
         private HeroPlayerObject heroPlayerObject;
         private ModelObject drivableBoxObject;
+
         #endregion
 
         #region Properties
@@ -211,7 +212,7 @@ namespace GDApp
             //listens for picking with the mouse on valid (based on specified predicate) collidable objects and pushes notification events to listeners
             this.pickingManager = new PickingManager(this, this.eventDispatcher, StatusType.Off, 
                 this.managerParameters, 
-                PickingBehaviourType.PickAndRemove, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
+                PickingBehaviourType.PickAndPlace, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
             Components.Add(this.pickingManager);
             #endregion
 
@@ -241,6 +242,9 @@ namespace GDApp
             //stores default effect parameters
             this.effectDictionary = new Dictionary<string, EffectParameters>();
 
+            //notice we go back to using a content dictionary type since we want to pass strings and have dictionary load content
+            this.videoDictionary = new ContentDictionary<Video>("video dictionary", this.Content);
+
         }
 
         private void LoadAssets()
@@ -248,6 +252,7 @@ namespace GDApp
             #region Models
             //geometric samples
             this.modelDictionary.Load("Assets/Models/plane1", "plane1");
+            this.modelDictionary.Load("Assets/Models/plane", "plane");
             this.modelDictionary.Load("Assets/Models/box2", "box2");
             this.modelDictionary.Load("Assets/Models/torus");
             this.modelDictionary.Load("Assets/Models/sphere");
@@ -322,7 +327,10 @@ namespace GDApp
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");
+            #endregion
 
+            #region Video
+            this.videoDictionary.Load("Assets/Video/sample");
             #endregion
         }
 
@@ -403,7 +411,7 @@ namespace GDApp
         {
             int worldScale = 250;
 
-            //Non-collidable
+            //Non - collidable
             InitializeNonCollidableSkyBox(worldScale);
             InitializeNonCollidableFoliage(worldScale);
             InitializeNonCollidableDriveableObject();
@@ -425,6 +433,9 @@ namespace GDApp
             ////add level elements
             InitializeBuildings();
             InitializeWallsFences();
+
+            //add video display
+            InitializeVideoDisplay();
         }
 
         private void InitializeCollidableHeroPlayerObject()
@@ -772,6 +783,39 @@ namespace GDApp
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }
+  
+        private void InitializeVideoDisplay()
+        {
+     
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["checkerboard"];
+            //make the screen really shiny
+            effectParameters.SpecularPower = 256;
+
+            //put the display up on the Y-axis, obviously we can rotate by setting transform3D.Rotation
+            Transform3D transform3D = new Transform3D(new Vector3(0, 20, 0), new Vector3(0, 0, 0), new Vector3(16, 10, 0.1f), Vector3.UnitZ, Vector3.UnitY);
+
+            /* 
+             * Does the display need to be collidable? if so use a CollidableObject and not a ModelObject.
+             * Notice we dont pass in a texture since the video controller will set this.
+             */
+            ModelObject videoModelObject = new ModelObject(AppData.VideoIDMainHall, ActorType.Decorator, 
+                transform3D, effectParameters, this.modelDictionary["box"]);
+
+            ////create the controller
+            VideoController videoController = new VideoController(AppData.VideoIDMainHall + " video " + AppData.ControllerIDSuffix, ControllerType.Video, this.eventDispatcher,
+                this.textureDictionary["checkerboard"], this.videoDictionary["sample"], 0.5f);
+
+            //make it rotate like a commercial video display
+            videoModelObject.AttachController(new RotationController(AppData.VideoIDMainHall + " rotation " + AppData.ControllerIDSuffix,
+                ControllerType.Rotation, new Vector3(0, 0.02f, 0)));
+            //attach
+            videoModelObject.AttachController(videoController);
+            //add to object manager
+            this.objectManager.Add(videoModelObject);
+        }
+
+
 
         #endregion
 
@@ -1114,8 +1158,6 @@ namespace GDApp
             InitializeUIProgress();
             InitializeUIInventoryMenu();
         }
-
-
         private void InitializeUIMousePointer()
         {
             Texture2D texture = this.textureDictionary["reticuleDefault"];
@@ -1239,10 +1281,12 @@ namespace GDApp
 
         protected override void UnloadContent()
         {
-            //formally call garbage collection to de-allocate resources from RAM
+            //formally call garbage collection on all ContentDictionary objects to de-allocate resources from RAM
             this.modelDictionary.Dispose();
             this.textureDictionary.Dispose();
             this.fontDictionary.Dispose();
+            this.videoDictionary.Dispose();
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -1253,6 +1297,7 @@ namespace GDApp
 
 #if DEMO
             #region Demo
+            demoVideoDisplay();
             demoSoundManager();
             demoCameraChange();
             demoAlphaChange();
@@ -1265,6 +1310,21 @@ namespace GDApp
         }
 
         #region DEMO
+        private void demoVideoDisplay()
+        {
+            if (this.keyboardManager.IsFirstKeyPress(Keys.F3))
+            {
+                //pass the target ID for the controller to play the right video
+                object[] additonalParameters = { AppData.VideoIDMainHall + " video " + AppData.ControllerIDSuffix };
+                EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Video, additonalParameters));
+            }
+            else if (this.keyboardManager.IsFirstKeyPress(Keys.F4))
+            {
+                //pass the target ID for the controller to play the right video
+                object[] additonalParameters = { AppData.VideoIDMainHall + " video " + AppData.ControllerIDSuffix };
+                EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.Video, additonalParameters));
+            }
+        }
         private void demoGamePadManager()
         {
             if (this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.RightTrigger))

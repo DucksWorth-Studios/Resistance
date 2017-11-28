@@ -98,5 +98,11 @@ namespace GDLibrary
         {
             return new Controller("clone - " + this.ID, this.controllerType);
         }
+
+        //allows controllers to listen for events
+        protected virtual void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+
+        }
     }
 }

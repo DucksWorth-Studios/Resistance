@@ -64,7 +64,7 @@ namespace GDLibrary
                  * 
                  */
 
-                this.specularPower = (value > 0 && value < 256) ? value : DefaultSpecularPower;
+                this.specularPower = (value > 0 && value <= 256) ? value : DefaultSpecularPower;
             }
         }
         public Color EmissiveColor

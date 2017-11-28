@@ -84,16 +84,7 @@ namespace GDLibrary
         }
         #endregion
 
-        public UITextureObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
-            Color color, SpriteEffects spriteEffects, float layerDepth, Texture2D texture, 
-            Rectangle sourceRectangle, Vector2 origin)
-            : base(id, actorType, statusType, transform, color, spriteEffects, layerDepth)
-        {
-            this.Texture = texture;
-            this.SourceRectangle = sourceRectangle;
-            this.originalSourceRectangle = SourceRectangle;
-            this.Origin = origin;
-        }
+   
 
         //draws texture using full source rectangle with origin in centre
         public UITextureObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
@@ -103,6 +94,17 @@ namespace GDLibrary
                     new Vector2(texture.Width/2.0f, texture.Height/2.0f))
         {
 
+        }
+
+       public UITextureObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
+       Color color, SpriteEffects spriteEffects, float layerDepth, Texture2D texture,
+       Rectangle sourceRectangle, Vector2 origin)
+       : base(id, actorType, statusType, transform, color, spriteEffects, layerDepth)
+        {
+            this.Texture = texture;
+            this.SourceRectangle = sourceRectangle;
+            this.originalSourceRectangle = SourceRectangle;
+            this.Origin = origin;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

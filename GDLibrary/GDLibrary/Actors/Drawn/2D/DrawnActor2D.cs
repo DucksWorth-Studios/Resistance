@@ -35,7 +35,7 @@ namespace GDLibrary
         {
             get
             {
-                return this.color;
+                return this.originalColor;
             }
             set
             {
