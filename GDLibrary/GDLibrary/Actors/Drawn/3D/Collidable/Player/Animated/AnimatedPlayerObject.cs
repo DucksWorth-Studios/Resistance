@@ -30,7 +30,8 @@ namespace GDLibrary
         #endregion
 
         public AnimatedPlayerObject(string id, ActorType actorType, Transform3D transform,
-            EffectParameters effectParameters, Keys[] moveKeys, float radius, float height, 
+            EffectParameters effectParameters,
+            Keys[] moveKeys, float radius, float height, 
             float accelerationRate, float decelerationRate, float jumpHeight,
             Vector3 translationOffset, KeyboardManager keyboardManager, 
             string startAnimationName, Dictionary<string, Model> modelDictionary)

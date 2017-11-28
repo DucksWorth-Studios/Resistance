@@ -72,6 +72,7 @@ namespace GDApp
         //demo remove later
         private HeroPlayerObject heroPlayerObject;
         private ModelObject drivableBoxObject;
+        private HeroAnimatedPlayerObject animatedHeroPlayerObject;
 
         #endregion
 
@@ -332,6 +333,20 @@ namespace GDApp
             #region Video
             this.videoDictionary.Load("Assets/Video/sample");
             #endregion
+
+            #region Animations
+            //contains a single animation "Take001"
+            this.modelDictionary.Load("Assets/Models/Animated/dude");
+
+            //squirrel - one file per animation
+            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Idle");
+            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Jump");
+            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Punch");
+            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Standing");
+            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Tailwhip");
+            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/RedRun4");
+            #endregion
+
         }
 
         private void LoadCurvesAndRails()
@@ -436,6 +451,50 @@ namespace GDApp
 
             //add video display
             InitializeVideoDisplay();
+
+            //add animated characters
+            InitializeAnimatedPlayer();
+
+        }
+
+        private void InitializeAnimatedPlayer()
+        {
+            Transform3D transform3D = null;
+
+            transform3D = new Transform3D(new Vector3(0, 20, 30),
+                new Vector3(-90, 0, 0), //y-z are reversed because the capsule is rotation by 90 degrees around X-axis - See CharacterObject constructor
+                 0.1f * Vector3.One, 
+                 -Vector3.UnitZ, Vector3.UnitY);
+
+            BasicEffectParameters effectParameters = this.effectDictionary["litModelBasicEffect"].Clone() as BasicEffectParameters;
+            //if we dont specify a texture then the object manager will draw using whatever textures were baked into the animation in 3DS Max
+            effectParameters.Texture = null;
+
+            //dictionary that stores all the animation FBX files (e.g. walk.fbx, run.fbx)
+            Dictionary<string, Model> animatedModelTakeDictionary = new Dictionary<string, Model>();
+
+            //the dude model comes only with one animation in one FBX file so the statement below looks a little silly
+            //notice how I add the model by the name of the take as specified in the 3DS Max file (e.g. "jump", this.modelDictionary["Red_Jump"])
+            animatedModelTakeDictionary.Add("Take 001", this.modelDictionary["dude"]);
+
+            this.animatedHeroPlayerObject = new HeroAnimatedPlayerObject("the dude",
+                ActorType.Player, transform3D, 
+                effectParameters, 
+                AppData.PlayerOneMoveKeys,
+                AppData.PlayerRadius, 
+                AppData.PlayerHeight,
+                1, 1,  //accel, decel
+                AppData.PlayerMoveSpeed,
+                AppData.PlayerRotationSpeed,               
+                AppData.PlayerJumpHeight, 
+                new Vector3(0, -3.5f, 0), //offset inside capsule
+                this.keyboardManager, 
+                "Take 001", //start take
+                animatedModelTakeDictionary);
+            this.animatedHeroPlayerObject.Enable(false, AppData.PlayerMass);
+
+            this.objectManager.Add(animatedHeroPlayerObject);
+
         }
 
         private void InitializeCollidableHeroPlayerObject()
@@ -879,7 +938,15 @@ namespace GDApp
             viewportDictionaryKey = "column0 row4";
             //since the camera will be set on a rail it doesnt matter what the initial transform is set to
             transform = Transform3D.Zero;
-            controller = new RailController(id + " controller", ControllerType.Rail, this.drivableBoxObject, this.railDictionary["rail1 - parallel to x-axis"]);
+
+            //track animated player if it's available
+            if(this.animatedHeroPlayerObject != null)
+                controller = new RailController(id + " controller", ControllerType.Rail, this.animatedHeroPlayerObject, this.railDictionary["rail1 - parallel to x-axis"]);
+            else
+                controller = new RailController(id + " controller", ControllerType.Rail, this.drivableBoxObject, this.railDictionary["rail1 - parallel to x-axis"]);
+
+
+
             InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
         }
 
@@ -939,7 +1006,14 @@ namespace GDApp
             id = "non-collidable rail 1";
             //since the camera will be set on a rail it doesnt matter what the initial transform is set to
             transform = Transform3D.Zero;
-            controller = new RailController(id + " controller", ControllerType.Rail, this.drivableBoxObject, this.railDictionary["rail1 - parallel to x-axis"]);
+
+            //track animated player if it's available
+            if (this.animatedHeroPlayerObject != null)
+                controller = new RailController(id + " controller", ControllerType.Rail, this.animatedHeroPlayerObject, this.railDictionary["rail1 - parallel to x-axis"]);
+            else
+                controller = new RailController(id + " controller", ControllerType.Rail, this.drivableBoxObject, this.railDictionary["rail1 - parallel to x-axis"]);
+
+
             InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
         }
@@ -957,10 +1031,22 @@ namespace GDApp
             //doesnt matter since it will reset based on target actor data
             transform = Transform3D.Zero;
 
-            controller = new ThirdPersonController(id + "ctrllr", ControllerType.ThirdPerson, this.heroPlayerObject,
+            if (this.animatedHeroPlayerObject != null)
+            {
+                controller = new ThirdPersonController(id + "ctrllr", ControllerType.ThirdPerson, this.animatedHeroPlayerObject,
                 AppData.CameraThirdPersonDistance, AppData.CameraThirdPersonScrollSpeedDistanceMultiplier,
                 AppData.CameraThirdPersonElevationAngleInDegrees, AppData.CameraThirdPersonScrollSpeedElevatationMultiplier,
                 LerpSpeed.Fast, LerpSpeed.Medium, this.mouseManager);
+            }
+            else
+            {
+              controller = new ThirdPersonController(id + "ctrllr", ControllerType.ThirdPerson, this.heroPlayerObject,
+              AppData.CameraThirdPersonDistance, AppData.CameraThirdPersonScrollSpeedDistanceMultiplier,
+              AppData.CameraThirdPersonElevationAngleInDegrees, AppData.CameraThirdPersonScrollSpeedElevatationMultiplier,
+              LerpSpeed.Fast, LerpSpeed.Medium, this.mouseManager);
+            }
+
+
             InitializeCamera(screenResolution, id, this.viewPortDictionary[viewportDictionaryKey], transform, controller, 0);
 
         }

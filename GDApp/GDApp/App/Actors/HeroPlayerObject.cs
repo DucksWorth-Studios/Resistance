@@ -28,6 +28,7 @@ namespace GDApp
         {
             //id of the progress controller associated with this player object - see HandleCollisions()
             this.progressControllerID = progressControllerID;
+
             //register for callback on CDCR
             this.CharacterBody.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
         }

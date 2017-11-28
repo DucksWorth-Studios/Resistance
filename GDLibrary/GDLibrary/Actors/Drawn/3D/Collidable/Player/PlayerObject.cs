@@ -95,49 +95,7 @@ namespace GDLibrary
 
         protected virtual void HandleKeyboardInput(GameTime gameTime)
         {
-            /*
-                         //jump
-            if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveJump]))
-            {
-                this.CharacterBody.DoJump(this.JumpHeight);
-            }
-            //crouch
-            else if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveCrouch]))
-            {
-                this.CharacterBody.IsCrouching = !this.CharacterBody.IsCrouching;
-            }
-
-            //forward/backward
-            if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveForward]))
-            {
-                this.CharacterBody.Velocity += this.Transform.Look * 1 * gameTime.ElapsedGameTime.Milliseconds;
-            }
-            else if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexMoveBackward]))
-            {
-                this.CharacterBody.Velocity -= this.Transform.Look * 1 * gameTime.ElapsedGameTime.Milliseconds;
-            }
-            else //decelerate to zero when not pressed
-            {
-                this.CharacterBody.DesiredVelocity = Vector3.Zero;
-            }
-
-            //strafe left/right
-            if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexRotateLeft]))
-            {
-                this.Transform.RotateAroundYBy(0.1f * gameTime.ElapsedGameTime.Milliseconds);
-            }
-            else if (this.keyboardManager.IsKeyDown(this.MoveKeys[AppData.IndexRotateRight]))
-            {
-                this.Transform.RotateAroundYBy(-0.1f * gameTime.ElapsedGameTime.Milliseconds);
-            }
-            else //decelerate to zero when not pressed
-            {
-                this.CharacterBody.DesiredVelocity = Vector3.Zero;
-            }
-
-            //update the camera position to reflect the collision skin position
-            this.Transform.Translation = this.CharacterBody.Position;
-             */
+          
         }
 
         //add clone, equals, gethashcode, remove...

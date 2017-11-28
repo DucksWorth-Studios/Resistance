@@ -278,7 +278,11 @@ namespace GDLibrary
             //was the drawn enum value set?
             if ((actor.StatusType & StatusType.Drawn) == StatusType.Drawn)
             {
-                if (actor is ModelObject)
+                if (actor is AnimatedPlayerObject)
+                {
+                    DrawObject(gameTime, actor as AnimatedPlayerObject, activeCamera);
+                }
+                else if (actor is ModelObject)
                 {
                     DrawObject(gameTime, actor as ModelObject, activeCamera);
                 }
@@ -289,7 +293,7 @@ namespace GDLibrary
         //draw a model object 
         private void DrawObject(GameTime gameTime, ModelObject modelObject, Camera3D activeCamera)
         {
-         //   if (activeCamera.BoundingFrustum.Intersects(modelObject.BoundingSphere))
+            if (activeCamera.BoundingFrustum.Intersects(modelObject.BoundingSphere))
             {
                 if (modelObject.Model != null)
                 {
@@ -310,40 +314,40 @@ namespace GDLibrary
             }
         }
 
-//        private void DrawObject(GameTime gameTime, AnimatedPlayerObject animatedPlayerObject, Camera3D activeCamera)
-//        {
-//            //an array of the current positions of the model meshes
-//            Matrix[] bones = animatedPlayerObject.AnimationPlayer.GetSkinTransforms();
-//            Matrix world = animatedPlayerObject.GetWorldMatrix();
+        private void DrawObject(GameTime gameTime, AnimatedPlayerObject animatedPlayerObject, Camera3D activeCamera)
+        {
+            //an array of the current positions of the model meshes
+            Matrix[] bones = animatedPlayerObject.AnimationPlayer.GetSkinTransforms();
+            Matrix world = animatedPlayerObject.GetWorldMatrix();
 
-//            for (int i = 0; i < bones.Length; i++)
-//            {
-//                bones[i] *= world;
-//            }
+            for (int i = 0; i < bones.Length; i++)
+            {
+                bones[i] *= world;
+            }
 
-//            foreach (ModelMesh mesh in animatedPlayerObject.Model.Meshes)
-//            {
-//                foreach (SkinnedEffect skinnedEffect in mesh.Effects)
-//                {
-//                    skinnedEffect.SetBoneTransforms(bones);
-//                    skinnedEffect.View = activeCamera.View;
-//                    skinnedEffect.Projection = activeCamera.Projection;
+            foreach (ModelMesh mesh in animatedPlayerObject.Model.Meshes)
+            {
+                foreach (SkinnedEffect skinnedEffect in mesh.Effects)
+                {
+                    skinnedEffect.SetBoneTransforms(bones);
+                    skinnedEffect.View = activeCamera.View;
+                    skinnedEffect.Projection = activeCamera.Projection;
 
-//                    //if you want to overwrite the texture you baked into the animation in 3DS Max then set your own texture
-//                    if (animatedPlayerObject.EffectParameters.Texture != null)
-//                        skinnedEffect.Texture = animatedPlayerObject.EffectParameters.Texture;
+                    //if you want to overwrite the texture you baked into the animation in 3DS Max then set your own texture
+                    if (animatedPlayerObject.EffectParameters.Texture != null)
+                        skinnedEffect.Texture = animatedPlayerObject.EffectParameters.Texture;
 
-//                    skinnedEffect.DiffuseColor = animatedPlayerObject.EffectParameters.DiffuseColor.ToVector3();
-//                    skinnedEffect.Alpha = animatedPlayerObject.Alpha;
-//                    skinnedEffect.EnableDefaultLighting();
-//                    skinnedEffect.PreferPerPixelLighting = true;
-//                }
-//                mesh.Draw();
-//            }
+                    skinnedEffect.DiffuseColor = animatedPlayerObject.EffectParameters.DiffuseColor.ToVector3();
+                    skinnedEffect.Alpha = animatedPlayerObject.Alpha;
+                    skinnedEffect.EnableDefaultLighting();
+                    skinnedEffect.PreferPerPixelLighting = true;
+                }
+                mesh.Draw();
+            }
 
-//#if DEBUG
-//            debugDrawCount++;
-//#endif
-//        }
+#if DEBUG
+            debugDrawCount++;
+#endif
+        }
     }
 }

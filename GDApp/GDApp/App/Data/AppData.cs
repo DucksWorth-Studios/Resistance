@@ -54,8 +54,8 @@ namespace GDLibrary
 
         public static readonly float CameraThirdPersonScrollSpeedDistanceMultiplier = 0.00125f;
         public static readonly float CameraThirdPersonScrollSpeedElevatationMultiplier = 0.01f;
-        public static readonly float CameraThirdPersonDistance = 20;
-        public static readonly float CameraThirdPersonElevationAngleInDegrees = 160;
+        public static readonly float CameraThirdPersonDistance = 12;
+        public static readonly float CameraThirdPersonElevationAngleInDegrees = 150;
 
         public static readonly float SecurityCameraRotationSpeedSlow = 0.5f;
         public static readonly float SecurityCameraRotationSpeedMedium = 2 * SecurityCameraRotationSpeedSlow;
@@ -74,11 +74,11 @@ namespace GDLibrary
 
         public static readonly Keys[] PlayerOneMoveKeys = { Keys.U, Keys.J, Keys.H, Keys.K, Keys.Y, Keys.I, Keys.N, Keys.M};
         public static readonly Keys[] PlayerTwoMoveKeys = { Keys.NumPad8, Keys.NumPad5, Keys.NumPad4, Keys.NumPad6, Keys.NumPad7, Keys.NumPad9, Keys.NumPad2, Keys.NumPad3 };
-        public static readonly float PlayerMoveSpeed = 0.05f;
+        public static readonly float PlayerMoveSpeed = 0.15f;
         public static readonly float PlayerStrafeSpeed = 0.7f * PlayerMoveSpeed;
         public static readonly float PlayerRotationSpeed = 0.08f;
-        public static readonly float PlayerRadius = 3;
-        public static readonly float PlayerHeight = 5;
+        public static readonly float PlayerRadius = 1.5f;
+        public static readonly float PlayerHeight = 4.5f;
         public static readonly float PlayerMass = 25;
         public static readonly float PlayerJumpHeight = 25;
 
