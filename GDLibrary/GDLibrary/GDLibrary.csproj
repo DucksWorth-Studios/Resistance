@@ -93,6 +93,8 @@
     <Compile Include="Actors\Drawn\3D\Collidable\TriangleMeshObject.cs" />
     <Compile Include="Actors\Drawn\3D\DrawnActor3D.cs" />
     <Compile Include="Actors\Drawn\3D\ModelObject.cs" />
+    <Compile Include="Actors\Drawn\3D\Primitives\Billboards\BillboardPrimitiveObject.cs" />
+    <Compile Include="Actors\Drawn\3D\Primitives\PrimitiveObject.cs" />
     <Compile Include="Comparer\CameraDepthComparer.cs" />
     <Compile Include="Controllers\2D\Base\UIController.cs" />
     <Compile Include="Controllers\2D\UI\UIColorSineLerpController.cs" />
@@ -120,6 +122,8 @@
     <Compile Include="Curve\Curve3D.cs" />
     <Compile Include="Curve\Transform2DCurve.cs" />
     <Compile Include="Curve\Transform3DCurve.cs" />
+    <Compile Include="Enums\BillboardType.cs" />
+    <Compile Include="Enums\OrientationType.cs" />
     <Compile Include="GDDebug\Physics\BoundingBoxDrawer.cs" />
     <Compile Include="GDDebug\DebugDrawer.cs" />
     <Compile Include="GDDebug\Physics\PhysicsDebugDrawer.cs" />
@@ -135,7 +139,9 @@
     <Compile Include="Events\Base\EventDispatcher.cs" />
     <Compile Include="Events\Data\EventData.cs" />
     <Compile Include="Interfaces\IActor.cs" />
+    <Compile Include="Interfaces\ICollisionPrimitive.cs" />
     <Compile Include="Interfaces\IController.cs" />
+    <Compile Include="Interfaces\IVertexData.cs" />
     <Compile Include="Managers\Camera\CameraManager.cs" />
     <Compile Include="Managers\Content\ContentDictionary.cs" />
     <Compile Include="Managers\Game\GameStateManager.cs" />
@@ -151,6 +157,8 @@
     <Compile Include="Managers\Sound\SoundManager.cs" />
     <Compile Include="Managers\UI\UIManager.cs" />
     <Compile Include="Interfaces\IEffectParameters.cs" />
+    <Compile Include="Parameters\Collision\BoxCollisionPrimitive.cs" />
+    <Compile Include="Parameters\Collision\SphereCollisionPrimitive.cs" />
     <Compile Include="Parameters\Effect\BasicEffectParameters.cs" />
     <Compile Include="Parameters\Effect\DualTextureEffectParameters.cs" />
     <Compile Include="Parameters\Effect\EffectParameters.cs" />
@@ -159,6 +167,11 @@
     <Compile Include="Parameters\Other\ManagerParameters.cs" />
     <Compile Include="Parameters\Other\PickupParameters.cs" />
     <Compile Include="Parameters\Other\TrigonometricParameters.cs" />
+    <Compile Include="Parameters\Primitives\BillboardVertexData.cs" />
+    <Compile Include="Parameters\Primitives\BufferedVertexData.cs" />
+    <Compile Include="Parameters\Primitives\DynamicBufferedVertexData.cs" />
+    <Compile Include="Parameters\Primitives\VertexData.cs" />
+    <Compile Include="Parameters\Primitives\VertexInfo.cs" />
     <Compile Include="Templates\PausableDrawableGameComponent.cs" />
     <Compile Include="Templates\PausableGameComponent.cs" />
     <Compile Include="Templates\SimpleDrawableComponent.cs" />
