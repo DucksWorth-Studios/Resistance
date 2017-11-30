@@ -94,7 +94,6 @@ namespace GDLibrary
                 this.texture2);//shallow - a reference
         }
 
-        //since we CANNOT alter the signature of clone we need to override using the NEW keyword (unlike our typical approach of virtual and override)
         public override object Clone()
         {
             return GetDeepCopy();

@@ -15,10 +15,15 @@ namespace GDLibrary
     public class Transform3D : ICloneable
     {
         #region Statics
-        public static Transform3D Zero = new Transform3D(Vector3.Zero,
-                                Vector3.Zero, Vector3.One, -Vector3.UnitZ, Vector3.UnitY);
+        //30/11/17 - fix for Transform3D.Zero - thanks to JL
+        public static Transform3D Zero 
+        {
+            get
+            {
+                return new Transform3D(Vector3.Zero, Vector3.Zero, Vector3.One, -Vector3.UnitZ, Vector3.UnitY);
+            }
+        }
         #endregion
-
         #region Fields
         private Vector3 translation, rotation, scale;
         private Vector3 look, up;
@@ -27,7 +32,6 @@ namespace GDLibrary
         private Transform3D originalTransform3D;
         private double distanceToCamera; //used to sort transparent objects by distance from camera - see screencast on CDCR.
         #endregion
-
         #region Properties
         public Matrix Orientation
         {
@@ -147,6 +151,9 @@ namespace GDLibrary
                 this.distanceToCamera = value;
             }
         }
+
+        public Vector3 TranslateIncrement { get; internal set; }
+        public int RotateIncrement { get; internal set; }
 
         #endregion
 

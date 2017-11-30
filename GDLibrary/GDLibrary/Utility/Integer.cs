@@ -2,11 +2,29 @@
 {
     public class Integer
     {
-        public static Integer Zero = new Integer(0);
-        public static Integer One = new Integer(1);
+        #region Statics
+        public static Integer Zero
+        {
+            get
+            {
+                return new Integer(0);
+            }
+        }
+        public static Integer One
+        {
+            get
+            {
+                return new Integer(1);
+            }
+        }
+        #endregion
 
+        #region Fields
         private int value;
+        #endregion
 
+        #region Properties
+      
         public int Value
         {
             get
@@ -18,7 +36,8 @@
                 this.value = value;
             }
         }
-     
+        #endregion
+
 
         public Integer(int value)
         {

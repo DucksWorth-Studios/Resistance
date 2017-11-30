@@ -60,7 +60,16 @@ namespace GDLibrary
             this.body.CollisionSkin = this.collision;
 
             //register for callback collision
-            //this.Body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
+            this.Body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
+        }
+
+        private bool CollisionSkin_callbackFn(CollisionSkin skin0, CollisionSkin collidee)
+        {
+            //CollidableObject c = collidee.Owner.ExternalData as CollidableObject;
+            //c.ActorType == ActorType.Player
+
+
+            return true;
         }
 
         public override Matrix GetWorldMatrix()

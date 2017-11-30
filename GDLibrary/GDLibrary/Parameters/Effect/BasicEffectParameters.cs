@@ -134,7 +134,6 @@ namespace GDLibrary
             bEffect.EmissiveColor = this.EmissiveColor.ToVector3();
             bEffect.Alpha = this.Alpha;
 
-
             //Not all models NEED a texture. Does a semi-transparent window need a texture?
             if (this.Texture != null)
             {
@@ -168,7 +167,6 @@ namespace GDLibrary
                 this.Alpha);//deep
         }
 
-        //since we CANNOT alter the signature of clone we need to override using the NEW keyword (unlike our typical approach of virtual and override)
         public override object Clone()
         {
             return GetDeepCopy();

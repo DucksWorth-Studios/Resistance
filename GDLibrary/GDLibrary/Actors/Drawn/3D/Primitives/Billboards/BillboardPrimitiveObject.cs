@@ -17,6 +17,7 @@ namespace GDLibrary
     {
         public BillboardType BillboardType { get; set; }
         public Vector3 Up { get; set; }
+        public Vector3 Right { get; set; }
         public string Technique { get; set; }
 
         //scrolling

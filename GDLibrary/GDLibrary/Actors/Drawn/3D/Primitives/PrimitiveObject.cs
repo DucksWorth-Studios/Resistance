@@ -8,6 +8,8 @@ Date Updated:	27/11/17
 Bugs:			None
 Fixes:			None
 */
+using Microsoft.Xna.Framework;
+
 namespace GDLibrary
 {
     public class PrimitiveObject : DrawnActor3D
@@ -26,6 +28,14 @@ namespace GDLibrary
             set
             {
                 this.vertexData = value;
+            }
+        }
+
+        public BoundingSphere BoundingSphere
+        {
+            get
+            {
+                return new BoundingSphere(this.Transform.Translation, this.Transform.Scale.Length());
             }
         }
         #endregion

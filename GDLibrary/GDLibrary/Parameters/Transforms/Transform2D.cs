@@ -13,6 +13,16 @@ namespace GDLibrary
 {
     public class Transform2D : ICloneable
     {
+        #region Statics
+        public static Transform2D One
+        {
+            get
+            {
+                return new Transform2D(Vector2.One);
+            }
+        }
+        #endregion
+
         #region Fields
         private Vector2 translation, scale;
         private float rotationInDegrees, rotationInRadians;

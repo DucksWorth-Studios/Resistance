@@ -118,5 +118,18 @@ namespace GDLibrary
         public static readonly string VideoIDMainHall;
         public static readonly string ControllerIDSuffix = " controller";
         #endregion
+
+        #region Primitive ids used by vertexData dictionary
+        public static readonly string TexturedQuadID = "textured quad";
+
+        #endregion
+
+        #region Effect parameter ids used by the effect dictionary
+        public static readonly string UnLitBillboardEffectParametersID = "unlit billboard effect";
+        public static readonly string LitBasicEffectParametersID = "lit basic effect";
+        internal static readonly string UnLitBasicEffectParametersID = "unlit basic effect";
+        internal static readonly string UnLitDualEffectParametersID = "unlit dual Effect";
+        #endregion
+
     }
 }

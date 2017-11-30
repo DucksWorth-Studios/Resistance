@@ -14,56 +14,51 @@ Fixes:			None
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 namespace GDLibrary
 {
-    public class BillboardVertexData<T> : VertexData<T> where T : struct, IVertexType
+    //this is the contents sent to the GFX card for each vertex drawn
+    public struct VertexBillboard : IVertexType
     {
         #region Variables
-        private DynamicVertexBuffer vertexBuffer;
-        private GraphicsDevice graphicsDevice;
+        public Vector3 position;
+        public Vector4 texCoordAndOffset;
+        #endregion
+
+        public VertexBillboard(Vector3 position, Vector4 texCoordAndOffset)
+        {
+            this.position = position;
+            this.texCoordAndOffset = texCoordAndOffset;
+        }
+
+        public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration
+        (
+                new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
+                new VertexElement(12, VertexElementFormat.Vector4, VertexElementUsage.TextureCoordinate, 0)
+        );
+
+        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
+    }
+
+    public class BillboardVertexData<T> : BufferedVertexData<T> where T : struct, IVertexType
+    {
+        #region Variables
         #endregion
 
         #region Properties
-
-        public DynamicVertexBuffer VertexBuffer
-        {
-            get
-            {
-                return vertexBuffer;
-            }
-            set
-            {
-                vertexBuffer = value;
-
-            }
-        }
         #endregion
 
-        public BillboardVertexData(GraphicsDevice graphicsDevice, T[] vertices, 
-            PrimitiveType primitiveType, int primitiveCount)
-            : base(vertices, primitiveType, primitiveCount)
+        //allows developer to pass in vertices AND buffer - more efficient since buffer is defined ONCE outside of the object instead of a new VertexBuffer for EACH instance of the class
+        public BillboardVertexData(GraphicsDevice graphicsDevice, T[] vertices, DynamicVertexBuffer vertexBuffer, PrimitiveType primitiveType, int primitiveCount)
+            : base(graphicsDevice, vertices, vertexBuffer, primitiveType, primitiveCount)
         {
-            this.graphicsDevice = graphicsDevice;
 
-            //reserve space on gfx will be CHANGED frequently
-            this.vertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(T), vertices.Length, BufferUsage.None);
-            //set data on the reserved space
-            this.vertexBuffer.SetData<T>(this.Vertices);
         }
 
-        public override void Draw(GameTime gameTime, Effect effect)
+        //buffer is created INSIDE the class so each class has a buffer - not efficient
+        public BillboardVertexData(GraphicsDevice graphicsDevice, T[] vertices, PrimitiveType primitiveType, int primitiveCount)
+            : base(graphicsDevice, vertices, primitiveType, primitiveCount)
         {
-            //this is what we want GFX to draw
-            effect.GraphicsDevice.SetVertexBuffer(this.vertexBuffer);
 
-            //draw!
-            effect.GraphicsDevice.DrawPrimitives(this.PrimitiveType, 0, this.PrimitiveCount);
-        }
-
-        public new object Clone()
-        {
-            return new BillboardVertexData<T>(this.graphicsDevice, this.Vertices, this.PrimitiveType, this.PrimitiveCount);
         }
     }
 }

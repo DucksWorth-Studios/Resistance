@@ -17,34 +17,103 @@ namespace GDLibrary
         #region Statics
         //Deep relates to the distance between the near and far clipping planes i.e. 1 to 2500
         public static ProjectionParameters StandardDeepFiveThree
-            = new ProjectionParameters(MathHelper.PiOver2, 5.0f / 3, 1, 2500);
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 5.0f / 3, 0.1f, 2500);
+            }
+        }
+
         public static ProjectionParameters StandardDeepFourThree
-           = new ProjectionParameters(MathHelper.PiOver2, 4.0f / 3, 1, 2500);
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 4.0f / 3, 0.1f, 2500);
+            }
+        }
+
+
         public static ProjectionParameters StandardDeepSixteenTen
-            = new ProjectionParameters(MathHelper.PiOver2, 16.0f / 10, 1, 2500);
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 16.0f / 10, 0.1f, 2500);
+            }
+        }
+
         public static ProjectionParameters StandardDeepSixteenNine
-            = new ProjectionParameters(MathHelper.PiOver4, 16.0f / 9, 1, 2500);
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver4, 16.0f / 9, 1, 2500);
+            }
+        }
 
         //Medium relates to the distance between the near and far clipping planes i.e. 1 to 1000
         public static ProjectionParameters StandardMediumFiveThree
-            = new ProjectionParameters(MathHelper.PiOver2, 5.0f / 3, 0.1f, 1000);
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 5.0f / 3, 0.1f, 1000);
+            }
+        }
+
         public static ProjectionParameters StandardMediumFourThree
-           = new ProjectionParameters(MathHelper.PiOver2, 4.0f / 3, 1, 1000);
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 4.0f / 3, 0.1f, 1000);
+            }
+        }
+
         public static ProjectionParameters StandardMediumSixteenTen
-            = new ProjectionParameters(MathHelper.PiOver2, 16.0f / 10, 1, 1000);
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 16.0f / 10, 0.1f, 1000);
+            }
+        }
+
         public static ProjectionParameters StandardMediumSixteenNine
-            = new ProjectionParameters(MathHelper.PiOver4, 16.0f/9, 1, 1000);
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver4, 16.0f / 9, 0.1f, 1000);
+            }
+        }
 
         //Shallow relates to the distance between the near and far clipping planes i.e. 1 to 500
         public static ProjectionParameters StandardShallowFiveThree
-            = new ProjectionParameters(MathHelper.PiOver2, 5.0f / 3, 1, 500);
-        public static ProjectionParameters StandardShallowFourThree
-            = new ProjectionParameters(MathHelper.PiOver2, 4.0f / 3, 1, 500);
-        public static ProjectionParameters StandardShallowSixteenTen
-            = new ProjectionParameters(MathHelper.PiOver2, 16.0f / 10, 1, 500);
-        public static ProjectionParameters StandardShallowSixteenNine
-            = new ProjectionParameters(MathHelper.PiOver2, 16.0f / 9, 1, 500);
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 5.0f / 3, 0.1f, 500);
+            }
+        }
 
+        public static ProjectionParameters StandardShallowFourThree
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 4.0f / 3, 0.1f, 500);
+            }
+        }
+
+        public static ProjectionParameters StandardShallowSixteenTen
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 16.0f / 10, 0.1f, 500);
+            }
+        }
+
+        public static ProjectionParameters StandardShallowSixteenNine
+        {
+            get
+            {
+                return new ProjectionParameters(MathHelper.PiOver2, 16.0f / 9, 0.1f, 500);
+            }
+        }
         #endregion
 
         #region Fields

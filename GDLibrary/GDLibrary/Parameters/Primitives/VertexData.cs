@@ -51,10 +51,8 @@ namespace GDLibrary
         }
         #endregion
 
-        public VertexData(T[] vertices,
-            PrimitiveType primitiveType, int primitiveCount)
+        public VertexData(T[] vertices, PrimitiveType primitiveType, int primitiveCount)
         {
-   
             this.vertices = vertices;
             this.primitiveType = primitiveType;
             this.primitiveCount = primitiveCount;
@@ -68,9 +66,9 @@ namespace GDLibrary
         public object Clone()
         {
             return new VertexData<T>(
-                this.Vertices, //shallow
+                this.Vertices, //shallow - reference
                 this.PrimitiveType,  //struct - deep
-                this.PrimitiveCount); //deep
+                this.PrimitiveCount);  //deep - primitive
         }
     }
 }

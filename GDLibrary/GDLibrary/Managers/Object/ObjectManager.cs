@@ -286,7 +286,44 @@ namespace GDLibrary
                 {
                     DrawObject(gameTime, actor as ModelObject, activeCamera);
                 }
+                else if (actor is BillboardPrimitiveObject)
+                {
+                    DrawObject(gameTime, actor as BillboardPrimitiveObject, activeCamera);
+                }
+                else if (actor is PrimitiveObject)
+                {
+                    DrawObject(gameTime, actor as PrimitiveObject, activeCamera);
+                }
                 //we will add additional else...if statements here to render other object types (e.g model, animated, billboard etc)
+            }
+        }
+
+        //draw a NON-TEXTURED primitive i.e. vertices (and possibly indices) defined by the user
+        private void DrawObject(GameTime gameTime, PrimitiveObject primitiveObject, Camera3D activeCamera)
+        {
+            if (activeCamera.BoundingFrustum.Intersects(primitiveObject.BoundingSphere))
+            {
+                primitiveObject.EffectParameters.SetParameters(activeCamera);
+                primitiveObject.EffectParameters.SetWorld(primitiveObject.GetWorldMatrix());
+                primitiveObject.VertexData.Draw(gameTime, primitiveObject.EffectParameters.Effect);
+
+#if DEBUG
+                debugDrawCount++;
+#endif
+            }
+        }
+
+        private void DrawObject(GameTime gameTime, BillboardPrimitiveObject billboardPrimitiveObject, Camera3D activeCamera)
+        {
+            if (activeCamera.BoundingFrustum.Intersects(billboardPrimitiveObject.BoundingSphere))
+            {
+                billboardPrimitiveObject.EffectParameters.SetParameters(activeCamera, billboardPrimitiveObject.BillboardParameters);
+                billboardPrimitiveObject.EffectParameters.SetWorld(billboardPrimitiveObject.GetWorldMatrix());
+                billboardPrimitiveObject.VertexData.Draw(gameTime, billboardPrimitiveObject.EffectParameters.Effect);
+
+#if DEBUG
+                debugDrawCount++;
+#endif
             }
         }
 

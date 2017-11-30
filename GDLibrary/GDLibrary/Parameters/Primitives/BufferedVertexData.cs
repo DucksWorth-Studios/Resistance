@@ -38,17 +38,42 @@ namespace GDLibrary
 
             }
         }
+        public GraphicsDevice GraphicsDevice
+        {
+            get
+            {
+                return this.graphicsDevice;
+            }
+        }
         #endregion
 
+        //allows developer to pass in vertices AND buffer - more efficient since buffer is defined ONCE outside of the object instead of a new VertexBuffer for EACH instance of the class
+        public BufferedVertexData(GraphicsDevice graphicsDevice, T[] vertices, VertexBuffer vertexBuffer, PrimitiveType primitiveType, int primitiveCount)
+            : base(vertices, primitiveType, primitiveCount)
+        {
+            this.graphicsDevice = graphicsDevice;
+            this.VertexBuffer = vertexBuffer;
+            
+            //set data on the reserved space
+            this.vertexBuffer.SetData<T>(this.Vertices);
+        }
+    
+        //buffer is created INSIDE the class so each class has a buffer - not efficient
         public BufferedVertexData(GraphicsDevice graphicsDevice, T[] vertices, PrimitiveType primitiveType, int primitiveCount)
             : base(vertices, primitiveType, primitiveCount)
         {
             this.graphicsDevice = graphicsDevice;
-
-            //reserve space on gfx
             this.VertexBuffer = new VertexBuffer(graphicsDevice, typeof(T), vertices.Length, BufferUsage.None);
+            
+            //set data on the reserved space
+            this.vertexBuffer.SetData<T>(this.Vertices);
+        }
 
-            //move data to the space
+
+        public void SetData(T[] vertices)
+        {
+            this.Vertices = vertices;
+            //set data on the reserved space
             this.vertexBuffer.SetData<T>(this.Vertices);
         }
 
@@ -63,7 +88,10 @@ namespace GDLibrary
 
         public new object Clone()
         {
-            return new BufferedVertexData<T>(this.graphicsDevice, this.Vertices, this.PrimitiveType, this.PrimitiveCount);
+            return new BufferedVertexData<T>(this.graphicsDevice,  //shallow - reference
+                this.Vertices, //shallow - reference
+                this.PrimitiveType, //struct - deep
+                this.PrimitiveCount); //deep - primitive
         }
     }
 }

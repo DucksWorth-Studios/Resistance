@@ -1,41 +1,29 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*
+Function: 		A factory to generate common primitives used by your game.
+
+Author: 		NMCG
+Version:		1.0
+Date Updated:	27/11/17
+Bugs:			
+Fixes:			None
+*/
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
 namespace GDLibrary
 {
-    public struct VertexBillboard : IVertexType
-    {
-        #region Variables
-        public Vector3 position;
-        public Vector4 texCoordAndOffset;
-        #endregion
 
-        public VertexBillboard(Vector3 position, Vector4 texCoordAndOffset)
-        {
-            this.position = position;
-            this.texCoordAndOffset = texCoordAndOffset;
-        }
-
-        public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration
-        (
-                new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
-                new VertexElement(12, VertexElementFormat.Vector4, VertexElementUsage.TextureCoordinate, 0)
-        );
-
-        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
-    }
-
-    public class VertexInfo
+    public static class VertexFactory 
     {
         //constant
         public static int ROUND_PRECISION_FLOAT = 3;
 
         /******************************************** Wireframe - Origin, Line, Circle, Quad, Cube & Billboard ********************************************/
 
-        public static VertexPositionColor[] GetVerticesPositionColorLine(int sidelength, out PrimitiveType primitiveType,
-                                                            out int primitiveCount)
+        public static VertexPositionColor[] GetVerticesPositionColorLine(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.LineList;
             primitiveCount = 1;
@@ -53,8 +41,7 @@ namespace GDLibrary
             return vertices;
         }
 
-        public static VertexPositionColor[] GetVerticesPositionColorOriginHelper(out PrimitiveType primitiveType,
-                                                            out int primitiveCount)
+        public static VertexPositionColor[] GetVerticesPositionColorOriginHelper(out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.LineList;
             primitiveCount = 10;
@@ -100,9 +87,7 @@ namespace GDLibrary
         }
 
         //returns the vertices for a simple sphere (i.e. 3 circles) with a user-defined radius and sweep angle
-        public static VertexPositionColor[] GetVerticesPositionColorSphere(int radius, 
-            int sweepAngleInDegrees, out PrimitiveType primitiveType,
-                                                            out int primitiveCount)
+        public static VertexPositionColor[] GetVerticesPositionColorSphere(int radius, int sweepAngleInDegrees, out PrimitiveType primitiveType, out int primitiveCount)
         {
             List<VertexPositionColor> vertexList = new List<VertexPositionColor>();
 
@@ -128,8 +113,7 @@ namespace GDLibrary
         }
 
         //returns the vertices for a circle with a user-defined radius, sweep angle, and orientation
-        public static VertexPositionColor[] GetVerticesPositionColorCircle(int radius,
-            int sweepAngleInDegrees, OrientationType orientationType)
+        public static VertexPositionColor[] GetVerticesPositionColorCircle(int radius, int sweepAngleInDegrees, OrientationType orientationType)
         {
             //sweep angle should also be >= 1 and a multiple of 360
             //if angle is not a multiple of 360 the circle will not close - remember we are drawing with a LineStrip
@@ -164,8 +148,7 @@ namespace GDLibrary
             return vertices;
         }
 
-        public static VertexPositionColor[] GetVerticesPositionColorQuad(int sidelength, 
-            out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColor[] GetVerticesPositionColorQuad(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.TriangleStrip;
             primitiveCount = 2;
@@ -194,7 +177,7 @@ namespace GDLibrary
             VertexBillboard[] vertices = new VertexBillboard[4];
             float halfSideLength = sidelength / 2.0f;
 
-             Vector2 uvTopLeft = new Vector2(0, 0);
+            Vector2 uvTopLeft = new Vector2(0, 0);
             Vector2 uvTopRight = new Vector2(1, 0);
             Vector2 uvBottomLeft = new Vector2(0, 1);
             Vector2 uvBottomRight = new Vector2(1, 1);
@@ -281,17 +264,106 @@ namespace GDLibrary
             return vertices;
         }
 
+        //defined vertices for a new shape in our game
+        public static VertexPositionColor[] GetColoredTriangle(out PrimitiveType primitiveType, out int primitiveCount)
+        {
+            VertexPositionColor[] vertices = new VertexPositionColor[3];
+            vertices[0] = new VertexPositionColor(new Vector3(0, 1, 0), Color.White); //T
+            vertices[1] = new VertexPositionColor(new Vector3(1, 0, 0), Color.White); //R
+            vertices[2] = new VertexPositionColor(new Vector3(-1, 0, 0), Color.White); //L
+
+            primitiveType = PrimitiveType.TriangleStrip;
+            primitiveCount = 1;
+
+            return vertices;
+        }
+
+        //TriangleStrip
+        public static VertexPositionColorTexture[] GetTextureQuadVertices(out PrimitiveType primitiveType, out int primitiveCount)
+        {
+            float halfLength = 0.5f;
+
+            Vector3 topLeft = new Vector3(-halfLength, halfLength, 0);
+            Vector3 topRight = new Vector3(halfLength, halfLength, 0);
+            Vector3 bottomLeft = new Vector3(-halfLength, -halfLength, 0);
+            Vector3 bottomRight = new Vector3(halfLength, -halfLength, 0);
+
+            //quad coplanar with the XY-plane (i.e. forward facing normal along UnitZ)
+            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[4];
+            vertices[0] = new VertexPositionColorTexture(topLeft, Color.White, Vector2.Zero);
+            vertices[1] = new VertexPositionColorTexture(topRight, Color.White, Vector2.UnitX);
+            vertices[2] = new VertexPositionColorTexture(bottomLeft, Color.White, Vector2.UnitY);
+            vertices[3] = new VertexPositionColorTexture(bottomRight, Color.White, Vector2.One);
+
+            primitiveType = PrimitiveType.TriangleStrip;
+            primitiveCount = 2;
+
+            return vertices;
+        }
+
+        public static VertexPositionColor[] GetSpiralVertices(int radius, int angleInDegrees, float verticalIncrement, out int primitiveCount)
+        {
+            VertexPositionColor[] vertices = GetCircleVertices(radius, angleInDegrees, out primitiveCount, 
+                OrientationType.XZAxis);
+
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i].Position.Y = verticalIncrement * i;
+            }
+
+            return vertices;
+        }
+
+        public static VertexPositionColor[] GetSphereVertices(int radius, int angleInDegrees, out int primitiveCount)
+        {
+            List<VertexPositionColor> vertList = new List<VertexPositionColor>();
+
+            vertList.AddRange(GetCircleVertices(radius, angleInDegrees, out primitiveCount, OrientationType.XYAxis));
+            vertList.AddRange(GetCircleVertices(radius, angleInDegrees, out primitiveCount, OrientationType.YZAxis));
+            vertList.AddRange(GetCircleVertices(radius, angleInDegrees, out primitiveCount, OrientationType.XZAxis));
+            primitiveCount = vertList.Count - 1;      
+            return vertList.ToArray();
+        }
+
+        public static VertexPositionColor[] GetCircleVertices(int radius, int angleInDegrees, out int primitiveCount,  OrientationType orientationType)
+        {
+            primitiveCount = 360 / angleInDegrees;
+            VertexPositionColor[] vertices = new VertexPositionColor[primitiveCount + 1];
+
+            Vector3 position = Vector3.Zero;
+            float angleInRadians = MathHelper.ToRadians(angleInDegrees);
+
+            for (int i = 0; i <= primitiveCount; i++)
+            {
+                if (orientationType == OrientationType.XYAxis)
+                {
+                    position.X = (float)(radius * Math.Cos(i * angleInRadians));
+                    position.Y = (float)(radius * Math.Sin(i * angleInRadians));
+                }
+                else if (orientationType == OrientationType.XZAxis)
+                {
+                    position.X = (float)(radius * Math.Cos(i * angleInRadians));
+                    position.Z = (float)(radius * Math.Sin(i * angleInRadians));
+                }
+                else
+                {
+                    position.Y = (float)(radius * Math.Cos(i * angleInRadians));
+                    position.Z = (float)(radius * Math.Sin(i * angleInRadians));
+                }
+
+                vertices[i] = new VertexPositionColor(position, Color.White);
+            }
+            return vertices;
+        }
 
         /******************************************** Textured - Quad, Cube & Pyramid ********************************************/
 
-        public static VertexPositionColorTexture[] GetVerticesPositionColorTextureQuad(int sidelength,
-            out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColorTexture[] GetVerticesPositionColorTextureQuad(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.TriangleStrip;
             primitiveCount = 2;
 
             VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[4];
-
             float halfSideLength = sidelength / 2.0f;
 
             Vector3 topLeft = new Vector3(-halfSideLength, halfSideLength, 0);
@@ -308,9 +380,11 @@ namespace GDLibrary
             return vertices;
         }
 
-
-        public static VertexPositionColorTexture[] GetVerticesPositionTexturedCube(int sidelength)
+        public static VertexPositionColorTexture[] GetVerticesPositionTexturedCube(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
         {
+            primitiveType = PrimitiveType.TriangleList;
+            primitiveCount = 12;
+
             VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[36];
 
             float halfSideLength = sidelength / 2.0f;
@@ -389,8 +463,11 @@ namespace GDLibrary
             return vertices;
         }
 
-        public static VertexPositionColorTexture[] GetVerticesPositionTexturedPyramidSquare(int sidelength)
+        public static VertexPositionColorTexture[] GetVerticesPositionTexturedPyramidSquare(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
         {
+            primitiveType = PrimitiveType.TriangleList;
+            primitiveCount = 6;
+
             VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[18];
             float halfSideLength = sidelength / 2.0f;
 
@@ -438,6 +515,98 @@ namespace GDLibrary
             return vertices;
         }
 
-     
+        /******************************************** Textured & Normal - Cube ********************************************/
+
+        //adding normals - step 1 - add the vertices for the object shape
+        public static VertexPositionNormalTexture[] GetVerticesPositionNormalTexturedCube(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
+        {
+            primitiveType = PrimitiveType.TriangleList;
+            primitiveCount = 12;
+
+            VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[36];
+
+            float halfSideLength = sidelength / 2.0f;
+
+            Vector3 topLeftFront = new Vector3(-halfSideLength, halfSideLength, halfSideLength);
+            Vector3 topLeftBack = new Vector3(-halfSideLength, halfSideLength, -halfSideLength);
+            Vector3 topRightFront = new Vector3(halfSideLength, halfSideLength, halfSideLength);
+            Vector3 topRightBack = new Vector3(halfSideLength, halfSideLength, -halfSideLength);
+
+            Vector3 bottomLeftFront = new Vector3(-halfSideLength, -halfSideLength, halfSideLength);
+            Vector3 bottomLeftBack = new Vector3(-halfSideLength, -halfSideLength, -halfSideLength);
+            Vector3 bottomRightFront = new Vector3(halfSideLength, -halfSideLength, halfSideLength);
+            Vector3 bottomRightBack = new Vector3(halfSideLength, -halfSideLength, -halfSideLength);
+
+            //uv coordinates
+            Vector2 uvTopLeft = new Vector2(0, 0);
+            Vector2 uvTopRight = new Vector2(1, 0);
+            Vector2 uvBottomLeft = new Vector2(0, 1);
+            Vector2 uvBottomRight = new Vector2(1, 1);
+
+
+            //top - 1 polygon for the top
+            vertices[0] = new VertexPositionNormalTexture(topLeftFront, Vector3.UnitY, uvBottomLeft);
+            vertices[1] = new VertexPositionNormalTexture(topLeftBack, Vector3.UnitY, uvTopLeft);
+            vertices[2] = new VertexPositionNormalTexture(topRightBack, Vector3.UnitY, uvTopRight);
+
+            vertices[3] = new VertexPositionNormalTexture(topLeftFront, Vector3.UnitY, uvBottomLeft);
+            vertices[4] = new VertexPositionNormalTexture(topRightBack, Vector3.UnitY, uvTopRight);
+            vertices[5] = new VertexPositionNormalTexture(topRightFront, Vector3.UnitY, uvBottomRight);
+
+            //front
+            vertices[6] = new VertexPositionNormalTexture(topLeftFront, Vector3.UnitZ, uvBottomLeft);
+            vertices[7] = new VertexPositionNormalTexture(topRightFront, Vector3.UnitZ, uvBottomRight);
+            vertices[8] = new VertexPositionNormalTexture(bottomLeftFront, Vector3.UnitZ, uvTopLeft);
+
+            vertices[9] = new VertexPositionNormalTexture(bottomLeftFront, Vector3.UnitZ, uvTopLeft);
+            vertices[10] = new VertexPositionNormalTexture(topRightFront, Vector3.UnitZ, uvBottomRight);
+            vertices[11] = new VertexPositionNormalTexture(bottomRightFront, Vector3.UnitZ, uvTopRight);
+
+            //back
+            vertices[12] = new VertexPositionNormalTexture(bottomRightBack, -Vector3.UnitZ, uvBottomRight);
+            vertices[13] = new VertexPositionNormalTexture(topRightBack, -Vector3.UnitZ, uvTopRight);
+            vertices[14] = new VertexPositionNormalTexture(topLeftBack, -Vector3.UnitZ, uvTopLeft);
+
+            vertices[15] = new VertexPositionNormalTexture(bottomRightBack, -Vector3.UnitZ, uvBottomRight);
+            vertices[16] = new VertexPositionNormalTexture(topLeftBack, -Vector3.UnitZ, uvTopLeft);
+            vertices[17] = new VertexPositionNormalTexture(bottomLeftBack, -Vector3.UnitZ, uvBottomLeft);
+
+            //left 
+            vertices[18] = new VertexPositionNormalTexture(topLeftBack, -Vector3.UnitX, uvTopLeft);
+            vertices[19] = new VertexPositionNormalTexture(topLeftFront, -Vector3.UnitX, uvTopRight);
+            vertices[20] = new VertexPositionNormalTexture(bottomLeftFront, -Vector3.UnitX, uvBottomRight);
+
+            vertices[21] = new VertexPositionNormalTexture(bottomLeftBack, -Vector3.UnitX, uvBottomLeft);
+            vertices[22] = new VertexPositionNormalTexture(topLeftBack, -Vector3.UnitX, uvTopLeft);
+            vertices[23] = new VertexPositionNormalTexture(bottomLeftFront, -Vector3.UnitX, uvBottomRight);
+
+            //right
+            vertices[24] = new VertexPositionNormalTexture(bottomRightFront, Vector3.UnitX, uvBottomLeft);
+            vertices[25] = new VertexPositionNormalTexture(topRightFront, Vector3.UnitX, uvTopLeft);
+            vertices[26] = new VertexPositionNormalTexture(bottomRightBack, Vector3.UnitX, uvBottomRight);
+
+            vertices[27] = new VertexPositionNormalTexture(topRightFront, Vector3.UnitX, uvTopLeft);
+            vertices[28] = new VertexPositionNormalTexture(topRightBack, Vector3.UnitX, uvTopRight);
+            vertices[29] = new VertexPositionNormalTexture(bottomRightBack, Vector3.UnitX, uvBottomRight);
+
+            //bottom
+            vertices[30] = new VertexPositionNormalTexture(bottomLeftFront, -Vector3.UnitY, uvTopLeft);
+            vertices[31] = new VertexPositionNormalTexture(bottomRightFront, -Vector3.UnitY, uvTopRight);
+            vertices[32] = new VertexPositionNormalTexture(bottomRightBack, -Vector3.UnitY, uvBottomRight);
+
+            vertices[33] = new VertexPositionNormalTexture(bottomLeftFront, -Vector3.UnitY, uvTopLeft);
+            vertices[34] = new VertexPositionNormalTexture(bottomRightBack, -Vector3.UnitY, uvBottomRight);
+            vertices[35] = new VertexPositionNormalTexture(bottomLeftBack, -Vector3.UnitY, uvBottomLeft);
+
+            return vertices;
+        }
+
+
+
+
+
+
+
+
     }
 }

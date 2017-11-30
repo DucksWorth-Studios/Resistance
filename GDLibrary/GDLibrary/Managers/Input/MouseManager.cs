@@ -186,32 +186,6 @@ namespace GDLibrary
             Mouse.SetPosition((int)position.X, (int)position.Y);
         }
 
-        //tests if mouse on the screen vertical screen edge
-        public CompassDirectionType GetCompassDirection(float padding, Microsoft.Xna.Framework.Rectangle screenRectangle)
-        {
-            CompassDirectionType compassDirectionType = CompassDirectionType.Centre;
-            //left
-            if (this.newState.X <= screenRectangle.Left)
-            {
-                compassDirectionType = CompassDirectionType.West;
-            }
-            else if (this.newState.X > screenRectangle.Right)
-            {
-                compassDirectionType = CompassDirectionType.East;
-            }
-
-            if (this.newState.Y <= screenRectangle.Top)
-            {
-                compassDirectionType |= CompassDirectionType.North;
-            }
-            else if (this.newState.Y > screenRectangle.Bottom)
-            {
-                compassDirectionType |= CompassDirectionType.South;
-            }
-
-            return compassDirectionType;
-        }
-
         #region Ray Picking
         //inner class used for ray picking
         class ImmovableSkinPredicate : CollisionSkinPredicate1

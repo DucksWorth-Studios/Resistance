@@ -3,13 +3,49 @@ namespace GDLibrary
 {
     public class Integer3 : ICloneable
     {
-        public static Integer3 Zero = new Integer3(0, 0, 0);
-        public static Integer3 One = new Integer3(1, 1, 1);
-        public static Integer3 UnitX = new Integer3(1, 0, 0);
-        public static Integer3 UnitY = new Integer3(0, 1, 0);
-        public static Integer3 UnitZ = new Integer3(0, 0, 1);
-        private int x, y, z;
+        #region Statics
+        public static Integer3 Zero
+        {
+            get
+            {
+                return new Integer3(0, 0, 0);
+            }
+        }
+        public static Integer3 One
+        {
+            get
+            {
+                return new Integer3(1, 1, 1);
+            }
+        }
+        public static Integer3 UnitX
+        {
+            get
+            {
+                return new Integer3(1, 0, 0);
+            }
+        }
+        public static Integer3 UnitY
+        {
+            get
+            {
+                return new Integer3(0, 1, 0);
+            }
+        }
+        public static Integer3 UnitZ
+        {
+            get
+            {
+                return new Integer3(0, 0, 1);
+            }
+        }
+        #endregion
 
+        #region Fields
+        private int x, y, z;
+        #endregion
+
+        #region Properties
         public int X
         {
             get
@@ -43,6 +79,7 @@ namespace GDLibrary
                 z = value;
             }
         }
+        #endregion
 
         public Integer3(int x, int y, int z)
         {

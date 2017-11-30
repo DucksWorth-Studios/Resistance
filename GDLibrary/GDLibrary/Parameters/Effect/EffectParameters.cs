@@ -149,6 +149,19 @@ namespace GDLibrary
             this.effect.CurrentTechnique.Passes[0].Apply();
         }
 
+        //used by animated models
+        public virtual void SetParameters(Camera3D camera, Matrix[] bones)
+        {
+            //apply or serialise the variables above to the GFX card
+            this.effect.CurrentTechnique.Passes[0].Apply();
+        }
+
+        //used by billboards
+        public virtual void SetParameters(Camera3D camera, BillboardParameters billboardParameters)
+        {
+
+        }
+
         public virtual void SetWorld(Matrix world)
         {
             
@@ -164,7 +177,6 @@ namespace GDLibrary
                 this.alpha);//deep
         }
 
-        //since we CANNOT alter the signature of clone we need to override using the NEW keyword (unlike our typical approach of virtual and override)
         public virtual object Clone()
         {
             return GetDeepCopy();
