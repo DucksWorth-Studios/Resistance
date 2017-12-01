@@ -7,6 +7,7 @@ Bugs:			None
 Fixes:			None
 */
 
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -75,6 +76,11 @@ namespace GDLibrary
         public bool IsStateChanged()
         {
             return !this.newState.Equals(oldState); //false if no change, otherwise true
+        }
+
+        public bool IsAnyKeyPressed()
+        {
+            return this.newState.GetPressedKeys().Length == 0 ? false : true; 
         }
     }
 }

@@ -222,14 +222,14 @@ namespace GDLibrary
             //update all your opaque objects
             foreach (Actor3D actor in this.opaqueDrawList)
             {
-                if ((actor.GetStatusType() & StatusType.Update) != 0) //if update flag is set
+                if ((actor.GetStatusType() & StatusType.Update) == StatusType.Update) //if update flag is set
                     actor.Update(gameTime);
             }
 
             //update all your transparent objects
             foreach (Actor3D actor in this.transparentDrawList)
             {
-                if ((actor.GetStatusType() & StatusType.Update) != 0) //if update flag is set
+                if ((actor.GetStatusType() & StatusType.Update) == StatusType.Update) //if update flag is set
                 {
                     actor.Update(gameTime);
                     //used to sort objects by distance from the camera so that proper depth representation will be shown
@@ -317,7 +317,7 @@ namespace GDLibrary
         {
             if (activeCamera.BoundingFrustum.Intersects(billboardPrimitiveObject.BoundingSphere))
             {
-                billboardPrimitiveObject.EffectParameters.SetParameters(activeCamera, billboardPrimitiveObject.BillboardParameters);
+                billboardPrimitiveObject.EffectParameters.SetParameters(activeCamera, billboardPrimitiveObject.BillboardOrientationParameters);
                 billboardPrimitiveObject.EffectParameters.SetWorld(billboardPrimitiveObject.GetWorldMatrix());
                 billboardPrimitiveObject.VertexData.Draw(gameTime, billboardPrimitiveObject.EffectParameters.Effect);
 

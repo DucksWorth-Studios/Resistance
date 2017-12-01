@@ -157,7 +157,7 @@ namespace GDLibrary
         }
 
         //used by billboards
-        public virtual void SetParameters(Camera3D camera, BillboardParameters billboardParameters)
+        public virtual void SetParameters(Camera3D camera, BillboardOrientationParameters billboardParameters)
         {
 
         }

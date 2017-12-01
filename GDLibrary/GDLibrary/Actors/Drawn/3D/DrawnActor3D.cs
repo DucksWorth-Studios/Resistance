@@ -98,9 +98,12 @@ namespace GDLibrary
                 this.EffectParameters.GetDeepCopy(), //hybrid - shallow (texture and effect) and deep (all other fields) 
                 this.StatusType); //deep - a simple numeric type
 
-            //clone each of the (behavioural) controllers
-            foreach (IController controller in this.ControllerList)
-                actor.AttachController((IController)controller.Clone());
+            if (this.ControllerList != null)
+            {
+                //clone each of the (behavioural) controllers
+                foreach (IController controller in this.ControllerList)
+                    actor.AttachController((IController)controller.Clone());
+            }
 
             return actor;
         }

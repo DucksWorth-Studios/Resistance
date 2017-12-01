@@ -128,6 +128,7 @@
     <Compile Include="Curve\Transform3DCurve.cs" />
     <Compile Include="Enums\BillboardType.cs" />
     <Compile Include="Enums\OrientationType.cs" />
+    <Compile Include="Enums\AnimationStateType.cs" />
     <Compile Include="Factory\VertexFactory.cs" />
     <Compile Include="GDDebug\Physics\BoundingBoxDrawer.cs" />
     <Compile Include="GDDebug\DebugDrawer.cs" />
@@ -169,7 +170,6 @@
     <Compile Include="Parameters\Effect\BillboardEffectParameters.cs" />
     <Compile Include="Parameters\Effect\DualTextureEffectParameters.cs" />
     <Compile Include="Parameters\Effect\EffectParameters.cs" />
-    <Compile Include="Parameters\Effect\SkinnedModelEffectParameters.cs" />
     <Compile Include="Parameters\Other\GroupParameters.cs" />
     <Compile Include="Parameters\Other\ManagerParameters.cs" />
     <Compile Include="Parameters\Other\PickupParameters.cs" />

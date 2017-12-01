@@ -26,40 +26,24 @@ namespace GDLibrary
 
         }
 
-        public override void SetParameters(Camera3D camera, BillboardParameters billboardParameters)
+        public override void SetParameters(Camera3D camera, BillboardOrientationParameters billboardParameters)
         {
             this.Effect.CurrentTechnique = this.Effect.Techniques[billboardParameters.Technique];
             this.Effect.Parameters["View"].SetValue(camera.View);
             this.Effect.Parameters["Projection"].SetValue(camera.ProjectionParameters.Projection);
             this.Effect.Parameters["Up"].SetValue(billboardParameters.Up);
+            this.Effect.Parameters["Right"].SetValue(billboardParameters.Right);
+            this.Effect.Parameters["DiffuseColor"].SetValue(this.DiffuseColor.ToVector4());
             this.Effect.Parameters["DiffuseTexture"].SetValue(this.Texture);
             this.Effect.Parameters["Alpha"].SetValue(this.Alpha);
 
-            if (billboardParameters.BillboardType == BillboardType.Normal)
-            {
-                this.Effect.Parameters["Right"].SetValue(billboardParameters.Right);
-            }
+            //animation specific parameters
+            this.Effect.Parameters["IsScrolling"].SetValue(billboardParameters.IsScrolling);
+            this.Effect.Parameters["scrollRate"].SetValue(billboardParameters.scrollValue);
+            this.Effect.Parameters["IsAnimated"].SetValue(billboardParameters.IsAnimated);
+            this.Effect.Parameters["InverseFrameCount"].SetValue(billboardParameters.inverseFrameCount);
+            this.Effect.Parameters["CurrentFrame"].SetValue(billboardParameters.currentFrame);
 
-            if (billboardParameters.IsScrolling)
-            {
-                this.Effect.Parameters["IsScrolling"].SetValue(billboardParameters.IsScrolling);
-                this.Effect.Parameters["scrollRate"].SetValue(billboardParameters.scrollValue);
-            }
-            else
-            {
-                this.Effect.Parameters["IsScrolling"].SetValue(false);
-            }
-
-            if (billboardParameters.IsAnimated)
-            {
-                this.Effect.Parameters["IsAnimated"].SetValue(billboardParameters.IsAnimated);
-                this.Effect.Parameters["InverseFrameCount"].SetValue(billboardParameters.inverseFrameCount);
-                this.Effect.Parameters["CurrentFrame"].SetValue(billboardParameters.currentFrame);
-            }
-            else
-            {
-                this.Effect.Parameters["IsAnimated"].SetValue(false);
-            }
 
             base.SetParameters(camera);
         }
@@ -67,6 +51,19 @@ namespace GDLibrary
         public override void SetWorld(Matrix world)
         {
             this.Effect.Parameters["World"].SetValue(world);
+        }
+
+        public override EffectParameters GetDeepCopy()
+        {
+            return new BillboardEffectParameters(this.Effect, //shallow - a reference
+                this.Texture, //shallow - a reference
+                this.DiffuseColor,//deep
+                this.Alpha);//deep
+        }
+
+        public override object Clone()
+        {
+            return GetDeepCopy();
         }
     }
 }

@@ -36,6 +36,7 @@ namespace GDLibrary
         CollidableRecording,      //audio recordings from players that can be picked up and played
         CollidableProjectile,
         CollidableDoor,
-        CollidableAmmo
+        CollidableAmmo,
+        Primitive
     }
 }

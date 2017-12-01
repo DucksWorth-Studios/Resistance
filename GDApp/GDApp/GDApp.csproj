@@ -65,7 +65,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\Actors\HeroAnimatedPlayerObject.cs" />
+    <Compile Include="App\Actors\SquirrelAnimatedPlayerObject.cs" />
     <Compile Include="App\Actors\HeroPlayerObject.cs" />
     <Compile Include="App\Game\MyGameStateManager.cs" />
     <Compile Include="App\Menu\MyAppMenuManager.cs" />

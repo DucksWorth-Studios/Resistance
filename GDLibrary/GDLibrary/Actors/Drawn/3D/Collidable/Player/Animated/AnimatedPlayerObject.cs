@@ -7,19 +7,61 @@ using System.Collections.Generic;
 
 namespace GDLibrary
 {
+    //used internally as a unique key (take + model name) to access a specific animation (useful when lots of FBX files have same default take name i.e. Take001)
+    class AnimationDictionaryKey
+    {
+        public string takeName;
+        public string fileNameNoSuffix;
+
+        public AnimationDictionaryKey(string takeName, string fileNameNoSuffix)
+        {
+            this.takeName = takeName;
+            this.fileNameNoSuffix = fileNameNoSuffix;
+        }
+
+        //Why do we override equals and gethashcode? Clue: this.modelDictionary.ContainsKey()
+        public override bool Equals(object obj)
+        {
+            AnimationDictionaryKey other = obj as AnimationDictionaryKey;
+            return this.takeName.Equals(other.takeName) && this.fileNameNoSuffix.Equals(other.fileNameNoSuffix);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash = hash * 31 + this.takeName.GetHashCode();
+            hash = hash * 17 + this.fileNameNoSuffix.GetHashCode();
+            return hash;
+        }
+
+    }
+
     public class AnimatedPlayerObject : PlayerObject
     {
         #region Variables
+        private AnimationStateType animationState;
         private AnimationPlayer animationPlayer;
         private SkinningData skinningData;
         private string startAnimationName;
         //stores all the data related to a character with multiple individual FBX animation files (e.g. walk.fbx, idle,fbx, run.fbx)
-        private Dictionary<string, Model> modelDictionary;
-        private Dictionary<string, AnimationPlayer> animationPlayerDictionary;
-        private Dictionary<string, SkinningData> skinningDataDictionary;
+        private Dictionary<AnimationDictionaryKey, Model> modelDictionary;
+        private Dictionary<AnimationDictionaryKey, AnimationPlayer> animationPlayerDictionary;
+        private Dictionary<AnimationDictionaryKey, SkinningData> skinningDataDictionary;
+        private AnimationDictionaryKey oldKey;
         #endregion
 
         #region Properties
+        public AnimationStateType AnimationState
+        {
+            get
+            {
+                return this.animationState;
+            }
+            set
+            {
+                this.animationState = value;
+            }
+        }
         public AnimationPlayer AnimationPlayer
         {
             get
@@ -33,41 +75,34 @@ namespace GDLibrary
             EffectParameters effectParameters,
             Keys[] moveKeys, float radius, float height, 
             float accelerationRate, float decelerationRate, float jumpHeight,
-            Vector3 translationOffset, KeyboardManager keyboardManager, 
-            string startAnimationName, Dictionary<string, Model> modelDictionary)
+            Vector3 translationOffset, KeyboardManager keyboardManager)
             : base(id, actorType, transform, effectParameters, null, moveKeys, radius, height, accelerationRate, decelerationRate, jumpHeight, translationOffset, keyboardManager)
         {
-            //set initial animation played when player instanciated
-            this.startAnimationName = startAnimationName;
-
-            this.modelDictionary = modelDictionary;
-
-            //initialize both dictionaries
-            this.animationPlayerDictionary = new Dictionary<string, AnimationPlayer>();
-            this.skinningDataDictionary = new Dictionary<string, SkinningData>();
-
-            //load animation player with initial take e.g. idle
-            LoadAnimationPlayers(modelDictionary);
-
-            //set initial clip
-            SetClip(startAnimationName);
+            //initialize dictionaries
+            this.modelDictionary = new Dictionary<AnimationDictionaryKey, Model>();
+            this.animationPlayerDictionary = new Dictionary<AnimationDictionaryKey, AnimationPlayer>();
+            this.skinningDataDictionary = new Dictionary<AnimationDictionaryKey, SkinningData>();
         }
 
-        public void LoadAnimationPlayers(Dictionary<string, Model> modelDictionary)
+        public void AddAnimation(string takeName, string fileNameNoSuffix, Model model)
         {
-            foreach(string animationName in modelDictionary.Keys)
+            AnimationDictionaryKey key = new AnimationDictionaryKey(takeName, fileNameNoSuffix);
+
+            //if not already added
+            if (!this.modelDictionary.ContainsKey(key))
             {
-                // Look up our custom skinning information.
-                skinningData = modelDictionary[animationName].Tag as SkinningData;
+                this.modelDictionary.Add(key, model);
+                //read the skinning data (i.e. the set of transforms applied to each model bone for each frame of the animation)
+                skinningData = model.Tag as SkinningData;
 
                 if (skinningData == null)
-                    throw new InvalidOperationException ("The model [" + animationName + "] does not contain a SkinningData tag.");
+                    throw new InvalidOperationException("The model [" + fileNameNoSuffix + "] does not contain a SkinningData tag.");
 
-                // Create an animation player, and start decoding an animation clip.
-                animationPlayerDictionary.Add(animationName, new AnimationPlayer(skinningData));
+                //make an animation player for the model
+                this.animationPlayerDictionary.Add(key, new AnimationPlayer(skinningData));
 
-                //Store the skinning data for the particular animation for the model (e.g. walk.fbs, idle.fbx)
-                skinningDataDictionary.Add(animationName, skinningData);
+                //store the skinning data for the model 
+                this.skinningDataDictionary.Add(key, skinningData);
             }
         }
 
@@ -78,18 +113,38 @@ namespace GDLibrary
             base.Update(gameTime);
         }
 
-        //call to change animation clip during gameplay
-        public void SetClip(string animationName)
+        //sets the first frame for the take and file (e.g. "Take 001", "dude")
+        public void SetAnimation(string takeName, string fileNameNoSuffix)
         {
-            //set the model based on the animation being played
-            this.Model = modelDictionary[animationName];
-            //retrieve the animation player
-            animationPlayer = animationPlayerDictionary[animationName];
-            //retrieve the skinning data
-            skinningData = skinningDataDictionary[animationName];
+            AnimationDictionaryKey key = new AnimationDictionaryKey(takeName, fileNameNoSuffix);
 
-            //set the skinning data in the animation player and set the player to start at the first frame
-            animationPlayer.StartClip(skinningData.AnimationClips[animationName]);
+            //have we requested a different animation and is it in the dictionary?
+
+            //first time or different animation requet
+            if (this.oldKey == null || (!this.oldKey.Equals(key) && this.modelDictionary.ContainsKey(key)))
+            {
+                //set the model based on the animation being played
+                this.Model = modelDictionary[key];
+
+                //retrieve the animation player
+                animationPlayer = animationPlayerDictionary[key];
+
+                //retrieve the skinning data
+                skinningData = skinningDataDictionary[key];
+
+                //set the skinning data in the animation player and set the player to start at the first frame for the take
+                animationPlayer.StartClip(skinningData.AnimationClips[key.takeName]);
+            }
+
+
+            //store current key for comparison in next update to prevent re-setting the same animation in successive calls to SetAnimation()
+            this.oldKey = key;
+        }
+
+        //sets the take based on what the user presses/clicks
+        protected virtual void SetAnimationByInput()
+        {
+
         }
     }
 }

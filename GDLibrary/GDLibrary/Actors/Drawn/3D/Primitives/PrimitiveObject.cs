@@ -49,12 +49,21 @@ namespace GDLibrary
 
         public new object Clone()
         {
-            return new PrimitiveObject("clone - " + ID, //deep
+            PrimitiveObject actor = new PrimitiveObject("clone - " + ID, //deep
                this.ActorType, //deep
                (Transform3D)this.Transform.Clone(), //deep
                (EffectParameters)this.EffectParameters.Clone(), //deep
                this.StatusType, //deep
                this.vertexData); //shallow - its ok if objects refer to the same vertices
+
+            if (this.ControllerList != null)
+            {
+                //clone each of the (behavioural) controllers
+                foreach (IController controller in this.ControllerList)
+                    actor.AttachController((IController)controller.Clone());
+            }
+
+            return actor;
         }
     }
 }

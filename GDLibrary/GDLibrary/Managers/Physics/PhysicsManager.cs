@@ -150,6 +150,5 @@ namespace GDLibrary
                 physicSystem.Integrate(1.0f / 60.0f);
         }
 
-        //to do - dispose
     }
 }

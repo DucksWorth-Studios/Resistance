@@ -48,7 +48,7 @@ namespace GDLibrary
             get
             {
                 //bug fix for disappearing skybox plane - scale the bounding sphere up by 10%
-                return this.model.Meshes[model.Root.Index].BoundingSphere.Transform(Matrix.CreateScale(1.4f) * this.GetWorldMatrix());
+                return this.model.Meshes[model.Root.Index].BoundingSphere.Transform(Matrix.CreateScale(1f) * this.GetWorldMatrix());
             }
         }
         #endregion
@@ -111,11 +111,20 @@ namespace GDLibrary
 
         public new object Clone()
         {
-            return new ModelObject("clone - " + ID, //deep
+            ModelObject actor = new ModelObject("clone - " + ID, //deep
                 this.ActorType,   //deep
                 (Transform3D)this.Transform.Clone(),  //deep
                 this.EffectParameters.GetDeepCopy(), //hybrid - shallow (texture and effect) and deep (all other fields) 
                 this.model); //shallow i.e. a reference
+
+            if (this.ControllerList != null)
+            {
+                //clone each of the (behavioural) controllers
+                foreach (IController controller in this.ControllerList)
+                    actor.AttachController((IController)controller.Clone());
+            }
+
+            return actor;
         }
 
         public override bool Remove()

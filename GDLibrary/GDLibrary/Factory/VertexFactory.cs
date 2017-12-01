@@ -172,8 +172,11 @@ namespace GDLibrary
         }
 
         //returns the vertices for a billboard which has a custom vertex declaration
-        public static VertexBillboard[] GetVertexBillboard(int sidelength)
+        public static VertexBillboard[] GetVertexBillboard(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
         {
+            primitiveType = PrimitiveType.TriangleStrip;
+            primitiveCount = 2;
+
             VertexBillboard[] vertices = new VertexBillboard[4];
             float halfSideLength = sidelength / 2.0f;
 

@@ -169,7 +169,7 @@ namespace GDLibrary
         }
         public virtual void Update(GameTime gameTime)
         {
-            if (this.controllerList != null)
+            if (this.controllerList != null &&  ((this.StatusType & StatusType.Update) == StatusType.Update))
             {
                 foreach (IController controller in this.controllerList)
                     controller.Update(gameTime, this); //you control me, update!

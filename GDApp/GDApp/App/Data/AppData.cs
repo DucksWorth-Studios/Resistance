@@ -82,6 +82,11 @@ namespace GDLibrary
         public static readonly float PlayerMass = 25;
         public static readonly float PlayerJumpHeight = 25;
 
+        public static readonly float SquirrelPlayerMoveSpeed = 0.4f;
+        public static readonly float SquirrelPlayerRotationSpeed = 0.2f;
+        public static readonly Keys[] SquirrelPlayerMoveKeys = { Keys.NumPad8, Keys.NumPad5, Keys.NumPad4, Keys.NumPad6, Keys.NumPad7, Keys.NumPad1, Keys.NumPad2, Keys.NumPad3 };
+
+
         #endregion
 
         #region Menu
@@ -121,14 +126,18 @@ namespace GDLibrary
 
         #region Primitive ids used by vertexData dictionary
         public static readonly string TexturedQuadID = "textured quad";
+        public static readonly string TexturedBillboardQuadID = "textured billboard quad";
 
         #endregion
 
         #region Effect parameter ids used by the effect dictionary
-        public static readonly string UnLitBillboardEffectParametersID = "unlit billboard effect";
-        public static readonly string LitBasicEffectParametersID = "lit basic effect";
-        internal static readonly string UnLitBasicEffectParametersID = "unlit basic effect";
-        internal static readonly string UnLitDualEffectParametersID = "unlit dual Effect";
+        public static readonly string LitModelsEffectID = "lit models basic effect";
+        public static readonly string UnlitModelsEffectID = "unlit models basic effect";
+        public static readonly string UnLitPrimitivesEffectID = "unlit primitives basic effect";
+        public static readonly string UnlitModelDualEffectID = "unlit models dual effect";
+        public static readonly string UnlitBillboardsEffectID = "unlit billboards effect";
+
+
         #endregion
 
     }

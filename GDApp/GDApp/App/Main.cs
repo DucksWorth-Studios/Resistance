@@ -74,7 +74,7 @@ namespace GDApp
         //demo remove later
         private HeroPlayerObject heroPlayerObject;
         private ModelObject drivableBoxObject;
-        private HeroAnimatedPlayerObject animatedHeroPlayerObject;
+        private SquirrelAnimatedPlayerObject animatedHeroPlayerObject;
 
 
         #endregion
@@ -105,10 +105,10 @@ namespace GDApp
             //set the title
             Window.Title = "3DGD - My Amazing Game 1.0";
 
-            //Initialize EventDispatcher
+            //EventDispatcher
             InitializeEventDispatcher();
 
-            //Load Dictionaries, Media Assets and Non-media Assets
+            //Dictionaries, Media Assets and Non-media Assets
             LoadDictionaries();
             LoadAssets();
             LoadCurvesAndRails();
@@ -117,13 +117,13 @@ namespace GDApp
             //to draw primitives and billboards
             LoadVertexData();
 
-            //Initialize Effects
+            //Effects
             InitializeEffects();
 
-            //Initialize the Managers
+            //Managers
             InitializeManagers(screenResolution, screenType, isMouseVisible, numberOfGamePadPlayers);
 
-            //add menu and UI elements
+            //menu and UI elements
             AddMenuElements();
             AddUIElements();
 #if DEBUG
@@ -276,7 +276,6 @@ namespace GDApp
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
             this.modelDictionary.Load("Assets/Models/Architecture/Walls/wall");
-            this.modelDictionary.Load("Assets/Models/Landscape/canyon");
 
             //dual texture demo
             this.modelDictionary.Load("Assets/Models/box");
@@ -316,7 +315,6 @@ namespace GDApp
             //architecture
             this.textureDictionary.Load("Assets/Textures/Architecture/Buildings/house-low-texture");
             this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall");
-            this.textureDictionary.Load("Assets/Textures/Landscape/canyon");
 
             //dual texture demo - see Main::InitializeCollidableGround()
             this.textureDictionary.Load("Assets/Debug/Textures/checkerboard_greywhite");
@@ -383,16 +381,28 @@ namespace GDApp
         {
             Microsoft.Xna.Framework.Graphics.PrimitiveType primitiveType;
             int primitiveCount;
+            IVertexData vertexData = null;
 
             #region Textured Quad
             //get vertices for textured quad
             VertexPositionColorTexture[] vertices = VertexFactory.GetTextureQuadVertices(out primitiveType, out primitiveCount);
 
             //make a vertex data object to store and draw the vertices
-            IVertexData vertexData = new BufferedVertexData<VertexPositionColorTexture>(this.graphics.GraphicsDevice, vertices, primitiveType, primitiveCount);
+            vertexData = new BufferedVertexData<VertexPositionColorTexture>(this.graphics.GraphicsDevice, vertices, primitiveType, primitiveCount);
 
             //add to the dictionary for use by things like billboards - see InitializeBillboards()
             this.vertexDataDictionary.Add(AppData.TexturedQuadID, vertexData);
+            #endregion
+
+            #region Billboard Quad - we must use this type when creating billboards
+            // get vertices for textured billboard
+            VertexBillboard[] verticesBillboard = VertexFactory.GetVertexBillboard(1, out primitiveType, out primitiveCount);
+            
+            //make a vertex data object to store and draw the vertices
+            vertexData = new BufferedVertexData<VertexBillboard>(this.graphics.GraphicsDevice, verticesBillboard, primitiveType, primitiveCount);
+
+            //add to the dictionary for use by things like billboards - see InitializeBillboards()
+            this.vertexDataDictionary.Add(AppData.TexturedBillboardQuadID, vertexData);
             #endregion
 
         }
@@ -453,11 +463,11 @@ namespace GDApp
 
             //Non - collidable
             InitializeNonCollidableSkyBox(worldScale);
-            InitializeNonCollidableFoliage(worldScale);
-            InitializeNonCollidableDriveableObject();
-            InitializeNonCollidableDecoratorObjects();
+            //InitializeNonCollidableFoliage(worldScale);
+            //InitializeNonCollidableDriveableObject();
+            //InitializeNonCollidableDecoratorObjects();
 
-            ////Collidable
+            //Collidable
             InitializeCollidableGround(worldScale);
             //demo high vertex count trianglemesh
             InitializeStaticCollidableTriangleMeshObjects();
@@ -468,7 +478,7 @@ namespace GDApp
             InitializeDynamicCollidableObjects();
 
             ////adds the hero of the game - see InitializeSingleScreenFirstThirdPersonDemo()
-            InitializeCollidableHeroPlayerObject();
+            //InitializeCollidableHeroPlayerObject();
 
             ////add level elements
             InitializeBuildings();
@@ -478,77 +488,92 @@ namespace GDApp
             InitializeVideoDisplay();
 
             //add animated characters
-            InitializeAnimatedPlayer();
+            InitializeSquirrelAnimatedPlayer();
 
-            //add primitive objects - where developer defines the vertices manually
-            //InitializePrimitives();
+            ////add primitive objects - where developer defines the vertices manually
+            InitializePrimitives();
 
-            ////add billboards - special quads that orient themselves based on 3 types - cylindrical, spherical, normal
-            InitializeBillboards();
-
-        }
-
-        private void InitializeBillboards()
-        {
-            BillboardPrimitiveObject archetypeBillboardObject = null, cloneBillboardObject = null;
-
-            //archetype - clone from this
-            archetypeBillboardObject = new BillboardPrimitiveObject("billboard", ActorType.Billboard,
-                Transform3D.Zero, //transform reset in clones
-                this.effectDictionary[AppData.UnLitBillboardEffectParametersID],        
-                StatusType.Drawn | StatusType.Update,
-                this.vertexDataDictionary[AppData.TexturedQuadID],
-                BillboardType.Normal); //texture reset in clones
-
-            #region Normal
-            cloneBillboardObject = (BillboardPrimitiveObject)archetypeBillboardObject.Clone();
-            cloneBillboardObject.BillboardType = BillboardType.Normal;
-            cloneBillboardObject.Transform = new Transform3D(new Vector3(0, 25, -10), Vector3.Zero, 4 * Vector3.One, Vector3.UnitZ, Vector3.UnitY);
-            cloneBillboardObject.EffectParameters.Texture = this.textureDictionary["grass1"];
-            this.objectManager.Add(cloneBillboardObject);
-            #endregion
         }
 
         private void InitializePrimitives()
         {
-            
+            //get a copy of the effect parameters
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnLitPrimitivesEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["checkerboard"];
+            effectParameters.DiffuseColor = Color.Yellow;
+            effectParameters.Alpha = 0.4f;
+
+            //define location
+            Transform3D transform = new Transform3D(new Vector3(0, 40, 0), new Vector3(40, 4, 1));
+
+            //create primitive
+            PrimitiveObject primitiveObject = new PrimitiveObject("simple primitive", ActorType.Primitive,
+                transform, effectParameters, StatusType.Drawn | StatusType.Update, this.vertexDataDictionary[AppData.TexturedQuadID]);
+           
+            PrimitiveObject clonedPrimitiveObject = null;
+
+            for (int i = 1; i <= 4; i++)
+            {
+                clonedPrimitiveObject = primitiveObject.Clone() as PrimitiveObject;
+                clonedPrimitiveObject.Transform.Translation += new Vector3(0, 5 * i, 0);
+
+                //we could also attach controllers here instead to give each a different rotation
+                clonedPrimitiveObject.AttachController(new RotationController("rot controller", ControllerType.Rotation, new Vector3(0.1f * i, 0, 0)));
+
+                //add to manager
+                this.objectManager.Add(clonedPrimitiveObject);
+            } 
+
         }
 
-        private void InitializeAnimatedPlayer()
+   
+        private void InitializeSquirrelAnimatedPlayer()
         {
             Transform3D transform3D = null;
 
             transform3D = new Transform3D(new Vector3(0, 20, 30),
                 new Vector3(-90, 0, 0), //y-z are reversed because the capsule is rotation by 90 degrees around X-axis - See CharacterObject constructor
-                 0.1f * Vector3.One, 
-                 -Vector3.UnitZ, Vector3.UnitY);
+                 2f * Vector3.One, 
+                 Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.DiffuseColor = Color.OrangeRed;
+            //squirrel fur shouldnt be super skiny - the lower specular power will make it (somewhat) more realistic
+            effectParameters.SpecularPower = 2;
             //if we dont specify a texture then the object manager will draw using whatever textures were baked into the animation in 3DS Max
-            effectParameters.Texture = null;
+            effectParameters.Texture = this.textureDictionary["checkerboard_greywhite"];
 
-            //dictionary that stores all the animation FBX files (e.g. walk.fbx, run.fbx)
-            Dictionary<string, Model> animatedModelTakeDictionary = new Dictionary<string, Model>();
-
-            //the dude model comes only with one animation in one FBX file so the statement below looks a little silly
-            //notice how I add the model by the name of the take as specified in the 3DS Max file (e.g. "jump", this.modelDictionary["Red_Jump"])
-            animatedModelTakeDictionary.Add("Take 001", this.modelDictionary["dude"]);
-
-            this.animatedHeroPlayerObject = new HeroAnimatedPlayerObject("the dude",
+            this.animatedHeroPlayerObject = new SquirrelAnimatedPlayerObject("squirrel",
                 ActorType.Player, transform3D, 
                 effectParameters, 
-                AppData.PlayerOneMoveKeys,
+                AppData.SquirrelPlayerMoveKeys,
                 AppData.PlayerRadius, 
                 AppData.PlayerHeight,
                 1, 1,  //accel, decel
-                AppData.PlayerMoveSpeed,
-                AppData.PlayerRotationSpeed,               
+                AppData.SquirrelPlayerMoveSpeed,
+                AppData.SquirrelPlayerRotationSpeed,               
                 AppData.PlayerJumpHeight, 
-                new Vector3(0, -3.5f, 0), //offset inside capsule
-                this.keyboardManager, 
-                "Take 001", //start take
-                animatedModelTakeDictionary);
+                new Vector3(0, 0, 0), //offset inside capsule
+                this.keyboardManager);
             this.animatedHeroPlayerObject.Enable(false, AppData.PlayerMass);
+
+            //add the animations
+            string takeName = "Take 001";
+            string fileNameNoSuffix = "Red_Idle";
+            this.animatedHeroPlayerObject.AddAnimation(takeName, fileNameNoSuffix, this.modelDictionary[fileNameNoSuffix]);
+            fileNameNoSuffix = "Red_Jump";
+            this.animatedHeroPlayerObject.AddAnimation(takeName, fileNameNoSuffix, this.modelDictionary[fileNameNoSuffix]);
+            fileNameNoSuffix = "Red_Punch";
+            this.animatedHeroPlayerObject.AddAnimation(takeName, fileNameNoSuffix, this.modelDictionary[fileNameNoSuffix]);
+            fileNameNoSuffix = "Red_Standing";
+            this.animatedHeroPlayerObject.AddAnimation(takeName, fileNameNoSuffix, this.modelDictionary[fileNameNoSuffix]);
+            fileNameNoSuffix = "Red_Tailwhip";
+            this.animatedHeroPlayerObject.AddAnimation(takeName, fileNameNoSuffix, this.modelDictionary[fileNameNoSuffix]);
+            fileNameNoSuffix = "RedRun4";
+            this.animatedHeroPlayerObject.AddAnimation(takeName, fileNameNoSuffix, this.modelDictionary[fileNameNoSuffix]);
+
+            //set the start animtion
+            this.animatedHeroPlayerObject.SetAnimation("Take 001", "Red_Idle");
 
             this.objectManager.Add(animatedHeroPlayerObject);
 
@@ -561,7 +586,7 @@ namespace GDApp
                 new Vector3(1,3.5f,1), -Vector3.UnitZ, Vector3.UnitY);
 
             //clone the dictionary effect and set unique properties for the hero player object
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //make the hero a field since we need to point the third person camera controller at this object
@@ -589,7 +614,7 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale));
 
             //clone the dictionary effect and set unique properties for the hero player object
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnLitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //create a archetype to use for cloning
@@ -653,7 +678,7 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale));
 
             //clone the dictionary effect and set unique properties for the hero player object
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
             //a fix to ensure that any image containing transparent pixels will be sent to the correct draw list in ObjectManager
             effectParameters.Alpha = 0.99f;
@@ -695,18 +720,12 @@ namespace GDApp
              */
             Model model = this.modelDictionary["box2"];
 
-            //clone the dictionary effect and set unique properties for the hero player object
-            DualTextureEffectParameters effectParameters = this.effectDictionary[AppData.UnLitDualEffectParametersID].Clone() as DualTextureEffectParameters;
+            //a simple dual texture demo - dual textures can be used with a lightMap from 3DS Max using the Render to Texture setting
+            DualTextureEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelDualEffectID].Clone() as DualTextureEffectParameters;
             effectParameters.Texture = this.textureDictionary["grass1"];
             effectParameters.Texture2 = this.textureDictionary["checkerboard_greywhite"];
 
-
-            //BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnLitBasicEffectParameters].GetDeepCopy() as BasicEffectParameters;
-            //effectParameters.Texture = this.textureDictionary["grass1"];
-            //effectParameters.DiffuseColor = Color.White;
-
             transform3D = new Transform3D(Vector3.Zero, Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
-
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters,  model);
             collidableObject.AddPrimitive(new JigLibX.Geometry.Plane(transform3D.Up, transform3D.Translation), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
@@ -719,7 +738,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-50, 10, 0), new Vector3(45, 45, 0), 0.1f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
             //clone the dictionary effect and set unique properties for the hero player object
 
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["ml"];
             effectParameters.DiffuseColor = Color.White;
             effectParameters.SpecularPower = 32; //pow((N, H), SpecularPower)
@@ -737,7 +756,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-30, 3, 0),
                 new Vector3(0, 0, 0), 0.08f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             CollidableObject collidableObject = new TriangleMeshObject("teapot", ActorType.CollidableProp, transform3D, effectParameters, 
@@ -752,7 +771,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-10, 3, 0),
                 new Vector3(0, 0, 0), 0.08f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
             //lets set the diffuse color also, for fun.
             effectParameters.DiffuseColor = Color.Blue;
@@ -771,7 +790,7 @@ namespace GDApp
 
             #region Spheres
             model = this.modelDictionary["sphere"];
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //make once then clone
@@ -794,7 +813,7 @@ namespace GDApp
 
             #region Box
             model = this.modelDictionary["box2"];
-            effectParameters = (this.effectDictionary[AppData.LitBasicEffectParametersID] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            effectParameters = (this.effectDictionary[AppData.LitModelsEffectID] as BasicEffectParameters).Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["crate2"];
             //make once then clone
             archetypeCollidableObject = new CollidableObject("box - ", ActorType.CollidablePickup, Transform3D.Zero, effectParameters, model);
@@ -826,7 +845,7 @@ namespace GDApp
             //place the drivable model to the left of the existing models and specify that forward movement is along the -ve z-axis
             Transform3D transform = new Transform3D(new Vector3(-10, 5, 25), -Vector3.UnitZ, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["crate1"];
             effectParameters.DiffuseColor = Color.Gold;
 
@@ -848,7 +867,7 @@ namespace GDApp
             //position the object
             Transform3D transform = new Transform3D(new Vector3(0, 5, 0), Vector3.Zero, Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["crate1"];
             effectParameters.DiffuseColor = Color.Gold;
             effectParameters.Alpha = 0.5f;
@@ -878,7 +897,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-100, 0, 0),
                 new Vector3(0, 90, 0), 0.4f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["house-low-texture"];
 
             CollidableObject collidableObject = new TriangleMeshObject("house1", ActorType.CollidableArchitecture, transform3D, 
@@ -892,7 +911,7 @@ namespace GDApp
             Transform3D transform3D = new Transform3D(new Vector3(-140, 0, -14),
                 new Vector3(0, -90, 0), 0.4f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
 
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["wall"];
 
             CollidableObject collidableObject = new TriangleMeshObject("wall1", ActorType.CollidableArchitecture, transform3D, 
@@ -904,7 +923,7 @@ namespace GDApp
         private void InitializeVideoDisplay()
         {
      
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitBasicEffectParametersID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
             //make the screen really shiny
             effectParameters.SpecularPower = 256;
@@ -1394,32 +1413,44 @@ namespace GDApp
         #region Effects
         private void InitializeEffects()
         {
+            BasicEffect basicEffect = null;
+            DualTextureEffect dualTextureEffect = null;
+            Effect billboardEffect = null;
+
+
             #region Lit objects
             //create a BasicEffect and set the lighting conditions for all models that use this effect in their EffectParameters field
-            BasicEffect litModelBasicEffect = new BasicEffect(graphics.GraphicsDevice);
+            basicEffect = new BasicEffect(graphics.GraphicsDevice);
 
-            litModelBasicEffect.TextureEnabled = true;
-            litModelBasicEffect.PreferPerPixelLighting = true;
-            litModelBasicEffect.EnableDefaultLighting();
-            this.effectDictionary.Add(AppData.LitBasicEffectParametersID, new BasicEffectParameters(litModelBasicEffect));
+            basicEffect.TextureEnabled = true;
+            basicEffect.PreferPerPixelLighting = true;
+            basicEffect.EnableDefaultLighting();
+            this.effectDictionary.Add(AppData.LitModelsEffectID, new BasicEffectParameters(basicEffect));
             #endregion
 
             #region For Unlit objects
             //used for model objects that dont interact with lighting i.e. sky
-            BasicEffect unlitModelBasicEffect = new BasicEffect(graphics.GraphicsDevice);
-            unlitModelBasicEffect.TextureEnabled = true;
-            unlitModelBasicEffect.LightingEnabled = false;
-            this.effectDictionary.Add(AppData.UnLitBasicEffectParametersID, new BasicEffectParameters(unlitModelBasicEffect));
+            basicEffect = new BasicEffect(graphics.GraphicsDevice);
+            basicEffect.TextureEnabled = true;
+            basicEffect.LightingEnabled = false;
+            this.effectDictionary.Add(AppData.UnlitModelsEffectID, new BasicEffectParameters(basicEffect));
             #endregion
 
             #region For dual texture objects
-            DualTextureEffect dualTextureEffect = new DualTextureEffect(graphics.GraphicsDevice);
-            this.effectDictionary.Add(AppData.UnLitDualEffectParametersID, new DualTextureEffectParameters(dualTextureEffect));
+            dualTextureEffect = new DualTextureEffect(graphics.GraphicsDevice);
+            this.effectDictionary.Add(AppData.UnlitModelDualEffectID, new DualTextureEffectParameters(dualTextureEffect));
             #endregion
 
             #region For unlit billboard objects
-            Effect billboardEffect = Content.Load<Effect>("Assets/Effects/billboard");
-            this.effectDictionary.Add(AppData.UnLitBillboardEffectParametersID, new BillboardEffectParameters(billboardEffect));
+            billboardEffect = Content.Load<Effect>("Assets/Effects/billboard");
+            this.effectDictionary.Add(AppData.UnlitBillboardsEffectID, new BillboardEffectParameters(billboardEffect));
+            #endregion
+
+            #region For unlit primitive objects
+            basicEffect = new BasicEffect(graphics.GraphicsDevice);
+            basicEffect.TextureEnabled = true;
+            basicEffect.VertexColorEnabled = true;
+            this.effectDictionary.Add(AppData.UnLitPrimitivesEffectID, new BasicEffectParameters(basicEffect));
             #endregion
 
         }
@@ -1462,6 +1493,7 @@ namespace GDApp
 
 #if DEMO
             #region Demo
+            demoAnimationChangeTake();
             demoVideoDisplay();
             demoSoundManager();
             demoCameraChange();
@@ -1475,6 +1507,25 @@ namespace GDApp
         }
 
         #region DEMO
+        private void demoAnimationChangeTake()
+        {
+            if (this.keyboardManager.IsFirstKeyPress(Keys.NumPad1))
+            {
+                //set the start animtion
+                this.animatedHeroPlayerObject.SetAnimation("Take 001", "Red_Idle");
+            }
+            else if (this.keyboardManager.IsFirstKeyPress(Keys.NumPad3))
+            {
+                //set the start animtion
+                this.animatedHeroPlayerObject.SetAnimation("Take 001", "Red_Tailwhip");
+            }
+            else if (this.keyboardManager.IsFirstKeyPress(Keys.NumPad4))
+            {
+                //set the start animtion
+                this.animatedHeroPlayerObject.SetAnimation("Take 001", "RedRun4");
+            }
+        }
+
         private void demoVideoDisplay()
         {
             if (this.keyboardManager.IsFirstKeyPress(Keys.F3))
@@ -1572,14 +1623,17 @@ namespace GDApp
         }
         private void demoAlphaChange()
         {
-            //testing event generation on opacity change - see DrawnActor3D::Alpha setter
-            if (this.keyboardManager.IsFirstKeyPress(Keys.F5))
+            if (this.drivableBoxObject != null)
             {
-                this.drivableBoxObject.Alpha -= 0.05f;
-            }
-            else if (this.keyboardManager.IsFirstKeyPress(Keys.F6))
-            {
-                this.drivableBoxObject.Alpha += 0.05f;
+                //testing event generation on opacity change - see DrawnActor3D::Alpha setter
+                if (this.keyboardManager.IsFirstKeyPress(Keys.F5))
+                {
+                    this.drivableBoxObject.Alpha -= 0.05f;
+                }
+                else if (this.keyboardManager.IsFirstKeyPress(Keys.F6))
+                {
+                    this.drivableBoxObject.Alpha += 0.05f;
+                }
             }
         }
         #endregion

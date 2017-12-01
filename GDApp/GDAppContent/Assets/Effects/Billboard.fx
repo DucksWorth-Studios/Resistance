@@ -1,5 +1,5 @@
 //Author: NMCG
-//Date: 23.4.15
+//Date: 30.11.17
 
 //------- Variables --------//
 //used for WVP calculation
@@ -20,8 +20,9 @@ int CurrentFrame;
 bool IsScrolling = false;
 float2 scrollRate = float2(0,0);
 
+float4 DiffuseColor = float4(1, 1, 1, 1);
 float Alpha = 1;
-float AlphaThreshold = 0.01f;
+float AlphaThreshold = 0.001f;
 
 //------- Texture Samplers --------//
 Texture DiffuseTexture;
@@ -79,7 +80,7 @@ VS_OUTPUT CylindricalBillboardVS(VS_INPUT In)
 {
 	VS_OUTPUT Output = (VS_OUTPUT)0;
 	float3 finalPosition = In.Position;
-	finalPosition += (In.TexCoordAndOffset.z * float3(View._11, View._21, View._31)) + (In.TexCoordAndOffset.w * normalize(Up));
+	finalPosition += (In.TexCoordAndOffset.z * float3(View._11, View._21, View._31)) + (In.TexCoordAndOffset.w * Up);
 	Output.Position = mul(float4(finalPosition, 1), mul(World, mul(View, Projection)));
 	Output.TexCoord = GetTexCoords(In.TexCoordAndOffset.xy);
 	return Output;
@@ -105,7 +106,7 @@ float4 BillboardPS(VS_OUTPUT In) : COLOR0
 		texCoord.x %= 1;
 		texCoord.y %= 1;
 	}
-	float4 Color = tex2D(textureSampler, texCoord);
+	float4 Color = DiffuseColor * tex2D(textureSampler, texCoord);
 
 	Color.a *= Alpha; 
 
