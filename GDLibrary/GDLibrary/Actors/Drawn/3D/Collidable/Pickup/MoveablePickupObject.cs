@@ -51,7 +51,11 @@ namespace GDLibrary
         //how do we want this object to respond to collisions?
         private void HandleCollisions(CollidableObject collidableObjectCollider, CollidableObject collidableObjectCollidee)
         {
-            //add your response code here...
+            ////add your response code here...
+            //if(collidableObjectCollider.ActorType == ActorType.Player)
+            //{
+            //    EventDispatcher.Publish(new EventData(this, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
+            //}
         }
         #endregion
 

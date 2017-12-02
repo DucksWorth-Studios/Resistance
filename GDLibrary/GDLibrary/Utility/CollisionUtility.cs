@@ -55,6 +55,15 @@ namespace GDLibrary
             return collidableObject.ActorType == ActorType.CollidableProp || collidableObject.ActorType == ActorType.CollidablePickup;
         }
 
+        public static bool IsCollidableObjectPlayer(CollidableObject collidableObject)
+        {
+            //shouldnt be able to pick immovable things
+            if (collidableObject.Collision.Owner.Immovable)
+                return false;
+
+            return collidableObject.ActorType == ActorType.Player;
+        }
+
         public static string GetMouseStringFromCollidableObject(CollidableObject collidableObject, float distanceToObject)
         {
             return collidableObject.ID + " [" + distanceToObject + "]";

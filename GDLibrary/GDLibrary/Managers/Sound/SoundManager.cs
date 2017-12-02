@@ -144,11 +144,25 @@ namespace GDLibrary
             else //OnStop
             {
                 //since we can only pass refereneces in AdditionalParameters and AudioStopOption is an enum (i.e. a primitive type) then we need to hack the code a little
-                if ((int)eventData.AdditionalParameters[0] == 0)
+                if ((int)eventData.AdditionalParameters[1] == 0)
                     this.StopCue(cueName, AudioStopOptions.Immediate);
                 else
                     this.StopCue(cueName, AudioStopOptions.AsAuthored);
             }
+
+
+
+            //if (totalElapsedTime > 1)
+            //{
+            //    totalElapsedTime = 0;
+            //    //object[] additionalParameters = { 1 };
+            //    //EventDispatcher.Publish(new EventData(EventActionType.OnStop, EventCategoryType.Sound2D, additionalParameters));
+            //}
+            //else
+            //    totalElapsedTime += gameTime.ElapsedTime.Milliseconds;
+
+
+
         }
         //Do we want sound to play in the menu? In this case, we should remove this code and set statusType to Update in the constructor.
         protected override void EventDispatcher_MenuChanged(EventData eventData)
@@ -158,14 +172,14 @@ namespace GDLibrary
             {
                 //turn on update and draw i.e. hide the menu
                 this.StatusType = StatusType.Update;
-              
+
             }
             //did the event come from the main menu and is it a pause game event
             else if (eventData.EventType == EventActionType.OnPause)
             {
                 //turn off update and draw i.e. show the menu since the game is paused
                 this.StatusType = StatusType.Off;
-      
+
             }
         }
         #endregion

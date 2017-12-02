@@ -58,8 +58,16 @@ namespace GDLibrary
             this.body.ExternalData = this;
             this.collision = new CollisionSkin(this.body);
             this.body.CollisionSkin = this.collision;
+
+            //we will only add this event handling in a class that sub-classes CollidableObject e.g. PickupCollidableObject or PlayerCollidableObject
+            //this.body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
         }
 
+        //we will only add this method in a class that sub-classes CollidableObject e.g. PickupCollidableObject or PlayerCollidableObject
+        //private bool CollisionSkin_callbackFn(CollisionSkin skin0, CollisionSkin skin1)
+        //{
+        //    return true;
+        //}
 
         public override Matrix GetWorldMatrix()
         {
@@ -70,11 +78,6 @@ namespace GDLibrary
                                 Matrix.CreateTranslation(this.body.Position);
         }
 
-        //we will only normally provide this method in a class that sub-classes CollidableObject e.g. PickupCollidableObject or PlayerCollidableObject
-        //public virtual bool CollisionSkin_callbackFn(CollisionSkin skin0, CollisionSkin skin1)
-        //{
-        //    return true;
-        //}
 
         protected Vector3 SetMass(float mass)
         {

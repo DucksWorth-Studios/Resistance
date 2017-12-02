@@ -43,7 +43,7 @@ namespace GDApp
             {
                 if (collidableObjectCollidee.ActorType == ActorType.CollidablePickup)
                 {
-                    //publish an event to remove, play a sound etc...
+
                 }
                 //add else if statements here for all the responses that you want your player to have
                 else if (collidableObjectCollidee.ActorType == ActorType.CollidableDoor)

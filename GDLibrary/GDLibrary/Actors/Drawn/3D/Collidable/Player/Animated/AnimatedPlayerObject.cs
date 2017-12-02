@@ -42,7 +42,7 @@ namespace GDLibrary
         private AnimationStateType animationState;
         private AnimationPlayer animationPlayer;
         private SkinningData skinningData;
-        private string startAnimationName;
+  
         //stores all the data related to a character with multiple individual FBX animation files (e.g. walk.fbx, idle,fbx, run.fbx)
         private Dictionary<AnimationDictionaryKey, Model> modelDictionary;
         private Dictionary<AnimationDictionaryKey, AnimationPlayer> animationPlayerDictionary;
@@ -119,8 +119,7 @@ namespace GDLibrary
             AnimationDictionaryKey key = new AnimationDictionaryKey(takeName, fileNameNoSuffix);
 
             //have we requested a different animation and is it in the dictionary?
-
-            //first time or different animation requet
+            //first time or different animation request
             if (this.oldKey == null || (!this.oldKey.Equals(key) && this.modelDictionary.ContainsKey(key)))
             {
                 //set the model based on the animation being played

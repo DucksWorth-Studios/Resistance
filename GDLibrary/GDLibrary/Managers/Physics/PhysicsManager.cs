@@ -61,7 +61,7 @@ namespace GDLibrary
             this.physicSystem.Gravity = gravity;
 
             //25/11/17 - prevents bug where objects would show correct CDCR response when velocity == Vector3.Zero
-            //this.physicSystem.EnableFreezing = false;
+            this.physicSystem.EnableFreezing = false;
 
             this.physicSystem.SolverType = PhysicsSystem.Solver.Normal;
             this.physicSystem.CollisionSystem.UseSweepTests = true;

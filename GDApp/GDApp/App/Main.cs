@@ -525,8 +525,7 @@ namespace GDApp
             } 
 
         }
-
-   
+  
         private void InitializeSquirrelAnimatedPlayer()
         {
             Transform3D transform3D = null;
@@ -538,10 +537,9 @@ namespace GDApp
 
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.DiffuseColor = Color.OrangeRed;
-            //squirrel fur shouldnt be super skiny - the lower specular power will make it (somewhat) more realistic
-            effectParameters.SpecularPower = 2;
+            //no specular, emissive, directional lights
             //if we dont specify a texture then the object manager will draw using whatever textures were baked into the animation in 3DS Max
-            effectParameters.Texture = this.textureDictionary["checkerboard_greywhite"];
+            effectParameters.Texture =  this.textureDictionary["checkerboard_greywhite"];
 
             this.animatedHeroPlayerObject = new SquirrelAnimatedPlayerObject("squirrel",
                 ActorType.Player, transform3D, 
@@ -1491,6 +1489,7 @@ namespace GDApp
             if(this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
                 this.Exit();
 
+
 #if DEMO
             #region Demo
             demoAnimationChangeTake();
@@ -1506,6 +1505,7 @@ namespace GDApp
             base.Update(gameTime);
         }
 
+#if DEMO
         #region DEMO
         private void demoAnimationChangeTake()
         {
@@ -1525,7 +1525,6 @@ namespace GDApp
                 this.animatedHeroPlayerObject.SetAnimation("Take 001", "RedRun4");
             }
         }
-
         private void demoVideoDisplay()
         {
             if (this.keyboardManager.IsFirstKeyPress(Keys.F3))
@@ -1637,6 +1636,7 @@ namespace GDApp
             }
         }
         #endregion
+#endif
 
         protected override void Draw(GameTime gameTime)
         {

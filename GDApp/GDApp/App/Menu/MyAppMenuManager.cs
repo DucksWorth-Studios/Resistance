@@ -20,13 +20,17 @@ namespace GDApp
             base.EventDispatcher_MenuChanged(eventData);
 
             //then generate sound events particular to your game e.g. play background music in a menu
-            if (eventData.EventType == EventActionType.OnPlay)
+            if (eventData.EventType == EventActionType.OnStart)
             {
-                //add event to stop background menu music here...
+                ////add event to stop background menu music here...
+                //object[] additionalParameters = { "menu elevator music", 1 };
+                //EventDispatcher.Publish(new EventData(EventActionType.OnStop, EventCategoryType.Sound2D, additionalParameters));
             }
             else if (eventData.EventType == EventActionType.OnPause)
             {
                 //add event to play background menu music here...
+                //object[] additionalParameters = { "menu elevator music" };
+                //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
             }
         }
         #endregion

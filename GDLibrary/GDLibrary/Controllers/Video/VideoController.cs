@@ -202,7 +202,7 @@ namespace GDLibrary
             {
                 if (videoState == VideoState.Playing)
                     parentModelObject.EffectParameters.Texture = videoPlayer.GetTexture();
-                else if(videoState == VideoState.Stopped)
+                else if (videoState == VideoState.Stopped)
                     parentModelObject.EffectParameters.Texture = startTexture;
             }
         }
