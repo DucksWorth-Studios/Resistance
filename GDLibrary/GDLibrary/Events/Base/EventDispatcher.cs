@@ -70,13 +70,22 @@ namespace GDLibrary
                 uniqueSet.Add(eventData);
             }
         }
+
+        EventData eventData;
         public override void Update(GameTime gameTime)
         {
-            for (int i = 0; i < queue.Count; i++)
-                Process(queue.Dequeue());
+            System.Diagnostics.Debug.WriteLine("[" + queue.Count + "]: EventDispatcher::Update() at " + gameTime.TotalGameTime.TotalSeconds);
 
-            queue.Clear();
-            uniqueSet.Clear();
+            for (int i = 0; i < queue.Count; i++)
+            {
+                eventData = queue.Dequeue();
+                Process(eventData);
+                uniqueSet.Remove(eventData);
+            }
+
+            //Update() method can be pre-empted and not complete processing all events so we need to store for next update
+            //queue.Clear();
+            //uniqueSet.Clear();
 
             base.Update(gameTime);
         }

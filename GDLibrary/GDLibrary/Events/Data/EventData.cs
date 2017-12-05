@@ -127,28 +127,29 @@ namespace GDLibrary
         public override bool Equals(object obj)
         {
             EventData other = obj as EventData;
-            bool bEquals = false;
+            bool bEquals = true;
 
-            if(this.id != null)
+            //sometimes we don't specify ID or sender so run a test
+            if (this.id != null)
                 bEquals = bEquals && this.id.Equals(other.ID);
 
             if (this.sender != null)
                 bEquals = bEquals && this.sender.Equals(other.Sender);
 
             return bEquals && ((this.additionalParameters != null && this.additionalParameters.Length != 0) ? this.additionalParameters.Equals(other.additionalParameters) : true)
-                && this.eventType == other.EventType 
+                && this.eventType == other.EventType
                 && this.eventCategoryType == other.EventCategoryType;
         }
 
         public override int GetHashCode()
         {
             int hash = 1;
-            if(this.id != null)
+            if (this.id != null)
                 hash = hash * 7 + this.id.GetHashCode();
-            if(this.sender != null)
+            if (this.sender != null)
                 hash = hash * 11 + this.sender.GetHashCode();
 
-            if(this.additionalParameters != null && this.additionalParameters.Length != 0)
+            if (this.additionalParameters != null && this.additionalParameters.Length != 0)
                 hash = hash * 31 + this.additionalParameters.GetHashCode();
 
             hash = hash * 47 + this.eventType.GetHashCode();

@@ -43,6 +43,15 @@ namespace GDApp
             {
                 if (collidableObjectCollidee.ActorType == ActorType.CollidablePickup)
                 {
+                    EventDispatcher.Publish(new EventData(collidableObjectCollidee, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
+
+                    //increment UI
+                    object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, 1 };
+                    EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
+
+                    //play sound
+                    object[] additionalParameters = { "boing" };
+                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
 
                 }
                 //add else if statements here for all the responses that you want your player to have

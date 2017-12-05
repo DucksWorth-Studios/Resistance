@@ -8,10 +8,19 @@ namespace GDLibrary
 
         public bool Equals(EventData e1, EventData e2)
         {
-            return e1.ID.Equals(e2.ID)
-                && e1.EventType.Equals(e2.EventType)
-                    && e1.EventCategoryType.Equals(e2.EventCategoryType)
-                        && (e1.Sender as Actor).GetID().Equals(e2.Sender as Actor);
+            bool bEquals = true;
+
+            //sometimes we don't specify ID or sender so run a test
+            if (e1.ID != null && e2.ID != null)
+                bEquals = e1.ID.Equals(e2.ID);
+
+            bEquals = bEquals && e1.EventType.Equals(e2.EventType)
+                    && e1.EventCategoryType.Equals(e2.EventCategoryType);
+
+            if (e1.Sender != null && e2.Sender != null)
+                bEquals = bEquals && (e1.Sender as Actor).GetID().Equals(e2.Sender as Actor);
+
+            return bEquals;
 
         }
 
