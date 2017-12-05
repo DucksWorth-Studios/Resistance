@@ -19,7 +19,8 @@
         Winning,
         Losing,
         Bored,
-        Taunting
+        Taunting,
+        Walking
         //add all the states that you have animations for here...
     }
 }

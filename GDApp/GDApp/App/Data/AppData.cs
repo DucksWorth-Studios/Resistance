@@ -86,6 +86,9 @@ namespace GDLibrary
         public static readonly float SquirrelPlayerRotationSpeed = 0.2f;
         public static readonly Keys[] SquirrelPlayerMoveKeys = { Keys.NumPad8, Keys.NumPad5, Keys.NumPad4, Keys.NumPad6, Keys.NumPad7, Keys.NumPad1, Keys.NumPad2, Keys.NumPad3 };
 
+        public static readonly float DudeMoveSpeed = 0.15f;
+        public static readonly float DudeRotationSpeed = 0.1f;
+        public static readonly float DudeJumpHeight = 25;
 
         #endregion
 
@@ -136,6 +139,7 @@ namespace GDLibrary
         public static readonly string UnLitPrimitivesEffectID = "unlit primitives basic effect";
         public static readonly string UnlitModelDualEffectID = "unlit models dual effect";
         public static readonly string UnlitBillboardsEffectID = "unlit billboards effect";
+
 
 
         #endregion
