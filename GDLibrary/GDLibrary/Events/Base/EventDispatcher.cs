@@ -73,9 +73,7 @@ namespace GDLibrary
 
         EventData eventData;
         public override void Update(GameTime gameTime)
-        {
-            System.Diagnostics.Debug.WriteLine("[" + queue.Count + "]: EventDispatcher::Update() at " + gameTime.TotalGameTime.TotalSeconds);
-
+        { 
             for (int i = 0; i < queue.Count; i++)
             {
                 eventData = queue.Dequeue();

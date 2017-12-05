@@ -45,11 +45,10 @@ namespace GDApp
                 {
                     EventDispatcher.Publish(new EventData(collidableObjectCollidee, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
 
-                    //increment UI
+                    //after fixing the event dispatcher update() method we can not successfully increment UI and/or send other events (e.g. play sound)
                     object[] additionalEventParams = { AppData.PlayerOneProgressControllerID, 1 };
                     EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
 
-                    //play sound
                     object[] additionalParameters = { "boing" };
                     EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
 
