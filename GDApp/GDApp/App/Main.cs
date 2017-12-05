@@ -286,7 +286,7 @@ namespace GDApp
             //environment
             this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1"); //demo use of the shorter form of Load() that generates key from asset name
             this.textureDictionary.Load("Assets/Textures/Props/Crates/crate2");
-            this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");
+            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
             this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
             this.textureDictionary.Load("Assets/Textures/Skybox/back");
             this.textureDictionary.Load("Assets/Textures/Skybox/left");
@@ -317,19 +317,19 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall");
 
             //dual texture demo - see Main::InitializeCollidableGround()
-            this.textureDictionary.Load("Assets/Debug/Textures/checkerboard_greywhite");
+            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard_greywhite");
             
 
 #if DEBUG
             //demo
-            this.textureDictionary.Load("Assets/Debug/Textures/ml");
-            this.textureDictionary.Load("Assets/Debug/Textures/checkerboard");
+            this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
+            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
 #endif
             #endregion
 
             #region Fonts
 #if DEBUG
-            this.fontDictionary.Load("Assets/Debug/Fonts/debug");
+            this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");

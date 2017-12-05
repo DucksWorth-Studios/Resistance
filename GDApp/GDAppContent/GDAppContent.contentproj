@@ -231,24 +231,24 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Debug\Textures\checkerboard.png">
+    <Compile Include="Assets\GDDebug\Textures\checkerboard.png">
       <Name>checkerboard</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Assets\Debug\Textures\ml.png">
+    <Compile Include="Assets\GDDebug\Textures\ml.png">
       <Name>ml</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Assets\Debug\Textures\slj.jpg">
+    <Compile Include="Assets\GDDebug\Textures\slj.jpg">
       <Name>slj</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Debug\Fonts\debug.spritefont">
+    <Compile Include="Assets\GDDebug\Fonts\debug.spritefont">
       <Name>debug</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
@@ -457,7 +457,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Debug\Textures\checkerboard_greywhite.png">
+    <Compile Include="Assets\GDDebug\Textures\checkerboard_greywhite.png">
       <Name>checkerboard_greywhite</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
