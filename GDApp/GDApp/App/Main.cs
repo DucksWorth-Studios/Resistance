@@ -246,6 +246,7 @@ namespace GDApp
 
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
+            this.modelDictionary.Load("Assets/Models/Architecture/bunker_floor", "Bunker_Floor");
             #endregion
 
             #region Textures
@@ -396,51 +397,51 @@ namespace GDApp
         private void LoadGame(int level)
         {
             int worldScale = 250;
-
+            float floorScale = 1.2f;
             //Non - collidable
             InitializeNonCollidableSkyBox(worldScale);
           
             //Collidable
-            InitializeCollidableGround(worldScale);
+            InitializeCollidableGround(floorScale);
 
             ////add level elements
-            InitializeBuildings();
+            //InitializeBuildings();
 
             ////add primitive objects - where developer defines the vertices manually
-            InitializePrimitives();
+            //InitializePrimitives();
 
         }
 
-        private void InitializePrimitives()
-        {
-            //get a copy of the effect parameters
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnLitPrimitivesEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["checkerboard"];
-            effectParameters.DiffuseColor = Color.Yellow;
-            effectParameters.Alpha = 0.4f;
+        //private void InitializePrimitives()
+        //{
+        //    //get a copy of the effect parameters
+        //    BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnLitPrimitivesEffectID].Clone() as BasicEffectParameters;
+        //    effectParameters.Texture = this.textureDictionary["checkerboard"];
+        //    effectParameters.DiffuseColor = Color.Yellow;
+        //    effectParameters.Alpha = 0.4f;
 
-            //define location
-            Transform3D transform = new Transform3D(new Vector3(0, 40, 0), new Vector3(40, 4, 1));
+        //    //define location
+        //    Transform3D transform = new Transform3D(new Vector3(0, 40, 0), new Vector3(40, 4, 1));
 
-            //create primitive
-            PrimitiveObject primitiveObject = new PrimitiveObject("simple primitive", ActorType.Primitive,
-                transform, effectParameters, StatusType.Drawn | StatusType.Update, this.vertexDataDictionary[AppData.TexturedQuadID]);
+        //    //create primitive
+        //    PrimitiveObject primitiveObject = new PrimitiveObject("simple primitive", ActorType.Primitive,
+        //        transform, effectParameters, StatusType.Drawn | StatusType.Update, this.vertexDataDictionary[AppData.TexturedQuadID]);
 
-            PrimitiveObject clonedPrimitiveObject = null;
+        //    PrimitiveObject clonedPrimitiveObject = null;
 
-            for (int i = 1; i <= 4; i++)
-            {
-                clonedPrimitiveObject = primitiveObject.Clone() as PrimitiveObject;
-                clonedPrimitiveObject.Transform.Translation += new Vector3(0, 5 * i, 0);
+        //    for (int i = 1; i <= 4; i++)
+        //    {
+        //        clonedPrimitiveObject = primitiveObject.Clone() as PrimitiveObject;
+        //        clonedPrimitiveObject.Transform.Translation += new Vector3(0, 5 * i, 0);
 
-                //we could also attach controllers here instead to give each a different rotation
-                clonedPrimitiveObject.AttachController(new RotationController("rot controller", ControllerType.Rotation, new Vector3(0.1f * i, 0, 0)));
+        //        //we could also attach controllers here instead to give each a different rotation
+        //        clonedPrimitiveObject.AttachController(new RotationController("rot controller", ControllerType.Rotation, new Vector3(0.1f * i, 0, 0)));
 
-                //add to manager
-                this.objectManager.Add(clonedPrimitiveObject);
-            }
+        //        //add to manager
+        //        this.objectManager.Add(clonedPrimitiveObject);
+        //    }
 
-        }
+        //}
 
         //skybox is a non-collidable series of ModelObjects with no lighting
         private void InitializeNonCollidableSkyBox(int worldScale)
@@ -507,7 +508,7 @@ namespace GDApp
         }
 
         //the ground is simply a large flat box with a Box primitive collision surface attached
-        private void InitializeCollidableGround(int worldScale)
+        private void InitializeCollidableGround(float floorScale)
         {
             CollidableObject collidableObject = null;
             Transform3D transform3D = null;
@@ -522,14 +523,17 @@ namespace GDApp
              * See https://www.youtube.com/watch?v=AqiNpRmENIQ&t=1892s
              * 
              */
-            Model model = this.modelDictionary["box2"];
+            Model model = this.modelDictionary["Bunker_Floor"];
 
             //a simple dual texture demo - dual textures can be used with a lightMap from 3DS Max using the Render to Texture setting
-            DualTextureEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelDualEffectID].Clone() as DualTextureEffectParameters;
-            effectParameters.Texture = this.textureDictionary["grass1"];
-            effectParameters.Texture2 = this.textureDictionary["checkerboard_greywhite"];
+            //DualTextureEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelDualEffectID].Clone() as DualTextureEffectParameters;
+            //effectParameters.Texture = this.textureDictionary["grass1"];
+            //effectParameters.Texture2 = this.textureDictionary["checkerboard_greywhite"];
 
-            transform3D = new Transform3D(Vector3.Zero, Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["grass1"];
+
+            transform3D = new Transform3D(new Vector3(100,0.9f,-5), Vector3.Zero, new Vector3(floorScale, 0.001f, floorScale), Vector3.UnitX, Vector3.UnitY);
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
             collidableObject.AddPrimitive(new JigLibX.Geometry.Plane(transform3D.Up, transform3D.Translation), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
@@ -540,6 +544,7 @@ namespace GDApp
         {
             Transform3D transform3D = new Transform3D(new Vector3(-100, 0, 0),
                 new Vector3(0, 90, 0), 0.4f * Vector3.One, Vector3.UnitX, Vector3.UnitY);
+
 
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["house-low-texture"];
