@@ -396,10 +396,10 @@ namespace GDApp
         //load the contents for the level specified
         private void LoadGame(int level)
         {
-            int worldScale = 250;
+            int worldScale = 100;
             float floorScale = 1.2f;
             //Non - collidable
-            InitializeNonCollidableSkyBox(worldScale);
+            InitializeNonCollidableWalls(worldScale, floorScale);
           
             //Collidable
             InitializeCollidableGround(floorScale);
@@ -444,7 +444,7 @@ namespace GDApp
         //}
 
         //skybox is a non-collidable series of ModelObjects with no lighting
-        private void InitializeNonCollidableSkyBox(int worldScale)
+        private void InitializeNonCollidableWalls(int worldScale, float floorScale)
         {
             //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
             Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale));
@@ -459,12 +459,13 @@ namespace GDApp
             //will be re-used for all planes
             ModelObject clonePlane = null;
 
-            #region Skybox
+            #region Walls
             //add the back skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["back"];
             //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
             clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
+            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 2, 1, worldScale);
 
             /*
              * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
@@ -472,7 +473,7 @@ namespace GDApp
              * - the interaction between 3DS Max and XNA units which result in the scale factor used below (i.e. 1 x 2.54 x worldScale)/2
              * - that I move the plane down a little on the Y-axiz, purely for aesthetic purposes
              */
-            clonePlane.Transform.Translation = new Vector3(0, 0, (-2.54f * worldScale) / 2.0f);
+            clonePlane.Transform.Translation = new Vector3(10, 0, (-2.54f * worldScale) / 2.1f);
             this.objectManager.Add(clonePlane);
 
             //As an exercise the student should add the remaining 4 skybox planes here by repeating the clone, texture assignment, rotation, and translation steps above...
