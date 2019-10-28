@@ -397,12 +397,12 @@ namespace GDApp
         private void LoadGame(int level)
         {
             int worldScale = 250;
-
+            float floorScale = 1.2f;
             //Non - collidable
             InitializeNonCollidableSkyBox(worldScale);
           
             //Collidable
-            InitializeCollidableGround(worldScale);
+            InitializeCollidableGround(floorScale);
 
             ////add level elements
             //InitializeBuildings();
@@ -508,7 +508,7 @@ namespace GDApp
         }
 
         //the ground is simply a large flat box with a Box primitive collision surface attached
-        private void InitializeCollidableGround(int worldScale)
+        private void InitializeCollidableGround(float floorScale)
         {
             CollidableObject collidableObject = null;
             Transform3D transform3D = null;
@@ -533,7 +533,7 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["grass1"];
 
-            transform3D = new Transform3D(new Vector3(0,0,10), Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(100,0.9f,-5), Vector3.Zero, new Vector3(floorScale, 0.001f, floorScale), Vector3.UnitX, Vector3.UnitY);
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
             collidableObject.AddPrimitive(new JigLibX.Geometry.Plane(transform3D.Up, transform3D.Translation), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
