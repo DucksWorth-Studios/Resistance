@@ -871,6 +871,31 @@ namespace GDApp
         }
         #endregion
 
+        #region Demo Timer
+
+        private int minutes = 10;
+        private double remainingSeconds = -1;
+        private void DemoTimer(GameTime gameTime)
+        {
+            if (this.remainingSeconds == -1)
+                this.remainingSeconds = minutes * 60;
+            else if (this.remainingSeconds > 0)
+                this.remainingSeconds = this.remainingSeconds - gameTime.ElapsedGameTime.TotalSeconds;
+
+            int mins = (int)this.remainingSeconds / 60;
+            int secs = (int)this.remainingSeconds % 60;
+
+            System.Diagnostics.Debug.WriteLine(mins + " : " + secs + " --- " + this.remainingSeconds);
+
+            if (this.remainingSeconds <= 0)
+            {
+                //TODO - Change this to lose state
+                Exit();
+            }
+        }
+
+        #endregion
+
         #region Content, Update, Draw        
         protected override void LoadContent()
         {
