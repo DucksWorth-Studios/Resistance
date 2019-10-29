@@ -486,12 +486,13 @@ namespace GDApp
             this.objectManager.Add(clonePlane);
             #endregion
 
-            #region right wall
+            #region short right wall
             //add the right skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["right"];
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
-            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 2.0f, 0, 0);
+            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 5.1f, 1, worldScale / 2);
+            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 3.65f, 0, -8.7f);
             this.objectManager.Add(clonePlane);
             #endregion
 
@@ -503,7 +504,7 @@ namespace GDApp
             //clonePlane.Transform.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f), 0);
             //this.objectManager.Add(clonePlane);
 
-
+            #region front wall
             //add the front skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
@@ -511,6 +512,7 @@ namespace GDApp
             clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 4f, 1, worldScale / 2);
             clonePlane.Transform.Translation = new Vector3(0, 0, (2.54f * worldScale) / 1.54f);
             this.objectManager.Add(clonePlane);
+            #endregion
             #endregion
         }
 
