@@ -397,9 +397,8 @@ namespace GDApp
         private void LoadGame(int level)
         {
             int worldScale = 100;
-            float floorScale = 1.2f;
             //Non - collidable
-            InitializeNonCollidableWalls(worldScale, floorScale);
+            InitializeNonCollidableWalls(worldScale);
           
             //Collidable
             InitializeCollidableGround(worldScale);
@@ -444,7 +443,7 @@ namespace GDApp
         //}
 
         //skybox is a non-collidable series of ModelObjects with no lighting
-        private void InitializeNonCollidableWalls(int worldScale, float floorScale)
+        private void InitializeNonCollidableWalls(int worldScale)
         {
             //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
             Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale));
@@ -465,7 +464,7 @@ namespace GDApp
             clonePlane.EffectParameters.Texture = this.textureDictionary["back"];
             //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
             clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 2, 1, worldScale);
+            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 2.5f, 1, worldScale/2);
 
             /*
              * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
@@ -473,7 +472,7 @@ namespace GDApp
              * - the interaction between 3DS Max and XNA units which result in the scale factor used below (i.e. 1 x 2.54 x worldScale)/2
              * - that I move the plane down a little on the Y-axiz, purely for aesthetic purposes
              */
-            clonePlane.Transform.Translation = new Vector3(10, 0, (-2.54f * worldScale) / 2.1f);
+            clonePlane.Transform.Translation = new Vector3(19, 0, (-2.54f * worldScale/4) / 1.9f);
             this.objectManager.Add(clonePlane);
 
             //As an exercise the student should add the remaining 4 skybox planes here by repeating the clone, texture assignment, rotation, and translation steps above...
@@ -491,13 +490,13 @@ namespace GDApp
             clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 2.0f, 0, 0);
             this.objectManager.Add(clonePlane);
 
-            //add the top skybox plane
-            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.EffectParameters.Texture = this.textureDictionary["sky"];
-            //notice the combination of rotations to correctly align the sky texture with the sides
-            clonePlane.Transform.Rotation = new Vector3(180, -90, 0);
-            clonePlane.Transform.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f), 0);
-            this.objectManager.Add(clonePlane);
+            ////add the top skybox plane
+            //clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            //clonePlane.EffectParameters.Texture = this.textureDictionary["sky"];
+            ////notice the combination of rotations to correctly align the sky texture with the sides
+            //clonePlane.Transform.Rotation = new Vector3(180, -90, 0);
+            //clonePlane.Transform.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f), 0);
+            //this.objectManager.Add(clonePlane);
 
             //add the front skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
