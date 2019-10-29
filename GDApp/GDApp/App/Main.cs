@@ -246,7 +246,7 @@ namespace GDApp
 
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
-            this.modelDictionary.Load("Assets/Models/Architecture/bunker_floor", "Bunker_Floor");
+            this.modelDictionary.Load("Assets/Models/Architecture/bunker_floor2", "Bunker_Floor");
             #endregion
 
             #region Textures
@@ -402,7 +402,7 @@ namespace GDApp
             InitializeNonCollidableWalls(worldScale, floorScale);
           
             //Collidable
-            InitializeCollidableGround(floorScale);
+            InitializeCollidableGround(worldScale);
 
             ////add level elements
             //InitializeBuildings();
@@ -509,7 +509,7 @@ namespace GDApp
         }
 
         //the ground is simply a large flat box with a Box primitive collision surface attached
-        private void InitializeCollidableGround(float floorScale)
+        private void InitializeCollidableGround(int worldScale)
         {
             CollidableObject collidableObject = null;
             Transform3D transform3D = null;
@@ -534,7 +534,7 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["grass1"];
 
-            transform3D = new Transform3D(new Vector3(100,0.9f,-5), Vector3.Zero, new Vector3(floorScale, 0.001f, floorScale), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(200, 0, -40), Vector3.Zero, new Vector3(worldScale/4, 0.001f, worldScale/4), Vector3.UnitX, Vector3.UnitY);
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
             collidableObject.AddPrimitive(new JigLibX.Geometry.Plane(transform3D.Up, transform3D.Translation), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
