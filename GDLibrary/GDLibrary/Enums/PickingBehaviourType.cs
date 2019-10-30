@@ -11,6 +11,7 @@ namespace GDLibrary
     public enum PickingBehaviourType : sbyte
     {
         PickAndPlace,
-        PickAndRemove
+        PickAndRemove,
+        InteractWithObject
     }
 }
