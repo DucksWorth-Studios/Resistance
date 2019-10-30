@@ -135,9 +135,24 @@ namespace GDApp
             InitializeDebugCollisionSkinInfo();
 #endif
 
+            InitializeEvents();
             base.Initialize();
         }
+        #region Events
+        /*
+         * Any Events That are to be initialised in main will happen in here
+         */
 
+        private void InitializeEvents()
+        {
+            this.eventDispatcher.O
+        }
+
+        private void Interactive(EventData eventData)
+        {
+
+        }
+        #endregion
         private void InitializeManagers(Integer2 screenResolution,
             ScreenUtility.ScreenType screenType, bool isMouseVisible, int numberOfGamePadPlayers) //1 - 4
         {

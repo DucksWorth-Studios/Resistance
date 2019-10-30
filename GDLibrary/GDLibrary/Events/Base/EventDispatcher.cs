@@ -153,7 +153,7 @@ namespace GDLibrary
                     OnVideo(eventData);
                     break;
                 case EventCategoryType.Interactive:
-
+                    OnInteract(eventData);
                     break;
                 default:
                     break;
