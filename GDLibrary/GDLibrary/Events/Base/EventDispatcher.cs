@@ -252,7 +252,7 @@ namespace GDLibrary
             VideoChanged?.Invoke(eventData);
         }
 
-        protected virtual void OnInteracr(EventData eventData)
+        protected virtual void OnInteract(EventData eventData)
         {
             InteractChanged?.Invoke(eventData);
         }
