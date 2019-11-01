@@ -1,18 +1,22 @@
-# README #
+# Resistance
+By Ducksworth Studios
 
-Getting the 3DGD code-base up and running
+## Roles
 
-### What is this repository for? ###
-
-* Support 3D Game Development module - DkIT
-* 1.0
-
-### How do I get set up? ###
-
-* Requires Visual Studio 2017 and XNA Game Studio 4.0
-* 3DS Max 2016 or later is useful for generating FBX models and animations
-* An image editor (e.g. Gimp) is useful for producing textures with a transparent layer. Textures containing transparent pixels must be in PNG format.
-
-### Who do I talk to? ###
-
-* Niall McGuinness
+- Andrew Carolan
+    - Lead Programmer
+    - Level Design
+- Aaron Richardson
+    - Lead Sound Designer
+    - Assistant Level Designer
+- Cameron Scholes
+    - Lead 3D Modelling
+    - Assistant Gameplay Programmer
+- Tomas Smith
+    - Lead Gameplay Programmer
+    - Assistant Programmer
+    
+## Gameplay
+Resistance is a puzzle based escape room. 
+The player must solve 2 different puzzles 
+in order to unlock the door.
