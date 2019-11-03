@@ -261,8 +261,11 @@ namespace GDApp
 
             //menu - buttons
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/quit");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/start");
 
             //menu - backgrounds
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/Title-screen");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/mainmenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/audiomenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/controlsmenu");
@@ -669,7 +672,7 @@ namespace GDApp
             sceneID = "main menu";
 
             //retrieve the background texture
-            texture = this.textureDictionary["mainmenu"];
+            texture = this.textureDictionary["Title-screen"];
             //scale the texture to fit the entire screen
             Vector2 scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
                 (float)graphics.PreferredBackBufferHeight / texture.Height);
