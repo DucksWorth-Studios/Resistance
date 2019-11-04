@@ -94,12 +94,13 @@ namespace GDLibrary
                 this.currentPickedObject = this.managerParameters.MouseManager.GetPickedObject(camera, camera.ViewportCentre,
                     this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
 
-                if (this.currentPickedObject != null && IsValidCollision(currentPickedObject, pos, normal) && this.currentPickedObject.ActorType == ActorType.Interactable)
+                if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.Interactable)
                 { 
                     //generate event to tell object manager and physics manager to remove the object
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.Interact, EventCategoryType.Interactive));
                     Console.WriteLine("Interacting");
                 }
+                Console.WriteLine("Hello");
             }
         }
 
