@@ -159,13 +159,13 @@ namespace GDApp
         {
             CollidableObject actor = eventData.Sender as CollidableObject;
 
-            if (actor.EffectParameters.Texture == this.textureDictionary["crate1"])
+            if (actor.EffectParameters.Texture == this.textureDictionary["green"])
             {
-                actor.EffectParameters.Texture = this.textureDictionary["checkerboard"];
+                actor.EffectParameters.Texture = this.textureDictionary["gray"];
             }
             else
             {
-                actor.EffectParameters.Texture = this.textureDictionary["crate1"];
+                actor.EffectParameters.Texture = this.textureDictionary["green"];
             }
 
             //actor.AddPrimitive(new Box(actor.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * actor.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
@@ -180,7 +180,7 @@ namespace GDApp
         {
             Model model = this.modelDictionary["box2"];
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["checkerboard"];
+            effectParameters.Texture = this.textureDictionary["gray"];
             Transform3D transform = new Transform3D(new Vector3(0, 10, -50), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
             CollidableObject collidableObject = new CollidableObject("HEY",ActorType.Interactable,transform,effectParameters,model);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
@@ -329,6 +329,10 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1");
             //dual texture demo - see Main::InitializeCollidableGround()
             this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard_greywhite");
+
+            //Load Colors
+            this.textureDictionary.Load("Assets/Colours/gray");
+            this.textureDictionary.Load("Assets/Colours/green");
 
 
 #if DEBUG
