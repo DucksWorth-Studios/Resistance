@@ -150,7 +150,10 @@ namespace GDApp
         {
             this.eventDispatcher.InteractChanged += Interactive;
         }
-
+        /*
+         * Author: Tomas
+         * Object is retrieved from the event and its texture is changed based on what current texture is
+         */
         private void Interactive(EventData eventData)
         {
             CollidableObject actor = eventData.Sender as CollidableObject;

@@ -85,7 +85,10 @@ namespace GDLibrary
             }
         }
 
-
+        /**
+         * Tomas
+         * Finds a suitable object with the interactable enum and sends it to the interact event
+         */
         private void InteractWithObject(GameTime gameTime)
         {
             if (this.managerParameters.MouseManager.IsLeftButtonClickedOnce())
