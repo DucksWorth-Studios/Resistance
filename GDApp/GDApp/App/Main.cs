@@ -181,7 +181,7 @@ namespace GDApp
             Model model = this.modelDictionary["box2"];
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["gray"];
-            Transform3D transform = new Transform3D(new Vector3(0, 10, -50), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+            Transform3D transform = new Transform3D(new Vector3(0, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
             CollidableObject collidableObject = new CollidableObject("HEY",ActorType.Interactable,transform,effectParameters,model);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
 
