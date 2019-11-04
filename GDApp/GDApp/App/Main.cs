@@ -136,8 +136,11 @@ namespace GDApp
 #endif
 
             InitializeEvents();
+            initialiseTestObject();
+            InitializeDynamicCollidableObjects();
             base.Initialize();
         }
+
         #region Events
         /*
          * Any Events That are to be initialised in main will happen in here
@@ -145,12 +148,78 @@ namespace GDApp
 
         private void InitializeEvents()
         {
-            this.eventDispatcher.O
+            this.eventDispatcher.InteractChanged += Interactive;
         }
 
         private void Interactive(EventData eventData)
         {
+            CollidableObject actor = eventData.Sender as CollidableObject;
 
+            if (actor.EffectParameters.Texture == this.textureDictionary["crate1"])
+            {
+                actor.EffectParameters.Texture = this.textureDictionary["checkerboard"];
+            }
+            else
+            {
+                actor.EffectParameters.Texture = this.textureDictionary["crate1"];
+            }
+
+            //actor.AddPrimitive(new Box(actor.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * actor.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            //actor.Enable(true, 1);
+            //this.objectManager.Remove(eventData.Sender as CollidableObject);
+            //this.objectManager.Add(actor);
+        }
+        #endregion
+        #region TestObjects
+        
+        private void initialiseTestObject()
+        {
+            Model model = this.modelDictionary["box2"];
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["checkerboard"];
+            Transform3D transform = new Transform3D(new Vector3(0, 10, -50), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+            CollidableObject collidableObject = new CollidableObject("HEY",ActorType.Interactable,transform,effectParameters,model);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeDynamicCollidableObjects()
+        {
+            CollidableObject collidableObject, archetypeCollidableObject = null;
+            Model model = null;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            
+            #region Box
+            model = this.modelDictionary["box2"];
+            effectParameters = (this.effectDictionary[AppData.LitModelsEffectID] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["checkerboard"];
+            //make once then clone
+            archetypeCollidableObject = new CollidableObject("box - ", ActorType.Interactable, Transform3D.Zero, effectParameters, model);
+
+            int count = 0;
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+                    collidableObject.ID += count;
+                    count++;
+
+                    collidableObject.Transform = new Transform3D(new Vector3(25 + 5 * j, 15 + 10 * i, 0), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+                    collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+                    //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
+                    collidableObject.Enable(true, 1);
+                    this.objectManager.Add(collidableObject);
+                }
+            }
+            //Transform3D transform = new Transform3D(
+            //    new Vector3(25 + 5, 15 + 10, 0), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+            //InteractableObject iteract = new InteractableObject("box - SUPREME ", ActorType.CollidablePickup, transform, effectParameters, model);
+            //this.objectManager.Add(iteract);
+            #endregion
         }
         #endregion
         private void InitializeManagers(Integer2 screenResolution,
@@ -215,7 +284,7 @@ namespace GDApp
             //listens for picking with the mouse on valid (based on specified predicate) collidable objects and pushes notification events to listeners
             this.pickingManager = new PickingManager(this, this.eventDispatcher, StatusType.Off,
                 this.managerParameters,
-                PickingBehaviourType.PickAndPlace, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
+                PickingBehaviourType.InteractWithObject, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
             Components.Add(this.pickingManager);
             #endregion
         }
@@ -290,7 +359,7 @@ namespace GDApp
             //architecture
             this.textureDictionary.Load("Assets/Textures/Architecture/Buildings/house-low-texture");
             //this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall");
-
+            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1");
             //dual texture demo - see Main::InitializeCollidableGround()
             this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard_greywhite");
 
