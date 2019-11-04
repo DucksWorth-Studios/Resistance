@@ -137,7 +137,7 @@ namespace GDApp
 
             InitializeEvents();
             initialiseTestObject();
-            InitializeDynamicCollidableObjects();
+            //InitializeDynamicCollidableObjects();
             base.Initialize();
         }
 
@@ -145,7 +145,8 @@ namespace GDApp
         /*
          * Any Events That are to be initialised in main will happen in here
          */
-
+         /*This method is used to initialse all events related to the main.cs
+          */
         private void InitializeEvents()
         {
             this.eventDispatcher.InteractChanged += Interactive;
@@ -186,43 +187,6 @@ namespace GDApp
 
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
-        }
-
-        private void InitializeDynamicCollidableObjects()
-        {
-            CollidableObject collidableObject, archetypeCollidableObject = null;
-            Model model = null;
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            
-            #region Box
-            model = this.modelDictionary["box2"];
-            effectParameters = (this.effectDictionary[AppData.LitModelsEffectID] as BasicEffectParameters).Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["checkerboard"];
-            //make once then clone
-            archetypeCollidableObject = new CollidableObject("box - ", ActorType.Interactable, Transform3D.Zero, effectParameters, model);
-
-            int count = 0;
-            for (int i = 0; i < 5; i++)
-            {
-                for (int j = 0; j < 5; j++)
-                {
-                    collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
-                    collidableObject.ID += count;
-                    count++;
-
-                    collidableObject.Transform = new Transform3D(new Vector3(25 + 5 * j, 15 + 10 * i, 0), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
-                    collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
-
-                    //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
-                    collidableObject.Enable(true, 1);
-                    this.objectManager.Add(collidableObject);
-                }
-            }
-            //Transform3D transform = new Transform3D(
-            //    new Vector3(25 + 5, 15 + 10, 0), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
-            //InteractableObject iteract = new InteractableObject("box - SUPREME ", ActorType.CollidablePickup, transform, effectParameters, model);
-            //this.objectManager.Add(iteract);
-            #endregion
         }
         #endregion
         private void InitializeManagers(Integer2 screenResolution,
