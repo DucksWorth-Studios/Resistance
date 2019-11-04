@@ -135,9 +135,60 @@ namespace GDApp
             InitializeDebugCollisionSkinInfo();
 #endif
 
+            InitializeEvents();
+            initialiseTestObject();
+            //InitializeDynamicCollidableObjects();
             base.Initialize();
         }
 
+        #region Events
+        /*
+         * Any Events That are to be initialised in main will happen in here
+         */
+         /*This method is used to initialse all events related to the main.cs
+          */
+        private void InitializeEvents()
+        {
+            this.eventDispatcher.InteractChanged += Interactive;
+        }
+        /*
+         * Author: Tomas
+         * Object is retrieved from the event and its texture is changed based on what current texture is
+         */
+        private void Interactive(EventData eventData)
+        {
+            CollidableObject actor = eventData.Sender as CollidableObject;
+
+            if (actor.EffectParameters.Texture == this.textureDictionary["green"])
+            {
+                actor.EffectParameters.Texture = this.textureDictionary["gray"];
+            }
+            else
+            {
+                actor.EffectParameters.Texture = this.textureDictionary["green"];
+            }
+
+            //actor.AddPrimitive(new Box(actor.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * actor.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            //actor.Enable(true, 1);
+            //this.objectManager.Remove(eventData.Sender as CollidableObject);
+            //this.objectManager.Add(actor);
+        }
+        #endregion
+        #region TestObjects
+        
+        private void initialiseTestObject()
+        {
+            Model model = this.modelDictionary["box2"];
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+            Transform3D transform = new Transform3D(new Vector3(0, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+            CollidableObject collidableObject = new CollidableObject("HEY",ActorType.Interactable,transform,effectParameters,model);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
+        #endregion
         private void InitializeManagers(Integer2 screenResolution,
             ScreenUtility.ScreenType screenType, bool isMouseVisible, int numberOfGamePadPlayers) //1 - 4
         {
@@ -200,7 +251,7 @@ namespace GDApp
             //listens for picking with the mouse on valid (based on specified predicate) collidable objects and pushes notification events to listeners
             this.pickingManager = new PickingManager(this, this.eventDispatcher, StatusType.Off,
                 this.managerParameters,
-                PickingBehaviourType.PickAndPlace, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
+                PickingBehaviourType.InteractWithObject, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
             Components.Add(this.pickingManager);
             #endregion
         }
@@ -275,9 +326,13 @@ namespace GDApp
             //architecture
             this.textureDictionary.Load("Assets/Textures/Architecture/Buildings/house-low-texture");
             //this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall");
-
+            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1");
             //dual texture demo - see Main::InitializeCollidableGround()
             this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard_greywhite");
+
+            //Load Colors
+            this.textureDictionary.Load("Assets/Colours/gray");
+            this.textureDictionary.Load("Assets/Colours/green");
 
 
 #if DEBUG
