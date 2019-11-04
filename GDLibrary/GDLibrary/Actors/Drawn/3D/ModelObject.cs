@@ -48,7 +48,7 @@ namespace GDLibrary
             get
             {
                 //bug fix for disappearing skybox plane - scale the bounding sphere up by 10%
-                return this.model.Meshes[model.Root.Index].BoundingSphere.Transform(Matrix.CreateScale(1.1f) * this.GetWorldMatrix());
+                return this.model.Meshes[model.Root.Index].BoundingSphere.Transform(Matrix.CreateScale(8) * this.GetWorldMatrix());
             }
         }
         #endregion
