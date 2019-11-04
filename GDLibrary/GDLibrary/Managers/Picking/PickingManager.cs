@@ -75,14 +75,21 @@ namespace GDLibrary
 
         protected override void HandleMouse(GameTime gameTime)
         {
-            if (this.pickingBehaviourType == PickingBehaviourType.PickAndPlace)
-                DoPickAndPlace(gameTime);
-            else 
-                DoPickAndRemove(gameTime);
+            if (this.pickingBehaviourType == PickingBehaviourType.InteractWithObject)
+            {
+                InteractWithObject(gameTime);
+            }
+            else
+            {
+
+            }
         }
 
-
-        private void DoPickAndRemove(GameTime gameTime)
+        /**
+         * Tomas
+         * Finds a suitable object with the interactable enum and sends it to the interact event
+         */
+        private void InteractWithObject(GameTime gameTime)
         {
             if (this.managerParameters.MouseManager.IsLeftButtonClickedOnce())
             {
@@ -90,11 +97,13 @@ namespace GDLibrary
                 this.currentPickedObject = this.managerParameters.MouseManager.GetPickedObject(camera, camera.ViewportCentre,
                     this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
 
-                if (this.currentPickedObject != null && IsValidCollision(currentPickedObject, pos, normal))
+                if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.Interactable)
                 { 
                     //generate event to tell object manager and physics manager to remove the object
-                    EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
+                    EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.Interact, EventCategoryType.Interactive));
+                    Console.WriteLine("Interacting");
                 }
+                Console.WriteLine("Hello");
             }
         }
 
