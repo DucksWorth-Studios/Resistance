@@ -530,7 +530,7 @@ namespace GDApp
              * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
              */
 
-            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 4f, 0, (-2.54f * worldScale) / 2f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4f, 0, (-2.54f * worldScale) / 2f);
             this.objectManager.Add(clonePlane);
             #endregion
 
@@ -539,21 +539,21 @@ namespace GDApp
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["left"];
             clonePlane.Transform.Rotation = new Vector3(90, 90, 0);
-            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 2.0f, 0, 0);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f, 0, 0);
             this.objectManager.Add(clonePlane);
             #endregion
 
-            /*#region short right wall
+            #region short right wall
             //add the right skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["right"];
+            clonePlane.Transform.Scale = new Vector3(worldScale/4, 1, worldScale);
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 5.1f, 1, worldScale / 2);
-            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 3.65f, 0, -8.7f);
+            clonePlane.Transform.Translation = new Vector3(worldScale / 128.0f, 0, (-2.54f * worldScale) / 2.67f);
             this.objectManager.Add(clonePlane);
             #endregion
 
-            #region long right wall
+            /*#region long right wall
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["right"];
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
