@@ -455,8 +455,8 @@ namespace GDApp
         private void LoadGame(int level)
         {
             int worldScale = 100;
-            //Non - collidable
-            InitializeNonCollidableWalls(worldScale);
+            //collidable
+            InitializeCollidableWalls(worldScale);
           
             //Collidable
             InitializeCollidableGround(worldScale);
@@ -501,17 +501,17 @@ namespace GDApp
         //}
 
         //skybox is a non-collidable series of ModelObjects with no lighting
-        private void InitializeNonCollidableWalls(int worldScale)
+        private void InitializeCollidableWalls(int worldScale)
         {
             //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
-            Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale));
+            Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale / 4));
 
             //clone the dictionary effect and set unique properties for the hero player object
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //create a archetype to use for cloning
-            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["plane1"]);
+            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
 
             //will be re-used for all planes
             ModelObject clonePlane = null;
@@ -521,26 +521,25 @@ namespace GDApp
             //add the back skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["back"];
+            //scale the length of the plane to be half of the worldscale
+            clonePlane.Transform.Scale = new Vector3(worldScale / 2.0f, 1, worldScale / 4);
             //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
             clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 2.5f, 1, worldScale/2);
-
+            
             /*
              * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
-             * Note:
-             * - the interaction between 3DS Max and XNA units which result in the scale factor used below (i.e. 1 x 2.54 x worldScale)/2
-             * - that I move the plane down a little on the Y-axiz, purely for aesthetic purposes
              */
-            clonePlane.Transform.Translation = new Vector3(19, 0, (-2.54f * worldScale/4) / 1.9f);
+
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4f, 0, (-2.54f * worldScale) / 2f);
             this.objectManager.Add(clonePlane);
             #endregion
 
             #region Left wall
+            //longest wall of the L shape level
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["left"];
             clonePlane.Transform.Rotation = new Vector3(90, 90, 0);
-            clonePlane.Transform.Scale = new Vector3(worldScale/ 1.26f, 1, worldScale / 2);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale/4) / 2.0f, 0, 65);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f, 0, 0);
             this.objectManager.Add(clonePlane);
             #endregion
 
@@ -548,29 +547,30 @@ namespace GDApp
             //add the right skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["right"];
+            clonePlane.Transform.Scale = new Vector3(worldScale/ 4, 1, worldScale / 4);
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 5.1f, 1, worldScale / 2);
-            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 3.65f, 0, -8.7f);
+            clonePlane.Transform.Translation = new Vector3(worldScale / 128.0f, 0, (-2.54f * worldScale) / 2.67f);
             this.objectManager.Add(clonePlane);
             #endregion
 
             #region long right wall
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["right"];
+            clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 4);
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 1.7f, 1, worldScale / 2);
-            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 13.0f, 0, 90.8f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4.0f, 0, (2.54f * worldScale) / 8.0f);
             this.objectManager.Add(clonePlane);
             #endregion
 
-            #region short front wall
+            #region 2nd room short wall
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            clonePlane.Transform.Scale = new Vector3(worldScale / 4, 1, worldScale / 4);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 5.0f, 1, worldScale / 2);
-            clonePlane.Transform.Translation = new Vector3(44.9f, 0, (2.54f * worldScale) / 15.8f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 8.0f, 0, (-2.54f * worldScale) / 4.0f);
             this.objectManager.Add(clonePlane);
             #endregion
+
 
             ////add the top skybox plane
             //clonePlane = (ModelObject)planePrototypeModelObject.Clone();
@@ -582,12 +582,31 @@ namespace GDApp
 
             #region front wall
             //add the front skybox plane
+            // this side will be done in 3 blocks two on each side with a space for a door and then a block on top of it
+            //left side of door
+            float xScale = 0.833f * worldScale / 10.0f;
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 4);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 4f, 1, worldScale / 2);
-            clonePlane.Transform.Translation = new Vector3(0, 0, (2.54f * worldScale) / 1.54f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.2f, 0, (2.54f * worldScale) / 2f);
             this.objectManager.Add(clonePlane);
+
+            //right side of door
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 4);
+            clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.5f, 0, (2.54f * worldScale) / 2f);
+            this.objectManager.Add(clonePlane);
+
+            //top of door way
+            //clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            //clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            //clonePlane.Transform.Scale = new Vector3(worldScale / 4, 1, worldScale / 4);
+            //clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
+            //clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.7f, worldScale / 1.05f, (2.54f * worldScale) / 2f);
+            //this.objectManager.Add(clonePlane);
             #endregion
             #endregion
         }
@@ -608,7 +627,7 @@ namespace GDApp
              * See https://www.youtube.com/watch?v=AqiNpRmENIQ&t=1892s
              * 
              */
-            Model model = this.modelDictionary["Bunker_Floor"];
+            Model model = this.modelDictionary["box2"];
 
             //a simple dual texture demo - dual textures can be used with a lightMap from 3DS Max using the Render to Texture setting
             //DualTextureEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelDualEffectID].Clone() as DualTextureEffectParameters;
@@ -618,7 +637,7 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["grass1"];
 
-            transform3D = new Transform3D(new Vector3(200, 0, -40), Vector3.Zero, new Vector3(worldScale/4, 0.001f, worldScale/4), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(Vector3.Zero, Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
             collidableObject.AddPrimitive(new JigLibX.Geometry.Plane(transform3D.Up, transform3D.Translation), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
