@@ -553,16 +553,16 @@ namespace GDApp
             this.objectManager.Add(clonePlane);
             #endregion
 
-            /*#region long right wall
+            #region long right wall
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["right"];
+            clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale);
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 1.7f, 1, worldScale / 2);
-            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 13.0f, 0, 90.8f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4.0f, 0, (2.54f * worldScale) / 8.0f);
             this.objectManager.Add(clonePlane);
             #endregion
 
-            #region short front wall
+            /*#region short front wall
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
