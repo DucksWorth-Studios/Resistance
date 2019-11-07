@@ -571,7 +571,7 @@ namespace GDApp
             this.objectManager.Add(clonePlane);
             #endregion
 
-            /*
+
             ////add the top skybox plane
             //clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             //clonePlane.EffectParameters.Texture = this.textureDictionary["sky"];
@@ -582,13 +582,32 @@ namespace GDApp
 
             #region front wall
             //add the front skybox plane
+            // this side will be done in 3 blocks two on each side with a space for a door and then a block on top of it
+            //left side of door
+            float xScale = 0.833f * worldScale / 10.0f;
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale/2);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 4f, 1, worldScale / 2);
-            clonePlane.Transform.Translation = new Vector3(0, 0, (2.54f * worldScale) / 1.54f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.2f, 0, (2.54f * worldScale) / 2f);
             this.objectManager.Add(clonePlane);
-            #endregion*/
+
+            //right side of door
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale/2);
+            clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.5f, 0, (2.54f * worldScale) / 2f);
+            this.objectManager.Add(clonePlane);
+
+            //top of door way
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            clonePlane.Transform.Scale = new Vector3(worldScale / 4, 1, worldScale / 4);
+            clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.7f, worldScale / 1.05f, (2.54f * worldScale) / 2f);
+            this.objectManager.Add(clonePlane);
+            #endregion
             #endregion
         }
 
