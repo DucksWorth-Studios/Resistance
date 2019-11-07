@@ -521,17 +521,16 @@ namespace GDApp
             //add the back skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["back"];
+            //scale the length of the plane to be half of the worldscale
+            clonePlane.Transform.Scale = new Vector3(worldScale / 2.0f, 1, worldScale);
             //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
             clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
-            clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 2.5f, 1, worldScale/2);
-
+            
             /*
              * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
-             * Note:
-             * - the interaction between 3DS Max and XNA units which result in the scale factor used below (i.e. 1 x 2.54 x worldScale)/2
-             * - that I move the plane down a little on the Y-axiz, purely for aesthetic purposes
              */
-            clonePlane.Transform.Translation = new Vector3(19, 0, (-2.54f * worldScale/4) / 1.9f);
+
+            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 4f, 0, (-2.54f * worldScale) / 2f);
             this.objectManager.Add(clonePlane);
             #endregion
 
@@ -544,7 +543,7 @@ namespace GDApp
             this.objectManager.Add(clonePlane);
             #endregion
 
-            #region short right wall
+            /*#region short right wall
             //add the right skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["right"];
@@ -588,7 +587,7 @@ namespace GDApp
             clonePlane.Transform.Scale = new Vector3(clonePlane.Transform.Scale.X / 4f, 1, worldScale / 2);
             clonePlane.Transform.Translation = new Vector3(0, 0, (2.54f * worldScale) / 1.54f);
             this.objectManager.Add(clonePlane);
-            #endregion
+            #endregion*/
             #endregion
         }
 
