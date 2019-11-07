@@ -608,7 +608,7 @@ namespace GDApp
              * See https://www.youtube.com/watch?v=AqiNpRmENIQ&t=1892s
              * 
              */
-            Model model = this.modelDictionary["Bunker_Floor"];
+            Model model = this.modelDictionary["box2"];
 
             //a simple dual texture demo - dual textures can be used with a lightMap from 3DS Max using the Render to Texture setting
             //DualTextureEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelDualEffectID].Clone() as DualTextureEffectParameters;
@@ -618,7 +618,7 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["grass1"];
 
-            transform3D = new Transform3D(new Vector3(200, 0, -40), Vector3.Zero, new Vector3(worldScale/4, 0.001f, worldScale/4), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(Vector3.Zero, Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
             collidableObject.AddPrimitive(new JigLibX.Geometry.Plane(transform3D.Up, transform3D.Translation), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
