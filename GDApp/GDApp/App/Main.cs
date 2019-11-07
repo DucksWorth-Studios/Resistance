@@ -455,8 +455,8 @@ namespace GDApp
         private void LoadGame(int level)
         {
             int worldScale = 100;
-            //Non - collidable
-            InitializeNonCollidableWalls(worldScale);
+            //collidable
+            InitializeCollidableWalls(worldScale);
           
             //Collidable
             InitializeCollidableGround(worldScale);
@@ -501,7 +501,7 @@ namespace GDApp
         //}
 
         //skybox is a non-collidable series of ModelObjects with no lighting
-        private void InitializeNonCollidableWalls(int worldScale)
+        private void InitializeCollidableWalls(int worldScale)
         {
             //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
             Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale));
@@ -511,7 +511,7 @@ namespace GDApp
             effectParameters.Texture = this.textureDictionary["checkerboard"];
 
             //create a archetype to use for cloning
-            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["plane1"]);
+            ModelObject planePrototypeModelObject = new ModelObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
 
             //will be re-used for all planes
             ModelObject clonePlane = null;
@@ -536,11 +536,11 @@ namespace GDApp
             #endregion
 
             #region Left wall
+            //longest wall of the L shape level
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["left"];
             clonePlane.Transform.Rotation = new Vector3(90, 90, 0);
-            clonePlane.Transform.Scale = new Vector3(worldScale/ 1.26f, 1, worldScale / 2);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale/4) / 2.0f, 0, 65);
+            clonePlane.Transform.Translation = new Vector3((2.54f * worldScale) / 2.0f, 0, 0);
             this.objectManager.Add(clonePlane);
             #endregion
 
