@@ -51,7 +51,7 @@ namespace GDApp
         public GamePadManager gamePadManager { get; private set; }
         public SoundManager soundManager { get; private set; }
         public PickingManager pickingManager { get; private set; }
-
+        public LogicManager logicPuzzle;
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
 
@@ -67,7 +67,6 @@ namespace GDApp
         private Dictionary<string, EffectParameters> effectDictionary;
         private ContentDictionary<Video> videoDictionary;
         private Dictionary<string, IVertexData> vertexDataDictionary;
-
 
         private ManagerParameters managerParameters;
 
@@ -136,7 +135,8 @@ namespace GDApp
 #endif
 
             InitializeEvents();
-            initialiseTestObject();
+            //initialiseTestObject();
+            InitializeSwitches();
             //InitializeDynamicCollidableObjects();
             base.Initialize();
         }
@@ -158,7 +158,6 @@ namespace GDApp
         private void Interactive(EventData eventData)
         {
             CollidableObject actor = eventData.Sender as CollidableObject;
-
             if (actor.EffectParameters.Texture == this.textureDictionary["green"])
             {
                 actor.EffectParameters.Texture = this.textureDictionary["gray"];
@@ -167,7 +166,8 @@ namespace GDApp
             {
                 actor.EffectParameters.Texture = this.textureDictionary["green"];
             }
-
+            Console.WriteLine(actor.ID);
+            this.logicPuzzle.changeState(actor.ID);
             //actor.AddPrimitive(new Box(actor.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * actor.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
             //actor.Enable(true, 1);
             //this.objectManager.Remove(eventData.Sender as CollidableObject);
@@ -187,6 +187,34 @@ namespace GDApp
 
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeSwitches()
+        {
+            CollidableObject collidableObject, archetypeCollidableObject = null;
+            
+            Model model = this.modelDictionary["box2"];
+            BasicEffectParameters effectParameters = (this.effectDictionary[AppData.LitModelsEffectID] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+            
+            archetypeCollidableObject = new CollidableObject("switch-", ActorType.Interactable, Transform3D.Zero, effectParameters, model);
+
+            int count = 0;
+            for (int i = 0; i < 4; ++i)
+            {
+                ++count;
+                collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+                collidableObject.ID = "switch-" +count;
+                
+
+                collidableObject.Transform = new Transform3D(new Vector3(10 * i, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+                collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity,2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+                //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
+                collidableObject.Enable(true, 1);
+                this.objectManager.Add(collidableObject);
+                
+            }
         }
         #endregion
         private void InitializeManagers(Integer2 screenResolution,
@@ -241,6 +269,9 @@ namespace GDApp
             //this object packages together all managers to give the mouse object the ability to listen for all forms of input from the user, as well as know where camera is etc.
             this.managerParameters = new ManagerParameters(this.objectManager,
                 this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager, this.screenManager, this.soundManager);
+
+            this.logicPuzzle = new LogicManager(this);
+            Components.Add(logicPuzzle);
 
             #region Pick Manager
             //call this function anytime we want to decide if a mouse over object is interesting to the PickingManager
