@@ -37,6 +37,7 @@ namespace GDLibrary
         public delegate void VideoEventHandler(EventData eventData);
         public delegate void DebugEventHandler(EventData eventData);
         public delegate void InteractHandler(EventData eventData);
+        public delegate void PuzzleHandler(EventData eventData);
         
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
@@ -54,6 +55,7 @@ namespace GDLibrary
         public event VideoEventHandler VideoChanged;
         public event DebugEventHandler DebugChanged;
         public event InteractHandler InteractChanged;
+        public event PuzzleHandler PuzzleChanged;
         
 
 
@@ -156,7 +158,7 @@ namespace GDLibrary
                     OnInteract(eventData);
                     break;
                 case EventCategoryType.LogicPuzzle:
-                    OnInteract(eventData);
+                    OnPuzzleStateChange(eventData);
                     break;
                 default:
                     break;
@@ -258,6 +260,11 @@ namespace GDLibrary
         protected virtual void OnInteract(EventData eventData)
         {
             InteractChanged?.Invoke(eventData);
+        }
+
+        protected virtual void OnPuzzleStateChange(EventData eventData)
+        {
+            PuzzleChanged?.Invoke(eventData);
         }
     }
 }
