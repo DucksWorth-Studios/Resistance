@@ -171,6 +171,12 @@ namespace GDLibrary
                 this.transparentDrawList.Add(actor);
         }
 
+        public Actor3D Find(Predicate<Actor3D> predicate)
+        {
+            Actor3D actor = this.opaqueDrawList.Find(predicate);
+
+            return actor;
+        }
         //call when we want to remove a drawn object from the scene
         public void Remove(Actor3D actor)
         {
