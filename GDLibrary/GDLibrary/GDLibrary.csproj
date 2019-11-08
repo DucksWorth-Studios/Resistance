@@ -154,6 +154,7 @@
     <Compile Include="Managers\Game\GameStateManager.cs" />
     <Compile Include="Managers\Input\GamePadManager.cs" />
     <Compile Include="Exceptions\GamePadException.cs" />
+    <Compile Include="Managers\MechanicManagers\LogicManager.cs" />
     <Compile Include="Managers\Menu\MenuManager.cs" />
     <Compile Include="Managers\Object\ObjectManager.cs" />
     <Compile Include="Managers\Physics\PhysicsManager.cs" />

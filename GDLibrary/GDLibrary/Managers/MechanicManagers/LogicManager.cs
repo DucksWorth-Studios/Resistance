@@ -94,29 +94,29 @@ namespace GDLibrary
                 {
                     this.gateOne = true;
                     //Send Event To light up Gate One
-                    Console.Write("Gate One");
+                    Console.WriteLine("Gate One");
                 }
                 else if((!this.switchOne || !this.switchFour) && this.gateOne)
                 {
                     this.gateOne = false;
                     //Send Event to delight Gate One;
-                    Console.Write("Gate One Off");
+                    Console.WriteLine("Gate One Off");
 
                 }
 
                 //XOR Gate
-                if ( (this.switchThree || this.switchTwo) && !(this.switchThree && this.switchTwo) && !this.gateTwo)
+                if ((this.switchThree || this.switchTwo) && !(this.switchThree && this.switchTwo) && !this.gateTwo)
                 {
                     this.gateTwo = true;
                     //Send Event To light up Gate Two
-                    Console.Write("Gate Two");
+                    Console.WriteLine("Gate Two");
 
                 }
-                else if (((this.switchThree && this.switchFour) || (!this.switchThree && !this.switchFour)) && this.gateTwo)
+                else if (((this.switchThree && this.switchTwo) || (!this.switchThree && !this.switchTwo)) && this.gateTwo)
                 {
                     this.gateTwo = false;
                     //Send Event to delight Gate Two;
-                    Console.Write("Gate Two OFF");
+                    Console.WriteLine("Gate Two OFF");
 
                 }
 
@@ -125,14 +125,14 @@ namespace GDLibrary
                 {
                     this.gateThree = true;
                     //Event for Gate Three
-                    Console.Write("Gate Three");
+                    Console.WriteLine("Gate Three");
 
                 }
-                else if((!this.gateOne || !this.switchTwo) && this.gateThree)
+                else if ((!this.gateOne || !this.switchTwo) && this.gateThree)
                 {
                     this.gateThree = false;
                     //Event For Gate Three
-                    Console.Write("Gate Three Off");
+                    Console.WriteLine("Gate Three Off");
 
                 }
 
@@ -140,10 +140,10 @@ namespace GDLibrary
                 {
                     this.gateFour = true;
                     this.IsSolved = true;
-                    Console.Write("Gate Four");
+                    Console.WriteLine("Gate Four Logic Solved");
 
                 }
-                else if((!this.gateThree || !this.gateTwo) && this.gateFour)
+                else if ((!this.gateThree || !this.gateTwo) && this.gateFour)
                 {
                     this.gateFour = false;
                 }
