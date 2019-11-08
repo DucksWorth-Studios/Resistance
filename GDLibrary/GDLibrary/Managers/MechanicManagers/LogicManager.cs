@@ -93,13 +93,14 @@ namespace GDLibrary
                 if(this.switchOne && this.switchFour && !this.gateOne)
                 {
                     this.gateOne = true;
-                    //Send Event To light up Gate One
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-1" }));
                     Console.WriteLine("Gate One");
                 }
                 else if((!this.switchOne || !this.switchFour) && this.gateOne)
                 {
                     this.gateOne = false;
                     //Send Event to delight Gate One;
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight,EventCategoryType.LogicPuzzle,new object[] { "gate-1" }));
                     Console.WriteLine("Gate One Off");
 
                 }
@@ -108,14 +109,14 @@ namespace GDLibrary
                 if ((this.switchThree || this.switchTwo) && !(this.switchThree && this.switchTwo) && !this.gateTwo)
                 {
                     this.gateTwo = true;
-                    //Send Event To light up Gate Two
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-2" }));
                     Console.WriteLine("Gate Two");
 
                 }
                 else if (((this.switchThree && this.switchTwo) || (!this.switchThree && !this.switchTwo)) && this.gateTwo)
                 {
                     this.gateTwo = false;
-                    //Send Event to delight Gate Two;
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-2" }));
                     Console.WriteLine("Gate Two OFF");
 
                 }
@@ -124,14 +125,14 @@ namespace GDLibrary
                 if (this.gateOne && this.switchTwo && !this.gateThree)
                 {
                     this.gateThree = true;
-                    //Event for Gate Three
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-3" }));
                     Console.WriteLine("Gate Three");
 
                 }
                 else if ((!this.gateOne || !this.switchTwo) && this.gateThree)
                 {
                     this.gateThree = false;
-                    //Event For Gate Three
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-3" }));
                     Console.WriteLine("Gate Three Off");
 
                 }
@@ -140,6 +141,7 @@ namespace GDLibrary
                 {
                     this.gateFour = true;
                     this.IsSolved = true;
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-4" }));
                     Console.WriteLine("Gate Four Logic Solved");
 
                 }
