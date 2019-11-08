@@ -36,7 +36,7 @@ namespace GDLibrary
         #region Camera
         public static readonly int CurveEvaluationPrecision = 4;
 
-        public static readonly float CameraRotationSpeed = 0.0125f;
+        public static readonly float CameraRotationSpeed = 0.000125f;
         public static readonly float CameraMoveSpeed = 0.025f;
         public static readonly float CameraStrafeSpeed = 0.6f * CameraMoveSpeed;
     

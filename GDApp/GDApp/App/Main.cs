@@ -92,7 +92,7 @@ namespace GDApp
 
             int gameLevel = 1;
             bool isMouseVisible = true;
-            Integer2 screenResolution = ScreenUtility.HD720;
+            Integer2 screenResolution = ScreenUtility.HD1080;
             ScreenUtility.ScreenType screenType = ScreenUtility.ScreenType.SingleScreen;
             int numberOfGamePadPlayers = 1;
 
@@ -892,17 +892,21 @@ namespace GDApp
             //show complete texture
             Microsoft.Xna.Framework.Rectangle sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height);
 
+            Transform2D transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2), 0, Vector2.One, Vector2.Zero, new Integer2(texture.Width, texture.Height));
+            UITextureObject crosshair = new UITextureObject("crosshair", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White, SpriteEffects.None, 0, texture);
+
+            uiManager.Add(crosshair);
             //listens for object picking events from the object picking manager
-            UIPickingMouseObject myUIMouseObject = new UIPickingMouseObject("picking mouseObject",
-                ActorType.UITexture,
-                new Transform2D(Vector2.One),
-                this.fontDictionary["mouse"],
-                "",
-                new Vector2(0, 40),
-                texture,
-                this.mouseManager,
-                this.eventDispatcher);
-            this.uiManager.Add(myUIMouseObject);
+            // UIPickingMouseObject myUIMouseObject = new UIPickingMouseObject("picking mouseObject",
+            //    ActorType.UITexture,
+            //    new Transform2D(Vector2.One),
+            //    this.fontDictionary["mouse"],
+            //    "",
+            //    new Vector2(0, 40),
+            //    texture,
+            //    this.mouseManager,
+            //    this.eventDispatcher);
+            // this.uiManager.Add(myUIMouseObject);
         }
 
         #endregion

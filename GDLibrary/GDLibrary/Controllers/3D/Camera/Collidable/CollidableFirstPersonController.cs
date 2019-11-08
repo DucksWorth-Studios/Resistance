@@ -148,9 +148,26 @@ namespace GDLibrary
             //updates the sound manager to tell it where the 1st person camera is right now for any 3D sounds
             //did NOT use an event here as the frequency of calls to this event would FLOOD the system
             this.ManagerParameters.SoundManager.UpdateListenerPosition((actor as Actor3D).Transform.Translation);
-
+            HandleMouseInput(gameTime, actor as Actor3D);
             base.Update(gameTime, actor);
         }
+
+        //public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
+        //{
+            
+        //    Vector2 mouseDelta = Vector2.Zero;
+            
+        //    mouseDelta = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
+        //    mouseDelta *= gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed;
+          
+
+
+        //    //only rotate if something has changed with the mouse
+        //    if (mouseDelta.Length() != 0)
+        //        parentActor.Transform.RotateBy(new Vector3(mouseDelta, 0));
+            
+
+        //}
 
 
         public override void HandleKeyboardInput(GameTime gameTime, Actor3D parentActor)
