@@ -30,7 +30,8 @@ namespace GDLibrary
         Mouse,              //used to send mouse related events e.g. set mouse position
         Video,
         GlobalSound,
-        Interactive
+        Interactive,
+        LogicPuzzle
         //all other categories of sender...
     }
 }

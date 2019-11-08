@@ -155,6 +155,9 @@ namespace GDLibrary
                 case EventCategoryType.Interactive:
                     OnInteract(eventData);
                     break;
+                case EventCategoryType.LogicPuzzle:
+                    OnInteract(eventData);
+                    break;
                 default:
                     break;
             }

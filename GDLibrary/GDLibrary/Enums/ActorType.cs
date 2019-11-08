@@ -38,6 +38,7 @@ namespace GDLibrary
         CollidableProjectile,
         CollidableDoor,
         CollidableAmmo,
-        Primitive
+        Primitive,
+        Light
     }
 }
