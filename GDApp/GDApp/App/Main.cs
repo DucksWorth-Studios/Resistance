@@ -151,6 +151,7 @@ namespace GDApp
         private void InitializeEvents()
         {
             this.eventDispatcher.InteractChanged += Interactive;
+            this.eventDispatcher.PuzzleChanged += ChangeLights;
         }
         /*
          * Author: Tomas
@@ -174,6 +175,23 @@ namespace GDApp
             //this.objectManager.Remove(eventData.Sender as CollidableObject);
             //this.objectManager.Add(actor);
         }
+
+        private void ChangeLights(EventData eventData)
+        {
+            string id = (string)eventData.AdditionalParameters[0];
+            Predicate<Actor3D> predicate = s => s.GetID() == id;
+            CollidableObject gate =(CollidableObject) this.objectManager.Find(predicate);
+            if(gate.EffectParameters.Texture == this.textureDictionary["gray"])
+            {
+                gate.EffectParameters.Texture = this.textureDictionary["green"];
+            }
+            else
+            {
+                gate.EffectParameters.Texture = this.textureDictionary["gray"];
+            }
+            
+        }
+
         #endregion
         #region TestObjects
         
