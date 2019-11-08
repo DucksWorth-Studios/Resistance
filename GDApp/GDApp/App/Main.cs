@@ -137,6 +137,7 @@ namespace GDApp
             InitializeEvents();
             //initialiseTestObject();
             InitializeSwitches();
+            InitialisePuzzleLights();
             //InitializeDynamicCollidableObjects();
             base.Initialize();
         }
@@ -215,6 +216,34 @@ namespace GDApp
                 this.objectManager.Add(collidableObject);
                 
             }
+        }
+
+        private void InitialisePuzzleLights()
+        {
+            CollidableObject collidableObject, archetypeCollidableObject = null;
+            Model model = this.modelDictionary["sphere"];
+
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+
+            //make once then clone
+            archetypeCollidableObject = new CollidableObject("sphere", ActorType.Light, Transform3D.Zero, effectParameters, model);
+            int count = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                ++count;
+                collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+
+                collidableObject.ID = "gate-" + count;
+                collidableObject.Transform = new Transform3D(new Vector3(10 * i, 30, -25), new Vector3(0, 0, 0),
+                    0.082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                    Vector3.UnitX, Vector3.UnitY);
+
+                collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 2.54f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+                collidableObject.Enable(true, 1);
+                this.objectManager.Add(collidableObject);
+            }
+
         }
         #endregion
         private void InitializeManagers(Integer2 screenResolution,
@@ -325,7 +354,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/plane1", "plane1");
             //this.modelDictionary.Load("Assets/Models/plane", "plane");
             this.modelDictionary.Load("Assets/Models/box2", "box2");
-
+            this.modelDictionary.Load("Assets/Models/sphere", "sphere");
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
             this.modelDictionary.Load("Assets/Models/Architecture/bunker_floor2", "Bunker_Floor");
