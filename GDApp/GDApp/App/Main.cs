@@ -297,7 +297,8 @@ namespace GDApp
 
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
-            this.modelDictionary.Load("Assets/Models/Architecture/bunker_floor2", "Bunker_Floor");
+            this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_00", "barrier");
+            this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_00", "bunker_door");
             #endregion
 
             #region Textures
@@ -328,6 +329,8 @@ namespace GDApp
 
             //architecture
             this.textureDictionary.Load("Assets/Textures/Architecture/Buildings/house-low-texture");
+            this.textureDictionary.Load("Assets/Textures/Architecture/Doors/Concrete", "concrete");
+            this.textureDictionary.Load("Assets/Textures/Architecture/Doors/BrushedAluminum", "aluminum");
             //this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall");
             this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1");
             //dual texture demo - see Main::InitializeCollidableGround()
@@ -463,6 +466,8 @@ namespace GDApp
 
             ////add level elements
             //InitializeBuildings();
+            InitializeExitDoor();
+
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -655,6 +660,19 @@ namespace GDApp
 
             CollidableObject collidableObject = new TriangleMeshObject("house1", ActorType.CollidableArchitecture, transform3D,
                                 effectParameters, this.modelDictionary["house"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeExitDoor()
+        {
+            Transform3D transform3D = new Transform3D(new Vector3(-94, 16, 127), new Vector3(-90, 0, 0), new Vector3(0.11f, 0.1f, 0.09f), Vector3.UnitX, Vector3.UnitY);
+
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["aluminum"];
+
+            CollidableObject collidableObject = new TriangleMeshObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters,
+                this.modelDictionary["bunker_door"], new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }

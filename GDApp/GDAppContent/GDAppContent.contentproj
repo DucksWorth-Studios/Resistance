@@ -529,20 +529,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Models\Architecture\Bunker_Floor.FBX">
-      <Name>Bunker_Floor</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\Models\Architecture\Bunker_Floor2.FBX">
-      <Name>Bunker_Floor2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Backgrounds\Title-screen.png">
       <Name>Title-screen</Name>
       <Importer>TextureImporter</Importer>
@@ -571,6 +557,32 @@
   <ItemGroup>
     <Compile Include="Assets\Colours\green.JPG">
       <Name>green</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Architecture\Doors\BunkerDoor_Mapped_00.fbx">
+      <Name>BunkerDoor_Mapped_00</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Architecture\Doors\Barrier_Mapped_00.fbx">
+      <Name>Barrier_Mapped_00</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\Architecture\Doors\BrushedAluminum.png">
+      <Name>BrushedAluminum</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Assets\Textures\Architecture\Doors\Concrete.png">
+      <Name>Concrete</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
