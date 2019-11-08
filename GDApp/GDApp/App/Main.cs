@@ -467,6 +467,7 @@ namespace GDApp
             ////add level elements
             //InitializeBuildings();
             InitializeExitDoor();
+            InitializeDoorBarriers();
 
 
             ////add primitive objects - where developer defines the vertices manually
@@ -666,15 +667,55 @@ namespace GDApp
 
         private void InitializeExitDoor()
         {
-            Transform3D transform3D = new Transform3D(new Vector3(-94, 16, 127), new Vector3(-90, 0, 0), new Vector3(0.11f, 0.1f, 0.09f), Vector3.UnitX, Vector3.UnitY);
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
 
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            transform3D = new Transform3D(new Vector3(-94, 16, 127), new Vector3(-90, 0, 0), new Vector3(0.11f, 0.1f, 0.09f), Vector3.UnitX, Vector3.UnitY);
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
 
-            CollidableObject collidableObject = new TriangleMeshObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters,
+            collidableObject = new TriangleMeshObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters,
                 this.modelDictionary["bunker_door"], new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeDoorBarriers()
+        {
+            //Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject = null, cloneCollider = null;
+
+            //transform3D = new Transform3D(new Vector3(-98, 6, 124), new Vector3(-90, 0, 180), new Vector3(0.1f, 0.05f, 0.1f), Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["concrete"];
+
+            collidableObject = new CollidableObject("barrier - ", ActorType.CollidableArchitecture, Transform3D.Zero, 
+                effectParameters, this.modelDictionary["barrier"]);
+
+            //first barrier
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 1;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-100, 6, 124), new Vector3(-90, 0, 180), new Vector3(0.1f, 0.05f, 0.1f), Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, 2.54f * cloneCollider.Transform.Scale), 
+                new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
+
+            //second barrier
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 2;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-88, 20, 124), new Vector3(-90, 0, 0), new Vector3(0.1f, 0.05f, 0.1f), Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, 2.54f * cloneCollider.Transform.Scale),
+                new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
         }
 
         #endregion
