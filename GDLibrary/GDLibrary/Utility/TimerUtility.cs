@@ -7,27 +7,31 @@
         private int hours = 0;
         private int minutes = 0;
         private int seconds = 0;
+        private StatusType statusType;
 
         #endregion
 
         #region Constructors
 
-        public TimerUtility(int minutes)
+        public TimerUtility(int minutes, StatusType statusType)
         {
             this.minutes = minutes;
+            this.statusType = statusType;
         }
 
-        public TimerUtility(int hours, int minutes)
+        public TimerUtility(int hours, int minutes, StatusType statusType)
         {
             this.hours = hours;
             this.minutes = minutes;
+            this.statusType = statusType;
         }
 
-        public TimerUtility(int hours, int minutes, int seconds)
+        public TimerUtility(int hours, int minutes, int seconds, StatusType statusType)
         {
             this.hours = hours;
             this.minutes = minutes;
             this.seconds = seconds;
+            this.statusType = statusType;
         }
 
         #endregion
@@ -50,6 +54,12 @@
         {
             get => seconds;
             set => seconds = value;
+        }
+
+        public StatusType StatusType
+        {
+            get => statusType;
+            set => statusType = value;
         }
 
         #endregion
