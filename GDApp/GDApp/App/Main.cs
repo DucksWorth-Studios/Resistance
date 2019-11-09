@@ -987,6 +987,19 @@ namespace GDApp
             this.uiManager.Add(myUIMouseObject);
         }
 
+        private SpriteFont timerFont;
+
+        private void TimerUI()
+        {
+            foreach (TimerUtility timer in timerManager.TimerList)
+            {
+                spriteBatch.Begin();
+                spriteBatch.DrawString(timerFont, timer.Hours + ":" + timer.Minutes + ":" + timer.Seconds, 
+                    new Vector2(graphics.PreferredBackBufferWidth-100, 50), Color.Red);
+                spriteBatch.End();
+            }
+        }
+
         #endregion
 
         #region Effects
@@ -1051,7 +1064,7 @@ namespace GDApp
             //#if DEBUG
             //            InitializeDebugTextInfo();
             //#endif
-
+            timerFont = Content.Load<SpriteFont>("Assets/Fonts/timerFont");
         }
 
         protected override void UnloadContent()
@@ -1078,6 +1091,7 @@ namespace GDApp
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            TimerUI();
 
             base.Draw(gameTime);
         }
