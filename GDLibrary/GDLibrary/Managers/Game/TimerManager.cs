@@ -27,21 +27,21 @@ namespace GDLibrary
             base(game, eventDispatcher, statusType)
         {
             this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(new TimerUtility(minutes));
+            this.timerList.Add(new TimerUtility(minutes, statusType));
         }
 
         public TimerManager(int hours, int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
             base(game, eventDispatcher, statusType)
         {
             this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(new TimerUtility(hours, minutes));
+            this.timerList.Add(new TimerUtility(hours, minutes, statusType));
         }
 
         public TimerManager(int hours, int minutes, int seconds, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
             base(game, eventDispatcher, statusType)
         {
             this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(new TimerUtility(hours, minutes, seconds));
+            this.timerList.Add(new TimerUtility(hours, minutes, seconds, statusType));
         }
 
         #endregion
@@ -65,19 +65,19 @@ namespace GDLibrary
             timerList.Add(timer);
         }
 
-        public void Add(int minutes)
+        public void Add(int minutes, StatusType statusType)
         {
-            timerList.Add(new TimerUtility(minutes));
+            timerList.Add(new TimerUtility(minutes, statusType));
         }
 
-        public void Add(int hours, int minutes)
+        public void Add(int hours, int minutes, StatusType statusType)
         {
-            timerList.Add(new TimerUtility(hours, minutes));
+            timerList.Add(new TimerUtility(hours, minutes, statusType));
         }
 
-        public void Add(int hours, int minutes, int seconds)
+        public void Add(int hours, int minutes, int seconds, StatusType statusType)
         {
-            timerList.Add(new TimerUtility(hours, minutes, seconds));
+            timerList.Add(new TimerUtility(hours, minutes, seconds, statusType));
         }
 
         #endregion
@@ -121,46 +121,49 @@ namespace GDLibrary
 
                 foreach (TimerUtility timer in TimerList)
                 {
-                    int tempHrs = timer.Hours;
-                    int tempMins = timer.Minutes;
-                    int tempSecs = timer.Seconds;
-
-                    if (timer.Seconds > 0)
-                        timer.Seconds -= 1;
-                    else if (timer.Seconds == 0)
+                    if ((timer.StatusType & StatusType.Update) != 0)
                     {
-                        if (timer.Minutes > 0)
+                        int tempHrs = timer.Hours;
+                        int tempMins = timer.Minutes;
+                        int tempSecs = timer.Seconds;
+
+                        if (timer.Seconds > 0)
+                            timer.Seconds -= 1;
+                        else if (timer.Seconds == 0)
                         {
-                            timer.Minutes -= 1;
-                            timer.Seconds = 59;
-                        }
-                        else if (timer.Minutes == 0)
-                        {
-                            if (timer.Hours > 0)
+                            if (timer.Minutes > 0)
                             {
-                                timer.Hours -= 1;
-                                timer.Minutes = 59;
+                                timer.Minutes -= 1;
                                 timer.Seconds = 59;
                             }
-                            else if (timer.Hours == 0)
-                                throw new NotImplementedException("This should throw an event");
+                            else if (timer.Minutes == 0)
+                            {
+                                if (timer.Hours > 0)
+                                {
+                                    timer.Hours -= 1;
+                                    timer.Minutes = 59;
+                                    timer.Seconds = 59;
+                                }
+                                else if (timer.Hours == 0)
+                                    throw new NotImplementedException("This should throw an event");
+                                else
+                                    throw new Exception("Hour check has gone wrong");
+                            }
                             else
-                                throw new Exception("Hour check has gone wrong");
+                                throw new Exception("Minute check has gone wrong");
                         }
                         else
-                            throw new Exception("Minute check has gone wrong");
-                    }
-                    else
-                        throw new Exception("Second check has gone wrong");
+                            throw new Exception("Second check has gone wrong");
 
-                    if (timer.Hours == 0 && timer.Minutes == 0 && timer.Seconds == 0)
-                    {
-                        //TODO - Call lose event (will require enum check)
-                    }
+                        if (timer.Hours == 0 && timer.Minutes == 0 && timer.Seconds == 0)
+                        {
+                            //TODO - Call lose event (will require enum check)
+                        }
 
-                    System.Diagnostics.Debug.WriteLine("Old - " + tempHrs + ":" + tempMins + ":" + tempSecs +
-                                                       "\tNew - " + timer.Hours + ":" + timer.Minutes + ":" +
-                                                       timer.Seconds);
+                        System.Diagnostics.Debug.WriteLine("Old - " + tempHrs + ":" + tempMins + ":" + tempSecs +
+                                                           "\tNew - " + timer.Hours + ":" + timer.Minutes + ":" +
+                                                           timer.Seconds);
+                    }
                 }
             }
         }
