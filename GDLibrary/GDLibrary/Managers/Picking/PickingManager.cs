@@ -101,9 +101,9 @@ namespace GDLibrary
                 { 
                     //generate event to tell object manager and physics manager to remove the object
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.Interact, EventCategoryType.Interactive));
-                    Console.WriteLine("Interacting");
+                    //Console.WriteLine("Interacting");
                 }
-                Console.WriteLine("Hello");
+                //Console.WriteLine("Hello");
             }
         }
 
