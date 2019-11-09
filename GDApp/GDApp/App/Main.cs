@@ -256,7 +256,7 @@ namespace GDApp
             Components.Add(this.pickingManager);
             #endregion
 
-            this.timerManager = new TimerManager(10, this, eventDispatcher, StatusType.Update);
+            this.timerManager = new TimerManager(AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Update);
             Components.Add(timerManager);
         }
 
