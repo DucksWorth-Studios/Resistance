@@ -11,6 +11,7 @@ namespace GDLibrary
         #region Fields
 
         private List<TimerUtility> timerList;
+        private int lastGameSecond = 0;
 
         #endregion
 
@@ -115,46 +116,53 @@ namespace GDLibrary
 
         public override void Update(GameTime gameTime)
         {
-            foreach (TimerUtility timer in TimerList)
+            if (lastGameSecond < (int) gameTime.TotalGameTime.TotalSeconds)
             {
-                int tempHrs = timer.Hours;
-                int tempMins = timer.Minutes;
-                int tempSecs = timer.Seconds;
+                lastGameSecond = (int) gameTime.TotalGameTime.TotalSeconds;
 
-                if (timer.Seconds > 0)
-                    timer.Seconds -= 1;
-                else if (timer.Seconds == 0)
+                foreach (TimerUtility timer in TimerList)
                 {
-                    if (timer.Minutes > 0)
+                    int tempHrs = timer.Hours;
+                    int tempMins = timer.Minutes;
+                    int tempSecs = timer.Seconds;
+
+                    if (timer.Seconds > 0)
+                        timer.Seconds -= 1;
+                    else if (timer.Seconds == 0)
                     {
-                        timer.Minutes -= 1;
-                        timer.Seconds = 59;
-                    }
-                    else if (timer.Minutes == 0)
-                    {
-                        if (timer.Hours > 0)
+                        if (timer.Minutes > 0)
                         {
-                            timer.Hours -= 1;
-                            timer.Minutes = 59;
+                            timer.Minutes -= 1;
                             timer.Seconds = 59;
                         }
-                        else if (timer.Hours == 0)
-                            throw new NotImplementedException("This should throw an event");
+                        else if (timer.Minutes == 0)
+                        {
+                            if (timer.Hours > 0)
+                            {
+                                timer.Hours -= 1;
+                                timer.Minutes = 59;
+                                timer.Seconds = 59;
+                            }
+                            else if (timer.Hours == 0)
+                                throw new NotImplementedException("This should throw an event");
+                            else
+                                throw new Exception("Hour check has gone wrong");
+                        }
                         else
-                            throw new Exception("Hour check has gone wrong");
+                            throw new Exception("Minute check has gone wrong");
                     }
                     else
-                        throw new Exception("Minute check has gone wrong");
-                }
-                else
-                    throw new Exception("Second check has gone wrong");
+                        throw new Exception("Second check has gone wrong");
 
-                if (timer.Hours == 0 && timer.Minutes == 0 && timer.Seconds == 0)
-                {
-                    //TODO - Call lose event (will require enum check)
-                }
+                    if (timer.Hours == 0 && timer.Minutes == 0 && timer.Seconds == 0)
+                    {
+                        //TODO - Call lose event (will require enum check)
+                    }
 
-                System.Diagnostics.Debug.WriteLine("Old - " + tempHrs + ":" + tempMins + ":" + tempSecs + "\tNew - ");
+                    System.Diagnostics.Debug.WriteLine("Old - " + tempHrs + ":" + tempMins + ":" + tempSecs +
+                                                       "\tNew - " + timer.Hours + ":" + timer.Minutes + ":" +
+                                                       timer.Seconds);
+                }
             }
         }
 
