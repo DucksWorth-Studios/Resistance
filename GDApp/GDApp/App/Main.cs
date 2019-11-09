@@ -51,6 +51,7 @@ namespace GDApp
         public GamePadManager gamePadManager { get; private set; }
         public SoundManager soundManager { get; private set; }
         public PickingManager pickingManager { get; private set; }
+        public TimerManager timerManager { get; private set; }
         public LogicManager logicPuzzle;
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
@@ -332,6 +333,9 @@ namespace GDApp
                 PickingBehaviourType.InteractWithObject, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
             Components.Add(this.pickingManager);
             #endregion
+
+            this.timerManager = new TimerManager(AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Update);
+            Components.Add(timerManager);
         }
 
         private void LoadDictionaries()
@@ -1029,31 +1033,6 @@ namespace GDApp
             #endregion
 
         }
-        #endregion
-
-        #region Demo Timer
-
-        private int minutes = 10;
-        private double remainingSeconds = -1;
-        private void DemoTimer(GameTime gameTime)
-        {
-            if (this.remainingSeconds == -1)
-                this.remainingSeconds = minutes * 60;
-            else if (this.remainingSeconds > 0)
-                this.remainingSeconds = this.remainingSeconds - gameTime.ElapsedGameTime.TotalSeconds;
-
-            int mins = (int)this.remainingSeconds / 60;
-            int secs = (int)this.remainingSeconds % 60;
-
-            System.Diagnostics.Debug.WriteLine(mins + " : " + secs + " --- " + this.remainingSeconds);
-
-            if (this.remainingSeconds <= 0)
-            {
-                //TODO - Change this to lose state
-                Exit();
-            }
-        }
-
         #endregion
 
         #region Content, Update, Draw        
