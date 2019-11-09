@@ -155,14 +155,8 @@ namespace GDLibrary
                         else
                             throw new Exception("Second check has gone wrong");
 
-                        if (timer.Hours == 0 && timer.Minutes == 0 && timer.Seconds == 0)
-                        {
-                            //TODO - Call lose event (will require enum check)
-                        }
-
                         System.Diagnostics.Debug.WriteLine("Old - " + tempHrs + ":" + tempMins + ":" + tempSecs +
-                                                           "\tNew - " + timer.Hours + ":" + timer.Minutes + ":" +
-                                                           timer.Seconds);
+                                                           "\tNew - " + timer);
                     }
                 }
             }
