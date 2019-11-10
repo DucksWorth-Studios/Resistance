@@ -433,6 +433,7 @@ namespace GDApp
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");
+            this.fontDictionary.Load("Assets/Fonts/timerFont");
             #endregion
 
             #region Video
