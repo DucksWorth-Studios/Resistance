@@ -153,7 +153,7 @@ namespace GDApp
         {
             this.eventDispatcher.InteractChanged += Interactive;
             this.eventDispatcher.PuzzleChanged += ChangeLights;
-            this.eventDispatcher.LoseTriggered += EventDispatcher_LoseTriggered;
+            this.eventDispatcher.PlayerChanged += LoseTriggered;
         }
         /*
          * Author: Tomas
@@ -198,9 +198,9 @@ namespace GDApp
          * Author: Cameron
          * This will be used to trigger different UI effects when the timer runs out
          */
-        private void EventDispatcher_LoseTriggered(EventData eventData)
+        private void LoseTriggered(EventData eventData)
         {
-            throw new NotImplementedException();
+            System.Diagnostics.Debug.WriteLine("Lose event triggered");
         }
 
         #endregion
