@@ -65,19 +65,19 @@ namespace GDLibrary
             timerList.Add(timer);
         }
 
-        public void Add(int minutes, StatusType statusType)
+        public void Add(string id, int minutes, StatusType statusType)
         {
-            timerList.Add(new TimerUtility(minutes, statusType));
+            timerList.Add(new TimerUtility(id, minutes, statusType));
         }
 
-        public void Add(int hours, int minutes, StatusType statusType)
+        public void Add(string id, int hours, int minutes, StatusType statusType)
         {
-            timerList.Add(new TimerUtility(hours, minutes, statusType));
+            timerList.Add(new TimerUtility(id, hours, minutes, statusType));
         }
 
-        public void Add(int hours, int minutes, int seconds, StatusType statusType)
+        public void Add(string id, int hours, int minutes, int seconds, StatusType statusType)
         {
-            timerList.Add(new TimerUtility(hours, minutes, seconds, statusType));
+            timerList.Add(new TimerUtility(id, hours, minutes, seconds, statusType));
         }
 
         #endregion
