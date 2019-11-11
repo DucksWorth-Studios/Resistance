@@ -66,6 +66,17 @@ namespace GDLibrary
             return this.newState.IsKeyDown(key);
         }
 
+        public bool IsKeyUp(Keys key)
+        {
+            return this.newState.IsKeyUp(key);
+        }
+
+        public bool IsKeyPushed(Keys key)
+        {
+            return this.newState.IsKeyUp(key) && this.oldState.IsKeyDown(key);
+        }
+
+
         //is a key pressed now that was not pressed in the last update?
         public bool IsFirstKeyPress(Keys key)
         {

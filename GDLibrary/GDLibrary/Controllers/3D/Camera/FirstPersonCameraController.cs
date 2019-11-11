@@ -69,8 +69,11 @@ namespace GDLibrary
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
 
-            if (ManagerParameters.KeyboardManager.IsKeyDown(Keys.Escape))
-            { EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock)); }
+            if (ManagerParameters.KeyboardManager.IsKeyPushed(Keys.Escape))
+            { 
+                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                
+            }
 
 
             if (!Paused)
