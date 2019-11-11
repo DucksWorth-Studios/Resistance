@@ -303,6 +303,7 @@ namespace GDApp
             //props
             this.modelDictionary.Load("Assets/Models/Props/War_map_table", "table");
             this.modelDictionary.Load("Assets/Models/Props/Ceiling_Lamp", "Ceiling_lights");
+            this.modelDictionary.Load("Assets/Models/Props/AmmoBox");
             #endregion
 
             #region Textures
@@ -476,6 +477,7 @@ namespace GDApp
             //init props
             InitializeWarTable();
             InitializeCeilingLights();
+            InitializeAmmoBoxes();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -762,6 +764,32 @@ namespace GDApp
 
             this.objectManager.Add(cloneModel);
             #endregion
+        }
+
+        private void InitializeAmmoBoxes()
+        {
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject = null, cloneCollidable;
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+
+            collidableObject = new CollidableObject("Ammo box - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
+                this.modelDictionary["AmmoBox"]);
+
+            for (int i = 0; i < 3; i++)
+            {
+                cloneCollidable = (CollidableObject)collidableObject.Clone();
+
+                cloneCollidable.ID += i;
+                cloneCollidable.Transform = new Transform3D(new Vector3(-70, 0, -30 + (i * 10)), new Vector3(0, 0, 0), new Vector3(0.05f, 0.05f, 0.05f),
+                    Vector3.UnitX, Vector3.UnitY);
+
+                cloneCollidable.AddPrimitive(new Box(cloneCollidable.Transform.Translation, Matrix.Identity, new Vector3(3,5,6)), 
+                    new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+                cloneCollidable.Enable(true, 1);
+                this.objectManager.Add(cloneCollidable);
+            }
         }
 
         #endregion
