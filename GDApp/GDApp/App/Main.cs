@@ -305,6 +305,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/Ceiling_Lamp", "Ceiling_lights");
             this.modelDictionary.Load("Assets/Models/Props/AmmoBox");
             this.modelDictionary.Load("Assets/Models/Props/FieldCot");
+            this.modelDictionary.Load("Assets/Models/Props/Field_Desk");
             #endregion
 
             #region Textures
@@ -480,6 +481,7 @@ namespace GDApp
             InitializeCeilingLights();
             InitializeAmmoBoxes();
             InitializeFieldCot();
+            InitializeFieldDesk();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -741,7 +743,7 @@ namespace GDApp
             transform3D = new Transform3D(new Vector3(-80, 0, -30), new Vector3(0, 0, 0), new Vector3(2.0f, 1.0f, 3.0f), Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
 
-            collidableObject = new TriangleMeshObject("warTable", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["table"],
+            collidableObject = new TriangleMeshObject("warTable", ActorType.CollidableDecorator, transform3D, effectParameters, this.modelDictionary["table"],
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
@@ -811,6 +813,21 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
         }
 
+        private void InitializeFieldDesk()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-100.0f, -2.0f, -131.0f), new Vector3(0, 90, 0), new Vector3(3.0f, 2.5f, 3.5f),
+               Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+
+            collidableObject = new TriangleMeshObject("field desk", ActorType.CollidableDecorator, transform3D, effectParameters,
+                this.modelDictionary["Field_Desk"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
         #endregion
 
         #region Initialize Cameras
