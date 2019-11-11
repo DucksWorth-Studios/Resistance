@@ -302,6 +302,7 @@ namespace GDApp
 
             //props
             this.modelDictionary.Load("Assets/Models/Props/War_map_table", "table");
+            this.modelDictionary.Load("Assets/Models/Props/Ceiling_Lamp", "Ceiling_lights");
             #endregion
 
             #region Textures
@@ -474,7 +475,7 @@ namespace GDApp
 
             //init props
             InitializeWarTable();
-
+            InitializeCeilingLights();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -740,6 +741,27 @@ namespace GDApp
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeCeilingLights()
+        {
+            BasicEffectParameters effectParameters;
+            ModelObject modelObject = null, cloneModel = null;
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+
+            modelObject = new ModelObject("Ceiling light - ", ActorType.Decorator, Transform3D.Zero, effectParameters,
+                this.modelDictionary["Ceiling_lights"]);
+
+            #region first ceiling light
+            cloneModel = (ModelObject)modelObject.Clone();
+            cloneModel.ID += 1;
+
+            cloneModel.Transform = new Transform3D(new Vector3(0, 20, 0), new Vector3(0, 0, 0), new Vector3(2.0f, 2.0f, 2.0f), 
+                Vector3.UnitX, Vector3.UnitY);
+
+            this.objectManager.Add(cloneModel);
+            #endregion
         }
 
         #endregion
