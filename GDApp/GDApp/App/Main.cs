@@ -299,6 +299,9 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_00", "barrier");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_00", "bunker_door");
+
+            //props
+            this.modelDictionary.Load("Assets/Models/Props/War_map_table", "table");
             #endregion
 
             #region Textures
@@ -468,6 +471,9 @@ namespace GDApp
             //InitializeBuildings();
             InitializeExitDoor();
             InitializeDoorBarriers();
+
+            //init props
+            InitializeWarTable();
 
 
             ////add primitive objects - where developer defines the vertices manually
@@ -695,7 +701,7 @@ namespace GDApp
             collidableObject = new CollidableObject("barrier - ", ActorType.CollidableArchitecture, Transform3D.Zero, 
                 effectParameters, this.modelDictionary["barrier"]);
 
-            //first barrier
+            #region first barrier
             cloneCollider = (CollidableObject)collidableObject.Clone();
             cloneCollider.ID += 1;
 
@@ -705,7 +711,9 @@ namespace GDApp
 
             cloneCollider.Enable(true, 1);
             this.objectManager.Add(cloneCollider);
+            #endregion
 
+            #region second region
             //second barrier
             cloneCollider = (CollidableObject)collidableObject.Clone();
             cloneCollider.ID += 2;
@@ -716,6 +724,22 @@ namespace GDApp
 
             cloneCollider.Enable(true, 1);
             this.objectManager.Add(cloneCollider);
+            #endregion
+        }
+
+        private void InitializeWarTable()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-80, 0, -30), new Vector3(0, 0, 0), new Vector3(2.0f, 1.0f, 3.0f), Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+
+            collidableObject = new TriangleMeshObject("warTable", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["table"],
+                new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
         }
 
         #endregion
