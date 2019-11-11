@@ -23,25 +23,25 @@ namespace GDLibrary
             this.timerList.Add(timer);
         }
 
-        public TimerManager(int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
+        public TimerManager(string id, int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
             base(game, eventDispatcher, statusType)
         {
             this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(new TimerUtility(minutes, statusType));
+            this.timerList.Add(new TimerUtility(id, minutes, statusType));
         }
 
-        public TimerManager(int hours, int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
+        public TimerManager(string id, int hours, int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
             base(game, eventDispatcher, statusType)
         {
             this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(new TimerUtility(hours, minutes, statusType));
+            this.timerList.Add(new TimerUtility(id, hours, minutes, statusType));
         }
 
-        public TimerManager(int hours, int minutes, int seconds, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
+        public TimerManager(string id, int hours, int minutes, int seconds, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
             base(game, eventDispatcher, statusType)
         {
             this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(new TimerUtility(hours, minutes, seconds, statusType));
+            this.timerList.Add(new TimerUtility(id, hours, minutes, seconds, statusType));
         }
 
         #endregion
