@@ -33,6 +33,5 @@ namespace GDLibrary
         Interactive,
         LogicPuzzle,
         //all other categories of sender...
-        Lose
     }
 }

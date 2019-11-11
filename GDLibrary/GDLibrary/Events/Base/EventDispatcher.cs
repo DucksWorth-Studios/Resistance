@@ -38,7 +38,6 @@ namespace GDLibrary
         public delegate void DebugEventHandler(EventData eventData);
         public delegate void InteractHandler(EventData eventData);
         public delegate void PuzzleHandler(EventData eventData);
-        public delegate void LoseHandler(EventData eventData);
         
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
@@ -57,7 +56,6 @@ namespace GDLibrary
         public event DebugEventHandler DebugChanged;
         public event InteractHandler InteractChanged;
         public event PuzzleHandler PuzzleChanged;
-        public event LoseHandler LoseTriggered;
 
         public EventDispatcher(Game game, int initialSize)
             : base(game)
@@ -159,9 +157,6 @@ namespace GDLibrary
                     break;
                 case EventCategoryType.LogicPuzzle:
                     OnPuzzleStateChange(eventData);
-                    break;
-                case EventCategoryType.Lose:
-                    OnLoseTriggered(eventData);
                     break;
                 default:
                     break;
@@ -268,11 +263,6 @@ namespace GDLibrary
         protected virtual void OnPuzzleStateChange(EventData eventData)
         {
             PuzzleChanged?.Invoke(eventData);
-        }
-
-        protected virtual void OnLoseTriggered(EventData eventData)
-        {
-            LoseTriggered?.Invoke(eventData);
         }
     }
 }
