@@ -18,6 +18,7 @@ namespace GDLibrary
         #region Fields
         private Model model;
         private Matrix[] boneTransforms;
+        private float boundingSphereMultiplier = 1.1f;
         #endregion
 
         #region Properties
@@ -43,12 +44,24 @@ namespace GDLibrary
                 this.boneTransforms = value;
             }
         }
+
+        public float BoundingSphereMultiplier
+        {
+            get => boundingSphereMultiplier;
+            set
+            {
+                if (value > 0)
+                    boundingSphereMultiplier = value;
+            }
+        }
+
         public BoundingSphere BoundingSphere
         {
             get
             {
                 //bug fix for disappearing skybox plane - scale the bounding sphere up by 10%
-                return this.model.Meshes[model.Root.Index].BoundingSphere.Transform(Matrix.CreateScale(8) * this.GetWorldMatrix());
+                return this.model.Meshes[model.Root.Index].BoundingSphere.Transform(Matrix.CreateScale(boundingSphereMultiplier) 
+                                                                                    * this.GetWorldMatrix());
             }
         }
         #endregion
@@ -67,6 +80,32 @@ namespace GDLibrary
             : base(id, actorType, transform, effectParameters, statusType)
         {
             this.model = model;
+
+            /* 3DS Max models contain meshes (e.g. a table might have 5 meshes i.e. a top and 4 legs) and each mesh contains a bone.
+            *  A bone holds the transform that says "move this mesh to this position". Without 5 bones in a table all the meshes would collapse down to be centred on the origin.
+            *  Our table, wouldnt look very much like a table!
+            *  
+            *  Take a look at the ObjectManager::DrawObject(GameTime gameTime, ModelObject modelObject) method and see if you can figure out what the line below is doing:
+            *  
+            *  effect.World = modelObject.BoneTransforms[mesh.ParentBone.Index] * modelObject.GetWorldMatrix();
+            */
+            InitializeBoneTransforms();
+        }
+
+        //default draw and update settings for statusType
+        public ModelObject(string id, ActorType actorType,
+            Transform3D transform, EffectParameters effectParameters, Model model, float boundingSphereMultiplier)
+            : this(id, actorType, transform, effectParameters, model, StatusType.Update | StatusType.Drawn)
+        {
+            this.boundingSphereMultiplier = boundingSphereMultiplier;
+        }
+
+        public ModelObject(string id, ActorType actorType,
+            Transform3D transform, EffectParameters effectParameters, Model model, StatusType statusType, float boundingSphereMultiplier)
+            : base(id, actorType, transform, effectParameters, statusType)
+        {
+            this.model = model;
+            this.boundingSphereMultiplier = boundingSphereMultiplier;
 
             /* 3DS Max models contain meshes (e.g. a table might have 5 meshes i.e. a top and 4 legs) and each mesh contains a bone.
             *  A bone holds the transform that says "move this mesh to this position". Without 5 bones in a table all the meshes would collapse down to be centred on the origin.
