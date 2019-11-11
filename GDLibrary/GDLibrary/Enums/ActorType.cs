@@ -39,6 +39,7 @@ namespace GDLibrary
         CollidableDoor,
         CollidableAmmo,
         Primitive,
-        Light
+        Light,
+        PopUP
     }
 }

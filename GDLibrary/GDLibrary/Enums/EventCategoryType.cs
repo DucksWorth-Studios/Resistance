@@ -31,7 +31,8 @@ namespace GDLibrary
         Video,
         GlobalSound,
         Interactive,
-        LogicPuzzle
+        LogicPuzzle,
+        Riddle
         //all other categories of sender...
     }
 }
