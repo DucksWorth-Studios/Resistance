@@ -97,7 +97,7 @@ namespace GDApp
             int numberOfGamePadPlayers = 1;
 
             //set the title
-            Window.Title = "3DGD - My Amazing Game 1.0";
+            Window.Title = "Resistance";
 
             //EventDispatcher
             InitializeEventDispatcher();
