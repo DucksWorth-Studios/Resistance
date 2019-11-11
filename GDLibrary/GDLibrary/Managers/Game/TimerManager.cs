@@ -113,6 +113,21 @@ namespace GDLibrary
 
         #endregion
 
+        #region Event Handeling
+
+        protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.LoseTriggered += EventDispatcher_LoseTriggered;
+        }
+
+        private void EventDispatcher_LoseTriggered(EventData eventData)
+        {
+            //TODO - Write code for losing the game
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         public override void Update(GameTime gameTime)
         {
             if (lastGameSecond < (int) gameTime.TotalGameTime.TotalSeconds)
@@ -145,7 +160,14 @@ namespace GDLibrary
                                     timer.Seconds = 59;
                                 }
                                 else if (timer.Hours == 0)
-                                    throw new NotImplementedException("This should throw an event");
+                                {
+                                    if (timer.ID.Equals("Lose Timer"))
+                                    {
+                                        throw new NotImplementedException("This should throw an event");
+                                    }
+                                    else
+                                        throw new NotImplementedException("Event doesn't exist for this timer");
+                                }
                                 else
                                     throw new Exception("Hour check has gone wrong");
                             }
