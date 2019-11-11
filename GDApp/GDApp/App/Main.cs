@@ -616,12 +616,12 @@ namespace GDApp
             this.objectManager.Add(clonePlane);
 
             //top of door way
-            //clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            //clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
-            //clonePlane.Transform.Scale = new Vector3(worldScale / 4, 1, worldScale / 4);
-            //clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
-            //clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.7f, worldScale / 1.05f, (2.54f * worldScale) / 2f);
-            //this.objectManager.Add(clonePlane);
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
+            clonePlane.Transform.Scale = new Vector3(worldScale / 11.7f, 1, worldScale / 33);
+            clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.7f, worldScale / 3.55f, (2.54f * worldScale) / 2f);
+            this.objectManager.Add(clonePlane);
             #endregion
             #endregion
         }
@@ -680,7 +680,7 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-94, 16, 127), new Vector3(-90, 0, 0), new Vector3(0.11f, 0.1f, 0.09f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-94, 12, 127), new Vector3(-90, 0, 0), new Vector3(0.11f, 0.01f, 0.07f), Vector3.UnitX, Vector3.UnitY);
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
