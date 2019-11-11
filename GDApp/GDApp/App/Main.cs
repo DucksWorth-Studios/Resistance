@@ -206,9 +206,17 @@ namespace GDApp
         #region TestObjects
         private void InitialisePopUP()
         {
+            int w,x,y,z;
+            int temp = graphics.PreferredBackBufferWidth / 4;
+            x = graphics.PreferredBackBufferWidth / 6;
+            y = graphics.PreferredBackBufferHeight / 6;
+            w = graphics.PreferredBackBufferWidth - (x*2);
+            z = graphics.PreferredBackBufferHeight - (y * 2);
+            Transform2D transform = new Transform2D(new Vector2(x,y), 0, Vector2.One,Vector2.One,new Integer2(1,1));
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(x,y,w,z);
             Texture2D texture = this.textureDictionary["green"];
-            UITextureObject picture = new UITextureObject("PopUp",ActorType.PopUP,StatusType.Drawn,Transform2D.One,Color.White,
-                SpriteEffects.None,1,texture);
+            UITextureObject picture = new UITextureObject("PopUp",ActorType.PopUP,StatusType.Drawn,transform,Color.White,
+                SpriteEffects.None,1,texture,rect, new Vector2(1,2));
 
             this.uiManager.Add(picture);
         }
