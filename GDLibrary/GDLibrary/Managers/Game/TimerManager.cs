@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +21,9 @@ namespace GDLibrary
         {
             this.timerList = new List<TimerUtility>(0);
             this.timerList.Add(timer);
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
         }
 
         public TimerManager(string id, int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
@@ -28,6 +31,9 @@ namespace GDLibrary
         {
             this.timerList = new List<TimerUtility>(0);
             this.timerList.Add(new TimerUtility(id, minutes, statusType));
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
         }
 
         public TimerManager(string id, int hours, int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
@@ -35,6 +41,9 @@ namespace GDLibrary
         {
             this.timerList = new List<TimerUtility>(0);
             this.timerList.Add(new TimerUtility(id, hours, minutes, statusType));
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
         }
 
         public TimerManager(string id, int hours, int minutes, int seconds, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
@@ -42,6 +51,9 @@ namespace GDLibrary
         {
             this.timerList = new List<TimerUtility>(0);
             this.timerList.Add(new TimerUtility(id, hours, minutes, seconds, statusType));
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
         }
 
         #endregion
