@@ -304,6 +304,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/War_map_table", "table");
             this.modelDictionary.Load("Assets/Models/Props/Ceiling_Lamp", "Ceiling_lights");
             this.modelDictionary.Load("Assets/Models/Props/AmmoBox");
+            this.modelDictionary.Load("Assets/Models/Props/FieldCot");
             #endregion
 
             #region Textures
@@ -478,6 +479,7 @@ namespace GDApp
             InitializeWarTable();
             InitializeCeilingLights();
             InitializeAmmoBoxes();
+            InitializeFieldCot();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -776,6 +778,7 @@ namespace GDApp
             collidableObject = new CollidableObject("Ammo box - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
                 this.modelDictionary["AmmoBox"]);
 
+
             for (int i = 0; i < 3; i++)
             {
                 cloneCollidable = (CollidableObject)collidableObject.Clone();
@@ -790,6 +793,22 @@ namespace GDApp
                 cloneCollidable.Enable(true, 1);
                 this.objectManager.Add(cloneCollidable);
             }
+        }
+
+        private void InitializeFieldCot()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-120.0f, 3.5f, -90.0f), new Vector3(0, 0, 0), new Vector3(0.03f, 0.03f, 0.05f),
+                Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+
+            collidableObject = new TriangleMeshObject("field cot", ActorType.CollidableDecorator, transform3D, effectParameters,
+                this.modelDictionary["FieldCot"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
         }
 
         #endregion
