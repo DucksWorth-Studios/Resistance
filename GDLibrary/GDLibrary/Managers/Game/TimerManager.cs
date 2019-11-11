@@ -191,7 +191,7 @@ namespace GDLibrary
                                 {
                                     if (timer.ID.Equals("Lose Timer"))
                                     {
-                                        throw new NotImplementedException("This should throw an event");
+                                        EventDispatcher.Publish(new EventData("Unused ID", this, EventActionType.OnLose, EventCategoryType.Player));
                                     }
                                     else
                                         throw new NotImplementedException("Event doesn't exist for this timer");
