@@ -136,10 +136,11 @@ namespace GDApp
 #endif
 
             InitializeEvents();
-            //initialiseTestObject();
+            initialiseTestObject();
             InitializeSwitches();
             InitialisePuzzleLights();
-            //InitializeDynamicCollidableObjects();
+            InitialisePopUP();
+            
             base.Initialize();
         }
 
@@ -153,6 +154,7 @@ namespace GDApp
         {
             this.eventDispatcher.InteractChanged += Interactive;
             this.eventDispatcher.PuzzleChanged += ChangeLights;
+            this.eventDispatcher.RiddleChanged += ChangePopUPState;
         }
         /*
          * Author: Tomas
@@ -192,17 +194,31 @@ namespace GDApp
             }
             
         }
+        private void ChangePopUPState(EventData eventData)
+        {
+            Predicate<Actor2D> pred = s => s.ActorType == ActorType.PopUP;
+            UITextureObject item = this.uiManager.Find(pred) as UITextureObject;
 
+            item.StatusType = StatusType.Off;
+
+        }
         #endregion
         #region TestObjects
-        
+        private void InitialisePopUP()
+        {
+            Texture2D texture = this.textureDictionary["green"];
+            UITextureObject picture = new UITextureObject("PopUp",ActorType.PopUP,StatusType.Drawn,Transform2D.One,Color.White,
+                SpriteEffects.None,1,texture);
+
+            this.uiManager.Add(picture);
+        }
         private void initialiseTestObject()
         {
             Model model = this.modelDictionary["box2"];
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["gray"];
-            Transform3D transform = new Transform3D(new Vector3(0, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
-            CollidableObject collidableObject = new CollidableObject("HEY",ActorType.Interactable,transform,effectParameters,model);
+            Transform3D transform = new Transform3D(new Vector3(-20, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+            CollidableObject collidableObject = new CollidableObject("HEY",ActorType.PopUP,transform,effectParameters,model);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             collidableObject.Enable(true, 1);
