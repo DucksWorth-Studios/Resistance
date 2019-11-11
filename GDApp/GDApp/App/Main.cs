@@ -312,11 +312,7 @@ namespace GDApp
             //environment
             this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
             this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
-            this.textureDictionary.Load("Assets/Textures/Skybox/back");
-            this.textureDictionary.Load("Assets/Textures/Skybox/left");
-            this.textureDictionary.Load("Assets/Textures/Skybox/right");
-            this.textureDictionary.Load("Assets/Textures/Skybox/sky");
-            this.textureDictionary.Load("Assets/Textures/Skybox/front");
+            this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall-texture", "wall");
 
             //menu - buttons
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
@@ -539,7 +535,7 @@ namespace GDApp
             #region Back wall
             //add the back skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.EffectParameters.Texture = this.textureDictionary["back"];
+            clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             //scale the length of the plane to be half of the worldscale
             clonePlane.Transform.Scale = new Vector3(worldScale / 2.0f, 1, worldScale / 4);
             //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
@@ -556,7 +552,7 @@ namespace GDApp
             #region Left wall
             //longest wall of the L shape level
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.EffectParameters.Texture = this.textureDictionary["left"];
+            clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Rotation = new Vector3(90, 90, 0);
             clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f, 0, 0);
             this.objectManager.Add(clonePlane);
@@ -565,7 +561,7 @@ namespace GDApp
             #region short right wall
             //add the right skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.EffectParameters.Texture = this.textureDictionary["right"];
+            clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(worldScale/ 4, 1, worldScale / 4);
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
             clonePlane.Transform.Translation = new Vector3(worldScale / 128.0f, 0, (-2.54f * worldScale) / 2.67f);
@@ -574,7 +570,7 @@ namespace GDApp
 
             #region long right wall
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.EffectParameters.Texture = this.textureDictionary["right"];
+            clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 4);
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
             clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4.0f, 0, (2.54f * worldScale) / 8.0f);
@@ -583,7 +579,7 @@ namespace GDApp
 
             #region 2nd room short wall
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(worldScale / 4, 1, worldScale / 4);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
             clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 8.0f, 0, (-2.54f * worldScale) / 4.0f);
@@ -605,7 +601,7 @@ namespace GDApp
             //left side of door
             float xScale = 0.833f * worldScale / 10.0f;
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 4);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
             clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.2f, 0, (2.54f * worldScale) / 2f);
@@ -613,7 +609,7 @@ namespace GDApp
 
             //right side of door
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            clonePlane.EffectParameters.Texture = this.textureDictionary["front"];
+            clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 4);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
             clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.5f, 0, (2.54f * worldScale) / 2f);
