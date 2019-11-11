@@ -153,6 +153,7 @@ namespace GDApp
         {
             this.eventDispatcher.InteractChanged += Interactive;
             this.eventDispatcher.PuzzleChanged += ChangeLights;
+            this.eventDispatcher.LoseTriggered += EventDispatcher_LoseTriggered;
         }
         /*
          * Author: Tomas
@@ -193,9 +194,18 @@ namespace GDApp
             
         }
 
+        /*
+         * Author: Cameron
+         * This will be used to trigger different UI effects when the timer runs out
+         */
+        private void EventDispatcher_LoseTriggered(EventData eventData)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
         #region TestObjects
-        
+
         private void initialiseTestObject()
         {
             Model model = this.modelDictionary["box2"];

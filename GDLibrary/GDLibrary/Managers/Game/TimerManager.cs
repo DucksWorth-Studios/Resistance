@@ -129,15 +129,8 @@ namespace GDLibrary
 
         protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
-            eventDispatcher.LoseTriggered += EventDispatcher_LoseTriggered;
             eventDispatcher.ScreenChanged += EventDispatcher_MenuChanged;
             base.RegisterForEventHandling(eventDispatcher);
-        }
-
-        private void EventDispatcher_LoseTriggered(EventData eventData)
-        {
-            //TODO - Write code for losing the game
-            throw new NotImplementedException();
         }
 
         protected override void EventDispatcher_MenuChanged(EventData eventData)
