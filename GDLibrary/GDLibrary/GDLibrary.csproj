@@ -84,6 +84,7 @@
     <Compile Include="Actors\Drawn\2D\UI\UIObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UITextObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UITextureObject.cs" />
+    <Compile Include="Actors\Drawn\2D\UI\UITimer.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\CollidableObject.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\Pickup\ImmovablePickupObject.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\Pickup\MoveablePickupObject.cs" />
