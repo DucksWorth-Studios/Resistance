@@ -20,7 +20,9 @@ namespace GDLibrary
         //local vars
         private Vector3 translation;
         Vector2 mousePosition = Vector2.Zero;
+        Vector2 OldmousePosition = Vector2.Zero;
         Vector2 mouseDelta = Vector2.Zero;
+        Vector2 mouseDeltaTemp = Vector2.One;
 
 
         #endregion
@@ -46,27 +48,24 @@ namespace GDLibrary
 
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
+           
+                mousePosition = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
+                mouseDelta = mouseDelta + mousePosition * gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed;
 
-            mousePosition = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
-            mousePosition *= gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed;
-            System.Diagnostics.Debug.Write("Delta" + mousePosition);
+                if (OldmousePosition == mousePosition && OldmousePosition != Vector2.Zero)
+                {
+                    mouseDelta = mouseDeltaTemp;
 
+                    parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
+                    this.ManagerParameters.MouseManager.SetPosition(new Vector2(this.ManagerParameters.ScreenManager.ScreenResolution.X / 2, this.ManagerParameters.ScreenManager.ScreenResolution.Y / 2));
+                }
 
-            if(mousePosition.X != 0 && mousePosition.Y != 0)
-            {
-                mouseDelta = mouseDelta + mousePosition;
+                parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
+                OldmousePosition = mousePosition;
 
+                if (mousePosition != Vector2.Zero) { mouseDeltaTemp = mouseDelta; }
 
-                //only rotate if something has changed with the mouse
-
-                parentActor.Transform.RotateBy(new Vector3(mouseDelta.X,mouseDelta.Y, 0));
-                
-
-            }
             
-
-
-
         } 
 
 

@@ -892,7 +892,7 @@ namespace GDApp
             //show complete texture
             Microsoft.Xna.Framework.Rectangle sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height);
 
-            Transform2D transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2), 0, Vector2.One, Vector2.Zero, new Integer2(texture.Width, texture.Height));
+            Transform2D transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth / 2 - texture.Width/2, graphics.PreferredBackBufferHeight / 2 - texture.Height/2), 0, Vector2.One, Vector2.Zero, new Integer2(texture.Width, texture.Height));
             UITextureObject crosshair = new UITextureObject("crosshair", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White, SpriteEffects.None, 0, texture);
 
             uiManager.Add(crosshair);
