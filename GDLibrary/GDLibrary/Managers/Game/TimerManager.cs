@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -130,6 +130,8 @@ namespace GDLibrary
         protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
             eventDispatcher.LoseTriggered += EventDispatcher_LoseTriggered;
+            eventDispatcher.ScreenChanged += EventDispatcher_MenuChanged;
+            base.RegisterForEventHandling(eventDispatcher);
         }
 
         private void EventDispatcher_LoseTriggered(EventData eventData)
@@ -138,6 +140,27 @@ namespace GDLibrary
             throw new NotImplementedException();
         }
 
+        protected override void EventDispatcher_MenuChanged(EventData eventData)
+        {
+            //did the event come from the main menu and is it a start game event
+            if (eventData.EventType == EventActionType.OnStart)
+            {
+                //turn on update for all timers
+                foreach (TimerUtility timer in timerList)
+                {
+                    timer.StatusType = StatusType.Update;
+                }
+            }
+            //did the event come from the main menu and is it a start game event
+            else if (eventData.EventType == EventActionType.OnPause)
+            {
+                //turn off update for all timers
+                foreach (TimerUtility timer in timerList)
+                {
+                    timer.StatusType = StatusType.Off;
+                }
+            }
+        }
         #endregion
 
         public override void Update(GameTime gameTime)
