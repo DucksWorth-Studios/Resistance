@@ -95,11 +95,11 @@ namespace GDLibrary
 
         //uses the default PlayerObject as the collidable object for the camera
         public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
-           ManagerParameters managerParameters,
+           ManagerParameters managerParameters, EventDispatcher eventDispatcher,
            IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
            float mass, float jumpHeight, Vector3 translationOffset)
            : this(id, controllerType,moveKeys, moveSpeed, strafeSpeed, rotationSpeed,
-            managerParameters,
+            managerParameters, eventDispatcher,
             parentActor, radius, height, accelerationRate, decelerationRate,
             mass, jumpHeight, translationOffset, null)
         {
@@ -107,10 +107,10 @@ namespace GDLibrary
 
         //allows developer to specify the type of collidable object to be used as basis for the camera
         public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
-            ManagerParameters managerParameters,
+            ManagerParameters managerParameters,EventDispatcher eventDispatcher,
             IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
             float mass, float jumpHeight, Vector3 translationOffset, PlayerObject collidableObject)
-            : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, managerParameters)
+            : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, managerParameters,eventDispatcher)
         {
             this.Radius = radius;
             this.height = height;

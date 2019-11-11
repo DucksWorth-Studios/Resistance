@@ -92,7 +92,7 @@ namespace GDApp
 
             int gameLevel = 1;
             bool isMouseVisible = true;
-            Integer2 screenResolution = ScreenUtility.HD1080;
+            Integer2 screenResolution = ScreenUtility.HD720;
             ScreenUtility.ScreenType screenType = ScreenUtility.ScreenType.SingleScreen;
             int numberOfGamePadPlayers = 1;
 
@@ -696,6 +696,7 @@ namespace GDApp
                     AppData.CameraMoveKeys,
                     AppData.CollidableCameraMoveSpeed, AppData.CollidableCameraStrafeSpeed, AppData.CameraRotationSpeed,
                     this.managerParameters,
+                    eventDispatcher,
                     camera, //parent
                     AppData.CollidableCameraCapsuleRadius,
                     AppData.CollidableCameraViewHeight,
@@ -723,6 +724,8 @@ namespace GDApp
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
             EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
+            
+            
 
             //publish an event to set the camera
             object[] additionalEventParamsB = { "collidable first person camera 1" };
@@ -731,7 +734,7 @@ namespace GDApp
             //this.cameraManager.SetActiveCamera(x => x.ID.Equals("collidable first person camera 1"));
         }
         #endregion
-
+        
         #region Menu & UI
         private void AddMenuElements()
         {
@@ -1015,8 +1018,7 @@ namespace GDApp
         {
             //exit using new gamepad manager
             if (this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
-                this.Exit();
-
+                this.Exit();      
             base.Update(gameTime);
         }
 

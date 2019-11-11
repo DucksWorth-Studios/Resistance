@@ -37,7 +37,8 @@ namespace GDLibrary
         public delegate void VideoEventHandler(EventData eventData);
         public delegate void DebugEventHandler(EventData eventData);
         public delegate void InteractHandler(EventData eventData);
-        
+        public delegate void mouseLockingHandler(EventData eventData);
+
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
         public event MenuEventHandler MenuChanged;
@@ -54,6 +55,7 @@ namespace GDLibrary
         public event VideoEventHandler VideoChanged;
         public event DebugEventHandler DebugChanged;
         public event InteractHandler InteractChanged;
+        public event mouseLockingHandler lockChanged;
         
 
 
@@ -155,11 +157,20 @@ namespace GDLibrary
                 case EventCategoryType.Interactive:
                     OnInteract(eventData);
                     break;
+                case EventCategoryType.mouseLock:
+                    onMouseLock(eventData);
+                    break;
+
                 default:
                     break;
             }
         }
 
+
+        protected virtual void onMouseLock(EventData eventData)
+        {
+            lockChanged?.Invoke(eventData);
+        }
 
         //called when a menu change is requested
         protected virtual void OnMenu(EventData eventData)

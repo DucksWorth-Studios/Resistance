@@ -24,16 +24,36 @@ namespace GDLibrary
         Vector2 mouseDelta = Vector2.Zero;
         Vector2 mouseDeltaTemp = Vector2.One;
 
+        bool Paused = true;
+
 
         #endregion
 
         #region Properties
         #endregion
 
-        public FirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed, ManagerParameters managerParameters)
+        public FirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed, ManagerParameters managerParameters,EventDispatcher eventDispatcher)
             : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, managerParameters)
         {
+            
+            RegisterForEventHandling(eventDispatcher);
+        }
 
+
+        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.lockChanged += Mouselockbool;
+        }
+
+        public void  Mouselockbool(EventData eventData)
+        {
+
+            System.Diagnostics.Debug.Write("IS Being Called");
+
+            if (!Paused) { Paused = true; }
+            else { Paused = false; }
+  
+           
         }
 
         public override void HandleGamePadInput(GameTime gameTime, Actor3D parentActor)
@@ -48,7 +68,14 @@ namespace GDLibrary
 
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
-           
+
+            if (ManagerParameters.KeyboardManager.IsKeyDown(Keys.Escape))
+            { EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock)); }
+
+
+            if (!Paused)
+            {
+
                 mousePosition = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
                 mouseDelta = mouseDelta + mousePosition * gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed;
 
@@ -65,7 +92,7 @@ namespace GDLibrary
 
                 if (mousePosition != Vector2.Zero) { mouseDeltaTemp = mouseDelta; }
 
-            
+            }
         } 
 
 
