@@ -25,6 +25,8 @@ namespace GDLibrary
         Vector2 mouseDeltaTemp = Vector2.One;
 
         bool Paused = true;
+        protected bool inPopUp = false;
+
 
 
         #endregion
@@ -43,6 +45,13 @@ namespace GDLibrary
         protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
             eventDispatcher.lockChanged += Mouselockbool;
+            eventDispatcher.RiddleChanged += MovementBlock;
+            //eventDispatcher.PopUpChanged += changeState;
+        }
+
+        public void changeState(EventData eventData)
+        {
+            inPopUp = false;
         }
 
         public void  Mouselockbool(EventData eventData)
@@ -54,6 +63,16 @@ namespace GDLibrary
             else { Paused = false; }
   
            
+        }
+
+        public void MovementBlock(EventData eventData)
+        {
+            Console.WriteLine("Movement");
+            if(!inPopUp)
+            {
+                Console.WriteLine("Movement2");
+                inPopUp = true;
+            }
         }
 
         public override void HandleGamePadInput(GameTime gameTime, Actor3D parentActor)
@@ -102,39 +121,42 @@ namespace GDLibrary
         public override void HandleKeyboardInput(GameTime gameTime, Actor3D parentActor)
         {
             translation = Vector3.Zero;
-
-            if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
-            {
-                translation = gameTime.ElapsedGameTime.Milliseconds
-                             * this.MoveSpeed * parentActor.Transform.Look;
-            }
-            else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
-            {
-                translation = -gameTime.ElapsedGameTime.Milliseconds
+            
+            
+                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
+                {
+                    translation = gameTime.ElapsedGameTime.Milliseconds
+                                * this.MoveSpeed * parentActor.Transform.Look;
+                }
+                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
+                {
+                    translation = -gameTime.ElapsedGameTime.Milliseconds
                             * this.MoveSpeed * parentActor.Transform.Look;
-            }
+                }
 
-            if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
-            {
-                //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
-                translation += -gameTime.ElapsedGameTime.Milliseconds
+                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
+                {
+                   //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
+                    translation += -gameTime.ElapsedGameTime.Milliseconds
                              * this.StrafeSpeed * parentActor.Transform.Right;
-            }
-            else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
-            {
-                //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
-                translation += gameTime.ElapsedGameTime.Milliseconds
+                }
+                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
+                {
+                    //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
+                    translation += gameTime.ElapsedGameTime.Milliseconds
                             * this.StrafeSpeed * parentActor.Transform.Right;
-            }
+                }
 
-            //Was a move button(s) pressed?
-            if (translation != Vector3.Zero)
-            {
-                //remove y-axis component of the translation
-                translation.Y = 0;
-                //apply
-                parentActor.Transform.TranslateBy(translation);
-            }
+                //Was a move button(s) pressed?
+                if (translation != Vector3.Zero)
+                {
+                    //remove y-axis component of the translation
+                    translation.Y = 0;
+                    //apply
+                    parentActor.Transform.TranslateBy(translation);
+                }
+            
+            
         }
 
         //Add Equals, Clone, ToString, GetHashCode...

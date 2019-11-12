@@ -9,6 +9,7 @@ Fixes:			None
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace GDLibrary
 {
@@ -152,22 +153,10 @@ namespace GDLibrary
             base.Update(gameTime, actor);
         }
 
-        //public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
-        //{
-            
-        //    Vector2 mouseDelta = Vector2.Zero;
-            
-        //    mouseDelta = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
-        //    mouseDelta *= gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed;
-          
-
-
-        //    //only rotate if something has changed with the mouse
-        //    if (mouseDelta.Length() != 0)
-        //        parentActor.Transform.RotateBy(new Vector3(mouseDelta, 0));
-            
-
-        //}
+        public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
+        {
+            if (!inPopUp) { base.HandleMouseInput(gameTime, parentActor); }
+        }
 
 
         public override void HandleKeyboardInput(GameTime gameTime, Actor3D parentActor)
@@ -182,55 +171,66 @@ namespace GDLibrary
 
             if ((parentActor != null) && (parentActor != null))
             {
-                //jump
-                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[4])) //check AppData.CameraMoveKeys for correct index of each move key
+                if (!inPopUp)
                 {
-                    this.playerObject.CharacterBody.DoJump(this.jumpHeight);
-                }
-                //crouch
-                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
-                {
-                    this.playerObject.CharacterBody.IsCrouching = !this.playerObject.CharacterBody.IsCrouching;
-                }
+                    //jump
+                    if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[4])) //check AppData.CameraMoveKeys for correct index of each move key
+                    {
+                        this.playerObject.CharacterBody.DoJump(this.jumpHeight);
+                    }
+                    //crouch
+                    else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
+                    {
+                        this.playerObject.CharacterBody.IsCrouching = !this.playerObject.CharacterBody.IsCrouching;
+                    }
 
-                //forward/backward
-                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
-                {
-                    Vector3 restrictedLook = parentActor.Transform.Look;
-                    restrictedLook.Y = 0;
-                    this.playerObject.CharacterBody.Velocity += restrictedLook * this.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
-                }
-                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
-                {
-                    Vector3 restrictedLook = parentActor.Transform.Look;
-                    restrictedLook.Y = 0;
-                    this.playerObject.CharacterBody.Velocity -= restrictedLook * this.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
-                }
-                else //decelerate to zero when not pressed
-                {
-                    this.playerObject.CharacterBody.DesiredVelocity = Vector3.Zero;
-                }
+                    //forward/backward
+                    if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
+                    {
+                        Vector3 restrictedLook = parentActor.Transform.Look;
+                        restrictedLook.Y = 0;
+                        this.playerObject.CharacterBody.Velocity += restrictedLook * this.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                    }
+                    else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
+                    {
+                        Vector3 restrictedLook = parentActor.Transform.Look;
+                        restrictedLook.Y = 0;
+                        this.playerObject.CharacterBody.Velocity -= restrictedLook * this.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                    }
+                    else //decelerate to zero when not pressed
+                    {
+                        this.playerObject.CharacterBody.DesiredVelocity = Vector3.Zero;
+                    }
 
-                //strafe left/right
-                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
-                {
-                    Vector3 restrictedRight = parentActor.Transform.Right;
-                    restrictedRight.Y = 0;
-                    this.playerObject.CharacterBody.Velocity -= restrictedRight * this.StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
-                }
-                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
-                {
-                    Vector3 restrictedRight = parentActor.Transform.Right;
-                    restrictedRight.Y = 0;
-                    this.playerObject.CharacterBody.Velocity += restrictedRight * this.StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
-                }
-                else //decelerate to zero when not pressed
-                {
-                    this.playerObject.CharacterBody.DesiredVelocity = Vector3.Zero;
-                }
+                    //strafe left/right
+                    if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
+                    {
+                        Vector3 restrictedRight = parentActor.Transform.Right;
+                        restrictedRight.Y = 0;
+                        this.playerObject.CharacterBody.Velocity -= restrictedRight * this.StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                    }
+                    else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
+                    {
+                        Vector3 restrictedRight = parentActor.Transform.Right;
+                        restrictedRight.Y = 0;
+                        this.playerObject.CharacterBody.Velocity += restrictedRight * this.StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                    }
+                    else //decelerate to zero when not pressed
+                    {
+                        this.playerObject.CharacterBody.DesiredVelocity = Vector3.Zero;
+                    }
 
-                //update the camera position to reflect the collision skin position
-                parentActor.Transform.Translation = this.playerObject.CharacterBody.Position;
+                    //update the camera position to reflect the collision skin position
+                    parentActor.Transform.Translation = this.playerObject.CharacterBody.Position;
+                }
+                else
+                {
+                    if (this.ManagerParameters.KeyboardManager.IsKeyPushed(Keys.Tab))
+                    {
+                        this.inPopUp = false;
+                        EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.PopUpDown));
+                    }
+                }
             }
 
         }
