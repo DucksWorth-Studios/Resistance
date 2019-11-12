@@ -51,11 +51,14 @@ namespace GDApp
         public GamePadManager gamePadManager { get; private set; }
         public SoundManager soundManager { get; private set; }
         public PickingManager pickingManager { get; private set; }
+
+        private CutsceneTimer cutsceneTimer;
+
         public TimerManager timerManager { get; private set; }
         public LogicManager logicPuzzle;
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
-
+        
         //stores loaded game resources
         private ContentDictionary<Model> modelDictionary;
         private ContentDictionary<Texture2D> textureDictionary;
@@ -378,6 +381,10 @@ namespace GDApp
                 PickingBehaviourType.InteractWithObject, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
             Components.Add(this.pickingManager);
             #endregion
+            
+            this.cutsceneTimer = new CutsceneTimer("CutsceneTimer", this.eventDispatcher,this);
+            Components.Add(cutsceneTimer);
+
 
             this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
