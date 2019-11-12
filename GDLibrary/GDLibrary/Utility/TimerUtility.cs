@@ -4,6 +4,7 @@
     {
         #region Fields
 
+        private string id;
         private int hours = 0;
         private int minutes = 0;
         private int seconds = 0;
@@ -13,21 +14,24 @@
 
         #region Constructors
 
-        public TimerUtility(int minutes, StatusType statusType)
+        public TimerUtility(string id, int minutes, StatusType statusType)
         {
+            this.id = id;
             this.minutes = minutes;
             this.statusType = statusType;
         }
 
-        public TimerUtility(int hours, int minutes, StatusType statusType)
+        public TimerUtility(string id, int hours, int minutes, StatusType statusType)
         {
+            this.id = id;
             this.hours = hours;
             this.minutes = minutes;
             this.statusType = statusType;
         }
 
-        public TimerUtility(int hours, int minutes, int seconds, StatusType statusType)
+        public TimerUtility(string id, int hours, int minutes, int seconds, StatusType statusType)
         {
+            this.id = id;
             this.hours = hours;
             this.minutes = minutes;
             this.seconds = seconds;
@@ -37,6 +41,12 @@
         #endregion
 
         #region Properties
+
+        public string ID
+        {
+            get => id;
+            set => id = value;
+        }
 
         public int Hours
         {

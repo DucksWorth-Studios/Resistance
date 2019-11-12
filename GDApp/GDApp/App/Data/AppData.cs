@@ -14,7 +14,7 @@ namespace GDLibrary
     public sealed class LerpSpeed
     {
         private static readonly float SpeedMultiplier = 2;
-        public static readonly float VerySlow = 0.05f;
+        public static readonly float VerySlow = 0.005f;
         public static readonly float Slow = SpeedMultiplier * VerySlow;
         public static readonly float Medium = SpeedMultiplier * Slow;
         public static readonly float Fast = SpeedMultiplier * Medium;
@@ -39,7 +39,7 @@ namespace GDLibrary
         #region Camera
         public static readonly int CurveEvaluationPrecision = 4;
 
-        public static readonly float CameraRotationSpeed = 0.0125f;
+        public static readonly float CameraRotationSpeed = 0.01f;
         public static readonly float CameraMoveSpeed = 0.025f;
         public static readonly float CameraStrafeSpeed = 0.6f * CameraMoveSpeed;
     
@@ -48,7 +48,7 @@ namespace GDLibrary
         public static readonly float CollidableCameraMoveSpeed = 0.6f;
         public static readonly float CollidableCameraStrafeSpeed = 0.6f * CollidableCameraMoveSpeed;
         public static readonly float CollidableCameraCapsuleRadius = 2;
-        public static readonly float CollidableCameraViewHeight = 8; //how tall is the first person player?
+        public static readonly float CollidableCameraViewHeight = 16; //how tall is the first person player?
         public static readonly float CollidableCameraMass = 10;
 
         public static readonly Keys[] CameraMoveKeys = { Keys.W, Keys.S, Keys.A, Keys.D, 

@@ -32,7 +32,9 @@ namespace GDLibrary
         GlobalSound,
         Interactive,
         LogicPuzzle,
-        Riddle
+        Riddle,
+        mouseLock,
+        LogicPuzzle
         //all other categories of sender...
     }
 }
