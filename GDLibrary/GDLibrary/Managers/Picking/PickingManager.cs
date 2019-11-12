@@ -26,7 +26,7 @@ namespace GDLibrary
         private bool bCurrentlyPicking;
         private ConstraintWorldPoint objectController = new ConstraintWorldPoint();
         private ConstraintVelocity damperController = new ConstraintVelocity();
-
+        private bool currentlyOpen;
 
         public PickingManager(Game game, EventDispatcher eventDispatcher, StatusType statusType,
            ManagerParameters managerParameters, PickingBehaviourType pickingBehaviourType, float pickStartDistance, float pickEndDistance, Predicate<CollidableObject> collisionPredicate)
@@ -38,6 +38,27 @@ namespace GDLibrary
             this.pickStartDistance = pickStartDistance;
             this.pickEndDistance = pickEndDistance;
             this.collisionPredicate = collisionPredicate;
+
+            RegisterForEventHandlingPicking(eventDispatcher);
+        }
+
+        public void RegisterForEventHandlingPicking(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.RiddleChanged += changeState;
+            eventDispatcher.PopUpChanged += changeState;
+        }
+
+        public void changeState(EventData eventdata)
+        {
+            if(currentlyOpen)
+            {
+                currentlyOpen = false;
+            }
+            else
+            {
+                currentlyOpen = true;
+            }
+
         }
 
         #region Event Handling
@@ -105,7 +126,10 @@ namespace GDLibrary
                 }
                 else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.PopUP)
                 {
-                    EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
+                    if(!currentlyOpen)
+                    {
+                        EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
+                    } 
                 }
                 //Console.WriteLine("Hello");
             }
