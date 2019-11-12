@@ -84,6 +84,7 @@
     <Compile Include="Actors\Drawn\2D\UI\UIObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UITextObject.cs" />
     <Compile Include="Actors\Drawn\2D\UI\UITextureObject.cs" />
+    <Compile Include="Actors\Drawn\2D\UI\UITimer.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\CollidableObject.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\Pickup\ImmovablePickupObject.cs" />
     <Compile Include="Actors\Drawn\3D\Collidable\Pickup\MoveablePickupObject.cs" />
@@ -152,8 +153,10 @@
     <Compile Include="Managers\Camera\CameraManager.cs" />
     <Compile Include="Managers\Content\ContentDictionary.cs" />
     <Compile Include="Managers\Game\GameStateManager.cs" />
+    <Compile Include="Managers\Game\TimerManager.cs" />
     <Compile Include="Managers\Input\GamePadManager.cs" />
     <Compile Include="Exceptions\GamePadException.cs" />
+    <Compile Include="Managers\MechanicManagers\LogicManager.cs" />
     <Compile Include="Managers\Menu\MenuManager.cs" />
     <Compile Include="Managers\Object\ObjectManager.cs" />
     <Compile Include="Managers\Physics\PhysicsManager.cs" />
@@ -197,6 +200,7 @@
     <Compile Include="Utility\ScreenUtility.cs" />
     <Compile Include="Utility\StatefulBool.cs" />
     <Compile Include="Utility\StringUtility.cs" />
+    <Compile Include="Utility\TimerUtility.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

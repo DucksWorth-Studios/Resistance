@@ -31,6 +31,9 @@ namespace GDLibrary
         public static int IndexMoveCrouch = 5;
         public static int IndexStrafeLeft = 6;
         public static int IndexStrafeRight = 7;
+        public static int LoseTimerHours = 0;
+        public static int LoseTimerMinutes = 10;
+        public static int LoseTimerSeconds = 0;
         #endregion
 
         #region Camera

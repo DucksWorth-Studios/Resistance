@@ -49,6 +49,7 @@ namespace GDLibrary
         OnPickup,
         OnOpen,
         OnClose,
+        OnLight,
 
         //sent whenever we want to change from single to multi-screen and vice verse
         OnScreenLayoutChange,

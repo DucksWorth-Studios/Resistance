@@ -51,7 +51,8 @@ namespace GDApp
         public GamePadManager gamePadManager { get; private set; }
         public SoundManager soundManager { get; private set; }
         public PickingManager pickingManager { get; private set; }
-
+        public TimerManager timerManager { get; private set; }
+        public LogicManager logicPuzzle;
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
 
@@ -67,7 +68,6 @@ namespace GDApp
         private Dictionary<string, EffectParameters> effectDictionary;
         private ContentDictionary<Video> videoDictionary;
         private Dictionary<string, IVertexData> vertexDataDictionary;
-
 
         private ManagerParameters managerParameters;
 
@@ -136,7 +136,9 @@ namespace GDApp
 #endif
 
             InitializeEvents();
-            initialiseTestObject();
+            //initialiseTestObject();
+            InitializeSwitches();
+            InitialisePuzzleLights();
             //InitializeDynamicCollidableObjects();
             base.Initialize();
         }
@@ -150,6 +152,7 @@ namespace GDApp
         private void InitializeEvents()
         {
             this.eventDispatcher.InteractChanged += Interactive;
+            this.eventDispatcher.PuzzleChanged += ChangeLights;
         }
         /*
          * Author: Tomas
@@ -158,7 +161,6 @@ namespace GDApp
         private void Interactive(EventData eventData)
         {
             CollidableObject actor = eventData.Sender as CollidableObject;
-
             if (actor.EffectParameters.Texture == this.textureDictionary["green"])
             {
                 actor.EffectParameters.Texture = this.textureDictionary["gray"];
@@ -167,12 +169,30 @@ namespace GDApp
             {
                 actor.EffectParameters.Texture = this.textureDictionary["green"];
             }
-
+            Console.WriteLine(actor.ID);
+            this.logicPuzzle.changeState(actor.ID);
             //actor.AddPrimitive(new Box(actor.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * actor.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
             //actor.Enable(true, 1);
             //this.objectManager.Remove(eventData.Sender as CollidableObject);
             //this.objectManager.Add(actor);
         }
+
+        private void ChangeLights(EventData eventData)
+        {
+            string id = (string)eventData.AdditionalParameters[0];
+            Predicate<Actor3D> predicate = s => s.GetID() == id;
+            CollidableObject gate =(CollidableObject) this.objectManager.Find(predicate);
+            if(gate.EffectParameters.Texture == this.textureDictionary["gray"])
+            {
+                gate.EffectParameters.Texture = this.textureDictionary["green"];
+            }
+            else
+            {
+                gate.EffectParameters.Texture = this.textureDictionary["gray"];
+            }
+            
+        }
+
         #endregion
         #region TestObjects
         
@@ -187,6 +207,62 @@ namespace GDApp
 
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeSwitches()
+        {
+            CollidableObject collidableObject, archetypeCollidableObject = null;
+            
+            Model model = this.modelDictionary["box2"];
+            BasicEffectParameters effectParameters = (this.effectDictionary[AppData.LitModelsEffectID] as BasicEffectParameters).Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+            
+            archetypeCollidableObject = new CollidableObject("switch-", ActorType.Interactable, Transform3D.Zero, effectParameters, model);
+
+            int count = 0;
+            for (int i = 0; i < 4; ++i)
+            {
+                ++count;
+                collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+                collidableObject.ID = "switch-" +count;
+                
+
+                collidableObject.Transform = new Transform3D(new Vector3(10 * i, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+                collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity,2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+                //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
+                collidableObject.Enable(true, 1);
+                this.objectManager.Add(collidableObject);
+                
+            }
+        }
+
+        private void InitialisePuzzleLights()
+        {
+            CollidableObject collidableObject, archetypeCollidableObject = null;
+            Model model = this.modelDictionary["sphere"];
+
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+
+            //make once then clone
+            archetypeCollidableObject = new CollidableObject("sphere", ActorType.Light, Transform3D.Zero, effectParameters, model);
+            int count = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                ++count;
+                collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+
+                collidableObject.ID = "gate-" + count;
+                collidableObject.Transform = new Transform3D(new Vector3(10 * i, 30, -25), new Vector3(0, 0, 0),
+                    0.082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                    Vector3.UnitX, Vector3.UnitY);
+
+                collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 2.54f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+                collidableObject.Enable(true, 1);
+                this.objectManager.Add(collidableObject);
+            }
+
         }
         #endregion
         private void InitializeManagers(Integer2 screenResolution,
@@ -242,6 +318,9 @@ namespace GDApp
             this.managerParameters = new ManagerParameters(this.objectManager,
                 this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager, this.screenManager, this.soundManager);
 
+            this.logicPuzzle = new LogicManager(this);
+            Components.Add(logicPuzzle);
+
             #region Pick Manager
             //call this function anytime we want to decide if a mouse over object is interesting to the PickingManager
             //See https://www.codeproject.com/Articles/114931/Understanding-Predicate-Delegates-in-C
@@ -254,6 +333,9 @@ namespace GDApp
                 PickingBehaviourType.InteractWithObject, AppData.PickStartDistance, AppData.PickEndDistance, collisionPredicate);
             Components.Add(this.pickingManager);
             #endregion
+
+            this.timerManager = new TimerManager(AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Update);
+            Components.Add(timerManager);
         }
 
         private void LoadDictionaries()
@@ -294,7 +376,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/plane1", "plane1");
             //this.modelDictionary.Load("Assets/Models/plane", "plane");
             this.modelDictionary.Load("Assets/Models/box2", "box2");
-
+            this.modelDictionary.Load("Assets/Models/sphere", "sphere");
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_00", "barrier");
@@ -357,6 +439,7 @@ namespace GDApp
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");
+            this.fontDictionary.Load("Assets/Fonts/timerFont");
             #endregion
 
             #region Video
@@ -1050,6 +1133,7 @@ namespace GDApp
         private void AddUIElements()
         {
             InitializeUIMousePointer();
+            InitializeTimerUI();
         }
         private void InitializeUIMousePointer()
         {
@@ -1068,6 +1152,21 @@ namespace GDApp
                 this.mouseManager,
                 this.eventDispatcher);
             this.uiManager.Add(myUIMouseObject);
+        }
+
+        private void InitializeTimerUI()
+        {
+            int count = 1;
+
+            foreach (TimerUtility timer in timerManager.TimerList)
+            {
+                Transform2D timerTransform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth-100, 25 * count),
+                    0, Vector2.One, Vector2.Zero, Integer2.Zero);
+
+                UITimer uiTimer = new UITimer(timerTransform, 0.1f, fontDictionary["timerFont"], timer);
+                this.uiManager.Add(uiTimer);
+                count++;
+            }
         }
 
         #endregion
@@ -1118,31 +1217,6 @@ namespace GDApp
         }
         #endregion
 
-        #region Demo Timer
-
-        private int minutes = 10;
-        private double remainingSeconds = -1;
-        private void DemoTimer(GameTime gameTime)
-        {
-            if (this.remainingSeconds == -1)
-                this.remainingSeconds = minutes * 60;
-            else if (this.remainingSeconds > 0)
-                this.remainingSeconds = this.remainingSeconds - gameTime.ElapsedGameTime.TotalSeconds;
-
-            int mins = (int)this.remainingSeconds / 60;
-            int secs = (int)this.remainingSeconds % 60;
-
-            System.Diagnostics.Debug.WriteLine(mins + " : " + secs + " --- " + this.remainingSeconds);
-
-            if (this.remainingSeconds <= 0)
-            {
-                //TODO - Change this to lose state
-                Exit();
-            }
-        }
-
-        #endregion
-
         #region Content, Update, Draw        
         protected override void LoadContent()
         {
@@ -1159,7 +1233,6 @@ namespace GDApp
             //#if DEBUG
             //            InitializeDebugTextInfo();
             //#endif
-
         }
 
         protected override void UnloadContent()
