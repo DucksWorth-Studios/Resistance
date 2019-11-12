@@ -136,10 +136,11 @@ namespace GDApp
 #endif
 
             InitializeEvents();
-            //initialiseTestObject();
+            initialiseTestObject();
             InitializeSwitches();
             InitialisePuzzleLights();
-            //InitializeDynamicCollidableObjects();
+            InitialisePopUP();
+            
             base.Initialize();
         }
 
@@ -153,6 +154,7 @@ namespace GDApp
         {
             this.eventDispatcher.InteractChanged += Interactive;
             this.eventDispatcher.PuzzleChanged += ChangeLights;
+            this.eventDispatcher.RiddleChanged += ChangePopUPState;
             this.eventDispatcher.PlayerChanged += LoseTriggered;
         }
         /*
@@ -193,7 +195,20 @@ namespace GDApp
             }
             
         }
+        private void ChangePopUPState(EventData eventData)
+        {
+            Predicate<Actor2D> pred = s => s.ActorType == ActorType.PopUP;
+            UITextureObject item = this.uiManager.Find(pred) as UITextureObject;
+            if(item.StatusType == StatusType.Off)
+            {
+                item.StatusType = StatusType.Drawn;
+            }
+            else
+            {
+                item.StatusType = StatusType.Off;
+            }     
 
+        }
         /*
          * Author: Cameron
          * This will be used to trigger different UI effects when the timer runs out
@@ -204,15 +219,34 @@ namespace GDApp
         }
 
         #endregion
+                
         #region TestObjects
+
+        private void InitialisePopUP()
+        {
+            int w,x,y,z;
+            int temp = graphics.PreferredBackBufferWidth / 4;
+            x = graphics.PreferredBackBufferWidth / 6;
+            y = graphics.PreferredBackBufferHeight / 6;
+
+            w = graphics.PreferredBackBufferWidth - (x*2);
+            z = graphics.PreferredBackBufferHeight - (y * 2);
+            Transform2D transform = new Transform2D(new Vector2(x,y), 0, Vector2.One,Vector2.One,new Integer2(1,1));
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(x,y,w,z);
+            Texture2D texture = this.textureDictionary["green"];
+            UITextureObject picture = new UITextureObject("PopUp",ActorType.PopUP,StatusType.Off,transform,Color.White,
+                SpriteEffects.None,1,texture,rect, new Vector2(1,2));
+
+            this.uiManager.Add(picture);
+        }
 
         private void initialiseTestObject()
         {
             Model model = this.modelDictionary["box2"];
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["gray"];
-            Transform3D transform = new Transform3D(new Vector3(0, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
-            CollidableObject collidableObject = new CollidableObject("HEY",ActorType.Interactable,transform,effectParameters,model);
+            Transform3D transform = new Transform3D(new Vector3(-20, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+            CollidableObject collidableObject = new CollidableObject("HEY",ActorType.PopUP,transform,effectParameters,model);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             collidableObject.Enable(true, 1);
@@ -275,6 +309,8 @@ namespace GDApp
 
         }
         #endregion
+
+
         private void InitializeManagers(Integer2 screenResolution,
             ScreenUtility.ScreenType screenType, bool isMouseVisible, int numberOfGamePadPlayers) //1 - 4
         {

@@ -103,6 +103,10 @@ namespace GDLibrary
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.Interact, EventCategoryType.Interactive));
                     //Console.WriteLine("Interacting");
                 }
+                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.PopUP)
+                {
+                    EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
+                }
                 //Console.WriteLine("Hello");
             }
         }

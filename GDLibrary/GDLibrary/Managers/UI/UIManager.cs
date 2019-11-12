@@ -75,6 +75,11 @@ namespace GDLibrary
             return resultList != null ? resultList.Count : 0;
         }
 
+        public Actor2D Find(Predicate<Actor2D> predicate)
+        {
+            return drawList.Find(predicate);
+        }
+
         //to do as an exercise...FindAll(Predicate<Actor2D> predicate)
 
         //batch remove on all objects that were requested to be removed
