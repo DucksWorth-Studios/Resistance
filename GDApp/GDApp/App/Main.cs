@@ -156,6 +156,7 @@ namespace GDApp
             this.eventDispatcher.PuzzleChanged += ChangeLights;
             this.eventDispatcher.RiddleChanged += ChangePopUPState;
             this.eventDispatcher.PlayerChanged += LoseTriggered;
+            this.eventDispatcher.PopUpChanged += ChangePopUPState;
         }
         /*
          * Author: Tomas
