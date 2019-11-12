@@ -1058,19 +1058,22 @@ namespace GDApp
 
             //add start button
             buttonID = "startbtn";
-            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, 575);
             texture = this.textureDictionary["start"];
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, graphics.PreferredBackBufferHeight - texture.Height);
             transform = new Transform2D(position,
                 0, new Vector2(0.8f, 0.8f),
                 new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
 
             uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
-                transform, Color.CornflowerBlue, SpriteEffects.None, 0.1f, texture, buttonText,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
                 this.fontDictionary["menu"],
-                Color.DarkGray, new Vector2(0, 2));
+                Color.DarkBlue, new Vector2(0, 2));
 
             uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
               new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.Blue, Color.DarkBlue));
+
             this.menuManager.Add(sceneID, uiButtonObject);
 
             //add exit button - clone the audio button then just reset texture, ids etc in all the clones
@@ -1080,7 +1083,7 @@ namespace GDApp
             //move down on Y-axis for next button
             clone.Transform.Translation += new Vector2(0, verticalBtnSeparation);
             //change the texture blend color
-            clone.Color = Color.Red;
+            clone.Color = Color.Gray;
             //store the original color since if we modify with a controller and need to reset
             clone.OriginalColor = clone.Color;
             //attach another controller on the exit button just to illustrate multi-controller approach
