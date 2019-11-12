@@ -529,20 +529,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Models\Architecture\Bunker_Floor.FBX">
-      <Name>Bunker_Floor</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\Models\Architecture\Bunker_Floor2.FBX">
-      <Name>Bunker_Floor2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Backgrounds\Title-screen.png">
       <Name>Title-screen</Name>
       <Importer>TextureImporter</Importer>
@@ -576,6 +562,73 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Models\Architecture\Doors\BunkerDoor_Mapped_00.fbx">
+      <Name>BunkerDoor_Mapped_00</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Architecture\Doors\Barrier_Mapped_00.fbx">
+      <Name>Barrier_Mapped_00</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\Architecture\Doors\BrushedAluminum.png">
+      <Name>BrushedAluminum</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Assets\Textures\Architecture\Doors\Concrete.png">
+      <Name>Concrete</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Props\AmmoBox.fbx">
+      <Name>AmmoBox</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Assets\Models\Props\Ceiling_Lamp.FBX">
+      <Name>Ceiling_Lamp</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Assets\Models\Props\Computer.FBX">
+      <Name>Computer</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Assets\Models\Props\FieldCot.fbx">
+      <Name>FieldCot</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Assets\Models\Props\Field_Desk.FBX">
+      <Name>Field_Desk</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Assets\Models\Props\Gun.FBX">
+      <Name>Gun</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Assets\Models\Props\War_map_table.FBX">
+      <Name>War_map_table</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\Architecture\Walls\wall-texture.png">
+      <Name>wall-texture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     <Compile Include="Assets\Fonts\timerFont.spritefont">
       <Name>timerFont</Name>
       <Importer>FontDescriptionImporter</Importer>
