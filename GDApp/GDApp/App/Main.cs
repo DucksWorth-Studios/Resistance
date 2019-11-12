@@ -125,9 +125,9 @@ namespace GDApp
 
             //load game happens before cameras are loaded because we may add a third person camera that needs a reference to a loaded Actor
             LoadGame(gameLevel);
-
+            
             InitializeCollidableFirstPersonDemo(screenResolution);
-
+            InitializeCutsceneCameras();
             //Publish Start Event(s)
             StartGame();
 
@@ -140,7 +140,9 @@ namespace GDApp
             InitializeSwitches();
             InitialisePuzzleLights();
             InitialisePopUP();
+
             
+           
             base.Initialize();
         }
 
@@ -173,12 +175,8 @@ namespace GDApp
             {
                 actor.EffectParameters.Texture = this.textureDictionary["green"];
             }
-            Console.WriteLine(actor.ID);
             this.logicPuzzle.changeState(actor.ID);
-            //actor.AddPrimitive(new Box(actor.Transform.Translation, Matrix.Identity, /*important do not change - cm to inch*/2.54f * actor.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
-            //actor.Enable(true, 1);
-            //this.objectManager.Remove(eventData.Sender as CollidableObject);
-            //this.objectManager.Add(actor);
+            
         }
 
         private void ChangeLights(EventData eventData)
@@ -963,6 +961,22 @@ namespace GDApp
 
             if (controller != null)
                 camera.AttachController(controller);
+
+            this.cameraManager.Add(camera);
+        }
+
+        private void InitializeCutsceneCameras()
+        {
+            Transform3D transform = null;
+            string id = "Door Cutscene Camera";
+            string viewportDictionaryKey = "full viewport";
+            float drawDepth = 0;
+
+            transform = new Transform3D(new Vector3(-70, 1.1f * AppData.CollidableCameraViewHeight + 6, 40),
+                new Vector3(-0.25f, -0.25f, 1), Vector3.UnitY);
+
+            Camera3D camera = new Camera3D(id, ActorType.Camera, transform,
+                   ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], drawDepth, StatusType.Update);
 
             this.cameraManager.Add(camera);
         }
