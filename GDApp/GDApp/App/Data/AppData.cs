@@ -48,7 +48,7 @@ namespace GDLibrary
         public static readonly float CollidableCameraMoveSpeed = 0.6f;
         public static readonly float CollidableCameraStrafeSpeed = 0.6f * CollidableCameraMoveSpeed;
         public static readonly float CollidableCameraCapsuleRadius = 2;
-        public static readonly float CollidableCameraViewHeight = 8; //how tall is the first person player?
+        public static readonly float CollidableCameraViewHeight = 16; //how tall is the first person player?
         public static readonly float CollidableCameraMass = 10;
 
         public static readonly Keys[] CameraMoveKeys = { Keys.W, Keys.S, Keys.A, Keys.D, 
