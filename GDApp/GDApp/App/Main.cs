@@ -153,6 +153,7 @@ namespace GDApp
         {
             this.eventDispatcher.InteractChanged += Interactive;
             this.eventDispatcher.PuzzleChanged += ChangeLights;
+            this.eventDispatcher.PlayerChanged += LoseTriggered;
         }
         /*
          * Author: Tomas
@@ -193,9 +194,18 @@ namespace GDApp
             
         }
 
+        /*
+         * Author: Cameron
+         * This will be used to trigger different UI effects when the timer runs out
+         */
+        private void LoseTriggered(EventData eventData)
+        {
+            System.Diagnostics.Debug.WriteLine("Lose event triggered");
+        }
+
         #endregion
         #region TestObjects
-        
+
         private void initialiseTestObject()
         {
             Model model = this.modelDictionary["box2"];
@@ -334,7 +344,7 @@ namespace GDApp
             Components.Add(this.pickingManager);
             #endregion
 
-            this.timerManager = new TimerManager(AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Update);
+            this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
         }
 

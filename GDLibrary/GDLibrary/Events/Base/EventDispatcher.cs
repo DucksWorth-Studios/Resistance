@@ -56,8 +56,6 @@ namespace GDLibrary
         public event DebugEventHandler DebugChanged;
         public event InteractHandler InteractChanged;
         public event PuzzleHandler PuzzleChanged;
-        
-
 
         public EventDispatcher(Game game, int initialSize)
             : base(game)
