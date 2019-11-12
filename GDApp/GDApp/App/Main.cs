@@ -198,11 +198,19 @@ namespace GDApp
         {
             Predicate<Actor2D> pred = s => s.ActorType == ActorType.PopUP;
             UITextureObject item = this.uiManager.Find(pred) as UITextureObject;
-
-            item.StatusType = StatusType.Off;
+            if(item.StatusType == StatusType.Off)
+            {
+                item.StatusType = StatusType.Drawn;
+            }
+            else
+            {
+                item.StatusType = StatusType.Off;
+            }
+            
 
         }
         #endregion
+                
         #region TestObjects
         private void InitialisePopUP()
         {
@@ -210,12 +218,13 @@ namespace GDApp
             int temp = graphics.PreferredBackBufferWidth / 4;
             x = graphics.PreferredBackBufferWidth / 6;
             y = graphics.PreferredBackBufferHeight / 6;
+
             w = graphics.PreferredBackBufferWidth - (x*2);
             z = graphics.PreferredBackBufferHeight - (y * 2);
             Transform2D transform = new Transform2D(new Vector2(x,y), 0, Vector2.One,Vector2.One,new Integer2(1,1));
             Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(x,y,w,z);
             Texture2D texture = this.textureDictionary["green"];
-            UITextureObject picture = new UITextureObject("PopUp",ActorType.PopUP,StatusType.Drawn,transform,Color.White,
+            UITextureObject picture = new UITextureObject("PopUp",ActorType.PopUP,StatusType.Off,transform,Color.White,
                 SpriteEffects.None,1,texture,rect, new Vector2(1,2));
 
             this.uiManager.Add(picture);
@@ -289,6 +298,8 @@ namespace GDApp
 
         }
         #endregion
+
+
         private void InitializeManagers(Integer2 screenResolution,
             ScreenUtility.ScreenType screenType, bool isMouseVisible, int numberOfGamePadPlayers) //1 - 4
         {
