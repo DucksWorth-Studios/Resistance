@@ -97,7 +97,7 @@ namespace GDApp
             int numberOfGamePadPlayers = 1;
 
             //set the title
-            Window.Title = "3DGD - My Amazing Game 1.0";
+            Window.Title = "Resistance";
 
             //EventDispatcher
             InitializeEventDispatcher();
@@ -954,6 +954,7 @@ namespace GDApp
                     AppData.CameraMoveKeys,
                     AppData.CollidableCameraMoveSpeed, AppData.CollidableCameraStrafeSpeed, AppData.CameraRotationSpeed,
                     this.managerParameters,
+                    eventDispatcher,
                     camera, //parent
                     AppData.CollidableCameraCapsuleRadius,
                     AppData.CollidableCameraViewHeight,
@@ -981,6 +982,8 @@ namespace GDApp
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
             EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
+            
+            
 
             //publish an event to set the camera
             object[] additionalEventParamsB = { "collidable first person camera 1" };
@@ -989,7 +992,7 @@ namespace GDApp
             //this.cameraManager.SetActiveCamera(x => x.ID.Equals("collidable first person camera 1"));
         }
         #endregion
-
+        
         #region Menu & UI
         private void AddMenuElements()
         {
@@ -1151,17 +1154,21 @@ namespace GDApp
             //show complete texture
             Microsoft.Xna.Framework.Rectangle sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height);
 
+            Transform2D transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth / 2 - texture.Width/2, graphics.PreferredBackBufferHeight / 2 - texture.Height/2), 0, Vector2.One, Vector2.Zero, new Integer2(texture.Width, texture.Height));
+            UITextureObject crosshair = new UITextureObject("crosshair", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White, SpriteEffects.None, 0, texture);
+
+            uiManager.Add(crosshair);
             //listens for object picking events from the object picking manager
-            UIPickingMouseObject myUIMouseObject = new UIPickingMouseObject("picking mouseObject",
-                ActorType.UITexture,
-                new Transform2D(Vector2.One),
-                this.fontDictionary["mouse"],
-                "",
-                new Vector2(0, 40),
-                texture,
-                this.mouseManager,
-                this.eventDispatcher);
-            this.uiManager.Add(myUIMouseObject);
+            // UIPickingMouseObject myUIMouseObject = new UIPickingMouseObject("picking mouseObject",
+            //    ActorType.UITexture,
+            //    new Transform2D(Vector2.One),
+            //    this.fontDictionary["mouse"],
+            //    "",
+            //    new Vector2(0, 40),
+            //    texture,
+            //    this.mouseManager,
+            //    this.eventDispatcher);
+            // this.uiManager.Add(myUIMouseObject);
         }
 
         private void InitializeTimerUI()
@@ -1259,8 +1266,7 @@ namespace GDApp
         {
             //exit using new gamepad manager
             if (this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
-                this.Exit();
-
+                this.Exit();      
             base.Update(gameTime);
         }
 

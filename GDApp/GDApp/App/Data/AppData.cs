@@ -14,7 +14,7 @@ namespace GDLibrary
     public sealed class LerpSpeed
     {
         private static readonly float SpeedMultiplier = 2;
-        public static readonly float VerySlow = 0.05f;
+        public static readonly float VerySlow = 0.005f;
         public static readonly float Slow = SpeedMultiplier * VerySlow;
         public static readonly float Medium = SpeedMultiplier * Slow;
         public static readonly float Fast = SpeedMultiplier * Medium;
@@ -39,7 +39,7 @@ namespace GDLibrary
         #region Camera
         public static readonly int CurveEvaluationPrecision = 4;
 
-        public static readonly float CameraRotationSpeed = 0.0125f;
+        public static readonly float CameraRotationSpeed = 0.01f;
         public static readonly float CameraMoveSpeed = 0.025f;
         public static readonly float CameraStrafeSpeed = 0.6f * CameraMoveSpeed;
     

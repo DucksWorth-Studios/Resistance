@@ -54,7 +54,8 @@ namespace GDApp
                 {
                     case "startbtn":
                         DoStart();
-                        break;
+                        EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                    break;
 
                     case "exitbtn":
                         DoExit();

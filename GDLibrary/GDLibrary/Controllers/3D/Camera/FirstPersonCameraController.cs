@@ -7,27 +7,53 @@ Bugs:			None
 Fixes:			None
 */
 
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace GDLibrary
 {
-    
+
     public class FirstPersonCameraController : UserInputController
     {
         #region Fields
         //local vars
         private Vector3 translation;
+        Vector2 mousePosition = Vector2.Zero;
+        Vector2 OldmousePosition = Vector2.Zero;
+        Vector2 mouseDelta = Vector2.Zero;
+        Vector2 mouseDeltaTemp = Vector2.One;
+
+        bool Paused = true;
+
 
         #endregion
 
         #region Properties
         #endregion
 
-        public FirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed, ManagerParameters managerParameters)
+        public FirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed, ManagerParameters managerParameters,EventDispatcher eventDispatcher)
             : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, managerParameters)
         {
+            
+            RegisterForEventHandling(eventDispatcher);
+        }
 
+
+        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.lockChanged += Mouselockbool;
+        }
+
+        public void  Mouselockbool(EventData eventData)
+        {
+
+            System.Diagnostics.Debug.Write("IS Being Called");
+
+            if (!Paused) { Paused = true; }
+            else { Paused = false; }
+  
+           
         }
 
         public override void HandleGamePadInput(GameTime gameTime, Actor3D parentActor)
@@ -42,16 +68,36 @@ namespace GDLibrary
 
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
-            Vector2 mouseDelta = Vector2.Zero;
 
-            mouseDelta = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
-            mouseDelta *= gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed;
+            if (ManagerParameters.KeyboardManager.IsKeyPushed(Keys.Escape))
+            { 
+                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                
+            }
 
-            //only rotate if something has changed with the mouse
-            if (mouseDelta.Length() != 0)
-                parentActor.Transform.RotateBy(new Vector3(mouseDelta, 0));
 
-        }
+            if (!Paused)
+            {
+
+                mousePosition = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
+                mouseDelta = mouseDelta + mousePosition * gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed;
+
+                if (OldmousePosition == mousePosition && OldmousePosition != Vector2.Zero)
+                {
+                    mouseDelta = mouseDeltaTemp;
+
+                    parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
+                    this.ManagerParameters.MouseManager.SetPosition(new Vector2(this.ManagerParameters.ScreenManager.ScreenResolution.X / 2, this.ManagerParameters.ScreenManager.ScreenResolution.Y / 2));
+                }
+
+                parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
+                OldmousePosition = mousePosition;
+
+                if (mousePosition != Vector2.Zero) { mouseDeltaTemp = mouseDelta; }
+
+            }
+        } 
+
 
         public override void HandleKeyboardInput(GameTime gameTime, Actor3D parentActor)
         {
