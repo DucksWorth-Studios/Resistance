@@ -40,6 +40,7 @@ namespace GDLibrary
         public delegate void mouseLockingHandler(EventData eventData);
         public delegate void PuzzleHandler(EventData eventData);
         public delegate void RiddleHandler(EventData eventData);
+        public delegate void PopUpHandler(EventData eventData);
         
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
@@ -61,6 +62,7 @@ namespace GDLibrary
         public event mouseLockingHandler lockChanged;
         public event PuzzleHandler PuzzleChanged;
         public event RiddleHandler RiddleChanged;
+        public event PopUpHandler PopUpChanged;
 
 
         public EventDispatcher(Game game, int initialSize)
@@ -169,6 +171,9 @@ namespace GDLibrary
                     break;
                 case EventCategoryType.Riddle:
                     OnRiddleInteract(eventData);
+                    break;
+                case EventCategoryType.PopUpDown:
+                    OnPopUpDown(eventData);
                     break;
                 default:
                     break;
@@ -285,6 +290,11 @@ namespace GDLibrary
         protected virtual void OnRiddleInteract(EventData eventData)
         {
             RiddleChanged?.Invoke(eventData);
+        }
+
+        protected virtual void OnPopUpDown(EventData eventData)
+        {
+            PopUpChanged?.Invoke(eventData);
         }
     }
 }
