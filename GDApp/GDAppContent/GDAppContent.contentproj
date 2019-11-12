@@ -629,6 +629,7 @@
       <Name>wall-texture</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Assets\Fonts\timerFont.spritefont">
       <Name>timerFont</Name>
       <Importer>FontDescriptionImporter</Importer>
