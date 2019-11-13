@@ -94,8 +94,9 @@ namespace GDLibrary
                 
             }
 
+  
 
-            if (!Paused)
+            if (!Paused && !inPopUp)
             {
 
                 mousePosition = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
