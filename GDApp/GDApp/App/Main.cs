@@ -240,19 +240,19 @@ namespace GDApp
 
 
             Vector2 scale = new Vector2(
-                (float)x/350,
-                (float)y/290);
+                (float)x/700,
+                (float)y/390);
 
 
             Vector2 translation = new Vector2(
-                (float)-x/2,
-                (float)0);
+                (float)x,
+                (float)y);
 
             Transform2D transform = new Transform2D(translation,0,scale, new Vector2(0,0), new Integer2(0,0));
 
 
             // Transform2D transform = new Transform2D(new Vector2(x,y), 0, new Vector2(1f, 1f),new Vector2(1,1),new Integer2(w,z));
-             Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0,0,tw,th);
+             Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0,0, tw, th);
 
 
             UITextureObject picture = new UITextureObject("PopUp",ActorType.PopUP,StatusType.Off,transform,Color.White,
