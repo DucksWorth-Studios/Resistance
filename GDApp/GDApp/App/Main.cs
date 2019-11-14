@@ -467,6 +467,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
             this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
             this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall-texture", "wall");
+            this.textureDictionary.Load("Assets/Textures/Architecture/wildtextures-concrete-wall-background", "concreteFloor");
 
             //menu - buttons
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
@@ -809,7 +810,7 @@ namespace GDApp
             //effectParameters.Texture2 = this.textureDictionary["checkerboard_greywhite"];
 
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["grass1"];
+            effectParameters.Texture = this.textureDictionary["concreteFloor"];
 
             transform3D = new Transform3D(Vector3.Zero, Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
