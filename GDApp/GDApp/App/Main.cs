@@ -201,7 +201,9 @@ namespace GDApp
         {
             Predicate<Actor2D> pred = s => s.ActorType == ActorType.PopUP;
             UITextureObject item = this.uiManager.Find(pred) as UITextureObject;
-            if(item.StatusType == StatusType.Off)
+            
+           
+            if (item.StatusType == StatusType.Off)
             {
                 item.StatusType = StatusType.Drawn;
             }
@@ -226,18 +228,36 @@ namespace GDApp
 
         private void InitialisePopUP()
         {
-            int w,x,y,z;
+            Texture2D texture = this.textureDictionary["popup"];
+   
+            int w,x,y,z,tw,th;
             int temp = graphics.PreferredBackBufferWidth / 4;
-            x = graphics.PreferredBackBufferWidth / 6;
-            y = graphics.PreferredBackBufferHeight / 6;
+             x = graphics.PreferredBackBufferWidth / 6;
+             y = graphics.PreferredBackBufferHeight / 6;
+             w = graphics.PreferredBackBufferWidth - (x*2);
+             z = graphics.PreferredBackBufferHeight - (y * 2);
+             tw = texture.Width;
+             th = texture.Height;
 
-            w = graphics.PreferredBackBufferWidth - (x*2);
-            z = graphics.PreferredBackBufferHeight - (y * 2);
-            Transform2D transform = new Transform2D(new Vector2(x,y), 0, Vector2.One,Vector2.One,new Integer2(1,1));
-            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(x,y,w,z);
-            Texture2D texture = this.textureDictionary["green"];
+
+            Vector2 scale = new Vector2(
+                (float)x/700,
+                (float)y/390);
+
+
+            Vector2 translation = new Vector2(
+                (float)x,
+                (float)y);
+
+            Transform2D transform = new Transform2D(translation,0,scale, new Vector2(0,0), new Integer2(0,0));
+
+
+            // Transform2D transform = new Transform2D(new Vector2(x,y), 0, new Vector2(1f, 1f),new Vector2(1,1),new Integer2(w,z));
+             Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0,0, tw, th);
+
+
             UITextureObject picture = new UITextureObject("PopUp",ActorType.PopUP,StatusType.Off,transform,Color.White,
-                SpriteEffects.None,1,texture,rect, new Vector2(1,2));
+                SpriteEffects.None,0,texture,rect, new Vector2(0,0));
 
             this.uiManager.Add(picture);
         }
@@ -476,6 +496,9 @@ namespace GDApp
             //Load Colors
             this.textureDictionary.Load("Assets/Colours/gray");
             this.textureDictionary.Load("Assets/Colours/green");
+
+            //load riddle pop up
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/the-riddle", "popup");
 
 
 #if DEBUG
@@ -1079,19 +1102,22 @@ namespace GDApp
 
             //add start button
             buttonID = "startbtn";
-            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, 575);
             texture = this.textureDictionary["start"];
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, graphics.PreferredBackBufferHeight - texture.Height);
             transform = new Transform2D(position,
                 0, new Vector2(0.8f, 0.8f),
                 new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
 
             uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
-                transform, Color.CornflowerBlue, SpriteEffects.None, 0.1f, texture, buttonText,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
                 this.fontDictionary["menu"],
-                Color.DarkGray, new Vector2(0, 2));
+                Color.DarkBlue, new Vector2(0, 2));
 
             uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
               new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.Blue, Color.DarkBlue));
+
             this.menuManager.Add(sceneID, uiButtonObject);
 
             //add exit button - clone the audio button then just reset texture, ids etc in all the clones
@@ -1101,7 +1127,7 @@ namespace GDApp
             //move down on Y-axis for next button
             clone.Transform.Translation += new Vector2(0, verticalBtnSeparation);
             //change the texture blend color
-            clone.Color = Color.Red;
+            clone.Color = Color.Gray;
             //store the original color since if we modify with a controller and need to reset
             clone.OriginalColor = clone.Color;
             //attach another controller on the exit button just to illustrate multi-controller approach
@@ -1213,7 +1239,11 @@ namespace GDApp
             Microsoft.Xna.Framework.Rectangle sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height);
 
             Transform2D transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth / 2 - texture.Width/2, graphics.PreferredBackBufferHeight / 2 - texture.Height/2), 0, Vector2.One, Vector2.Zero, new Integer2(texture.Width, texture.Height));
-            UITextureObject crosshair = new UITextureObject("crosshair", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White, SpriteEffects.None, 0, texture);
+            UITextureObject crosshair = new UITextureObject("crosshair", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White, SpriteEffects.None, 1, texture);
+
+           
+
+
 
             uiManager.Add(crosshair);
             //listens for object picking events from the object picking manager
