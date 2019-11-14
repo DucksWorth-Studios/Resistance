@@ -56,6 +56,7 @@ namespace GDApp
 
         public TimerManager timerManager { get; private set; }
         public LogicManager logicPuzzle;
+        public ObjectiveManager objectiveManager;
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
         
@@ -408,6 +409,9 @@ namespace GDApp
 
             this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
+
+            this.objectiveManager = new ObjectiveManager(this, this.eventDispatcher, StatusType.Off, 0, this.spriteBatch);
+            Components.Add(this.uiManager);
         }
 
         private void LoadDictionaries()

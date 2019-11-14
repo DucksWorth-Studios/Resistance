@@ -35,7 +35,8 @@ namespace GDLibrary
         Riddle,
         mouseLock,
         PopUpDown,
-        Cutscene
+        Cutscene,
+        Objective
 
         //all other categories of sender...
     }
