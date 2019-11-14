@@ -192,6 +192,7 @@
     <Compile Include="Parameters\Transforms\Transform3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\CollisionUtility.cs" />
+    <Compile Include="Utility\CutsceneTimer.cs" />
     <Compile Include="Utility\DebugUtility.cs" />
     <Compile Include="Utility\Integer.cs" />
     <Compile Include="Utility\Integer2.cs" />
