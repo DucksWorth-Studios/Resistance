@@ -474,6 +474,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/quit");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/start");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/restart-Button");
 
             //menu - backgrounds
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/Title-screen");
@@ -1233,8 +1234,10 @@ namespace GDApp
 
         private void AddGameOverMenu()
         {
-            string sceneID = "";
-
+            string sceneID, buttonID, buttonText;
+            Vector2 position = Vector2.Zero;
+            UIButtonObject uiButtonObject = null, clone = null;
+            int verticalBtnSeparation = 100;
             int w, h;
 
             w = graphics.PreferredBackBufferWidth;
@@ -1251,6 +1254,43 @@ namespace GDApp
             sceneID = "lose-screen";
             this.menuManager.Add(sceneID,picture);
 
+            texture = this.textureDictionary["restart-Button"];
+            buttonID = "";
+            buttonText = "";
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, graphics.PreferredBackBufferHeight - texture.Height);
+            transform = new Transform2D(position,
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
+                this.fontDictionary["menu"],
+                Color.DarkBlue, new Vector2(0, 2));
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.Green, Color.Green));
+
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+
+
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "exitbtn";
+            clone.Texture = this.textureDictionary["quit"];
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(180, verticalBtnSeparation);
+            //change the texture blend color
+            clone.Color = Color.Gray;
+            //store the original color since if we modify with a controller and need to reset
+            clone.OriginalColor = clone.Color;
+            //attach another controller on the exit button just to illustrate multi-controller approach
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.DarkRed));
+            this.menuManager.Add(sceneID, clone);
+
+            #endregion
 
         }
 
@@ -1302,7 +1342,7 @@ namespace GDApp
             }
         }
 
-        #endregion
+        
 
         #region Effects
         private void InitializeEffects()
