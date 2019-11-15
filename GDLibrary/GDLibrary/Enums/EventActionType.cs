@@ -17,6 +17,7 @@ namespace GDLibrary
         OnResume,
         OnStop,
         OnStopAll,
+        OnGameOver,
 
         //processed by many managers (incl. menu, sound, object, ui, physic) and video controller
         OnStart,

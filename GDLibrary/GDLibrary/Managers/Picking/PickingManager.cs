@@ -76,6 +76,11 @@ namespace GDLibrary
                 //turn off update to disable picking
                 this.StatusType = StatusType.Off;
             }
+            else if (eventData.EventType == EventActionType.OnLose)
+            {
+                //turn off update and draw i.e. show the menu since the game is paused
+                this.StatusType = StatusType.Off;
+            }
         }
         #endregion
 
@@ -128,6 +133,8 @@ namespace GDLibrary
                 {
                     if(!currentlyOpen)
                     {
+                        //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.MainMenu));
+                        //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.mouseLock));
                         EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
                     } 
                 }

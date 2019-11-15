@@ -116,6 +116,11 @@ namespace GDLibrary
                 //turn off update and draw i.e. show the menu since the game is paused
                 this.StatusType = StatusType.Off;
             }
+            else if (eventData.EventType == EventActionType.OnLose)
+            {
+                //turn off update and draw i.e. show the menu since the game is paused
+                this.StatusType = StatusType.Off;
+            }
         }
         #endregion
 
