@@ -854,8 +854,9 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
 
-            collidableObject = new TriangleMeshObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters,
-                this.modelDictionary["bunker_door"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["bunker_door"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(13.0f,15.0f,0.5f)),
+               new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }
@@ -878,7 +879,7 @@ namespace GDApp
             cloneCollider.ID += 1;
 
             cloneCollider.Transform = new Transform3D(new Vector3(-99, 6, 124), new Vector3(-90, 0, 180), new Vector3(0.07f, 0.05f, 0.07f), Vector3.UnitX, Vector3.UnitY);
-            cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, 2.54f * cloneCollider.Transform.Scale), 
+            cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, new Vector3(2.0f, 1.0f, 3.0f)), 
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             cloneCollider.Enable(true, 1);
@@ -993,8 +994,9 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["FieldDeskTexture"];
 
-            collidableObject = new TriangleMeshObject("field desk", ActorType.CollidableDecorator, transform3D, effectParameters,
-                this.modelDictionary["field-desk"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject = new CollidableObject("field desk", ActorType.CollidableDecorator, transform3D, effectParameters,
+                this.modelDictionary["field-desk"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(22.0f, 8.0f, 7.0f)), new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }
