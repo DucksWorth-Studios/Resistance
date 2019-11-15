@@ -464,6 +464,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/book-case");
             this.modelDictionary.Load("Assets/Models/Props/Phonograph");
             this.modelDictionary.Load("Assets/Models/Props/computer");
+            this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
             #endregion
 
             #region Textures
@@ -656,6 +657,7 @@ namespace GDApp
             InitializeBookCase();
             InitializePhonoGraph();
             InitializeComputer();
+            InitializeLogicPuzzleModel();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -1126,6 +1128,15 @@ namespace GDApp
                 new MaterialProperties(0.1f, 0.1f, 0.1f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeLogicPuzzleModel()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-30.0f, 12.0f, -125.2f), new Vector3(90, -180, 180), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+
+            ModelObject model = new ModelObject("logic puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["LogicPuzzle"]);
+            this.objectManager.Add(model);
         }
         #endregion
 
