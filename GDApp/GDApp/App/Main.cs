@@ -461,6 +461,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/field-desk");
             this.modelDictionary.Load("Assets/Models/Props/war-table");
             this.modelDictionary.Load("Assets/Models/Props/FilingCabinet");
+            this.modelDictionary.Load("Assets/Models/Props/book-case");
             #endregion
 
             #region Textures
@@ -469,6 +470,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
             this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall-texture", "wall");
             this.textureDictionary.Load("Assets/Textures/Architecture/concrete", "concreteFloor");
+            this.textureDictionary.Load("Assets/Textures/Architecture/concrete2");
 
             //menu - buttons
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
@@ -510,6 +512,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/WarTableTexture");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/LightTexture");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/FilingCabinet");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
 
 
 #if DEBUG
@@ -647,6 +650,7 @@ namespace GDApp
             InitializeFieldCot();
             InitializeFieldDesk();
             InitializeFilingCabinet();
+            InitializeBookCases();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -755,16 +759,6 @@ namespace GDApp
             this.objectManager.Add(clonePlane);
             #endregion
 
-            #region ceiling
-            ////add the top skybox plane
-            //clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            //clonePlane.EffectParameters.Texture = this.textureDictionary["sky"];
-            ////notice the combination of rotations to correctly align the sky texture with the sides
-            //clonePlane.Transform.Rotation = new Vector3(180, -90, 0);
-            //clonePlane.Transform.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f), 0);
-            //this.objectManager.Add(clonePlane);
-            #endregion
-
             #region front wall
             //add the front skybox plane
             // this side will be done in 3 blocks two on each side with a space for a door and then a block on top of it
@@ -791,6 +785,24 @@ namespace GDApp
             clonePlane.Transform.Scale = new Vector3(xScale / 1.6f, 1, worldScale / 40);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
             clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.7f, worldScale / 4.35f, (2.54f * worldScale) / 2f);
+            this.objectManager.Add(clonePlane);
+            #endregion
+
+            #region dividing wall
+            //right side
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.EffectParameters.Texture = this.textureDictionary["concrete2"];
+            clonePlane.Transform.Scale = new Vector3(xScale, 0.5f, worldScale / 10);
+            clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.97f, (2.54f * worldScale) / 20.0f, (-2.54f * worldScale) / 3.55f);
+            this.objectManager.Add(clonePlane);
+
+            //left side
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.EffectParameters.Texture = this.textureDictionary["concrete2"];
+            clonePlane.Transform.Scale = new Vector3(xScale, 0.5f, worldScale / 10);
+            clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.97f, (2.54f * worldScale) / 20.0f, (-2.54f * worldScale) / 2.2f);
             this.objectManager.Add(clonePlane);
             #endregion
             #endregion
@@ -1064,6 +1076,24 @@ namespace GDApp
             this.objectManager.Add(cloneCollider);
             #endregion
             #endregion
+        }
+
+        private void InitializeBookCases()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-62.0f, 0.0f, -93.65f), new Vector3(0, 0, 0), new Vector3(0.05f, 0.038f, 0.045f), Vector3.UnitX, Vector3.UnitY);
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["bookcase"];
+
+            collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["book-case"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2.0f, 15.0f, 17.0f)),
+               new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
         }
         #endregion
 
