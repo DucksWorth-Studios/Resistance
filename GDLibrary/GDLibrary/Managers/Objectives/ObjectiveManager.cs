@@ -58,6 +58,36 @@ namespace GDLibrary
             this.removeList.Clear();
         }
 
+        #region register for events
+
+        protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.ObjectiveChanged +=updateObjective;
+        }
+
+        #endregion
+
+
+        protected void updateObjective(EventData eventData)
+        {
+
+        }
+
+        protected override void EventDispatcher_MenuChanged(EventData eventData)
+        {
+            //did the event come from the main menu and is it a start game event
+            if (eventData.EventType == EventActionType.OnStart)
+            {
+               
+            }
+            //did the event come from the main menu and is it a start game event
+            else if (eventData.EventType == EventActionType.OnPause)
+            {
+              
+            }
+        }
+
+
         protected override void ApplyUpdate(GameTime gameTime)
         {
             ApplyRemove();
