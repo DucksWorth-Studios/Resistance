@@ -190,6 +190,7 @@ namespace GDLibrary
             this.Game.GraphicsDevice.Viewport = this.fullScreenViewport;
         }
 
+        //Check Status type to be onlose and disable this
         protected override void HandleInput(GameTime gameTime)
         {
             #region Menu Handling

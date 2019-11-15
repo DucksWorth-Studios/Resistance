@@ -133,9 +133,9 @@ namespace GDLibrary
                 {
                     if(!currentlyOpen)
                     {
-                        //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.MainMenu));
-                        //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.mouseLock));
-                        EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
+                        EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.MainMenu));
+                        EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.mouseLock));
+                        //EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
                     } 
                 }
                 //Console.WriteLine("Hello");
