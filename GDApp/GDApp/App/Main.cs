@@ -122,6 +122,7 @@ namespace GDApp
             //menu and UI elements
             AddMenuElements();
             AddUIElements();
+            AddGameOverMenu();
 #if DEBUG
             InitializeDebugTextInfo();
 #endif
@@ -374,7 +375,7 @@ namespace GDApp
             //menu manager
             this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, this.cameraManager, spriteBatch, this.eventDispatcher, StatusType.Off);
             //set the main menu to be the active menu scene
-            this.menuManager.SetActiveList("mainmenu");
+            this.menuManager.SetActiveList("main menu");
             Components.Add(this.menuManager);
 
             //ui (e.g. reticule, inventory, progress)
@@ -408,6 +409,7 @@ namespace GDApp
 
             this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
+            
         }
 
         private void LoadDictionaries()
@@ -496,7 +498,7 @@ namespace GDApp
             //Load Colors
             this.textureDictionary.Load("Assets/Colours/gray");
             this.textureDictionary.Load("Assets/Colours/green");
-
+            this.textureDictionary.Load("Assets/Colours/black");
             //load riddle pop up
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/the-riddle", "popup");
 
@@ -1073,8 +1075,9 @@ namespace GDApp
             //this.cameraManager.SetActiveCamera(x => x.ID.Equals("collidable first person camera 1"));
         }
         #endregion
-        
+
         #region Menu & UI
+
         private void AddMenuElements()
         {
             Transform2D transform = null;
@@ -1227,11 +1230,36 @@ namespace GDApp
             this.menuManager.Add(sceneID, clone);
             #endregion
         }
+
+        private void AddGameOverMenu()
+        {
+            string sceneID = "";
+
+            int w, h;
+
+            w = graphics.PreferredBackBufferWidth;
+            h = graphics.PreferredBackBufferHeight;
+
+
+            Transform2D transform = new Transform2D(new Vector2(0, 0), 0, Vector2.One, Vector2.One, new Integer2(1, 1));
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, w, h);
+            Texture2D texture = this.textureDictionary["black"];
+            UITextureObject picture = new UITextureObject("lose-screen-background", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 1, texture, rect, new Vector2(1, 2));
+
+
+            sceneID = "lose-screen";
+            this.menuManager.Add(sceneID,picture);
+
+
+        }
+
         private void AddUIElements()
         {
             InitializeUIMousePointer();
             InitializeTimerUI();
         }
+
         private void InitializeUIMousePointer()
         {
             Texture2D texture = this.textureDictionary["reticuleDefault"];
