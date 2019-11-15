@@ -463,6 +463,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/FilingCabinet");
             this.modelDictionary.Load("Assets/Models/Props/book-case");
             this.modelDictionary.Load("Assets/Models/Props/Phonograph");
+            this.modelDictionary.Load("Assets/Models/Props/computer");
             #endregion
 
             #region Textures
@@ -654,6 +655,7 @@ namespace GDApp
             InitializeFilingCabinet();
             InitializeBookCase();
             InitializePhonoGraph();
+            InitializeComputer();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -1107,6 +1109,23 @@ namespace GDApp
 
             ModelObject model = new ModelObject("phonograph", ActorType.Decorator, transform, effectParameters, this.modelDictionary["Phonograph"]);
             this.objectManager.Add(model);
+        }
+
+        private void InitializeComputer()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-40.0f, 0.0f, -68.0f), new Vector3(0, -90, 0), new Vector3(0.05f, 0.05f, 0.045f), Vector3.UnitX, Vector3.UnitY);
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["ComputerTexture"];
+
+            collidableObject = new TriangleMeshObject("computer", ActorType.CollidableDecorator, transform3D, effectParameters, this.modelDictionary["computer"],
+                new MaterialProperties(0.1f, 0.1f, 0.1f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
         }
         #endregion
 
