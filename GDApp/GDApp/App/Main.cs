@@ -462,6 +462,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/war-table");
             this.modelDictionary.Load("Assets/Models/Props/FilingCabinet");
             this.modelDictionary.Load("Assets/Models/Props/book-case");
+            this.modelDictionary.Load("Assets/Models/Props/Phonograph");
             #endregion
 
             #region Textures
@@ -513,6 +514,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/LightTexture");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/FilingCabinet");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
 
 
 #if DEBUG
@@ -650,7 +652,8 @@ namespace GDApp
             InitializeFieldCot();
             InitializeFieldDesk();
             InitializeFilingCabinet();
-            InitializeBookCases();
+            InitializeBookCase();
+            InitializePhonoGraph();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -1078,7 +1081,7 @@ namespace GDApp
             #endregion
         }
 
-        private void InitializeBookCases()
+        private void InitializeBookCase()
         {
             Transform3D transform3D;
             BasicEffectParameters effectParameters;
@@ -1089,11 +1092,21 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["bookcase"];
 
-            collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["book-case"]);
+            collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["book-case"]);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2.0f, 15.0f, 17.0f)),
                new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializePhonoGraph()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-100.0f, 7.0f, -121.0f), new Vector3(0, 180, 0), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["phonograph"];
+
+            ModelObject model = new ModelObject("phonograph", ActorType.Decorator, transform, effectParameters, this.modelDictionary["Phonograph"]);
+            this.objectManager.Add(model);
         }
         #endregion
 
