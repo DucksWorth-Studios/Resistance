@@ -455,11 +455,11 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_00", "bunker_door");
 
             //props
-            this.modelDictionary.Load("Assets/Models/Props/War_map_table", "table");
-            this.modelDictionary.Load("Assets/Models/Props/Ceiling_Lamp", "Ceiling_lights");
-            this.modelDictionary.Load("Assets/Models/Props/AmmoBox");
-            this.modelDictionary.Load("Assets/Models/Props/FieldCot");
-            this.modelDictionary.Load("Assets/Models/Props/Field_Desk");
+            this.modelDictionary.Load("Assets/Models/Props/lamp");
+            this.modelDictionary.Load("Assets/Models/Props/ammo-box");
+            this.modelDictionary.Load("Assets/Models/Props/field-cot");
+            this.modelDictionary.Load("Assets/Models/Props/field-desk");
+            this.modelDictionary.Load("Assets/Models/Props/war-table");
             #endregion
 
             #region Textures
@@ -500,6 +500,15 @@ namespace GDApp
 
             //load riddle pop up
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/the-riddle", "popup");
+
+            //props
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/ammo-box");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/ComputerTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/FieldCotTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/FieldDeskTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/WarTableTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/LightTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/ammo-box");
 
 
 #if DEBUG
@@ -799,7 +808,7 @@ namespace GDApp
              * 
              * See https://knowledge.autodesk.com/support/3ds-max/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/3DSMax/files/GUID-37414F9F-5E33-4B1C-A77F-547D0B6F511A-htm.html
              * See https://www.youtube.com/watch?v=vuHdnxkXpYo&t=453s
-             * See https://www.youtube.com/watch?v=AqiNpRmENIQ&t=1892s
+             * See https://www.youtube.com/watch?v=AqiNpRmENIQ&t=1892sl
              * 
              */
             Model model = this.modelDictionary["box2"];
@@ -898,8 +907,9 @@ namespace GDApp
 
             transform3D = new Transform3D(new Vector3(-80, 0, -30), new Vector3(0, 0, 0), new Vector3(2.0f, 1.0f, 3.0f), Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["WarTableTexture"];
 
-            collidableObject = new TriangleMeshObject("warTable", ActorType.CollidableDecorator, transform3D, effectParameters, this.modelDictionary["table"],
+            collidableObject = new TriangleMeshObject("war-table", ActorType.CollidableDecorator, transform3D, effectParameters, this.modelDictionary["war-table"],
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
@@ -911,9 +921,10 @@ namespace GDApp
             ModelObject modelObject = null, cloneModel = null;
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["LightTexture"];
 
             modelObject = new ModelObject("Ceiling light - ", ActorType.Decorator, Transform3D.Zero, effectParameters,
-                this.modelDictionary["Ceiling_lights"]);
+                this.modelDictionary["lamp"]);
 
             #region first ceiling light
             cloneModel = (ModelObject)modelObject.Clone();
@@ -932,9 +943,10 @@ namespace GDApp
             CollidableObject collidableObject = null, cloneCollidable;
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["ammo-box"];
 
             collidableObject = new CollidableObject("Ammo box - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
-                this.modelDictionary["AmmoBox"]);
+                this.modelDictionary["ammo-box"]);
 
 
             for (int i = 0; i < 3; i++)
@@ -959,12 +971,13 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-120.0f, 3.5f, -90.0f), new Vector3(0, 0, 0), new Vector3(0.03f, 0.03f, 0.05f),
+            transform3D = new Transform3D(new Vector3(-120.0f, -2.5f, -90.0f), new Vector3(0, 0, 0), new Vector3(0.05f, 0.05f, 0.06f),
                 Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["FieldCotTexture"];
 
             collidableObject = new TriangleMeshObject("field cot", ActorType.CollidableDecorator, transform3D, effectParameters,
-                this.modelDictionary["FieldCot"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+                this.modelDictionary["field-cot"], new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }
@@ -975,12 +988,13 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-100.0f, -2.0f, -131.0f), new Vector3(0, 90, 0), new Vector3(3.0f, 2.5f, 3.5f),
+            transform3D = new Transform3D(new Vector3(-100.0f, 0.0f, -121.0f), new Vector3(0, 90, 0), new Vector3(0.15f, 0.1f, 0.15f),
                Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["FieldDeskTexture"];
 
             collidableObject = new TriangleMeshObject("field desk", ActorType.CollidableDecorator, transform3D, effectParameters,
-                this.modelDictionary["Field_Desk"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+                this.modelDictionary["field-desk"], new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }
