@@ -631,9 +631,8 @@ namespace GDApp
             int worldScale = 100;
             //collidable
             InitializeCollidableWalls(worldScale);
-          
-            //Collidable
             InitializeCollidableGround(worldScale);
+            InitializeNonCollidableCeiling(worldScale);
 
             //add level elements
             //InitializeBuildings();
@@ -826,6 +825,16 @@ namespace GDApp
             collidableObject.AddPrimitive(new JigLibX.Geometry.Plane(transform3D.Up, transform3D.Translation), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeNonCollidableCeiling(int worldScale)
+        {
+            Transform3D transform = new Transform3D(new Vector3(0, 25, 0), Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["concreteFloor"];
+
+            ModelObject model = new ModelObject("ceiling", ActorType.NonCollidableCeiling, transform, effectParameters, this.modelDictionary["box2"]);
+            this.objectManager.Add(model);
         }
 
         private void InitializeBuildings()
