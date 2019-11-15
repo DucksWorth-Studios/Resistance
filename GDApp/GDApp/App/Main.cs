@@ -460,6 +460,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/field-cot");
             this.modelDictionary.Load("Assets/Models/Props/field-desk");
             this.modelDictionary.Load("Assets/Models/Props/war-table");
+            this.modelDictionary.Load("Assets/Models/Props/FilingCabinet");
             #endregion
 
             #region Textures
@@ -508,7 +509,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/FieldDeskTexture");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/WarTableTexture");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/LightTexture");
-            this.textureDictionary.Load("Assets/Textures/Props/Resistance/ammo-box");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/FilingCabinet");
 
 
 #if DEBUG
@@ -645,6 +646,7 @@ namespace GDApp
             InitializeAmmoBoxes();
             InitializeFieldCot();
             InitializeFieldDesk();
+            InitializeFilingCabinet();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -1008,6 +1010,60 @@ namespace GDApp
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(22.0f, 8.0f, 7.0f)), new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeFilingCabinet()
+        {
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject = null, cloneCollider = null;
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["FilingCabinet"];
+
+            collidableObject = new CollidableObject("filing cabinet - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
+                this.modelDictionary["FilingCabinet"]);
+            //collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4,2,4)),
+            //  new MaterialProperties(1, 1, 1));
+            //collidableObject.Enable(true, 1);
+            //this.objectManager.Add(collidableObject);
+
+            #region clones
+            #region clone 1 (2nd Room)
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 1;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-10.0f, -0.4f, -68.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4, 2, 4)),
+             new MaterialProperties(1, 1, 1));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
+            #endregion
+
+            #region clone 2 (left side of exit door)
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 2;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-75.0f, -0.4f, 122.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4,2,4)),
+              new MaterialProperties(1, 1, 1));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
+            #endregion
+
+            #region clone 3 (right side of exit door)
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 3;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-113.0f, -0.4f, 122.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4, 2, 4)),
+              new MaterialProperties(1, 1, 1));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
+            #endregion
+            #endregion
         }
         #endregion
 
