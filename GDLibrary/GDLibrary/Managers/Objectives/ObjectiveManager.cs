@@ -37,7 +37,11 @@ namespace GDLibrary
             this.drawList  = new List<Actor2D>(initialSize);
             this.removeList = new List<Actor2D>(initialSize);
             this.spriteBatch = spriteBatch;
-            
+
+
+         
+
+
 
         }
 

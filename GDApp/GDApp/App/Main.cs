@@ -96,7 +96,7 @@ namespace GDApp
 
             int gameLevel = 1;
             bool isMouseVisible = true;
-            Integer2 screenResolution = ScreenUtility.HD720;
+            Integer2 screenResolution = ScreenUtility.HD1080;
             ScreenUtility.ScreenType screenType = ScreenUtility.ScreenType.SingleScreen;
             int numberOfGamePadPlayers = 1;
 
@@ -144,9 +144,10 @@ namespace GDApp
             InitializeSwitches();
             InitialisePuzzleLights();
             InitialisePopUP();
+            InitialiseObjectiveHUD();
 
-            
-           
+
+
             base.Initialize();
         }
 
@@ -262,6 +263,41 @@ namespace GDApp
 
             this.uiManager.Add(picture);
         }
+
+
+        private void InitialiseObjectiveHUD()
+        {
+            Texture2D texture = this.textureDictionary["Objective"];
+
+            int x,y,tw, th;
+            tw = texture.Width;
+            th = texture.Height;
+            x = graphics.PreferredBackBufferWidth;
+            y = graphics.PreferredBackBufferHeight;
+
+
+            Vector2 scale = new Vector2(
+                (float)(x/y),
+                (float)(x/y));
+
+
+            Vector2 translation = new Vector2(
+                (float)(graphics.PreferredBackBufferWidth / 2) - (((x / y) * tw)) / 2,
+                (float)1);
+
+            Transform2D transform = new Transform2D(translation, 0, scale, new Vector2(0, 0), new Integer2(0, 0));
+
+
+            // Transform2D transform = new Transform2D(new Vector2(x,y), 0, new Vector2(1f, 1f),new Vector2(1,1),new Integer2(w,z));
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, tw, th);
+
+
+            UITextureObject picture = new UITextureObject("PopUp", ActorType.PopUP, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 0, texture, rect, new Vector2(0, 0));
+
+            this.objectiveManager.Add(picture);
+        }
+
 
         private void initialiseTestObject()
         {
@@ -411,7 +447,7 @@ namespace GDApp
             Components.Add(timerManager);
 
             this.objectiveManager = new ObjectiveManager(this, this.eventDispatcher, StatusType.Off, 0, this.spriteBatch);
-            Components.Add(this.uiManager);
+            Components.Add(this.objectiveManager);
         }
 
         private void LoadDictionaries()
@@ -487,6 +523,7 @@ namespace GDApp
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
             this.textureDictionary.Load("Assets/Textures/UI/HUD/progress_gradient");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Objective");
 
             //architecture
             this.textureDictionary.Load("Assets/Textures/Architecture/Buildings/house-low-texture");
