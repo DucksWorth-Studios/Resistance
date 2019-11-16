@@ -220,6 +220,8 @@ namespace GDApp
          */
         private void LoseTriggered(EventData eventData)
         {
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.MainMenu));
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
             System.Diagnostics.Debug.WriteLine("Lose event triggered");
         }
 
