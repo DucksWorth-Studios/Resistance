@@ -459,11 +459,16 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_00", "bunker_door");
 
             //props
-            this.modelDictionary.Load("Assets/Models/Props/War_map_table", "table");
-            this.modelDictionary.Load("Assets/Models/Props/Ceiling_Lamp", "Ceiling_lights");
-            this.modelDictionary.Load("Assets/Models/Props/AmmoBox");
-            this.modelDictionary.Load("Assets/Models/Props/FieldCot");
-            this.modelDictionary.Load("Assets/Models/Props/Field_Desk");
+            this.modelDictionary.Load("Assets/Models/Props/lamp");
+            this.modelDictionary.Load("Assets/Models/Props/ammo-box");
+            this.modelDictionary.Load("Assets/Models/Props/field-cot");
+            this.modelDictionary.Load("Assets/Models/Props/field-desk");
+            this.modelDictionary.Load("Assets/Models/Props/war-table");
+            this.modelDictionary.Load("Assets/Models/Props/FilingCabinet");
+            this.modelDictionary.Load("Assets/Models/Props/book-case");
+            this.modelDictionary.Load("Assets/Models/Props/Phonograph");
+            this.modelDictionary.Load("Assets/Models/Props/computer");
+            this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
             #endregion
 
             #region Textures
@@ -471,6 +476,8 @@ namespace GDApp
             this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
             this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
             this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall-texture", "wall");
+            this.textureDictionary.Load("Assets/Textures/Architecture/concrete", "concreteFloor");
+            this.textureDictionary.Load("Assets/Textures/Architecture/concrete2");
 
             //menu - buttons
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
@@ -505,6 +512,17 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Colours/black");
             //load riddle pop up
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/the-riddle", "popup");
+
+            //props
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/ammo-box");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/ComputerTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/FieldCotTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/FieldDeskTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/WarTableTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/LightTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/FilingCabinet");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
 
 
 #if DEBUG
@@ -627,11 +645,10 @@ namespace GDApp
             int worldScale = 100;
             //collidable
             InitializeCollidableWalls(worldScale);
-          
-            //Collidable
             InitializeCollidableGround(worldScale);
+            InitializeNonCollidableCeiling(worldScale);
 
-            ////add level elements
+            //add level elements
             //InitializeBuildings();
             InitializeExitDoor();
             InitializeDoorBarriers();
@@ -642,6 +659,11 @@ namespace GDApp
             InitializeAmmoBoxes();
             InitializeFieldCot();
             InitializeFieldDesk();
+            InitializeFilingCabinet();
+            InitializeBookCase();
+            InitializePhonoGraph();
+            InitializeComputer();
+            InitializeLogicPuzzleModel();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -683,7 +705,7 @@ namespace GDApp
         private void InitializeCollidableWalls(int worldScale)
         {
             //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
-            Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale / 4));
+            Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale / 10.0f));
 
             //clone the dictionary effect and set unique properties for the hero player object
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
@@ -701,7 +723,7 @@ namespace GDApp
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             //scale the length of the plane to be half of the worldscale
-            clonePlane.Transform.Scale = new Vector3(worldScale / 2.0f, 1, worldScale / 4);
+            clonePlane.Transform.Scale = new Vector3(worldScale / 2.0f, 1, worldScale / 10.0f);
             //rotate the default plane 90 degrees around the X-axis (use the thumb and curled fingers of your right hand to determine +ve or -ve rotation value)
             clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
             
@@ -709,7 +731,7 @@ namespace GDApp
              * Move the plane back to meet with the back edge of the grass (by based on the original 3DS Max model scale)
              */
 
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4f, 0, (-2.54f * worldScale) / 2f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4f, (2.54f * worldScale) / 20.0f, (-2.54f * worldScale) / 2.0f);
             this.objectManager.Add(clonePlane);
             #endregion
 
@@ -718,7 +740,7 @@ namespace GDApp
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Rotation = new Vector3(90, 90, 0);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f, 0, 0);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.0f, (2.54f * worldScale) / 20.0f, 0);
             this.objectManager.Add(clonePlane);
             #endregion
 
@@ -726,65 +748,74 @@ namespace GDApp
             //add the right skybox plane
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
-            clonePlane.Transform.Scale = new Vector3(worldScale/ 4, 1, worldScale / 4);
+            clonePlane.Transform.Scale = new Vector3(worldScale/ 4, 1, worldScale / 10.0f);
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
-            clonePlane.Transform.Translation = new Vector3(worldScale / 128.0f, 0, (-2.54f * worldScale) / 2.67f);
+            clonePlane.Transform.Translation = new Vector3(worldScale / 128.0f, (2.54f * worldScale) / 20.0f, (-2.54f * worldScale) / 2.67f);
             this.objectManager.Add(clonePlane);
             #endregion
 
             #region long right wall
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
-            clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 4);
+            clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 10.0f);
             clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4.0f, 0, (2.54f * worldScale) / 8.0f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4.0f, (2.54f * worldScale) / 20.0f, (2.54f * worldScale) / 8.0f);
             this.objectManager.Add(clonePlane);
             #endregion
 
             #region 2nd room short wall
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
-            clonePlane.Transform.Scale = new Vector3(worldScale / 4, 1, worldScale / 4);
+            clonePlane.Transform.Scale = new Vector3(worldScale / 4, 1, worldScale / 10.0f);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 8.0f, 0, (-2.54f * worldScale) / 4.0f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 8.0f, (2.54f * worldScale) / 20.0f, (-2.54f * worldScale) / 4.0f);
             this.objectManager.Add(clonePlane);
             #endregion
-
-
-            ////add the top skybox plane
-            //clonePlane = (ModelObject)planePrototypeModelObject.Clone();
-            //clonePlane.EffectParameters.Texture = this.textureDictionary["sky"];
-            ////notice the combination of rotations to correctly align the sky texture with the sides
-            //clonePlane.Transform.Rotation = new Vector3(180, -90, 0);
-            //clonePlane.Transform.Translation = new Vector3(0, ((2.54f * worldScale) / 2.0f), 0);
-            //this.objectManager.Add(clonePlane);
 
             #region front wall
             //add the front skybox plane
             // this side will be done in 3 blocks two on each side with a space for a door and then a block on top of it
             //left side of door
-            float xScale = 0.833f * worldScale / 10.0f;
+            float xScale = 0.833f * worldScale / 8.0f;
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
-            clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 4);
+            clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 10.0f);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.2f, 0, (2.54f * worldScale) / 2f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.2f, (2.54f * worldScale) / 20.0f, (2.54f * worldScale) / 2f);
             this.objectManager.Add(clonePlane);
 
             //right side of door
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
-            clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 4);
+            clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 10.0f);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.5f, 0, (2.54f * worldScale) / 2f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.5f, (2.54f * worldScale) / 20.0f, (2.54f * worldScale) / 2f);
             this.objectManager.Add(clonePlane);
 
             //top of door way
             clonePlane = (ModelObject)planePrototypeModelObject.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
-            clonePlane.Transform.Scale = new Vector3(worldScale / 11.7f, 1, worldScale / 33);
+            clonePlane.Transform.Scale = new Vector3(xScale / 1.6f, 1, worldScale / 40);
             clonePlane.Transform.Rotation = new Vector3(-90, 0, 180);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.7f, worldScale / 3.55f, (2.54f * worldScale) / 2f);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.7f, worldScale / 4.35f, (2.54f * worldScale) / 2f);
+            this.objectManager.Add(clonePlane);
+            #endregion
+
+            #region dividing wall
+            //right side
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.EffectParameters.Texture = this.textureDictionary["concrete2"];
+            clonePlane.Transform.Scale = new Vector3(xScale, 0.5f, worldScale / 10);
+            clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.97f, (2.54f * worldScale) / 20.0f, (-2.54f * worldScale) / 3.55f);
+            this.objectManager.Add(clonePlane);
+
+            //left side
+            clonePlane = (ModelObject)planePrototypeModelObject.Clone();
+            clonePlane.EffectParameters.Texture = this.textureDictionary["concrete2"];
+            clonePlane.Transform.Scale = new Vector3(xScale, 0.5f, worldScale / 10);
+            clonePlane.Transform.Rotation = new Vector3(90, -90, 0);
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.97f, (2.54f * worldScale) / 20.0f, (-2.54f * worldScale) / 2.2f);
             this.objectManager.Add(clonePlane);
             #endregion
             #endregion
@@ -803,7 +834,7 @@ namespace GDApp
              * 
              * See https://knowledge.autodesk.com/support/3ds-max/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/3DSMax/files/GUID-37414F9F-5E33-4B1C-A77F-547D0B6F511A-htm.html
              * See https://www.youtube.com/watch?v=vuHdnxkXpYo&t=453s
-             * See https://www.youtube.com/watch?v=AqiNpRmENIQ&t=1892s
+             * See https://www.youtube.com/watch?v=AqiNpRmENIQ&t=1892sl
              * 
              */
             Model model = this.modelDictionary["box2"];
@@ -814,13 +845,23 @@ namespace GDApp
             //effectParameters.Texture2 = this.textureDictionary["checkerboard_greywhite"];
 
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["grass1"];
+            effectParameters.Texture = this.textureDictionary["concreteFloor"];
 
             transform3D = new Transform3D(Vector3.Zero, Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
             collidableObject.AddPrimitive(new JigLibX.Geometry.Plane(transform3D.Up, transform3D.Translation), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeNonCollidableCeiling(int worldScale)
+        {
+            Transform3D transform = new Transform3D(new Vector3(0, 25, 0), Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["concreteFloor"];
+
+            ModelObject model = new ModelObject("ceiling", ActorType.NonCollidableCeiling, transform, effectParameters, this.modelDictionary["box2"]);
+            this.objectManager.Add(model);
         }
 
         private void InitializeBuildings()
@@ -844,13 +885,14 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-94, 12, 127), new Vector3(-90, 0, 0), new Vector3(0.11f, 0.01f, 0.07f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-94, 10, 127), new Vector3(-90, 0, 0), new Vector3(0.09f, 0.01f, 0.06f), Vector3.UnitX, Vector3.UnitY);
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
 
-            collidableObject = new TriangleMeshObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters,
-                this.modelDictionary["bunker_door"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["bunker_door"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(13.0f,15.0f,0.5f)),
+               new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }
@@ -872,8 +914,8 @@ namespace GDApp
             cloneCollider = (CollidableObject)collidableObject.Clone();
             cloneCollider.ID += 1;
 
-            cloneCollider.Transform = new Transform3D(new Vector3(-100, 6, 124), new Vector3(-90, 0, 180), new Vector3(0.1f, 0.05f, 0.1f), Vector3.UnitX, Vector3.UnitY);
-            cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, 2.54f * cloneCollider.Transform.Scale), 
+            cloneCollider.Transform = new Transform3D(new Vector3(-99, 6, 124), new Vector3(-90, 0, 180), new Vector3(0.07f, 0.05f, 0.07f), Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, new Vector3(12.0f, 1.0f, 1.0f)), 
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             cloneCollider.Enable(true, 1);
@@ -885,8 +927,8 @@ namespace GDApp
             cloneCollider = (CollidableObject)collidableObject.Clone();
             cloneCollider.ID += 2;
 
-            cloneCollider.Transform = new Transform3D(new Vector3(-88, 20, 124), new Vector3(-90, 0, 0), new Vector3(0.1f, 0.05f, 0.1f), Vector3.UnitX, Vector3.UnitY);
-            cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, 2.54f * cloneCollider.Transform.Scale),
+            cloneCollider.Transform = new Transform3D(new Vector3(-89, 13, 124), new Vector3(-90, 0, 0), new Vector3(0.07f, 0.05f, 0.07f), Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, new Vector3(12.0f, 1.0f, 1.0f)),
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             cloneCollider.Enable(true, 1);
@@ -902,8 +944,9 @@ namespace GDApp
 
             transform3D = new Transform3D(new Vector3(-80, 0, -30), new Vector3(0, 0, 0), new Vector3(2.0f, 1.0f, 3.0f), Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["WarTableTexture"];
 
-            collidableObject = new TriangleMeshObject("warTable", ActorType.CollidableDecorator, transform3D, effectParameters, this.modelDictionary["table"],
+            collidableObject = new TriangleMeshObject("war-table", ActorType.CollidableDecorator, transform3D, effectParameters, this.modelDictionary["war-table"],
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
@@ -915,9 +958,10 @@ namespace GDApp
             ModelObject modelObject = null, cloneModel = null;
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["LightTexture"];
 
             modelObject = new ModelObject("Ceiling light - ", ActorType.Decorator, Transform3D.Zero, effectParameters,
-                this.modelDictionary["Ceiling_lights"]);
+                this.modelDictionary["lamp"]);
 
             #region first ceiling light
             cloneModel = (ModelObject)modelObject.Clone();
@@ -936,9 +980,10 @@ namespace GDApp
             CollidableObject collidableObject = null, cloneCollidable;
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["ammo-box"];
 
             collidableObject = new CollidableObject("Ammo box - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
-                this.modelDictionary["AmmoBox"]);
+                this.modelDictionary["ammo-box"]);
 
 
             for (int i = 0; i < 3; i++)
@@ -963,12 +1008,13 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-120.0f, 3.5f, -90.0f), new Vector3(0, 0, 0), new Vector3(0.03f, 0.03f, 0.05f),
+            transform3D = new Transform3D(new Vector3(-120.0f, -2.5f, -90.0f), new Vector3(0, 0, 0), new Vector3(0.05f, 0.05f, 0.06f),
                 Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["FieldCotTexture"];
 
             collidableObject = new TriangleMeshObject("field cot", ActorType.CollidableDecorator, transform3D, effectParameters,
-                this.modelDictionary["FieldCot"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+                this.modelDictionary["field-cot"], new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }
@@ -979,14 +1025,124 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-100.0f, -2.0f, -131.0f), new Vector3(0, 90, 0), new Vector3(3.0f, 2.5f, 3.5f),
+            transform3D = new Transform3D(new Vector3(-100.0f, 0.0f, -121.0f), new Vector3(0, 90, 0), new Vector3(0.15f, 0.1f, 0.15f),
                Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["FieldDeskTexture"];
 
-            collidableObject = new TriangleMeshObject("field desk", ActorType.CollidableDecorator, transform3D, effectParameters,
-                this.modelDictionary["Field_Desk"], new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject = new CollidableObject("field desk", ActorType.CollidableDecorator, transform3D, effectParameters,
+                this.modelDictionary["field-desk"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(22.0f, 8.0f, 7.0f)), new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeFilingCabinet()
+        {
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject = null, cloneCollider = null;
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["FilingCabinet"];
+
+            collidableObject = new CollidableObject("filing cabinet - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
+                this.modelDictionary["FilingCabinet"]);
+            //collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4,2,4)),
+            //  new MaterialProperties(1, 1, 1));
+            //collidableObject.Enable(true, 1);
+            //this.objectManager.Add(collidableObject);
+
+            #region clones
+            #region clone 1 (2nd Room)
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 1;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-10.0f, -0.4f, -68.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4, 2, 4)),
+             new MaterialProperties(1, 1, 1));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
+            #endregion
+
+            #region clone 2 (left side of exit door)
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 2;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-75.0f, -0.4f, 122.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4,2,4)),
+              new MaterialProperties(1, 1, 1));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
+            #endregion
+
+            #region clone 3 (right side of exit door)
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 3;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-113.0f, -0.4f, 122.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4, 2, 4)),
+              new MaterialProperties(1, 1, 1));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
+            #endregion
+            #endregion
+        }
+
+        private void InitializeBookCase()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-62.0f, 0.0f, -93.65f), new Vector3(0, 0, 0), new Vector3(0.05f, 0.038f, 0.045f), Vector3.UnitX, Vector3.UnitY);
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["bookcase"];
+
+            collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["book-case"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2.0f, 15.0f, 17.0f)),
+               new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializePhonoGraph()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-100.0f, 7.0f, -121.0f), new Vector3(0, 180, 0), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["phonograph"];
+
+            ModelObject model = new ModelObject("phonograph", ActorType.Decorator, transform, effectParameters, this.modelDictionary["Phonograph"]);
+            this.objectManager.Add(model);
+        }
+
+        private void InitializeComputer()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-40.0f, 0.0f, -68.0f), new Vector3(0, -90, 0), new Vector3(0.05f, 0.05f, 0.045f), Vector3.UnitX, Vector3.UnitY);
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["ComputerTexture"];
+
+            collidableObject = new TriangleMeshObject("computer", ActorType.CollidableDecorator, transform3D, effectParameters, this.modelDictionary["computer"],
+                new MaterialProperties(0.1f, 0.1f, 0.1f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
+
+        private void InitializeLogicPuzzleModel()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-30.0f, 12.0f, -125.2f), new Vector3(90, -180, 180), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+
+            ModelObject model = new ModelObject("logic puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["LogicPuzzle"]);
+            this.objectManager.Add(model);
         }
         #endregion
 
