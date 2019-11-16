@@ -446,7 +446,7 @@ namespace GDApp
             this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
 
-            this.objectiveManager = new ObjectiveManager(this, this.eventDispatcher, StatusType.Off, 0, this.spriteBatch);
+            this.objectiveManager = new ObjectiveManager(this, this.eventDispatcher, StatusType.Off, 0, this.spriteBatch,this.textureDictionary);
             Components.Add(this.objectiveManager);
         }
 
@@ -524,6 +524,9 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
             this.textureDictionary.Load("Assets/Textures/UI/HUD/progress_gradient");
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Objective");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Escape");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Riddle");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Logic");
 
             //architecture
             this.textureDictionary.Load("Assets/Textures/Architecture/Buildings/house-low-texture");

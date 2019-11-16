@@ -9,6 +9,8 @@ namespace GDLibrary
     {
         #region Fields
 
+        
+
         private enum Objectives
         {
             noObjective = 0,
@@ -21,24 +23,25 @@ namespace GDLibrary
         private List<Actor2D> drawList, removeList;
         private SpriteBatch spriteBatch;
         private List<Objectives> completedObjectives;
+        private ContentDictionary<Texture2D> textureDictionary;
         private int currentObjective = 0;
 
-    
-   
 
+       
 
 
 
         #endregion
 
-        public ObjectiveManager(Game game, EventDispatcher eventDispatcher, StatusType  statusType,int initialSize,SpriteBatch spriteBatch)
+        public ObjectiveManager(Game game, EventDispatcher eventDispatcher, StatusType  statusType,int initialSize,SpriteBatch spriteBatch, ContentDictionary<Texture2D> textureDictionary)
             : base(game, eventDispatcher, statusType)
         {
             this.drawList  = new List<Actor2D>(initialSize);
             this.removeList = new List<Actor2D>(initialSize);
             this.spriteBatch = spriteBatch;
+            this.textureDictionary = textureDictionary;
 
-
+            this.InitializeObjectivesUI();
          
 
 
@@ -94,7 +97,19 @@ namespace GDLibrary
         }
 
         #endregion
+        protected Texture2D InitializeObjectivesUI()
+        {
+           Texture2D texture = textureDictionary["Objective"];
 
+
+            if ((Objectives)this.currentObjective == Objectives.escape) { texture = textureDictionary["Escape"]; }
+            if ((Objectives)this.currentObjective == Objectives.solveRiddle) { texture = textureDictionary["Riddle"]; }
+            if ((Objectives)this.currentObjective == Objectives.solveLogic) { texture = textureDictionary["Logic"]; }
+
+
+
+            return texture;
+        }
 
         protected void newObjective(EventData eventData)
         {
@@ -102,7 +117,7 @@ namespace GDLibrary
             {
                 completedObjectives.Add((Objectives)currentObjective);
                 currentObjective++;
-
+                
             }
 
         }
