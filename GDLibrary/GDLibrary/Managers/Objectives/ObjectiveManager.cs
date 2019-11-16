@@ -8,9 +8,28 @@ namespace GDLibrary
     public class ObjectiveManager : PausableDrawableGameComponent
     {
         #region Fields
+
+        private enum Objectives
+        {
+            noObjective = 0,
+            escape = 1,
+            solveRiddle = 2,
+            solveLogic = 3,
+        }
+
         private Game game;
         private List<Actor2D> drawList, removeList;
         private SpriteBatch spriteBatch;
+        private List<Objectives> completedObjectives;
+        private int currentObjective = 0;
+
+    
+   
+
+
+
+
+        #endregion
 
         public ObjectiveManager(Game game, EventDispatcher eventDispatcher, StatusType  statusType,int initialSize,SpriteBatch spriteBatch)
             : base(game, eventDispatcher, statusType)
@@ -18,8 +37,11 @@ namespace GDLibrary
             this.drawList  = new List<Actor2D>(initialSize);
             this.removeList = new List<Actor2D>(initialSize);
             this.spriteBatch = spriteBatch;
+            
+
         }
 
+        #region ManagerMethods
         public void Add(Actor2D actor)
         {
             this.drawList.Add(actor);
@@ -57,19 +79,27 @@ namespace GDLibrary
 
             this.removeList.Clear();
         }
+        #endregion
 
         #region register for events
 
         protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
-            eventDispatcher.ObjectiveChanged +=updateObjective;
+            eventDispatcher.ObjectiveChanged +=newObjective;
+            eventDispatcher.ObjectiveChanged +=EventDispatcher_MenuChanged;
         }
 
         #endregion
 
 
-        protected void updateObjective(EventData eventData)
+        protected void newObjective(EventData eventData)
         {
+            if (eventData.EventCategoryType == EventCategoryType.Objective)
+            {
+                completedObjectives.Add((Objectives)currentObjective);
+                currentObjective++;
+
+            }
 
         }
 
@@ -78,12 +108,13 @@ namespace GDLibrary
             //did the event come from the main menu and is it a start game event
             if (eventData.EventType == EventActionType.OnStart)
             {
-               
+                this.StatusType = StatusType.Drawn;
             }
             //did the event come from the main menu and is it a start game event
             else if (eventData.EventType == EventActionType.OnPause)
             {
-              
+                this.StatusType = StatusType.Off;
+
             }
         }
 
@@ -113,7 +144,7 @@ namespace GDLibrary
             }
             this.spriteBatch.End();
         }
-        #endregion
+ 
 
 
 

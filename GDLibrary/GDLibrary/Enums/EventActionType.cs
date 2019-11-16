@@ -64,6 +64,7 @@ namespace GDLibrary
 
         //sent to show/hide info
         OnToggleDebug,
+        OnObjective,
 
         //sent by object picking manager to update listeners e.g. the UI mouse ("no object selected")
         OnObjectPicked,
