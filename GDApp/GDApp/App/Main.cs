@@ -122,6 +122,7 @@ namespace GDApp
             //menu and UI elements
             AddMenuElements();
             AddUIElements();
+            AddGameOverMenu();
 #if DEBUG
             InitializeDebugTextInfo();
 #endif
@@ -219,6 +220,8 @@ namespace GDApp
          */
         private void LoseTriggered(EventData eventData)
         {
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.MainMenu));
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
             System.Diagnostics.Debug.WriteLine("Lose event triggered");
         }
 
@@ -374,7 +377,7 @@ namespace GDApp
             //menu manager
             this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, this.cameraManager, spriteBatch, this.eventDispatcher, StatusType.Off);
             //set the main menu to be the active menu scene
-            this.menuManager.SetActiveList("mainmenu");
+            this.menuManager.SetActiveList("main menu");
             Components.Add(this.menuManager);
 
             //ui (e.g. reticule, inventory, progress)
@@ -408,6 +411,7 @@ namespace GDApp
 
             this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
+            
         }
 
         private void LoadDictionaries()
@@ -479,6 +483,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/genericbtn");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/quit");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/start");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/restart-Button");
 
             //menu - backgrounds
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/Title-screen");
@@ -486,6 +491,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/audiomenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/controlsmenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/exitmenuwithtrans");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/game-over");
 
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
@@ -503,7 +509,7 @@ namespace GDApp
             //Load Colors
             this.textureDictionary.Load("Assets/Colours/gray");
             this.textureDictionary.Load("Assets/Colours/green");
-
+            this.textureDictionary.Load("Assets/Colours/black");
             //load riddle pop up
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/the-riddle", "popup");
 
@@ -1229,8 +1235,9 @@ namespace GDApp
             //this.cameraManager.SetActiveCamera(x => x.ID.Equals("collidable first person camera 1"));
         }
         #endregion
-        
+
         #region Menu & UI
+
         private void AddMenuElements()
         {
             Transform2D transform = null;
@@ -1383,11 +1390,88 @@ namespace GDApp
             this.menuManager.Add(sceneID, clone);
             #endregion
         }
+
+        private void AddGameOverMenu()
+        {
+            string sceneID, buttonID, buttonText;
+            Vector2 position = Vector2.Zero;
+            UIButtonObject uiButtonObject = null, clone = null;
+            int verticalBtnSeparation = 100;
+            int w, h;
+
+            w = graphics.PreferredBackBufferWidth;
+            h = graphics.PreferredBackBufferHeight;
+            float a, b,c,d;
+
+            Texture2D texture = this.textureDictionary["game-over"];
+
+            a = (float) w/texture.Width;
+            b = (float)h/texture.Height;
+            c = (float)1 / a;
+            d = (float)1 / b;
+            
+            Console.WriteLine("width "+w);
+            Console.WriteLine("height "+h );
+            Vector2 scale = new Vector2(a,b);
+
+            Transform2D transform = new Transform2D(new Vector2(0, 0), 0,scale, Vector2.One, new Integer2(1, 1));
+
+
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, w, h);
+            
+            UITextureObject picture = new UITextureObject("lose-screen-background", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 1, texture);
+
+
+            sceneID = "lose-screen";
+            this.menuManager.Add(sceneID,picture);
+
+            texture = this.textureDictionary["restart-Button"];
+            buttonID = "";
+            buttonText = "";
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, graphics.PreferredBackBufferHeight - texture.Height);
+            transform = new Transform2D(position,
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
+                this.fontDictionary["menu"],
+                Color.DarkBlue, new Vector2(0, 2));
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.Green, Color.Green));
+
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+
+
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "exitbtn";
+            clone.Texture = this.textureDictionary["quit"];
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(180, verticalBtnSeparation);
+            //change the texture blend color
+            clone.Color = Color.Gray;
+            //store the original color since if we modify with a controller and need to reset
+            clone.OriginalColor = clone.Color;
+            //attach another controller on the exit button just to illustrate multi-controller approach
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.DarkRed));
+            this.menuManager.Add(sceneID, clone);
+
+            #endregion
+
+        }
+
         private void AddUIElements()
         {
             InitializeUIMousePointer();
             InitializeTimerUI();
         }
+
         private void InitializeUIMousePointer()
         {
             Texture2D texture = this.textureDictionary["reticuleDefault"];
@@ -1430,7 +1514,7 @@ namespace GDApp
             }
         }
 
-        #endregion
+        
 
         #region Effects
         private void InitializeEffects()

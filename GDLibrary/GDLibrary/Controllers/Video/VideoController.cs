@@ -112,6 +112,11 @@ namespace GDLibrary
                 if (this.videoPlayer != null) //if video was playing when menu was shown then pause
                     this.videoPlayer.Pause();
             }
+            else if(eventData.EventType == EventActionType.OnLose)
+            {
+                if (this.videoPlayer != null) //if video was playing when menu was shown then pause
+                    this.videoPlayer.Pause();
+            }
         }
 
         private void EventDispatcher_VideoChanged(EventData eventData)

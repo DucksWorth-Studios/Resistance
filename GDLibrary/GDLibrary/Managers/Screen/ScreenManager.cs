@@ -27,7 +27,7 @@ namespace GDLibrary
         private bool bLayoutDirty = true;
         private GraphicsDeviceManager graphics;
         private Viewport fullScreenViewport;
-
+        private bool lose = false;
 
         #endregion
 
@@ -130,12 +130,20 @@ namespace GDLibrary
             {
                 //turn on update and draw i.e. hide the menu
                 this.StatusType = StatusType.Update | StatusType.Drawn;
+                this.lose = false;
             }
             //did the event come from the main menu and is it a start game event
             else if (eventData.EventType == EventActionType.OnPause)
             {
                 //turn off update and draw i.e. show the menu since the game is paused
                 this.StatusType = StatusType.Off;
+                this.lose = false;
+            }
+            else if (eventData.EventType == EventActionType.OnLose)
+            {
+                //turn off update and draw i.e. show the menu since the game is paused
+                this.StatusType = StatusType.Off;
+                this.lose = true;
             }
         }
         #endregion
@@ -185,24 +193,28 @@ namespace GDLibrary
             this.Game.GraphicsDevice.Viewport = this.fullScreenViewport;
         }
 
+        //Check Status type to be onlose and disable this
         protected override void HandleInput(GameTime gameTime)
         {
             #region Menu Handling
             //if user presses menu button then either show or hide the menu
             if (this.keyboardManager != null && this.keyboardManager.IsFirstKeyPress(this.pauseKey))
             {
-                //if game is paused then publish a play event
-                if (this.StatusType == StatusType.Off)
+                if(!lose)
                 {
-                    //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
-                    EventDispatcher.Publish(new EventData(EventActionType.OnStart, EventCategoryType.MainMenu));
+                    if (this.StatusType == StatusType.Off)
+                    {
+                        //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
+                        EventDispatcher.Publish(new EventData(EventActionType.OnStart, EventCategoryType.MainMenu));
+                    }
+                    //if game is playing then publish a pause event
+                    else if (this.StatusType != StatusType.Off)
+                    {
+                        //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
+                        EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
+                    }
                 }
-                //if game is playing then publish a pause event
-                else if (this.StatusType != StatusType.Off)
-                {
-                    //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
-                    EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
-                }
+                
             }
             #endregion
         }

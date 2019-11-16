@@ -32,6 +32,12 @@ namespace GDApp
                 //object[] additionalParameters = { "menu elevator music" };
                 //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
             }
+            else if (eventData.EventType == EventActionType.OnLose)
+            {
+                //SetActiveList("lose-screen");
+                //turn off update and draw i.e. show the menu since the game is paused
+                //this.StatusType = StatusType.Off;
+            }
         }
         #endregion
 
@@ -113,6 +119,11 @@ namespace GDApp
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
             EventDispatcher.Publish(new EventData(EventActionType.OnStart, EventCategoryType.MainMenu));
+        }
+
+        private void DoRestart()
+        {
+            //Send Restart Event
         }
 
         private void DoExit()

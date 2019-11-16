@@ -740,6 +740,27 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Colours\Black.jpg">
+      <Name>Black</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\UI\Menu\Buttons\restart-Button.png">
+      <Name>restart-Button</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\UI\Menu\Backgrounds\game-over.png">
+      <Name>game-over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+</Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Models\Props\Phonograph.FBX">
       <Name>Phonograph</Name>
       <Importer>FbxImporter</Importer>
