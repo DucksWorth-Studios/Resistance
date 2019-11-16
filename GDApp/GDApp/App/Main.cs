@@ -482,6 +482,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/audiomenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/controlsmenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/exitmenuwithtrans");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/game-over");
 
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
@@ -1242,13 +1243,26 @@ namespace GDApp
 
             w = graphics.PreferredBackBufferWidth;
             h = graphics.PreferredBackBufferHeight;
+            float a, b,c,d;
+
+            Texture2D texture = this.textureDictionary["game-over"];
+
+            a = (float) w/texture.Width;
+            b = (float)h/texture.Height;
+            c = (float)1 / a;
+            d = (float)1 / b;
+            
+            Console.WriteLine("width "+w);
+            Console.WriteLine("height "+h );
+            Vector2 scale = new Vector2(a,b);
+
+            Transform2D transform = new Transform2D(new Vector2(0, 0), 0,scale, Vector2.One, new Integer2(1, 1));
 
 
-            Transform2D transform = new Transform2D(new Vector2(0, 0), 0, Vector2.One, Vector2.One, new Integer2(1, 1));
             Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, w, h);
-            Texture2D texture = this.textureDictionary["black"];
+            
             UITextureObject picture = new UITextureObject("lose-screen-background", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White,
-                SpriteEffects.None, 1, texture, rect, new Vector2(1, 2));
+                SpriteEffects.None, 1, texture);
 
 
             sceneID = "lose-screen";
