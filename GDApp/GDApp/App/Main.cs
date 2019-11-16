@@ -162,6 +162,7 @@ namespace GDApp
             this.eventDispatcher.PuzzleChanged += ChangeLights;
             this.eventDispatcher.RiddleChanged += ChangePopUPState;
             this.eventDispatcher.PlayerChanged += LoseTriggered;
+            this.eventDispatcher.PlayerChanged += WinTriggered;
             this.eventDispatcher.PopUpChanged += ChangePopUPState;
         }
         /*
@@ -214,6 +215,7 @@ namespace GDApp
             }     
 
         }
+
         /*
          * Author: Cameron
          * This will be used to trigger different UI effects when the timer runs out
@@ -225,8 +227,17 @@ namespace GDApp
             System.Diagnostics.Debug.WriteLine("Lose event triggered");
         }
 
+        /*
+         * Author: Cameron
+         * This will be used to trigger the end screen with the door opening and a fade to black
+         */
+        private void WinTriggered(EventData eventData)
+        {
+            System.Diagnostics.Debug.WriteLine("Win event triggered");
+        }
+
         #endregion
-                
+
         #region TestObjects
 
         private void InitialisePopUP()
