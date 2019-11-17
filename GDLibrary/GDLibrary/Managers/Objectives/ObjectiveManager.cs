@@ -22,9 +22,10 @@ namespace GDLibrary
         private Game game;
         private List<Actor2D> drawList, removeList;
         private SpriteBatch spriteBatch;
-        private List<Objectives> completedObjectives;
+        private List<Objectives> completedObjectives = new List<Objectives> { };
         private ContentDictionary<Texture2D> textureDictionary;
-        private int currentObjective = 0;
+        private UIManager uIManager;
+        private int currentObjective = 1;
 
 
        
@@ -33,20 +34,24 @@ namespace GDLibrary
 
         #endregion
 
-        public ObjectiveManager(Game game, EventDispatcher eventDispatcher, StatusType  statusType,int initialSize,SpriteBatch spriteBatch, ContentDictionary<Texture2D> textureDictionary)
+        public ObjectiveManager(Game game, EventDispatcher eventDispatcher, StatusType  statusType,int initialSize,SpriteBatch spriteBatch, ContentDictionary<Texture2D> textureDictionary,UIManager  uIManager)
             : base(game, eventDispatcher, statusType)
         {
             this.drawList  = new List<Actor2D>(initialSize);
             this.removeList = new List<Actor2D>(initialSize);
             this.spriteBatch = spriteBatch;
             this.textureDictionary = textureDictionary;
-
+            this.uIManager = uIManager;
             this.InitializeObjectivesUI();
-         
-
-
 
         }
+
+
+        public int getCurrentObjective()
+        {
+            return this.currentObjective;
+        }
+
 
         #region ManagerMethods
         public void Add(Actor2D actor)
@@ -90,14 +95,14 @@ namespace GDLibrary
 
         #region register for events
 
-        protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
             eventDispatcher.ObjectiveChanged +=newObjective;
             eventDispatcher.ObjectiveChanged +=EventDispatcher_MenuChanged;
         }
 
         #endregion
-        protected Texture2D InitializeObjectivesUI()
+        public Texture2D InitializeObjectivesUI()
         {
            Texture2D texture = textureDictionary["Objective"];
 
@@ -111,13 +116,56 @@ namespace GDLibrary
             return texture;
         }
 
+        public void setObjectivesUI()
+        {
+            Predicate<Actor2D> pred = s => s.ActorType == ActorType.Objective;
+            UITextureObject objective = this.uIManager.Find(pred) as UITextureObject;
+            int newWidth;
+
+
+            if ((Objectives)this.currentObjective == Objectives.escape) { objective.Texture = textureDictionary["Escape"]; }
+            if ((Objectives)this.currentObjective == Objectives.solveRiddle)
+            {
+                objective.Texture = textureDictionary["Riddle"];
+                newWidth = (int)Math.Round(objective.SourceRectangle.Width * 1.5);
+
+                objective.Transform.Translation = new Vector2(objective.Transform.Translation.X - newWidth/6, objective.Transform.Translation.Y);
+
+                objective.SourceRectangle = new Rectangle
+                    (objective.SourceRectangle.X, objective.SourceRectangle.Y, newWidth, objective.SourceRectangle.Height);
+            }
+            if ((Objectives)this.currentObjective == Objectives.solveLogic)
+            {
+                objective.Texture = textureDictionary["Logic"];
+                newWidth = (int)Math.Round(objective.SourceRectangle.Width * 1.5);
+
+                objective.Transform.Translation = new Vector2(objective.Transform.Translation.X - newWidth / 6, objective.Transform.Translation.Y);
+
+                objective.SourceRectangle = new Rectangle
+                    (objective.SourceRectangle.X, objective.SourceRectangle.Y, newWidth, objective.SourceRectangle.Height);
+
+            }
+ 
+        }
+
         protected void newObjective(EventData eventData)
         {
             if (eventData.EventCategoryType == EventCategoryType.Objective)
             {
-                completedObjectives.Add((Objectives)currentObjective);
-                currentObjective++;
-                
+                if (currentObjective == 3)
+                {
+                    completedObjectives.Add((Objectives)currentObjective);
+                    currentObjective = 0;
+                    setObjectivesUI();
+                }
+                else
+                {
+
+                    completedObjectives.Add((Objectives)currentObjective);
+                    currentObjective++;
+                    setObjectivesUI();
+
+                }
             }
 
         }

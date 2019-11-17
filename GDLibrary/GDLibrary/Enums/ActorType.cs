@@ -40,6 +40,7 @@ namespace GDLibrary
         CollidableAmmo,
         Primitive,
         Light,
-        PopUP
+        PopUP,
+        Objective
     }
 }

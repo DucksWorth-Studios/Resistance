@@ -145,6 +145,7 @@ namespace GDApp
             InitialisePuzzleLights();
             InitialisePopUP();
             InitialiseObjectiveHUD();
+            loadCurrentObjective();
 
 
 
@@ -208,9 +209,20 @@ namespace GDApp
             if (item.StatusType == StatusType.Off)
             {
                 item.StatusType = StatusType.Drawn;
+                
+
+                if (objectiveManager.getCurrentObjective() == 1)
+                {
+                        
+                    EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
+                    
+                }
+                
+
             }
             else
             {
+
                 item.StatusType = StatusType.Off;
             }     
 
@@ -292,11 +304,46 @@ namespace GDApp
             Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, tw, th);
 
 
-            UITextureObject picture = new UITextureObject("PopUp", ActorType.PopUP, StatusType.Drawn, transform, Color.White,
+            UITextureObject picture = new UITextureObject("Objective", ActorType.UIDynamicText, StatusType.Drawn, transform, Color.White,
                 SpriteEffects.None, 0, texture, rect, new Vector2(0, 0));
 
-            this.objectiveManager.Add(picture);
+            this.uiManager.Add(picture);
         }
+
+
+        private void loadCurrentObjective()
+        {
+            Texture2D texture = objectiveManager.InitializeObjectivesUI();
+
+            int x, y, tw, th;
+            tw = texture.Width;
+            th = texture.Height;
+            x = graphics.PreferredBackBufferWidth;
+            y = graphics.PreferredBackBufferHeight;
+
+
+            Vector2 scale = new Vector2(
+                (float)(x / y),
+                (float)(x / y));
+
+
+            Vector2 translation = new Vector2(
+                (float)(graphics.PreferredBackBufferWidth / 2) - (((x / y) * tw)) / 2,
+                (float)y/18);
+
+            Transform2D transform = new Transform2D(translation, 0, scale, new Vector2(0, 0), new Integer2(0, 0));
+
+
+            // Transform2D transform = new Transform2D(new Vector2(x,y), 0, new Vector2(1f, 1f),new Vector2(1,1),new Integer2(w,z));
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, tw, th);
+
+
+            UITextureObject picture = new UITextureObject("currentObjective", ActorType.Objective, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 0, texture, rect, new Vector2(0, 0));
+
+            this.uiManager.Add(picture);
+        }
+
 
 
         private void initialiseTestObject()
@@ -446,7 +493,7 @@ namespace GDApp
             this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
 
-            this.objectiveManager = new ObjectiveManager(this, this.eventDispatcher, StatusType.Off, 0, this.spriteBatch,this.textureDictionary);
+            this.objectiveManager = new ObjectiveManager(this, this.eventDispatcher, StatusType.Off, 0, this.spriteBatch,this.textureDictionary,this.uiManager);
             Components.Add(this.objectiveManager);
         }
 
