@@ -142,6 +142,7 @@ namespace GDLibrary
                     this.gateFour = true;
                     this.IsSolved = true;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-4" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-5" }));
                     EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera" }));
                     EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive,EventCategoryType.Cutscene, new object[] {10, "collidable first person camera" }));
                     Console.WriteLine("Gate Four Logic Solved");

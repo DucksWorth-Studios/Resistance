@@ -238,8 +238,6 @@ namespace GDApp
 
         #endregion
 
-        #region TestObjects
-
         private void InitialisePopUP()
         {
             Texture2D texture = this.textureDictionary["popup"];
@@ -276,44 +274,31 @@ namespace GDApp
             this.uiManager.Add(picture);
         }
 
-        private void initialiseTestObject()
-        {
-            Model model = this.modelDictionary["box2"];
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["gray"];
-            Transform3D transform = new Transform3D(new Vector3(-20, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
-            CollidableObject collidableObject = new CollidableObject("HEY",ActorType.PopUP,transform,effectParameters,model);
-            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
-
-            collidableObject.Enable(true, 1);
-            this.objectManager.Add(collidableObject);
-        }
-
         private void InitializeSwitches()
         {
             CollidableObject collidableObject, archetypeCollidableObject = null;
-            
+
             Model model = this.modelDictionary["box2"];
             BasicEffectParameters effectParameters = (this.effectDictionary[AppData.LitModelsEffectID] as BasicEffectParameters).Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["gray"];
-            
+
             archetypeCollidableObject = new CollidableObject("switch-", ActorType.Interactable, Transform3D.Zero, effectParameters, model);
 
             int count = 0;
-            for (int i = 0; i < 4; ++i)
+            for (int i = 1; i < 5; ++i)
             {
                 ++count;
                 collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
-                collidableObject.ID = "switch-" +count;
-                
+                collidableObject.ID = "switch-" + count;
 
-                collidableObject.Transform = new Transform3D(new Vector3(10 * i, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
-                collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity,2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+                collidableObject.Transform = new Transform3D(new Vector3(-46, 5.5f * i, -125), new Vector3(0, 0, 0), new Vector3(1, 1, 1), Vector3.UnitX, Vector3.UnitY);
+                collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
 
                 //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
                 collidableObject.Enable(true, 1);
                 this.objectManager.Add(collidableObject);
-                
+
             }
         }
 
@@ -327,23 +312,91 @@ namespace GDApp
 
             //make once then clone
             archetypeCollidableObject = new CollidableObject("sphere", ActorType.Light, Transform3D.Zero, effectParameters, model);
-            int count = 0;
-            for (int i = 0; i < 4; i++)
-            {
-                ++count;
-                collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
 
-                collidableObject.ID = "gate-" + count;
-                collidableObject.Transform = new Transform3D(new Vector3(10 * i, 30, -25), new Vector3(0, 0, 0),
-                    0.082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
-                    Vector3.UnitX, Vector3.UnitY);
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
 
-                collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 2.54f), new MaterialProperties(0.2f, 0.8f, 0.7f));
-                collidableObject.Enable(true, 1);
-                this.objectManager.Add(collidableObject);
-            }
+            #region Gate-1
+            collidableObject.ID = "gate-1";
+            collidableObject.Transform = new Transform3D(new Vector3(-36.5f, 12.75f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
 
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+            #endregion
+
+
+            #region Gate-2
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "gate-2";
+            collidableObject.Transform = new Transform3D(new Vector3(-33, 19.75f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+            #endregion
+
+
+            #region Gate-3
+
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "gate-3";
+            collidableObject.Transform = new Transform3D(new Vector3(-25.75f, 9, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+            #endregion
+
+            #region Gate-4
+
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "gate-4";
+            collidableObject.Transform = new Transform3D(new Vector3(-13.5f, 13.75f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+            #endregion
+
+            #region End Light
+
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "gate-5";
+            collidableObject.Transform = new Transform3D(new Vector3(-11f, 13.75f, -125.25f), new Vector3(0, 0, 0),
+                0.025f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.025f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+            #endregion
         }
+
+        #region TestObjects
+        private void initialiseTestObject()
+        {
+            Model model = this.modelDictionary["box2"];
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+            Transform3D transform = new Transform3D(new Vector3(-20, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+            CollidableObject collidableObject = new CollidableObject("HEY", ActorType.PopUP, transform, effectParameters, model);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
+
         #endregion
 
 
@@ -1473,10 +1526,10 @@ namespace GDApp
                     new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.DarkRed));
             this.menuManager.Add(sceneID, clone);
 
-            #endregion
+            
 
         }
-
+#endregion
         private void AddUIElements()
         {
             InitializeUIMousePointer();
