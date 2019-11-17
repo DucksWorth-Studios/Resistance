@@ -280,9 +280,9 @@ namespace GDApp
         {
             Model model = this.modelDictionary["box2"];
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["gray"];
-            Transform3D transform = new Transform3D(new Vector3(-20, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
-            CollidableObject collidableObject = new CollidableObject("HEY",ActorType.PopUP,transform,effectParameters,model);
+            effectParameters.Texture = this.textureDictionary["popup"];
+            Transform3D transform = new Transform3D(new Vector3(-90, 6.9f, -120), new Vector3(-90, 0, 0), new Vector3(1, 1, 0.0001f), Vector3.UnitX, Vector3.UnitY);
+            CollidableObject collidableObject = new CollidableObject("Riddle Pickup", ActorType.PopUP, transform, effectParameters, model);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             collidableObject.Enable(true, 1);
