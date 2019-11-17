@@ -56,6 +56,7 @@ namespace GDApp
 
         public TimerManager timerManager { get; private set; }
         public LogicManager logicPuzzle;
+        public ObjectiveManager objectiveManager;
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
         
@@ -95,7 +96,7 @@ namespace GDApp
 
             int gameLevel = 1;
             bool isMouseVisible = true;
-            Integer2 screenResolution = ScreenUtility.HD720;
+            Integer2 screenResolution = ScreenUtility.HD1080;
             ScreenUtility.ScreenType screenType = ScreenUtility.ScreenType.SingleScreen;
             int numberOfGamePadPlayers = 1;
 
@@ -144,9 +145,11 @@ namespace GDApp
             InitializeSwitches();
             InitialisePuzzleLights();
             InitialisePopUP();
+            InitialiseObjectiveHUD();
+            loadCurrentObjective();
 
-            
-           
+
+
             base.Initialize();
         }
 
@@ -208,9 +211,20 @@ namespace GDApp
             if (item.StatusType == StatusType.Off)
             {
                 item.StatusType = StatusType.Drawn;
+                
+
+                if (objectiveManager.getCurrentObjective() == 1)
+                {
+                        
+                    EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
+                    
+                }
+                
+
             }
             else
             {
+
                 item.StatusType = StatusType.Off;
             }     
 
@@ -270,6 +284,74 @@ namespace GDApp
 
             UITextureObject picture = new UITextureObject("PopUp",ActorType.PopUP,StatusType.Off,transform,Color.White,
                 SpriteEffects.None,0,texture,rect, new Vector2(0,0));
+
+            this.uiManager.Add(picture);
+        }
+
+
+        private void InitialiseObjectiveHUD()
+        {
+            Texture2D texture = this.textureDictionary["Objective"];
+
+            int x,y,tw, th;
+            tw = texture.Width;
+            th = texture.Height;
+            x = graphics.PreferredBackBufferWidth;
+            y = graphics.PreferredBackBufferHeight;
+
+
+            Vector2 scale = new Vector2(
+                (float)(x/y),
+                (float)(x/y));
+
+
+            Vector2 translation = new Vector2(
+                (float)(graphics.PreferredBackBufferWidth / 2) - (((x / y) * tw)) / 2,
+                (float)1);
+
+            Transform2D transform = new Transform2D(translation, 0, scale, new Vector2(0, 0), new Integer2(0, 0));
+
+
+            // Transform2D transform = new Transform2D(new Vector2(x,y), 0, new Vector2(1f, 1f),new Vector2(1,1),new Integer2(w,z));
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, tw, th);
+
+
+            UITextureObject picture = new UITextureObject("Objective", ActorType.UIDynamicText, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 0, texture, rect, new Vector2(0, 0));
+
+            this.uiManager.Add(picture);
+        }
+
+
+        private void loadCurrentObjective()
+        {
+            Texture2D texture = objectiveManager.InitializeObjectivesUI();
+
+            int x, y, tw, th;
+            tw = texture.Width;
+            th = texture.Height;
+            x = graphics.PreferredBackBufferWidth;
+            y = graphics.PreferredBackBufferHeight;
+
+
+            Vector2 scale = new Vector2(
+                (float)(x / y),
+                (float)(x / y));
+
+
+            Vector2 translation = new Vector2(
+                (float)(graphics.PreferredBackBufferWidth / 2) - (((x / y) * tw)) / 2,
+                (float)y/18);
+
+            Transform2D transform = new Transform2D(translation, 0, scale, new Vector2(0, 0), new Integer2(0, 0));
+
+
+            // Transform2D transform = new Transform2D(new Vector2(x,y), 0, new Vector2(1f, 1f),new Vector2(1,1),new Integer2(w,z));
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, tw, th);
+
+
+            UITextureObject picture = new UITextureObject("currentObjective", ActorType.Objective, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 0, texture, rect, new Vector2(0, 0));
 
             this.uiManager.Add(picture);
         }
@@ -475,7 +557,11 @@ namespace GDApp
 
             this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
-            
+
+
+            this.objectiveManager = new ObjectiveManager(this, this.eventDispatcher, StatusType.Off, 0, this.spriteBatch,this.textureDictionary,this.uiManager);
+            Components.Add(this.objectiveManager);
+
         }
 
         private void LoadDictionaries()
@@ -560,6 +646,10 @@ namespace GDApp
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
             this.textureDictionary.Load("Assets/Textures/UI/HUD/progress_gradient");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Objective");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Escape");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Riddle");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Logic");
 
             //architecture
             this.textureDictionary.Load("Assets/Textures/Architecture/Buildings/house-low-texture");

@@ -41,6 +41,8 @@ namespace GDLibrary
         Primitive,
         Light,
         PopUP,
+        Objective,
         NonCollidableCeiling
+
     }
 }
