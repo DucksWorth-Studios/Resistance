@@ -761,6 +761,7 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Assets\Textures\UI\HUD\Escape.png">
       <Name>Escape</Name>
@@ -772,17 +773,20 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+  
     <Compile Include="Assets\Textures\UI\HUD\Riddle.png">
       <Name>Riddle</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
 
     <Compile Include="Assets\Textures\UI\Menu\Backgrounds\game-over.png">
       <Name>game-over</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-</Compile>
+    </Compile>
   </ItemGroup>
+  
   <ItemGroup>
     <Compile Include="Assets\Models\Props\Phonograph.FBX">
       <Name>Phonograph</Name>
