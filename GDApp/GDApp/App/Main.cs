@@ -289,14 +289,14 @@ namespace GDApp
             archetypeCollidableObject = new CollidableObject("switch-", ActorType.Interactable, Transform3D.Zero, effectParameters, model);
 
             int count = 0;
-            for (int i = 0; i < 4; ++i)
+            for (int i = 1; i < 5; ++i)
             {
                 ++count;
                 collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
                 collidableObject.ID = "switch-" +count;
                 
 
-                collidableObject.Transform = new Transform3D(new Vector3(10 * i, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+                collidableObject.Transform = new Transform3D(new Vector3(-46, 5.5f * i, -125), new Vector3(0, 0, 0), new Vector3(1, 1, 1), Vector3.UnitX, Vector3.UnitY);
                 collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity,2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
 
                 //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
