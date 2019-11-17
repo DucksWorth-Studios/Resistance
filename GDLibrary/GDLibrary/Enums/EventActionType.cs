@@ -17,6 +17,7 @@ namespace GDLibrary
         OnResume,
         OnStop,
         OnStopAll,
+        OnGameOver,
 
         //processed by many managers (incl. menu, sound, object, ui, physic) and video controller
         OnStart,
@@ -73,6 +74,10 @@ namespace GDLibrary
         //used to set mouse position via an event
         OnSetMousePosition,
 
-        Interact
+        Interact,
+
+        //Used for when the puzzle is solved to trigger the win
+        RiddleSolved,
+        LogicPuzzleSolved
     }
 }
