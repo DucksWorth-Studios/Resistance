@@ -451,7 +451,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/sphere", "sphere");
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
-            this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_00", "barrier");
+            this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_01", "barrier");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_00", "bunker_door");
 
             //props
@@ -532,6 +532,8 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Standing");
             this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Tailwhip");
             this.modelDictionary.Load("Assets/Models/Animated/Squirrel/RedRun4");
+            this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_01");
+
             #endregion
 
         }
@@ -860,13 +862,14 @@ namespace GDApp
             effectParameters.Texture = this.textureDictionary["concrete"];
 
             collidableObject = new CollidableObject("barrier - ", ActorType.CollidableArchitecture, Transform3D.Zero, 
-                effectParameters, this.modelDictionary["barrier"]);
+                effectParameters, this.modelDictionary["Barrier_Mapped_01"]);
 
             #region first barrier
             cloneCollider = (CollidableObject)collidableObject.Clone();
             cloneCollider.ID += 1;
 
-            cloneCollider.Transform = new Transform3D(new Vector3(-100, 6, 124), new Vector3(-90, 0, 180), new Vector3(0.1f, 0.05f, 0.1f), Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.Transform = new Transform3D(new Vector3(-107, 6, 124), new Vector3(-90, 0, 180), new Vector3(0.1f, 0.05f, 0.1f), 
+                Vector3.UnitX, Vector3.UnitY);
             cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, 2.54f * cloneCollider.Transform.Scale), 
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
 
@@ -879,7 +882,7 @@ namespace GDApp
             cloneCollider = (CollidableObject)collidableObject.Clone();
             cloneCollider.ID += 2;
 
-            cloneCollider.Transform = new Transform3D(new Vector3(-88, 20, 124), new Vector3(-90, 0, 0), new Vector3(0.1f, 0.05f, 0.1f), Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.Transform = new Transform3D(new Vector3(-80, 20, 124), new Vector3(-90, 0, 0), new Vector3(0.1f, 0.05f, 0.1f), Vector3.UnitX, Vector3.UnitY);
             cloneCollider.AddPrimitive(new Box(cloneCollider.Transform.Translation, Matrix.Identity, 2.54f * cloneCollider.Transform.Scale),
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
 
