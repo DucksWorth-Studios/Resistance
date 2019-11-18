@@ -129,7 +129,7 @@ namespace GDApp
 
             //load game happens before cameras are loaded because we may add a third person camera that needs a reference to a loaded Actor
             LoadGame(gameLevel);
-            
+
             InitializeCollidableFirstPersonDemo(screenResolution);
             InitializeCutsceneCameras();
             //Publish Start Event(s)
@@ -1184,18 +1184,28 @@ namespace GDApp
 
         private void InitializeCutsceneCameras()
         {
-            Transform3D transform = null;
+            Camera3D cloneCamera = null, camera = null;
             string id = "Door Cutscene Camera";
             string viewportDictionaryKey = "full viewport";
             float drawDepth = 0;
 
-            transform = new Transform3D(new Vector3(-70, 1.1f * AppData.CollidableCameraViewHeight + 6, 40),
-                new Vector3(-0.25f, -0.25f, 1), Vector3.UnitY);
-
-            Camera3D camera = new Camera3D(id, ActorType.Camera, transform,
+            camera = new Camera3D(id, ActorType.Camera, Transform3D.Zero,
                    ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], drawDepth, StatusType.Update);
 
-            this.cameraManager.Add(camera);
+            cloneCamera = (Camera3D)camera.Clone();
+            cloneCamera.Transform = new Transform3D(new Vector3(-70, 1.1f * AppData.CollidableCameraViewHeight + 6, 40),
+                new Vector3(-0.25f, -0.25f, 1), Vector3.UnitY);
+
+            this.cameraManager.Add(cloneCamera);
+
+            cloneCamera = null;
+
+            cloneCamera = (Camera3D)camera.Clone();
+            cloneCamera.ID = "Door Cutscene Camera2";
+            cloneCamera.Transform = new Transform3D(new Vector3(-120, 1.1f * AppData.CollidableCameraViewHeight + 6, -70),
+                new Vector3(1, -0.25f, -0.4f), Vector3.UnitY);
+
+            this.cameraManager.Add(cloneCamera);
         }
 
         private void InitializeCollidableFirstPersonDemo(Integer2 screenResolution)
