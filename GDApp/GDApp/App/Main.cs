@@ -493,6 +493,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/Phonograph");
             this.modelDictionary.Load("Assets/Models/Props/computer");
             this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
+            this.modelDictionary.Load("Assets/Models/Props/Gun");
             #endregion
 
             #region Textures
@@ -689,6 +690,7 @@ namespace GDApp
             InitializePhonoGraph();
             InitializeComputer();
             InitializeLogicPuzzleModel();
+            InitializeRiddleAnswerObject();
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -1168,6 +1170,23 @@ namespace GDApp
 
             ModelObject model = new ModelObject("logic puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["LogicPuzzle"]);
             this.objectManager.Add(model);
+        }
+
+        private void InitializeRiddleAnswerObject()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-89, 9, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+
+            collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.CollidablePickup, transform3D, effectParameters, 
+                this.modelDictionary["Gun"], new MaterialProperties(0.1f, 0.1f, 0.1f));
+            collidableObject.Enable(true, 1);
+
+            this.objectManager.Add(collidableObject);
         }
         #endregion
 
