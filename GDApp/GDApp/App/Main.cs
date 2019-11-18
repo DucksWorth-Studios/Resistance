@@ -1809,7 +1809,22 @@ namespace GDApp
             //used for model objects that dont interact with lighting i.e. sky
             basicEffect = new BasicEffect(graphics.GraphicsDevice);
             basicEffect.TextureEnabled = true;
-            basicEffect.LightingEnabled = false;
+            //basicEffect.LightingEnabled = false;
+
+
+            basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.245f, 0.245f,0.220f); // a red light
+            basicEffect.DirectionalLight0.Direction = new Vector3(1, 1, 1);  // coming along the x-axis
+            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0); // with green highlights
+
+            basicEffect.DirectionalLight1.Enabled = true;
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.245f, 0.245f, 0.220f); // a red light
+            basicEffect.DirectionalLight1.Direction = new Vector3(-1, -1, -1);  // coming along the x-axis
+            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 1, 0); // with green highlights
+
+            basicEffect.AmbientLightColor = new Vector3(1, 1, 1);
+            basicEffect.EmissiveColor = new Vector3(1, 1, 1);
+            
             this.effectDictionary.Add(AppData.UnlitModelsEffectID, new BasicEffectParameters(basicEffect));
             #endregion
 
