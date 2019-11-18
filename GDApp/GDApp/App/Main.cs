@@ -555,14 +555,12 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/quit");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/start");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/restart-Button");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/Resume");
 
             //menu - backgrounds
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/Title-screen");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/mainmenu");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/audiomenu");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/controlsmenu");
-            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/exitmenuwithtrans");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/game-over");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/PauseMenu");
 
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
@@ -1544,6 +1542,7 @@ namespace GDApp
             this.menuManager.Add(sceneID, clone);
             #endregion
 
+            /*
             #region Audio Menu
             sceneID = "audio menu";
 
@@ -1633,6 +1632,33 @@ namespace GDApp
             //change the texture blend color
             clone.Color = Color.LightYellow;
             this.menuManager.Add(sceneID, clone);
+            #endregion
+    */
+
+            #region Pause Menu
+            sceneID = "pause menu";
+
+            texture = this.textureDictionary["PauseMenu"];
+            scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
+                (float)graphics.PreferredBackBufferHeight / texture.Height);
+
+            transform = new Transform2D(scale);
+            this.menuManager.Add(sceneID, new UITextureObject("pauseMenuTexture", ActorType.UIStaticTexture, StatusType.Drawn,
+                transform, Color.White, SpriteEffects.None, 1, texture));
+
+            clone = null;
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "resumebtn";
+            clone.Texture = this.textureDictionary["Resume"];
+            clone.Transform.Translation -= new Vector2(0, verticalBtnSeparation * 3);
+            this.menuManager.Add(sceneID, clone);
+
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "exitbtn";
+            clone.Texture = this.textureDictionary["quit"];
+            clone.Transform.Translation -= new Vector2(0, verticalBtnSeparation);
+            this.menuManager.Add(sceneID, clone);
+
             #endregion
         }
 
