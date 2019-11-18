@@ -1379,21 +1379,17 @@ namespace GDApp
             string viewportDictionaryKey = "full viewport";
             float drawDepth = 0;
 
-            camera = new Camera3D(id, ActorType.Camera, Transform3D.Zero,
+            camera = new Camera3D(id, ActorType.Camera, new Transform3D(new Vector3(-70, 1.1f * AppData.CollidableCameraViewHeight + 6, 40),
+                new Vector3(-0.25f, -0.25f, 1), Vector3.UnitY),
                    ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], drawDepth, StatusType.Update);
 
-            cloneCamera = (Camera3D)camera.Clone();
-            cloneCamera.Transform = new Transform3D(new Vector3(-70, 1.1f * AppData.CollidableCameraViewHeight + 6, 40),
-                new Vector3(-0.25f, -0.25f, 1), Vector3.UnitY);
-
-            this.cameraManager.Add(cloneCamera);
+            this.cameraManager.Add(camera);
 
             cloneCamera = null;
 
-            cloneCamera = (Camera3D)camera.Clone();
-            cloneCamera.ID = "Door Cutscene Camera2";
-            cloneCamera.Transform = new Transform3D(new Vector3(-120, 1.1f * AppData.CollidableCameraViewHeight + 6, -70),
-                new Vector3(1, -0.25f, -0.4f), Vector3.UnitY);
+            cloneCamera = new Camera3D("Door Cutscene Camera2", ActorType.Camera, new Transform3D(new Vector3(-120, 1.1f * AppData.CollidableCameraViewHeight + 6, -70),
+                new Vector3(1, -0.25f, -0.4f), Vector3.UnitY),
+                   ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], drawDepth, StatusType.Update);
 
             this.cameraManager.Add(cloneCamera);
         }
