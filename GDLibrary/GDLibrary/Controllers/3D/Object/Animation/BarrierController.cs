@@ -27,9 +27,15 @@ namespace GDLibrary
             Actor3D parent = actor as Actor3D;
 
             if (rotateClockwise)
-                parent.Transform.RotateAroundZBy(1);
+            {
+                if (parent.Transform.Rotation.Z < 270)
+                    parent.Transform.RotateAroundZBy(1);
+            }
             else
-                parent.Transform.RotateAroundZBy(-1);
+            {
+                if (parent.Transform.Rotation.Z > -90)
+                    parent.Transform.RotateAroundZBy(-1);
+            }
 
             base.Update(gameTime, actor);
         }
