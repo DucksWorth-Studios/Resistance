@@ -161,6 +161,7 @@ namespace GDApp
             this.eventDispatcher.InteractChanged += Interactive;
             this.eventDispatcher.PuzzleChanged += ChangeLights;
             this.eventDispatcher.RiddleChanged += ChangePopUPState;
+            this.eventDispatcher.RiddleChanged += changeActorType;
             this.eventDispatcher.PlayerChanged += LoseTriggered;
             this.eventDispatcher.PlayerChanged += WinTriggered;
             this.eventDispatcher.PopUpChanged += ChangePopUPState;
@@ -217,6 +218,13 @@ namespace GDApp
 
         }
 
+        private void changeActorType(EventData eventData)
+        {
+            Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
+            Actor3D item = this.objectManager.Find(pred) as Actor3D;
+            item.ActorType = ActorType.CollidablePickup;
+        }
+
         private void ChangeRiddleState(EventData eventData)
         {
             Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
@@ -225,7 +233,7 @@ namespace GDApp
             item.StatusType = StatusType.Off;
 
             EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera2" }));
-            EventDispatcher.Publish(new EventData(EventActionType.RiddleSolved, EventCategoryType.Riddle));
+            EventDispatcher.Publish(new EventData(EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
             EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] {10, "collidable first person camera" }));
         }
 
@@ -1182,7 +1190,7 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["gray"];
 
-            collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.CollidablePickup, transform3D, effectParameters, 
+            collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.CollidableDecorator, transform3D, effectParameters, 
                 this.modelDictionary["Gun"], new MaterialProperties(0.1f, 0.1f, 0.1f));
             collidableObject.Enable(true, 1);
 

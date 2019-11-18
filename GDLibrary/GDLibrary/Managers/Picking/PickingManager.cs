@@ -138,6 +138,10 @@ namespace GDLibrary
                         EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
                     } 
                 }
+                else if(this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.CollidablePickup)
+                {
+                    EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
+                }
                 //Console.WriteLine("Hello");
             }
         }
