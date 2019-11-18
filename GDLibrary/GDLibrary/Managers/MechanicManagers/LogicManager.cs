@@ -1,4 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*
+ Author: Tomas
+ Manages the state of the logic puzzle and handles any chanes made to it via the interactive element of it
+ */
+
+
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,6 +90,10 @@ namespace GDLibrary
 
         }
 
+
+        /**
+         * The Brain of the manager it contains all switches and all changes that may occur to the models are fired off from here
+         */
         public void checkStatus()
         {
 
@@ -137,15 +147,23 @@ namespace GDLibrary
 
                 }
 
+                //AND Gate
                 if (this.gateThree && this.gateTwo && !this.gateFour)
                 {
                     this.gateFour = true;
                     this.IsSolved = true;
+
+                    //Changes the final Gate state
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-4" }));
+
+                    //Changes the end light to signify puzzle solved
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-5" }));
+
+                    //sets active camera to door cutscene camera
                     EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera" }));
+
+                    //sends off the event to ensure camera switches back to player once event has concluded
                     EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive,EventCategoryType.Cutscene, new object[] {10, "collidable first person camera" }));
-                    Console.WriteLine("Gate Four Logic Solved");
 
                 }
                 else if ((!this.gateThree || !this.gateTwo) && this.gateFour)
@@ -156,11 +174,14 @@ namespace GDLibrary
 
         }
 
+        //gets current state of puzzle solved or unsolved(true/false)
         public bool getState()
         {
             return this.IsSolved;
         }
 
+
+        //Every turn it checks the status of the game to see if any changes are made
         public override void Update(GameTime gameTime)
         {
             if(!this.IsSolved)

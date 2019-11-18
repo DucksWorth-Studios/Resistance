@@ -154,134 +154,11 @@ namespace GDApp
             base.Initialize();
         }
 
-        #region Events
-        /*
-         * Any Events That are to be initialised in main will happen in here
+  
+        /**
+         * Authors : Tomas & Aaron
+         * This initialises the popup and scales it accrding to screen size
          */
-         /*This method is used to initialse all events related to the main.cs
-          */
-        private void InitializeEvents()
-        {
-            this.eventDispatcher.InteractChanged += Interactive;
-            this.eventDispatcher.PuzzleChanged += ChangeLights;
-            this.eventDispatcher.RiddleChanged += ChangePopUPState;
-            this.eventDispatcher.RiddleChanged += changeActorType;
-            this.eventDispatcher.PlayerChanged += LoseTriggered;
-            this.eventDispatcher.PlayerChanged += WinTriggered;
-            this.eventDispatcher.PopUpChanged += ChangePopUPState;
-            this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
-        }
-        /*
-         * Author: Tomas
-         * Object is retrieved from the event and its texture is changed based on what current texture is
-         */
-        private void Interactive(EventData eventData)
-        {
-            CollidableObject actor = eventData.Sender as CollidableObject;
-            if (actor.EffectParameters.Texture == this.textureDictionary["green"])
-            {
-                actor.EffectParameters.Texture = this.textureDictionary["gray"];
-            }
-            else
-            {
-                actor.EffectParameters.Texture = this.textureDictionary["green"];
-            }
-            this.logicPuzzle.changeState(actor.ID);
-            
-        }
-
-        private void ChangeLights(EventData eventData)
-        {
-            string id = (string)eventData.AdditionalParameters[0];
-            Predicate<Actor3D> predicate = s => s.GetID() == id;
-            CollidableObject gate =(CollidableObject) this.objectManager.Find(predicate);
-            if(gate.EffectParameters.Texture == this.textureDictionary["gray"])
-            {
-                gate.EffectParameters.Texture = this.textureDictionary["green"];
-            }
-            else
-            {
-                gate.EffectParameters.Texture = this.textureDictionary["gray"];
-            }
-            
-        }
-        private void ChangePopUPState(EventData eventData)
-        {
-            Predicate<Actor2D> pred = s => s.ActorType == ActorType.PopUP;
-            UITextureObject item = this.uiManager.Find(pred) as UITextureObject;
-            
-           
-            if (item.StatusType == StatusType.Off)
-            {
-                item.StatusType = StatusType.Drawn;
-                
-
-                if (objectiveManager.getCurrentObjective() == 1)
-                {
-                        
-                    EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
-                    
-                }
-                
-
-            }
-            else
-            {
-
-                item.StatusType = StatusType.Off;
-            }     
-
-        }
-
-        /*
-         * Author : Andrew
-         *changes the actor type of the riddle answer object to collidable pickup 
-         */
-        private void changeActorType(EventData eventData)
-        {
-            Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
-            Actor3D item = this.objectManager.Find(pred) as Actor3D;
-            item.ActorType = ActorType.CollidablePickup;
-        }
-
-        /*
-         * Author : Andrew
-         *switches the camera to a cutscene camera when the riddle answer object is picked up
-         */
-        private void ChangeRiddleState(EventData eventData)
-        {
-            Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
-            Actor3D item = this.objectManager.Find(pred) as Actor3D;
-
-            item.StatusType = StatusType.Off;
-
-            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera2" }));
-            EventDispatcher.Publish(new EventData(EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
-            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] {10, "collidable first person camera" }));
-        }
-
-        /*
-         * Author: Cameron
-         * This will be used to trigger different UI effects when the timer runs out
-         */
-        private void LoseTriggered(EventData eventData)
-        {
-            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.MainMenu));
-            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
-            System.Diagnostics.Debug.WriteLine("Lose event triggered");
-        }
-
-        /*
-         * Author: Cameron
-         * This will be used to trigger the end screen with the door opening and a fade to black
-         */
-        private void WinTriggered(EventData eventData)
-        {
-            System.Diagnostics.Debug.WriteLine("Win event triggered");
-        }
-
-        #endregion
-
         private void InitialisePopUP()
         {
             Texture2D texture = this.textureDictionary["popup"];
@@ -386,6 +263,10 @@ namespace GDApp
             this.uiManager.Add(picture);
         }
 
+        /**
+         * Author: Tomas
+         * Initialises switch objects for logic puzzle
+         */
         private void InitializeSwitches()
         {
             CollidableObject collidableObject, archetypeCollidableObject = null;
@@ -414,6 +295,10 @@ namespace GDApp
             }
         }
 
+        /**
+         * Author Tomas
+         * Initialise the lights for logic puzzle gates
+         */
         private void InitialisePuzzleLights()
         {
             CollidableObject collidableObject, archetypeCollidableObject = null;
@@ -496,6 +381,11 @@ namespace GDApp
         }
 
         #region TestObjects
+        /**
+         * Author Tomas
+         * This test object is a simple interactive rectangle used to test 
+         * various functions e.g interact function, pop ups etc etc
+         */
         private void initialiseTestObject()
         {
             Model model = this.modelDictionary["box2"];
@@ -1454,6 +1344,140 @@ namespace GDApp
             EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, additionalEventParamsB));
             //we could also just use the line below, but why not use our event dispatcher?
             //this.cameraManager.SetActiveCamera(x => x.ID.Equals("collidable first person camera 1"));
+        }
+
+        /*
+        * Any Events That are to be initialised in main will happen in here
+        */
+        /*This method is used to initialse all events related to the main.cs
+         */
+        private void InitializeEvents()
+        {
+            this.eventDispatcher.InteractChanged += Interactive;
+            this.eventDispatcher.PuzzleChanged += ChangeLights;
+            this.eventDispatcher.RiddleChanged += ChangePopUPState;
+            this.eventDispatcher.RiddleChanged += changeActorType;
+            this.eventDispatcher.PlayerChanged += LoseTriggered;
+            this.eventDispatcher.PlayerChanged += WinTriggered;
+            this.eventDispatcher.PopUpChanged += ChangePopUPState;
+            this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
+        }
+        /*
+         * Author: Tomas
+         * Object is retrieved from the event and its texture is changed based on what current texture is
+         */
+        private void Interactive(EventData eventData)
+        {
+            CollidableObject actor = eventData.Sender as CollidableObject;
+            if (actor.EffectParameters.Texture == this.textureDictionary["green"])
+            {
+                actor.EffectParameters.Texture = this.textureDictionary["gray"];
+            }
+            else
+            {
+                actor.EffectParameters.Texture = this.textureDictionary["green"];
+            }
+            this.logicPuzzle.changeState(actor.ID);
+
+        }
+
+        /**
+         * Author: Tomas 
+         * Used to change the color of lights similar to interactive method but does not 
+         * pass the object via event data it must find it via predicate
+         */
+        private void ChangeLights(EventData eventData)
+        {
+            string id = (string)eventData.AdditionalParameters[0];
+            Predicate<Actor3D> predicate = s => s.GetID() == id;
+            CollidableObject gate = (CollidableObject)this.objectManager.Find(predicate);
+            if (gate.EffectParameters.Texture == this.textureDictionary["gray"])
+            {
+                gate.EffectParameters.Texture = this.textureDictionary["green"];
+            }
+            else
+            {
+                gate.EffectParameters.Texture = this.textureDictionary["gray"];
+            }
+
+        }
+
+        /*
+         * Author: Tomas 
+         *  changes the state of the pop up from down to up also dispatchers an objective to objective manager
+         */
+        private void ChangePopUPState(EventData eventData)
+        {
+            Predicate<Actor2D> pred = s => s.ActorType == ActorType.PopUP;
+            UITextureObject item = this.uiManager.Find(pred) as UITextureObject;
+
+
+            if (item.StatusType == StatusType.Off)
+            {
+                item.StatusType = StatusType.Drawn;
+
+
+                if (objectiveManager.getCurrentObjective() == 1)
+                {
+
+                    EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
+
+                }
+
+            }
+            else
+            {
+
+                item.StatusType = StatusType.Off;
+            }
+
+        }
+
+        /*
+         * Author : Andrew
+         *changes the actor type of the riddle answer object to collidable pickup 
+         */
+        private void changeActorType(EventData eventData)
+        {
+            Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
+            Actor3D item = this.objectManager.Find(pred) as Actor3D;
+            item.ActorType = ActorType.CollidablePickup;
+        }
+
+        /*
+         * Author : Andrew
+         *switches the camera to a cutscene camera when the riddle answer object is picked up
+         */
+        private void ChangeRiddleState(EventData eventData)
+        {
+            Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
+            Actor3D item = this.objectManager.Find(pred) as Actor3D;
+
+            item.StatusType = StatusType.Off;
+
+            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera2" }));
+            EventDispatcher.Publish(new EventData(EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
+            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] { 10, "collidable first person camera" }));
+        }
+
+        /*
+         * Author: Cameron
+         * This will be used to trigger different UI effects when the timer runs out
+         */
+        private void LoseTriggered(EventData eventData)
+        {
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.MainMenu));
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
+            System.Diagnostics.Debug.WriteLine("Lose event triggered");
+        }
+
+        /*
+         * Author: Cameron
+         * This will be used to trigger the end screen with the door opening and a fade to black
+         */
+        private void WinTriggered(EventData eventData)
+        {
+            System.Diagnostics.Debug.WriteLine("Win event triggered");
         }
         #endregion
 
