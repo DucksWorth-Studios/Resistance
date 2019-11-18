@@ -864,7 +864,8 @@ namespace GDApp
             collidableObject = new CollidableObject("barrier - ", ActorType.CollidableArchitecture, Transform3D.Zero, 
                 effectParameters, this.modelDictionary["Barrier_Mapped_01"]);
 
-            #region first barrier
+            #region Top Barrier
+            
             cloneCollider = (CollidableObject)collidableObject.Clone();
             cloneCollider.ID += 1;
 
@@ -876,10 +877,11 @@ namespace GDApp
             cloneCollider.Enable(true, 1);
             cloneCollider.AttachController(new BarrierController(true, "testing", ControllerType.Rotation));
             this.objectManager.Add(cloneCollider);
+            
             #endregion
 
-            #region second region
-            //second barrier
+            #region Bottom Barrier
+            
             cloneCollider = (CollidableObject)collidableObject.Clone();
             cloneCollider.ID += 2;
 
@@ -890,6 +892,7 @@ namespace GDApp
             cloneCollider.Enable(true, 1);
             cloneCollider.AttachController(new BarrierController(false, "testing", ControllerType.Rotation));
             this.objectManager.Add(cloneCollider);
+            
             #endregion
         }
 
