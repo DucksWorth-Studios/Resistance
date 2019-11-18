@@ -8,6 +8,7 @@ using JigLibX.Geometry;
 using JigLibX.Collision;
 using System.Collections.Generic;
 using System;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 /*
 override Clone()
@@ -56,6 +57,7 @@ namespace GDApp
 
         public TimerManager timerManager { get; private set; }
         public LogicManager logicPuzzle;
+        public ObjectiveManager objectiveManager;
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
         
@@ -144,9 +146,11 @@ namespace GDApp
             InitializeSwitches();
             InitialisePuzzleLights();
             InitialisePopUP();
+            InitialiseObjectiveHUD();
+            loadCurrentObjective();
 
-            
-           
+
+
             base.Initialize();
         }
 
@@ -210,9 +214,20 @@ namespace GDApp
             if (item.StatusType == StatusType.Off)
             {
                 item.StatusType = StatusType.Drawn;
+                
+
+                if (objectiveManager.getCurrentObjective() == 1)
+                {
+                        
+                    EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
+                    
+                }
+                
+
             }
             else
             {
+
                 item.StatusType = StatusType.Off;
             }     
 
@@ -267,8 +282,6 @@ namespace GDApp
 
         #endregion
 
-        #region TestObjects
-
         private void InitialisePopUP()
         {
             Texture2D texture = this.textureDictionary["popup"];
@@ -305,7 +318,8 @@ namespace GDApp
             this.uiManager.Add(picture);
         }
 
-        private void initialiseTestObject()
+
+        private void InitialiseObjectiveHUD()
         {
             Model model = this.modelDictionary["box2"];
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
@@ -313,36 +327,96 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3(-90, 6.9f, -120), new Vector3(-90, 0, 0), new Vector3(1, 1, 0.0001f), Vector3.UnitX, Vector3.UnitY);
             CollidableObject collidableObject = new CollidableObject("Riddle Pickup", ActorType.PopUP, transform, effectParameters, model);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            Texture2D texture = this.textureDictionary["Objective"];
 
-            collidableObject.Enable(true, 1);
-            this.objectManager.Add(collidableObject);
+            int x,y,tw, th;
+            tw = texture.Width;
+            th = texture.Height;
+            x = graphics.PreferredBackBufferWidth;
+            y = graphics.PreferredBackBufferHeight;
+
+
+            Vector2 scale = new Vector2(
+                (float)(x/y),
+                (float)(x/y));
+
+
+            Vector2 translation = new Vector2(
+                (float)(graphics.PreferredBackBufferWidth / 2) - (((x / y) * tw)) / 2,
+                (float)1);
+
+            Transform2D transform = new Transform2D(translation, 0, scale, new Vector2(0, 0), new Integer2(0, 0));
+
+
+            // Transform2D transform = new Transform2D(new Vector2(x,y), 0, new Vector2(1f, 1f),new Vector2(1,1),new Integer2(w,z));
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, tw, th);
+
+
+            UITextureObject picture = new UITextureObject("Objective", ActorType.UIDynamicText, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 0, texture, rect, new Vector2(0, 0));
+
+            this.uiManager.Add(picture);
+        }
+
+
+        private void loadCurrentObjective()
+        {
+            Texture2D texture = objectiveManager.InitializeObjectivesUI();
+
+            int x, y, tw, th;
+            tw = texture.Width;
+            th = texture.Height;
+            x = graphics.PreferredBackBufferWidth;
+            y = graphics.PreferredBackBufferHeight;
+
+
+            Vector2 scale = new Vector2(
+                (float)(x / y),
+                (float)(x / y));
+
+
+            Vector2 translation = new Vector2(
+                (float)(graphics.PreferredBackBufferWidth / 2) - (((x / y) * tw)) / 2,
+                (float)y/18);
+
+            Transform2D transform = new Transform2D(translation, 0, scale, new Vector2(0, 0), new Integer2(0, 0));
+
+
+            // Transform2D transform = new Transform2D(new Vector2(x,y), 0, new Vector2(1f, 1f),new Vector2(1,1),new Integer2(w,z));
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, tw, th);
+
+
+            UITextureObject picture = new UITextureObject("currentObjective", ActorType.Objective, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 0, texture, rect, new Vector2(0, 0));
+
+            this.uiManager.Add(picture);
         }
 
         private void InitializeSwitches()
         {
             CollidableObject collidableObject, archetypeCollidableObject = null;
-            
+
             Model model = this.modelDictionary["box2"];
             BasicEffectParameters effectParameters = (this.effectDictionary[AppData.LitModelsEffectID] as BasicEffectParameters).Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["gray"];
-            
+
             archetypeCollidableObject = new CollidableObject("switch-", ActorType.Interactable, Transform3D.Zero, effectParameters, model);
 
             int count = 0;
-            for (int i = 0; i < 4; ++i)
+            for (int i = 1; i < 5; ++i)
             {
                 ++count;
                 collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
-                collidableObject.ID = "switch-" +count;
-                
+                collidableObject.ID = "switch-" + count;
 
-                collidableObject.Transform = new Transform3D(new Vector3(10 * i, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
-                collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity,2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+                collidableObject.Transform = new Transform3D(new Vector3(-46, 5.5f * i, -125), new Vector3(0, 0, 0), new Vector3(1, 1, 1), Vector3.UnitX, Vector3.UnitY);
+                collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
 
                 //increase the mass of the boxes in the demo to see how collidable first person camera interacts vs. spheres (at mass = 1)
                 collidableObject.Enable(true, 1);
                 this.objectManager.Add(collidableObject);
-                
+
             }
         }
 
@@ -356,23 +430,91 @@ namespace GDApp
 
             //make once then clone
             archetypeCollidableObject = new CollidableObject("sphere", ActorType.Light, Transform3D.Zero, effectParameters, model);
-            int count = 0;
-            for (int i = 0; i < 4; i++)
-            {
-                ++count;
-                collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
 
-                collidableObject.ID = "gate-" + count;
-                collidableObject.Transform = new Transform3D(new Vector3(10 * i, 30, -25), new Vector3(0, 0, 0),
-                    0.082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
-                    Vector3.UnitX, Vector3.UnitY);
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
 
-                collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 2.54f), new MaterialProperties(0.2f, 0.8f, 0.7f));
-                collidableObject.Enable(true, 1);
-                this.objectManager.Add(collidableObject);
-            }
+            #region Gate-1
+            collidableObject.ID = "gate-1";
+            collidableObject.Transform = new Transform3D(new Vector3(-36.5f, 12.75f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
 
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+            #endregion
+
+
+            #region Gate-2
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "gate-2";
+            collidableObject.Transform = new Transform3D(new Vector3(-33, 19.75f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+            #endregion
+
+
+            #region Gate-3
+
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "gate-3";
+            collidableObject.Transform = new Transform3D(new Vector3(-25.75f, 9, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+            #endregion
+
+            #region Gate-4
+
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "gate-4";
+            collidableObject.Transform = new Transform3D(new Vector3(-13.5f, 13.75f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+            #endregion
+
+            #region End Light
+
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "gate-5";
+            collidableObject.Transform = new Transform3D(new Vector3(-11f, 13.75f, -125.25f), new Vector3(0, 0, 0),
+                0.025f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.025f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+            #endregion
         }
+
+        #region TestObjects
+        private void initialiseTestObject()
+        {
+            Model model = this.modelDictionary["box2"];
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+            Transform3D transform = new Transform3D(new Vector3(-20, 10, -25), new Vector3(0, 0, 0), new Vector3(2, 4, 1), Vector3.UnitX, Vector3.UnitY);
+            CollidableObject collidableObject = new CollidableObject("HEY", ActorType.PopUP, transform, effectParameters, model);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
+
         #endregion
 
 
@@ -380,7 +522,7 @@ namespace GDApp
             ScreenUtility.ScreenType screenType, bool isMouseVisible, int numberOfGamePadPlayers) //1 - 4
         {
             //add sound manager
-            this.soundManager = new SoundManager(this, this.eventDispatcher, StatusType.Update, "Content/Assets/Audio/", "Demo2DSound.xgs", "WaveBank1.xwb", "SoundBank1.xsb");
+            this.soundManager = new SoundManager(this, this.eventDispatcher, StatusType.Update, "Content/Assets/Audio/", "Music.xgs", "Music Wave Bank.xwb", "Music Sound Bank.xsb");
             Components.Add(this.soundManager);
 
             this.cameraManager = new CameraManager(this, 1, this.eventDispatcher);
@@ -451,7 +593,11 @@ namespace GDApp
 
             this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
-            
+
+
+            this.objectiveManager = new ObjectiveManager(this, this.eventDispatcher, StatusType.Off, 0, this.spriteBatch,this.textureDictionary,this.uiManager);
+            Components.Add(this.objectiveManager);
+
         }
 
         private void LoadDictionaries()
@@ -537,6 +683,10 @@ namespace GDApp
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
             this.textureDictionary.Load("Assets/Textures/UI/HUD/progress_gradient");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Objective");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Escape");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Riddle");
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Logic");
 
             //architecture
             this.textureDictionary.Load("Assets/Textures/Architecture/Buildings/house-low-texture");
@@ -697,7 +847,7 @@ namespace GDApp
 
             //init props
             InitializeWarTable();
-            InitializeCeilingLights();
+            //InitializeCeilingLights();
             InitializeAmmoBoxes();
             InitializeFieldCot();
             InitializeFieldDesk();
@@ -707,6 +857,9 @@ namespace GDApp
             InitializeComputer();
             InitializeLogicPuzzleModel();
             InitializeRiddleAnswerObject();
+
+
+           
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -995,27 +1148,27 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
         }
 
-        private void InitializeCeilingLights()
-        {
-            BasicEffectParameters effectParameters;
-            ModelObject modelObject = null, cloneModel = null;
+        //private void InitializeCeilingLights()
+        //{
+        //    BasicEffectParameters effectParameters;
+        //    ModelObject modelObject = null, cloneModel = null;
 
-            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["LightTexture"];
+        //    effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+        //    effectParameters.Texture = this.textureDictionary["LightTexture"];
 
-            modelObject = new ModelObject("Ceiling light - ", ActorType.Decorator, Transform3D.Zero, effectParameters,
-                this.modelDictionary["lamp"]);
+        //    modelObject = new ModelObject("Ceiling light - ", ActorType.Decorator, Transform3D.Zero, effectParameters,
+        //        this.modelDictionary["lamp"]);
 
-            #region first ceiling light
-            cloneModel = (ModelObject)modelObject.Clone();
-            cloneModel.ID += 1;
+        //    #region first ceiling light
+        //    cloneModel = (ModelObject)modelObject.Clone();
+        //    cloneModel.ID += 1;
 
-            cloneModel.Transform = new Transform3D(new Vector3(0, 20, 0), new Vector3(0, 0, 0), new Vector3(2.0f, 2.0f, 2.0f), 
-                Vector3.UnitX, Vector3.UnitY);
+        //    cloneModel.Transform = new Transform3D(new Vector3(0, 20, 0), new Vector3(0, 0, 0), new Vector3(2.0f, 2.0f, 2.0f), 
+        //        Vector3.UnitX, Vector3.UnitY);
 
-            this.objectManager.Add(cloneModel);
-            #endregion
-        }
+        //    this.objectManager.Add(cloneModel);
+        //    #endregion
+        //}
 
         private void InitializeAmmoBoxes()
         {
@@ -1160,6 +1313,14 @@ namespace GDApp
 
             ModelObject model = new ModelObject("phonograph", ActorType.Decorator, transform, effectParameters, this.modelDictionary["Phonograph"]);
             this.objectManager.Add(model);
+
+            AudioEmitter phonograph = new AudioEmitter();
+
+            phonograph.Position = new Vector3(-100.0f, 7.0f, -121.0f);
+            phonograph.DopplerScale = 500000f;
+
+            this.soundManager.Play3DCue("game-main-soundtrack", phonograph);
+
         }
 
         private void InitializeComputer()
@@ -1532,10 +1693,10 @@ namespace GDApp
                     new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.DarkRed));
             this.menuManager.Add(sceneID, clone);
 
-            #endregion
+            
 
         }
-
+#endregion
         private void AddUIElements()
         {
             InitializeUIMousePointer();
