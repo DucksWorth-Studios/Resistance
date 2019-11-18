@@ -626,7 +626,7 @@ namespace GDApp
             //environment
             this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
             this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
-            this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall-texture", "wall");
+            this.textureDictionary.Load("Assets/Textures/Architecture/concrete2", "wall");
             this.textureDictionary.Load("Assets/Textures/Architecture/concrete", "concreteFloor");
             this.textureDictionary.Load("Assets/Textures/Architecture/concrete2");
 
