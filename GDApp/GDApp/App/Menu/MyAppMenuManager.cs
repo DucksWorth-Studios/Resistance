@@ -25,6 +25,7 @@ namespace GDApp
                 ////add event to stop background menu music here...
                 //object[] additionalParameters = { "menu elevator music", 1 };
                 //EventDispatcher.Publish(new EventData(EventActionType.OnStop, EventCategoryType.Sound2D, additionalParameters));
+                this.SetActiveList("pause menu");
             }
             else if (eventData.EventType == EventActionType.OnPause)
             {
@@ -62,6 +63,11 @@ namespace GDApp
                         DoStart();
                         EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
                     break;
+
+                    case "resumebtn":
+                        DoStart();
+                        EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                        break;
 
                     case "exitbtn":
                         DoExit();
