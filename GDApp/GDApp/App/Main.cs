@@ -8,6 +8,7 @@ using JigLibX.Geometry;
 using JigLibX.Collision;
 using System.Collections.Generic;
 using System;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 /*
 override Clone()
@@ -96,7 +97,7 @@ namespace GDApp
 
             int gameLevel = 1;
             bool isMouseVisible = true;
-            Integer2 screenResolution = ScreenUtility.HD1080;
+            Integer2 screenResolution = ScreenUtility.HD720;
             ScreenUtility.ScreenType screenType = ScreenUtility.ScreenType.SingleScreen;
             int numberOfGamePadPlayers = 1;
 
@@ -486,7 +487,7 @@ namespace GDApp
             ScreenUtility.ScreenType screenType, bool isMouseVisible, int numberOfGamePadPlayers) //1 - 4
         {
             //add sound manager
-            this.soundManager = new SoundManager(this, this.eventDispatcher, StatusType.Update, "Content/Assets/Audio/", "Demo2DSound.xgs", "WaveBank1.xwb", "SoundBank1.xsb");
+            this.soundManager = new SoundManager(this, this.eventDispatcher, StatusType.Update, "Content/Assets/Audio/", "Music.xgs", "Music Wave Bank.xwb", "Music Sound Bank.xsb");
             Components.Add(this.soundManager);
 
             this.cameraManager = new CameraManager(this, 1, this.eventDispatcher);
@@ -809,7 +810,7 @@ namespace GDApp
 
             //init props
             InitializeWarTable();
-            InitializeCeilingLights();
+            //InitializeCeilingLights();
             InitializeAmmoBoxes();
             InitializeFieldCot();
             InitializeFieldDesk();
@@ -818,6 +819,9 @@ namespace GDApp
             InitializePhonoGraph();
             InitializeComputer();
             InitializeLogicPuzzleModel();
+
+
+           
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -1106,27 +1110,27 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
         }
 
-        private void InitializeCeilingLights()
-        {
-            BasicEffectParameters effectParameters;
-            ModelObject modelObject = null, cloneModel = null;
+        //private void InitializeCeilingLights()
+        //{
+        //    BasicEffectParameters effectParameters;
+        //    ModelObject modelObject = null, cloneModel = null;
 
-            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["LightTexture"];
+        //    effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+        //    effectParameters.Texture = this.textureDictionary["LightTexture"];
 
-            modelObject = new ModelObject("Ceiling light - ", ActorType.Decorator, Transform3D.Zero, effectParameters,
-                this.modelDictionary["lamp"]);
+        //    modelObject = new ModelObject("Ceiling light - ", ActorType.Decorator, Transform3D.Zero, effectParameters,
+        //        this.modelDictionary["lamp"]);
 
-            #region first ceiling light
-            cloneModel = (ModelObject)modelObject.Clone();
-            cloneModel.ID += 1;
+        //    #region first ceiling light
+        //    cloneModel = (ModelObject)modelObject.Clone();
+        //    cloneModel.ID += 1;
 
-            cloneModel.Transform = new Transform3D(new Vector3(0, 20, 0), new Vector3(0, 0, 0), new Vector3(2.0f, 2.0f, 2.0f), 
-                Vector3.UnitX, Vector3.UnitY);
+        //    cloneModel.Transform = new Transform3D(new Vector3(0, 20, 0), new Vector3(0, 0, 0), new Vector3(2.0f, 2.0f, 2.0f), 
+        //        Vector3.UnitX, Vector3.UnitY);
 
-            this.objectManager.Add(cloneModel);
-            #endregion
-        }
+        //    this.objectManager.Add(cloneModel);
+        //    #endregion
+        //}
 
         private void InitializeAmmoBoxes()
         {
@@ -1271,6 +1275,14 @@ namespace GDApp
 
             ModelObject model = new ModelObject("phonograph", ActorType.Decorator, transform, effectParameters, this.modelDictionary["Phonograph"]);
             this.objectManager.Add(model);
+
+            AudioEmitter phonograph = new AudioEmitter();
+
+            phonograph.Position = new Vector3(-100.0f, 7.0f, -121.0f);
+            phonograph.DopplerScale = 500000f;
+
+            this.soundManager.Play3DCue("game-main-soundtrack", phonograph);
+
         }
 
         private void InitializeComputer()
