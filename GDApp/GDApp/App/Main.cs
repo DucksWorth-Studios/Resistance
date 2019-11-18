@@ -164,6 +164,7 @@ namespace GDApp
             this.eventDispatcher.PlayerChanged += LoseTriggered;
             this.eventDispatcher.PlayerChanged += WinTriggered;
             this.eventDispatcher.PopUpChanged += ChangePopUPState;
+            this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
         }
         /*
          * Author: Tomas
@@ -214,6 +215,18 @@ namespace GDApp
                 item.StatusType = StatusType.Off;
             }     
 
+        }
+
+        private void ChangeRiddleState(EventData eventData)
+        {
+            Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
+            Actor3D item = this.objectManager.Find(pred) as Actor3D;
+
+            item.StatusType = StatusType.Off;
+
+            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera2" }));
+            EventDispatcher.Publish(new EventData(EventActionType.RiddleSolved, EventCategoryType.Riddle));
+            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] {10, "collidable first person camera" }));
         }
 
         /*
