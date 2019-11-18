@@ -72,6 +72,10 @@ namespace GDLibrary
         //used to set mouse position via an event
         OnSetMousePosition,
 
-        Interact
+        Interact,
+        
+        //Animation events
+        RotateTopBarrier,
+        RotateBottomBarrier
     }
 }

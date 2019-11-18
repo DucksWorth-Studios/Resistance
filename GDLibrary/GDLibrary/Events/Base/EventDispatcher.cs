@@ -42,6 +42,7 @@ namespace GDLibrary
         public delegate void RiddleHandler(EventData eventData);
         public delegate void PopUpHandler(EventData eventData);
         public delegate void CutsceneHandler(EventData eventData);
+        public delegate void AnimationHandler(EventData eventData);
         
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
@@ -65,6 +66,7 @@ namespace GDLibrary
         public event RiddleHandler RiddleChanged;
         public event PopUpHandler PopUpChanged;
         public event CutsceneHandler cutsceneChanged;
+        public event AnimationHandler animationTriggered;
 
 
         public EventDispatcher(Game game, int initialSize)
@@ -179,6 +181,9 @@ namespace GDLibrary
                     break;
                 case EventCategoryType.Cutscene:
                     OnCutscene(eventData);
+                    break;
+                case EventCategoryType.Animator:
+                    OnAnimation(eventData);
                     break;
                 default:
                     break;
@@ -305,6 +310,11 @@ namespace GDLibrary
         protected virtual void OnCutscene(EventData eventData)
         {
             cutsceneChanged?.Invoke(eventData);
+        }
+
+        protected virtual void OnAnimation(EventData eventData)
+        {
+            animationTriggered?.Invoke(eventData);
         }
     }
 }
