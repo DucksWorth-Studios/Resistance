@@ -218,6 +218,10 @@ namespace GDApp
 
         }
 
+        /*
+         * Author : Andrew
+         *changes the actor type of the riddle answer object to collidable pickup 
+         */
         private void changeActorType(EventData eventData)
         {
             Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
@@ -225,6 +229,10 @@ namespace GDApp
             item.ActorType = ActorType.CollidablePickup;
         }
 
+        /*
+         * Author : Andrew
+         *switches the camera to a cutscene camera when the riddle answer object is picked up
+         */
         private void ChangeRiddleState(EventData eventData)
         {
             Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
