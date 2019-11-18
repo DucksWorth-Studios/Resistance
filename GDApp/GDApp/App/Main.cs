@@ -131,7 +131,7 @@ namespace GDApp
 
             //load game happens before cameras are loaded because we may add a third person camera that needs a reference to a loaded Actor
             LoadGame(gameLevel);
-            
+
             InitializeCollidableFirstPersonDemo(screenResolution);
             InitializeCutsceneCameras();
             //Publish Start Event(s)
@@ -165,9 +165,11 @@ namespace GDApp
             this.eventDispatcher.InteractChanged += Interactive;
             this.eventDispatcher.PuzzleChanged += ChangeLights;
             this.eventDispatcher.RiddleChanged += ChangePopUPState;
+            this.eventDispatcher.RiddleChanged += changeActorType;
             this.eventDispatcher.PlayerChanged += LoseTriggered;
             this.eventDispatcher.PlayerChanged += WinTriggered;
             this.eventDispatcher.PopUpChanged += ChangePopUPState;
+            this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
         }
         /*
          * Author: Tomas
@@ -232,6 +234,33 @@ namespace GDApp
         }
 
         /*
+         * Author : Andrew
+         *changes the actor type of the riddle answer object to collidable pickup 
+         */
+        private void changeActorType(EventData eventData)
+        {
+            Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
+            Actor3D item = this.objectManager.Find(pred) as Actor3D;
+            item.ActorType = ActorType.CollidablePickup;
+        }
+
+        /*
+         * Author : Andrew
+         *switches the camera to a cutscene camera when the riddle answer object is picked up
+         */
+        private void ChangeRiddleState(EventData eventData)
+        {
+            Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
+            Actor3D item = this.objectManager.Find(pred) as Actor3D;
+
+            item.StatusType = StatusType.Off;
+
+            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera2" }));
+            EventDispatcher.Publish(new EventData(EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
+            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] {10, "collidable first person camera" }));
+        }
+
+        /*
          * Author: Cameron
          * This will be used to trigger different UI effects when the timer runs out
          */
@@ -292,6 +321,12 @@ namespace GDApp
 
         private void InitialiseObjectiveHUD()
         {
+            Model model = this.modelDictionary["box2"];
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["riddletexture"];
+            Transform3D transform = new Transform3D(new Vector3(-90, 6.9f, -120), new Vector3(-90, 0, 0), new Vector3(1, 1, 0.0001f), Vector3.UnitX, Vector3.UnitY);
+            CollidableObject collidableObject = new CollidableObject("Riddle Pickup", ActorType.PopUP, transform, effectParameters, model);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 2.54f * collidableObject.Transform.Scale), new MaterialProperties(0.2f, 0.8f, 0.7f));
             Texture2D texture = this.textureDictionary["Objective"];
 
             int x,y,tw, th;
@@ -620,6 +655,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/Phonograph");
             this.modelDictionary.Load("Assets/Models/Props/computer");
             this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
+            this.modelDictionary.Load("Assets/Models/Props/Gun");
             #endregion
 
             #region Textures
@@ -679,7 +715,8 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
 
-
+            //interactable
+            this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
 #if DEBUG
             //demo
             this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
@@ -819,6 +856,7 @@ namespace GDApp
             InitializePhonoGraph();
             InitializeComputer();
             InitializeLogicPuzzleModel();
+            InitializeRiddleAnswerObject();
 
 
            
@@ -1310,6 +1348,23 @@ namespace GDApp
             ModelObject model = new ModelObject("logic puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["LogicPuzzle"]);
             this.objectManager.Add(model);
         }
+
+        private void InitializeRiddleAnswerObject()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-89, 9, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+
+            collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.CollidableDecorator, transform3D, effectParameters, 
+                this.modelDictionary["Gun"], new MaterialProperties(0.1f, 0.1f, 0.1f));
+            collidableObject.Enable(true, 1);
+
+            this.objectManager.Add(collidableObject);
+        }
         #endregion
 
         #region Initialize Cameras
@@ -1325,18 +1380,28 @@ namespace GDApp
 
         private void InitializeCutsceneCameras()
         {
-            Transform3D transform = null;
+            Camera3D cloneCamera = null, camera = null;
             string id = "Door Cutscene Camera";
             string viewportDictionaryKey = "full viewport";
             float drawDepth = 0;
 
-            transform = new Transform3D(new Vector3(-70, 1.1f * AppData.CollidableCameraViewHeight + 6, 40),
-                new Vector3(-0.25f, -0.25f, 1), Vector3.UnitY);
-
-            Camera3D camera = new Camera3D(id, ActorType.Camera, transform,
+            camera = new Camera3D(id, ActorType.Camera, Transform3D.Zero,
                    ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], drawDepth, StatusType.Update);
 
-            this.cameraManager.Add(camera);
+            cloneCamera = (Camera3D)camera.Clone();
+            cloneCamera.Transform = new Transform3D(new Vector3(-70, 1.1f * AppData.CollidableCameraViewHeight + 6, 40),
+                new Vector3(-0.25f, -0.25f, 1), Vector3.UnitY);
+
+            this.cameraManager.Add(cloneCamera);
+
+            cloneCamera = null;
+
+            cloneCamera = (Camera3D)camera.Clone();
+            cloneCamera.ID = "Door Cutscene Camera2";
+            cloneCamera.Transform = new Transform3D(new Vector3(-120, 1.1f * AppData.CollidableCameraViewHeight + 6, -70),
+                new Vector3(1, -0.25f, -0.4f), Vector3.UnitY);
+
+            this.cameraManager.Add(cloneCamera);
         }
 
         private void InitializeCollidableFirstPersonDemo(Integer2 screenResolution)

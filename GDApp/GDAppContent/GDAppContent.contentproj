@@ -797,6 +797,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Textures\Props\Interactable\riddletexture.png">
+      <Name>riddletexture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Props\Gun.FBX">
+      <Name>Gun</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Audio\game-main-soundtrack.wav">
       <Name>game-main-soundtrack</Name>
       <Importer>WavImporter</Importer>

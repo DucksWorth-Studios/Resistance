@@ -9,6 +9,7 @@ Fixes:			None
 Comments:       Should consider making this class a Singleton because of the static message Stack - See https://msdn.microsoft.com/en-us/library/ff650316.aspx
 */
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -40,6 +41,7 @@ namespace GDLibrary
         public delegate void mouseLockingHandler(EventData eventData);
         public delegate void PuzzleHandler(EventData eventData);
         public delegate void RiddleHandler(EventData eventData);
+        public delegate void RiddleAnswerHandler(EventData eventData);
         public delegate void PopUpHandler(EventData eventData);
         public delegate void CutsceneHandler(EventData eventData);
         public delegate void ObjectiveHandler(EventData eventData);
@@ -64,6 +66,7 @@ namespace GDLibrary
         public event mouseLockingHandler lockChanged;
         public event PuzzleHandler PuzzleChanged;
         public event RiddleHandler RiddleChanged;
+        public event RiddleAnswerHandler RiddleAnswerChanged;
         public event PopUpHandler PopUpChanged;
         public event CutsceneHandler cutsceneChanged;
         public event ObjectiveHandler ObjectiveChanged;
@@ -176,6 +179,9 @@ namespace GDLibrary
                 case EventCategoryType.Riddle:
                     OnRiddleInteract(eventData);
                     break;
+                case EventCategoryType.RiddleAnswer:
+                    onRiddleAnswerInteract(eventData);
+                    break;
                 case EventCategoryType.PopUpDown:
                     OnPopUpDown(eventData);
                     break;
@@ -190,6 +196,10 @@ namespace GDLibrary
             }
         }
 
+        private void onRiddleAnswerInteract(EventData eventData)
+        {
+            RiddleAnswerChanged?.Invoke(eventData);
+        }
 
         protected virtual void onMouseLock(EventData eventData)
         {
