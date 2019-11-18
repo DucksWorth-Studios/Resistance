@@ -1,4 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿/**
+ * Author Tomas
+ * This manager handles events from puzzles in order to allow a cutscene to happen it recives information telling 
+ * it to wait till a certain time has passed then switch camera
+ * 
+ * Bugs: None
+ */
+
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,22 +37,24 @@ namespace GDLibrary
             eventDispatcher.cutsceneChanged += timeFunction;
         }
 
+        /*
+         * gets current time and adds the time to wait to it this is then stored till the time occurs
+         */
         public void timeFunction(EventData eventData)
         {
-            Console.WriteLine("Event Date " + eventData.ToString());
             this.secondsToWait = (int) eventData.AdditionalParameters[0];
             
             this.cameraToChangeTo = eventData.AdditionalParameters[1] as string;
 
             this.timeToDeploy = currentTime + secondsToWait;
-            Console.WriteLine("Time to Wait To " + this.timeToDeploy);
         }
 
+        // Waits till the time is appropriate and fires off an event to change back to First Person Camera
         public override void Update(GameTime gameTime)
         {
             if(gameTime.TotalGameTime.Seconds == this.timeToDeploy)
             {
-                Console.WriteLine("IN" + gameTime.TotalGameTime.Seconds);
+                
                 EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive,EventCategoryType.Camera, new object[] {cameraToChangeTo}));
             }
             this.currentTime = gameTime.TotalGameTime.Seconds;
