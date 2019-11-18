@@ -874,6 +874,7 @@ namespace GDApp
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             cloneCollider.Enable(true, 1);
+            cloneCollider.AttachController(new BarrierController(true, "testing", ControllerType.Rotation));
             this.objectManager.Add(cloneCollider);
             #endregion
 
@@ -887,6 +888,7 @@ namespace GDApp
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             cloneCollider.Enable(true, 1);
+            cloneCollider.AttachController(new BarrierController(false, "testing", ControllerType.Rotation));
             this.objectManager.Add(cloneCollider);
             #endregion
         }
