@@ -526,7 +526,7 @@ namespace GDApp
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_01", "barrier");
-            this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_00", "bunker_door");
+            this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_01", "bunker_door");
 
             //props
             this.modelDictionary.Load("Assets/Models/Props/lamp");
@@ -985,15 +985,19 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-94, 10, 127), new Vector3(-90, 0, 0), new Vector3(0.09f, 0.01f, 0.06f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-85, 0, 127), new Vector3(90, 180, 0), 
+                new Vector3(0.09f, 0.01f, 0.06f), Vector3.UnitX, Vector3.UnitY);
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
 
-            collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["bunker_door"]);
-            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(13.0f,15.0f,0.5f)),
-               new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, 
+                this.modelDictionary["bunker_door"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
+                    new Vector3(13.0f,15.0f,0.5f)),
+                    new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
+            collidableObject.AttachController(new DoorController("Door Controller", ControllerType.Rotation));
             this.objectManager.Add(collidableObject);
         }
 
