@@ -526,7 +526,7 @@ namespace GDApp
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_01", "barrier");
-            this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_00", "bunker_door");
+            this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_01", "bunker_door");
 
             //props
             this.modelDictionary.Load("Assets/Models/Props/lamp");
