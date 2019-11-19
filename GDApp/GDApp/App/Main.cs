@@ -122,11 +122,10 @@ namespace GDApp
             InitializeManagers(screenResolution, screenType, isMouseVisible, numberOfGamePadPlayers);
 
             //menu and UI elements
-            AddWinMenu();
-            //AddMenuElements();
+            AddMenuElements();
             AddUIElements();
-            //AddGameOverMenu();
-            //AddWinMenu();
+            AddGameOverMenu();
+            AddWinMenu();
 #if DEBUG
             InitializeDebugTextInfo();
 #endif
@@ -445,7 +444,7 @@ namespace GDApp
             //menu manager
             this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, this.cameraManager, spriteBatch, this.eventDispatcher, StatusType.Off);
             //set the main menu to be the active menu scene
-            this.menuManager.SetActiveList("win-screen");
+            this.menuManager.SetActiveList("main menu");
             Components.Add(this.menuManager);
 
             //ui (e.g. reticule, inventory, progress)
