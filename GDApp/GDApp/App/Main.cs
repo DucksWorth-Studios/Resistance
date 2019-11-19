@@ -971,10 +971,13 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
 
-            collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["bunker_door"]);
-            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(13.0f,15.0f,0.5f)),
-               new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, 
+                this.modelDictionary["bunker_door"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
+                    new Vector3(13.0f,15.0f,0.5f)),
+                    new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
+            collidableObject.AttachController(new DoorController("Door Controller", ControllerType.Rotation));
             this.objectManager.Add(collidableObject);
         }
 
