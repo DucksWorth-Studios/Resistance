@@ -108,8 +108,11 @@ namespace GDApp
                     case "backbtn":
                         SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
                         break;
+                    case "main-Menu":
+                        SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
+                        break;
 
-                    case "controlsbtn":
+                case "controlsbtn":
                         SetActiveList("controls menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
                         break;
 
