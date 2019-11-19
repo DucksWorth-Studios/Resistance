@@ -1211,7 +1211,10 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-62.0f, 0.0f, -93.65f), new Vector3(0, 0, 0), new Vector3(0.05f, 0.038f, 0.045f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-62.0f, 0.0f, -102), 
+                new Vector3(0, 0, 0), 
+                new Vector3(0.05f, 0.038f, 0.045f), 
+                Vector3.UnitX, Vector3.UnitY);
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["bookcase"];
