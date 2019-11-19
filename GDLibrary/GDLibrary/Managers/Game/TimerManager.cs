@@ -196,7 +196,7 @@ namespace GDLibrary
                                         loseEventFired = true;
                                     }
                                     else
-                                        throw new NotImplementedException("Event doesn't exist for this timer");
+                                        System.Diagnostics.Debug.WriteLine("Event doesn't exist for this timer " + timer.ID);
                                 }
                                 else
                                     throw new Exception("Hour check has gone wrong");
