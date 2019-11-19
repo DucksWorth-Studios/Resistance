@@ -22,7 +22,7 @@ namespace GDLibrary
 
         protected void RotateBookcase(EventData eventData)
         {
-            if (eventData.EventType == EventActionType.OpenDoor)
+            if (eventData.EventType == EventActionType.OpenBookcase)
                 opening = true;
         }
 
