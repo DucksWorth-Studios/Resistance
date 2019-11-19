@@ -6,7 +6,7 @@ namespace GDLibrary
     public class DoorController : Controller
     {
         private bool opened = false;
-        private bool opening = true;
+        private bool opening = false;
         
         public DoorController(string id, ControllerType controllerType) : base(id, controllerType)
         {
