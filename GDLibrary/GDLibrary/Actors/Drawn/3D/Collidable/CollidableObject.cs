@@ -62,6 +62,19 @@ namespace GDLibrary
             //we will only add this event handling in a class that sub-classes CollidableObject e.g. PickupCollidableObject or PlayerCollidableObject
             //this.body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
         }
+        
+        public CollidableObject(string id, ActorType actorType, Transform3D transform, EffectParameters effectParameters, 
+            Model model, float boundingSphereMultiplier)
+            : base(id, actorType, transform, effectParameters, model, boundingSphereMultiplier)
+        {
+            this.body = new Body();
+            this.body.ExternalData = this;
+            this.collision = new CollisionSkin(this.body);
+            this.body.CollisionSkin = this.collision;
+
+            //we will only add this event handling in a class that sub-classes CollidableObject e.g. PickupCollidableObject or PlayerCollidableObject
+            //this.body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
+        }
 
         //we will only add this method in a class that sub-classes CollidableObject e.g. PickupCollidableObject or PlayerCollidableObject
         //private bool CollisionSkin_callbackFn(CollisionSkin skin0, CollisionSkin skin1)
