@@ -1455,6 +1455,7 @@ namespace GDApp
 
             EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera2" }));
             EventDispatcher.Publish(new EventData(EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
+            EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
             EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] { 10, "collidable first person camera" }));
         }
 
