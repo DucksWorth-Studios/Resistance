@@ -1,6 +1,7 @@
 ﻿using GDLibrary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace GDApp
 {
@@ -106,6 +107,9 @@ namespace GDApp
                     break;
 
                     case "backbtn":
+                        SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
+                        break;
+                    case "main-Menu":
                         SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
                         break;
 
