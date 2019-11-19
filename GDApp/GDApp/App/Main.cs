@@ -122,9 +122,11 @@ namespace GDApp
             InitializeManagers(screenResolution, screenType, isMouseVisible, numberOfGamePadPlayers);
 
             //menu and UI elements
-            AddMenuElements();
+            AddWinMenu();
+            //AddMenuElements();
             AddUIElements();
-            AddGameOverMenu();
+            //AddGameOverMenu();
+            //AddWinMenu();
 #if DEBUG
             InitializeDebugTextInfo();
 #endif
@@ -443,7 +445,7 @@ namespace GDApp
             //menu manager
             this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, this.cameraManager, spriteBatch, this.eventDispatcher, StatusType.Off);
             //set the main menu to be the active menu scene
-            this.menuManager.SetActiveList("main menu");
+            this.menuManager.SetActiveList("win-screen");
             Components.Add(this.menuManager);
 
             //ui (e.g. reticule, inventory, progress)
@@ -556,11 +558,13 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/start");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/restart-Button");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/Resume");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/mainMenu-Button");
 
             //menu - backgrounds
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/Title-screen");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/game-over");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/PauseMenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/win-screen");
 
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
@@ -1770,7 +1774,97 @@ namespace GDApp
             
 
         }
-#endregion
+
+        private void AddWinMenu()
+        {
+
+            string sceneID, buttonID, buttonText;
+            Vector2 position = Vector2.Zero;
+            UIButtonObject uiButtonObject = null, clone = null;
+            int verticalBtnSeparation = 100;
+            int w, h;
+
+            w = graphics.PreferredBackBufferWidth;
+            h = graphics.PreferredBackBufferHeight;
+            float a, b, c, d;
+
+            Texture2D texture = this.textureDictionary["win-screen"];
+
+            a = (float)w / texture.Width;
+            b = (float)h / texture.Height;
+            c = (float)1 / a;
+            d = (float)1 / b;
+
+            Console.WriteLine("width " + w);
+            Console.WriteLine("height " + h);
+            Vector2 scale = new Vector2(a, b);
+
+            Transform2D transform = new Transform2D(new Vector2(0, 0), 0, scale, Vector2.One, new Integer2(1, 1));
+
+
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, w, h);
+
+            UITextureObject picture = new UITextureObject("win-screen-background", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 1, texture);
+
+
+            sceneID = "win-screen";
+            this.menuManager.Add(sceneID, picture);
+
+            texture = this.textureDictionary["restart-Button"];
+            buttonID = "";
+            buttonText = "";
+            float num = texture.Height / 2;
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, (graphics.PreferredBackBufferHeight / 2) + num);
+            transform = new Transform2D(position,
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
+                this.fontDictionary["menu"],
+                Color.DarkBlue, new Vector2(0, 2));
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.Green, Color.Green));
+
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "main-Menu";
+            clone.Texture = this.textureDictionary["mainMenu-Button"];
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(180, verticalBtnSeparation);
+            //change the texture blend color
+            clone.Color = Color.Gray;
+            //store the original color since if we modify with a controller and need to reset
+            clone.OriginalColor = clone.Color;
+            //attach another controller on the exit button just to illustrate multi-controller approach
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.White, Color.White));
+            this.menuManager.Add(sceneID, clone);
+
+
+
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "exitbtn";
+            clone.Texture = this.textureDictionary["quit"];
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(180, verticalBtnSeparation* 2);
+            //change the texture blend color
+            clone.Color = Color.Gray;
+            //store the original color since if we modify with a controller and need to reset
+            clone.OriginalColor = clone.Color;
+            //attach another controller on the exit button just to illustrate multi-controller approach
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.DarkRed));
+            this.menuManager.Add(sceneID, clone);
+
+        }
+        #endregion
         private void AddUIElements()
         {
             InitializeUIMousePointer();
