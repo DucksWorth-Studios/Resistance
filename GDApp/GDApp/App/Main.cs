@@ -1378,7 +1378,7 @@ namespace GDApp
             //doesnt matter how high on Y-axis we start the camera since it's collidable and will fall until the capsule toches the ground plane - see AppData::CollidableCameraViewHeight
             //just ensure that the Y-axis height is slightly more than AppData::CollidableCameraViewHeight otherwise the player will rise eerily upwards at the start of the game
             //as the CDCR system pushes the capsule out of the collidable ground plane 
-            transform = new Transform3D(new Vector3(0, 1.1f * AppData.CollidableCameraViewHeight, 60), -Vector3.UnitZ, Vector3.UnitY);
+            transform = new Transform3D(new Vector3(-98, 1.1f * AppData.CollidableCameraViewHeight, 104), -Vector3.UnitZ, Vector3.UnitY);
 
             Camera3D camera = new Camera3D(id, ActorType.Camera, transform,
                     ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], drawDepth, StatusType.Update);
