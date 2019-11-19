@@ -780,7 +780,7 @@ namespace GDApp
         //}
 
         //skybox is a non-collidable series of ModelObjects with no lighting
-        private void InitializeCollidableWalls(int worldScale)
+        private void InitializeWalls(int worldScale)
         {
             //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
             Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale / 10.0f));
@@ -899,6 +899,38 @@ namespace GDApp
             #endregion
         }
 
+        private void InitializeCollidableWalls(int worldScale)
+        {
+            //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
+            Transform3D transform = new Transform3D(new Vector3(0, 0, 0), new Vector3(worldScale, 1, worldScale / 10.0f));
+
+            //clone the dictionary effect and set unique properties for the hero player object
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["checkerboard"];
+
+            CollidableObject prototypeModel = new CollidableObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
+
+            CollidableObject clonePlane = null;
+
+            #region walls
+            #region back wall
+            clonePlane = (CollidableObject)prototypeModel.Clone();
+            clonePlane.ID = "back wall";
+            clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
+
+            clonePlane.Transform.Scale = new Vector3(worldScale / 2.0f, 1, worldScale / 10.0f);
+            clonePlane.Transform.Rotation = new Vector3(90, 0, 0);
+
+            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 4f, (2.54f * worldScale) / 20.0f, (-2.54f * worldScale) / 2.0f);
+            clonePlane.AddPrimitive(new Box(clonePlane.Transform.Translation, Matrix.Identity, 
+                new Vector3(clonePlane.Transform.Scale.X * 2.54f, clonePlane.Transform.Scale.Z * 2.54f, clonePlane.Transform.Scale.Y * 2.54f)), 
+                new MaterialProperties(0.1f, 0.1f, 0.1f));
+            clonePlane.Enable(true, 1);
+            this.objectManager.Add(clonePlane);
+            #endregion
+            #endregion
+        }
+
         //the ground is simply a large flat box with a Box primitive collision surface attached
         private void InitializeCollidableGround(int worldScale)
         {
@@ -925,9 +957,9 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["concreteFloor"];
 
-            transform3D = new Transform3D(Vector3.Zero, Vector3.Zero, new Vector3(worldScale, 0.001f, worldScale), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(Vector3.Zero, Vector3.Zero, new Vector3(worldScale, 0.1f, worldScale), Vector3.UnitX, Vector3.UnitY);
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
-            collidableObject.AddPrimitive(new JigLibX.Geometry.Plane(transform3D.Up, transform3D.Translation), new MaterialProperties(0.8f, 0.8f, 0.7f));
+            collidableObject.AddPrimitive(new Box(transform3D.Translation, Matrix.Identity, new Vector3(worldScale * 2.54f, 0.001f, worldScale * 2.54f)), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
             this.objectManager.Add(collidableObject);
         }
