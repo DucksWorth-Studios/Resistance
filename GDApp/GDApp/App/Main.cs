@@ -1832,36 +1832,44 @@ namespace GDApp
 
             this.menuManager.Add(sceneID, uiButtonObject);
 
+            buttonID = "main-Menu";
+            texture = this.textureDictionary["mainMenu-Button"];
+            position += new Vector2(5, verticalBtnSeparation);
+            transform = new Transform2D(position,
+                0, new Vector2(0.6f, 0.6f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
 
-            clone = (UIButtonObject)uiButtonObject.Clone();
-            clone.ID = "main-Menu";
-            clone.Texture = this.textureDictionary["mainMenu-Button"];
-            //move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(180, verticalBtnSeparation);
-            //change the texture blend color
-            clone.Color = Color.Gray;
-            //store the original color since if we modify with a controller and need to reset
-            clone.OriginalColor = clone.Color;
-            //attach another controller on the exit button just to illustrate multi-controller approach
-            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.White, Color.White));
-            this.menuManager.Add(sceneID, clone);
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
+                this.fontDictionary["menu"],
+                Color.DarkBlue, new Vector2(0, 2));
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.White, Color.Cyan));
+
+            this.menuManager.Add(sceneID, uiButtonObject);
 
 
+            buttonID = "exitbtn";
+            texture = this.textureDictionary["quit"];
+            position += new Vector2(-0, verticalBtnSeparation);
+            transform = new Transform2D(position,
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
 
-            clone = (UIButtonObject)uiButtonObject.Clone();
-            clone.ID = "exitbtn";
-            clone.Texture = this.textureDictionary["quit"];
-            //move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(180, verticalBtnSeparation* 2);
-            //change the texture blend color
-            clone.Color = Color.Gray;
-            //store the original color since if we modify with a controller and need to reset
-            clone.OriginalColor = clone.Color;
-            //attach another controller on the exit button just to illustrate multi-controller approach
-            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.DarkRed));
-            this.menuManager.Add(sceneID, clone);
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
+                this.fontDictionary["menu"],
+                Color.DarkBlue, new Vector2(0, 2));
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkRed, Color.Red));
+
+            this.menuManager.Add(sceneID, uiButtonObject);
 
         }
         #endregion
