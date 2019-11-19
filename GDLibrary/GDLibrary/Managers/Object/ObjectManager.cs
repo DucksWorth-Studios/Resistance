@@ -336,7 +336,7 @@ namespace GDLibrary
         //draw a model object 
         private void DrawObject(GameTime gameTime, ModelObject modelObject, Camera3D activeCamera)
         {
-            if (activeCamera.BoundingFrustum.Intersects(modelObject.BoundingSphere))
+            //if (activeCamera.BoundingFrustum.Intersects(modelObject.BoundingSphere))
             {
                 if (modelObject.Model != null)
                 {
