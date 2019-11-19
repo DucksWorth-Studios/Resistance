@@ -79,6 +79,7 @@ namespace GDLibrary
         //Animation events
         RotateTopBarrier,
         RotateBottomBarrier,
+        OpenDoor,
 
         //Used for when the puzzle is solved to trigger the win
         RiddleSolved,

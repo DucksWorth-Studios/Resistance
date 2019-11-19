@@ -22,7 +22,7 @@ namespace GDLibrary
 
         protected void RotateBarrier(EventData eventData)
         {
-            if (eventData.EventType == EventActionType.RotateBottomBarrier)
+            if (eventData.EventType == EventActionType.OpenDoor)
                 opening = true;
         }
 
