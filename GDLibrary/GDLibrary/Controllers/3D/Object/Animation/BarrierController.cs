@@ -25,9 +25,9 @@ namespace GDLibrary
 
         protected void RotateBarrier(EventData eventData)
         {
-            if (rotateClockwise)
+            if (eventData.EventType == EventActionType.RotateBottomBarrier)
                 rotateBottomBarrier = true;
-            else
+            else if (eventData.EventType == EventActionType.RotateTopBarrier)
                 rotateTopBarrier = true;
         }
 
