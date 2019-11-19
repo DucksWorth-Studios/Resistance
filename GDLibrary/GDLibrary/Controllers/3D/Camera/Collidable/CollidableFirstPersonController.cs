@@ -173,13 +173,8 @@ namespace GDLibrary
             {
                 if (!inPopUp)
                 {
-                    //jump
-                    if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[4])) //check AppData.CameraMoveKeys for correct index of each move key
-                    {
-                        this.playerObject.CharacterBody.DoJump(this.jumpHeight);
-                    }
                     //crouch
-                    else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
+                    if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
                     {
                         this.playerObject.CharacterBody.IsCrouching = !this.playerObject.CharacterBody.IsCrouching;
                     }
