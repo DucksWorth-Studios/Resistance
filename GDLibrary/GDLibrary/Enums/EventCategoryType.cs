@@ -37,9 +37,9 @@ namespace GDLibrary
         PopUpDown,
         Cutscene,
         RiddleAnswer,
-        Objective
-
+        Objective,
 
         //all other categories of sender...
+        Animator
     }
 }

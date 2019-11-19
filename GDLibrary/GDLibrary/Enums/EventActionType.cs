@@ -75,6 +75,10 @@ namespace GDLibrary
         OnSetMousePosition,
 
         Interact,
+        
+        //Animation events
+        RotateTopBarrier,
+        RotateBottomBarrier,
 
         //Used for when the puzzle is solved to trigger the win
         RiddleSolved,

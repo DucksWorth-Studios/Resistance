@@ -44,6 +44,7 @@ namespace GDLibrary
         public delegate void RiddleAnswerHandler(EventData eventData);
         public delegate void PopUpHandler(EventData eventData);
         public delegate void CutsceneHandler(EventData eventData);
+        public delegate void AnimationHandler(EventData eventData);
         public delegate void ObjectiveHandler(EventData eventData);
         
 
@@ -69,6 +70,7 @@ namespace GDLibrary
         public event RiddleAnswerHandler RiddleAnswerChanged;
         public event PopUpHandler PopUpChanged;
         public event CutsceneHandler cutsceneChanged;
+        public event AnimationHandler animationTriggered;
         public event ObjectiveHandler ObjectiveChanged;
 
 
@@ -187,6 +189,9 @@ namespace GDLibrary
                     break;
                 case EventCategoryType.Cutscene:
                     OnCutscene(eventData);
+                    break;
+                case EventCategoryType.Animator:
+                    OnAnimation(eventData);
                     break;
                 case EventCategoryType.Objective:
                     OnObjective(eventData);
@@ -321,7 +326,12 @@ namespace GDLibrary
         {
             cutsceneChanged?.Invoke(eventData);
         }
-
+        
+        protected virtual void OnAnimation(EventData eventData)
+        {
+            animationTriggered?.Invoke(eventData);
+        }
+        
         protected virtual void OnObjective(EventData eventData)
         {
             ObjectiveChanged?.Invoke(eventData);

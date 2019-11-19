@@ -259,6 +259,27 @@ namespace GDLibrary
             this.isDirty = true;
         }
 
+        public void RotateAroundXBy(float magnitude) //in degrees
+        {
+            this.rotation.X += magnitude;
+            this.look = Vector3.Normalize(Vector3.Transform(this.originalTransform3D.Look, Matrix.CreateRotationX(MathHelper.ToRadians(rotation.X))));
+            this.isDirty = true;
+        }
+
+        public void RotateAroundZBy(float magnitude) //in degrees
+        {
+            this.rotation.Z += magnitude;
+            this.look = Vector3.Normalize(Vector3.Transform(this.originalTransform3D.Look, Matrix.CreateRotationZ(MathHelper.ToRadians(rotation.Z))));
+            this.isDirty = true;
+        }
+
+        public void RotateAroundZBy(Vector3 lookVector, float magnitude) //in degrees
+        {
+            this.rotation.Z += magnitude;
+            this.look = Vector3.Normalize(Vector3.Transform(lookVector, Matrix.CreateRotationZ(MathHelper.ToRadians(rotation.Z))));
+            this.isDirty = true;
+        }
+
         public void TranslateTo(Vector3 translate)
         {
             this.translation = translate;

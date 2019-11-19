@@ -114,6 +114,7 @@
     <Compile Include="Controllers\3D\Camera\RailController.cs" />
     <Compile Include="Controllers\3D\Camera\SecurityCameraController.cs" />
     <Compile Include="Controllers\3D\Camera\ThirdPersonController.cs" />
+    <Compile Include="Controllers\3D\Object\Animation\BarrierController.cs" />
     <Compile Include="Controllers\3D\Object\ColorSineLerpController.cs" />
     <Compile Include="Controllers\3D\Object\PickupController.cs" />
     <Compile Include="Controllers\3D\Object\RotationController.cs" />
