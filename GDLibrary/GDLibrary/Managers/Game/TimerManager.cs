@@ -11,6 +11,7 @@ namespace GDLibrary
 
         private List<TimerUtility> timerList;
         private int lastGameSecond = 0;
+        private bool loseEventFired = false;
 
         #endregion
 
@@ -127,7 +128,7 @@ namespace GDLibrary
 
         #region Event Handeling
 
-        protected void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
             eventDispatcher.ScreenChanged += EventDispatcher_MenuChanged;
             base.RegisterForEventHandling(eventDispatcher);
@@ -189,9 +190,10 @@ namespace GDLibrary
                                 }
                                 else if (timer.Hours == 0)
                                 {
-                                    if (timer.ID.Equals("Lose Timer"))
+                                    if (timer.ID.Equals("Lose Timer") && !loseEventFired)
                                     {
                                         EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.Player));
+                                        loseEventFired = true;
                                     }
                                     else
                                         throw new NotImplementedException("Event doesn't exist for this timer");
@@ -204,9 +206,10 @@ namespace GDLibrary
                         }
                         else
                             throw new Exception("Second check has gone wrong");
-
+                        /*
                         System.Diagnostics.Debug.WriteLine("Old - " + tempHrs + ":" + tempMins + ":" + tempSecs +
                                                            "\tNew - " + timer);
+                        */
                     }
                 }
             }
