@@ -1813,12 +1813,12 @@ namespace GDApp
 
 
             basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
-            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.245f, 0.245f,0.220f); // a red light
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.38f, 0.38f,0.38f); // a red light
             basicEffect.DirectionalLight0.Direction = new Vector3(1, 1, 1);  // coming along the x-axis
             basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0); // with green highlights
 
             basicEffect.DirectionalLight1.Enabled = true;
-            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.245f, 0.245f, 0.220f); // a red light
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.5f, 0.5f, 0.4f); // a red light
             basicEffect.DirectionalLight1.Direction = new Vector3(-1, -1, -1);  // coming along the x-axis
             basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 1, 0); // with green highlights
 
