@@ -123,10 +123,22 @@ namespace GDLibrary
             int newWidth;
 
 
-            if ((Objectives)this.currentObjective == Objectives.escape) { objective.Texture = textureDictionary["Escape"]; }
+            if ((Objectives)this.currentObjective == Objectives.escape)
+            {
+                objective.Texture = textureDictionary["Escape"];
+
+                newWidth = (int)Math.Round(objective.SourceRectangle.Width /1.5);
+
+                objective.Transform.Translation = new Vector2(objective.Transform.Translation.X + newWidth / 3.5f, objective.Transform.Translation.Y);
+
+                objective.SourceRectangle = new Rectangle
+                    (objective.SourceRectangle.X, objective.SourceRectangle.Y, newWidth, objective.SourceRectangle.Height);
+
+            }
             if ((Objectives)this.currentObjective == Objectives.solveRiddle)
             {
                 objective.Texture = textureDictionary["Riddle"];
+          
                 newWidth = (int)Math.Round(objective.SourceRectangle.Width * 1.5);
 
                 objective.Transform.Translation = new Vector2(objective.Transform.Translation.X - newWidth/6, objective.Transform.Translation.Y);
@@ -137,12 +149,12 @@ namespace GDLibrary
             if ((Objectives)this.currentObjective == Objectives.solveLogic)
             {
                 objective.Texture = textureDictionary["Logic"];
-                newWidth = (int)Math.Round(objective.SourceRectangle.Width * 1.5);
+           
 
-                objective.Transform.Translation = new Vector2(objective.Transform.Translation.X - newWidth / 6, objective.Transform.Translation.Y);
+                objective.Transform.Translation = new Vector2(objective.Transform.Translation.X, objective.Transform.Translation.Y);
 
                 objective.SourceRectangle = new Rectangle
-                    (objective.SourceRectangle.X, objective.SourceRectangle.Y, newWidth, objective.SourceRectangle.Height);
+                    (objective.SourceRectangle.X, objective.SourceRectangle.Y, objective.SourceRectangle.Width, objective.SourceRectangle.Height);
 
             }
  
@@ -150,12 +162,11 @@ namespace GDLibrary
 
         protected void newObjective(EventData eventData)
         {
-            if (eventData.EventCategoryType == EventCategoryType.Objective)
-            {
-                if (currentObjective == 3)
+            System.Diagnostics.Debug.WriteLine("CurrentObj " + currentObjective);
+                if (currentObjective >= 3)
                 {
                     completedObjectives.Add((Objectives)currentObjective);
-                    currentObjective = 0;
+                    currentObjective = 1;
                     setObjectivesUI();
                 }
                 else
@@ -166,7 +177,8 @@ namespace GDLibrary
                     setObjectivesUI();
 
                 }
-            }
+
+            System.Diagnostics.Debug.WriteLine("CurrentObj " + currentObjective);
 
         }
 
