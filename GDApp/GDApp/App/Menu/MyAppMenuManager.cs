@@ -25,12 +25,19 @@ namespace GDApp
                 ////add event to stop background menu music here...
                 //object[] additionalParameters = { "menu elevator music", 1 };
                 //EventDispatcher.Publish(new EventData(EventActionType.OnStop, EventCategoryType.Sound2D, additionalParameters));
+                this.SetActiveList("pause menu");
             }
             else if (eventData.EventType == EventActionType.OnPause)
             {
                 //add event to play background menu music here...
                 //object[] additionalParameters = { "menu elevator music" };
                 //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+            }
+            else if (eventData.EventType == EventActionType.OnLose)
+            {
+                //SetActiveList("lose-screen");
+                //turn off update and draw i.e. show the menu since the game is paused
+                //this.StatusType = StatusType.Off;
             }
         }
         #endregion
@@ -56,6 +63,11 @@ namespace GDApp
                         DoStart();
                         EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
                     break;
+
+                    case "resumebtn":
+                        DoStart();
+                        EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                        break;
 
                     case "exitbtn":
                         DoExit();
@@ -113,6 +125,11 @@ namespace GDApp
         {
             //will be received by the menu manager and screen manager and set the menu to be shown and game to be paused
             EventDispatcher.Publish(new EventData(EventActionType.OnStart, EventCategoryType.MainMenu));
+        }
+
+        private void DoRestart()
+        {
+            //Send Restart Event
         }
 
         private void DoExit()

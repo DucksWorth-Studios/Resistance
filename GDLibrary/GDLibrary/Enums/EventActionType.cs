@@ -17,6 +17,7 @@ namespace GDLibrary
         OnResume,
         OnStop,
         OnStopAll,
+        OnGameOver,
 
         //processed by many managers (incl. menu, sound, object, ui, physic) and video controller
         OnStart,
@@ -64,6 +65,7 @@ namespace GDLibrary
 
         //sent to show/hide info
         OnToggleDebug,
+        OnObjective,
 
         //sent by object picking manager to update listeners e.g. the UI mouse ("no object selected")
         OnObjectPicked,
@@ -76,6 +78,10 @@ namespace GDLibrary
         
         //Animation events
         RotateTopBarrier,
-        RotateBottomBarrier
+        RotateBottomBarrier,
+
+        //Used for when the puzzle is solved to trigger the win
+        RiddleSolved,
+        LogicPuzzleSolved
     }
 }

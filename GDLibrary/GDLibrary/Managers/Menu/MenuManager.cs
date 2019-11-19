@@ -76,9 +76,25 @@ namespace GDLibrary
                 //show the mouse
                 this.Game.IsMouseVisible = true;
             }
+            else if (eventData.EventType == EventActionType.OnLose)
+            {
+                this.SetActiveList("lose-screen");
+                //turn on update and draw i.e. show the menu since the game is paused
+                Console.WriteLine("HELLO FRIEND");
+                this.StatusType = StatusType.Update | StatusType.Drawn;
+                //Set the ActiveList BeforeCalling this
+                
+                //show the mouse
+                this.Game.IsMouseVisible = true;
+            }
 
             //set the mouse to look directly forward otherwise the camera would move forward based on some random mouse orientation
             this.mouseManager.SetPosition(this.cameraManager.ActiveCamera.ViewportCentre);
+        }
+
+        protected void EventDispatcher_Onlose(EventData eventData)
+        {
+            this.SetActiveList("lose-screen");
         }
         #endregion
 
@@ -137,9 +153,10 @@ namespace GDLibrary
             if (this.menuDictionary.ContainsKey(menuSceneID))
             {
                 this.activeList = this.menuDictionary[menuSceneID];
+                Console.WriteLine(menuSceneID);
                 return true;
             }
-
+            Console.WriteLine(menuSceneID);
             return false;
         }
 

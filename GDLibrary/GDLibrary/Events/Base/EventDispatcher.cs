@@ -9,6 +9,7 @@ Fixes:			None
 Comments:       Should consider making this class a Singleton because of the static message Stack - See https://msdn.microsoft.com/en-us/library/ff650316.aspx
 */
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -40,9 +41,11 @@ namespace GDLibrary
         public delegate void mouseLockingHandler(EventData eventData);
         public delegate void PuzzleHandler(EventData eventData);
         public delegate void RiddleHandler(EventData eventData);
+        public delegate void RiddleAnswerHandler(EventData eventData);
         public delegate void PopUpHandler(EventData eventData);
         public delegate void CutsceneHandler(EventData eventData);
         public delegate void AnimationHandler(EventData eventData);
+        public delegate void ObjectiveHandler(EventData eventData);
         
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
@@ -64,9 +67,11 @@ namespace GDLibrary
         public event mouseLockingHandler lockChanged;
         public event PuzzleHandler PuzzleChanged;
         public event RiddleHandler RiddleChanged;
+        public event RiddleAnswerHandler RiddleAnswerChanged;
         public event PopUpHandler PopUpChanged;
         public event CutsceneHandler cutsceneChanged;
         public event AnimationHandler animationTriggered;
+        public event ObjectiveHandler ObjectiveChanged;
 
 
         public EventDispatcher(Game game, int initialSize)
@@ -176,6 +181,9 @@ namespace GDLibrary
                 case EventCategoryType.Riddle:
                     OnRiddleInteract(eventData);
                     break;
+                case EventCategoryType.RiddleAnswer:
+                    onRiddleAnswerInteract(eventData);
+                    break;
                 case EventCategoryType.PopUpDown:
                     OnPopUpDown(eventData);
                     break;
@@ -185,11 +193,18 @@ namespace GDLibrary
                 case EventCategoryType.Animator:
                     OnAnimation(eventData);
                     break;
+                case EventCategoryType.Objective:
+                    OnObjective(eventData);
+                    break;
                 default:
                     break;
             }
         }
 
+        private void onRiddleAnswerInteract(EventData eventData)
+        {
+            RiddleAnswerChanged?.Invoke(eventData);
+        }
 
         protected virtual void onMouseLock(EventData eventData)
         {
@@ -311,10 +326,15 @@ namespace GDLibrary
         {
             cutsceneChanged?.Invoke(eventData);
         }
-
+        
         protected virtual void OnAnimation(EventData eventData)
         {
             animationTriggered?.Invoke(eventData);
+        }
+        
+        protected virtual void OnObjective(EventData eventData)
+        {
+            ObjectiveChanged?.Invoke(eventData);
         }
     }
 }

@@ -230,6 +230,7 @@ namespace GDLibrary
                         this.inPopUp = false;
                         this.ManagerParameters.MouseManager.SetPosition(new Vector2(this.ManagerParameters.ScreenManager.ScreenResolution.X / 2, this.ManagerParameters.ScreenManager.ScreenResolution.Y / 2));
                         EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.PopUpDown));
+
                     }
                 }
             }

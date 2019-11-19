@@ -46,6 +46,7 @@ namespace GDLibrary
         {
             eventDispatcher.lockChanged += Mouselockbool;
             eventDispatcher.RiddleChanged += MovementBlock;
+            
             //eventDispatcher.PopUpChanged += changeState;
         }
 
