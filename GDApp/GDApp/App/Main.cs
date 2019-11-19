@@ -1834,7 +1834,7 @@ namespace GDApp
 
             buttonID = "main-Menu";
             texture = this.textureDictionary["mainMenu-Button"];
-            position += new Vector2(5, verticalBtnSeparation);
+            position += new Vector2(-5, verticalBtnSeparation);
             transform = new Transform2D(position,
                 0, new Vector2(0.6f, 0.6f),
                 new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
