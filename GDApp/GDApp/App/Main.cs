@@ -536,7 +536,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/field-desk");
             this.modelDictionary.Load("Assets/Models/Props/war-table");
             this.modelDictionary.Load("Assets/Models/Props/FilingCabinet");
-            this.modelDictionary.Load("Assets/Models/Props/book-case");
+            this.modelDictionary.Load("Assets/Models/Props/Bookshelf_01");
             this.modelDictionary.Load("Assets/Models/Props/Phonograph");
             this.modelDictionary.Load("Assets/Models/Props/computer");
             this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
@@ -1216,8 +1216,10 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["bookcase"];
 
-            collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["book-case"]);
-            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2.0f, 15.0f, 17.0f)),
+            collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, 
+                this.modelDictionary["Bookshelf_01"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
+                    new Vector3(2.0f, 15.0f, 17.0f)),
                new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
