@@ -965,7 +965,8 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-94, 10, 127), new Vector3(-90, 0, 0), new Vector3(0.09f, 0.01f, 0.06f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-85, 0, 127), new Vector3(90, 180, 0), 
+                new Vector3(0.09f, 0.01f, 0.06f), Vector3.UnitX, Vector3.UnitY);
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
