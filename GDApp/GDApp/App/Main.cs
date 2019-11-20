@@ -557,12 +557,17 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/start");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/restart-Button");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/Resume");
+
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/back-Button","back");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/control-button","controls");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/mainMenu-Button");
+
 
             //menu - backgrounds
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/Title-screen");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/game-over");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/PauseMenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/control-screen", "ControlMenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/win-screen");
 
             //ui (or hud) elements
@@ -1531,7 +1536,7 @@ namespace GDApp
             Vector2 position = Vector2.Zero;
             UIButtonObject uiButtonObject = null, clone = null;
             string sceneID = "", buttonID = "", buttonText = "";
-            int verticalBtnSeparation = 75;
+            int verticalBtnSeparation = 50;
 
             #region Main Menu
             sceneID = "main menu";
@@ -1554,13 +1559,13 @@ namespace GDApp
             texture = this.textureDictionary["start"];
             position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, graphics.PreferredBackBufferHeight - texture.Height);
             transform = new Transform2D(position,
-                0, new Vector2(0.8f, 0.8f),
+                0, new Vector2(0.6f, 0.4f),
                 new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
 
             uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
                 transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
                 this.fontDictionary["menu"],
-                Color.DarkBlue, new Vector2(0, 2));
+                Color.DarkBlue, new Vector2(0, 0));
 
             uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
               new TrigonometricParameters(0.1f, 0.2f, 1)));
@@ -1569,12 +1574,50 @@ namespace GDApp
 
             this.menuManager.Add(sceneID, uiButtonObject);
 
+
+            //// controls button
+            ///
+
+
+            //string buttonID2 = "controlsbtn";
+            //Texture2D texture2 = this.textureDictionary["controls"];
+            //Vector2 position2 = new Vector2(graphics.PreferredBackBufferWidth / 2.0f,1);
+            //Transform2D transform2 = new Transform2D(position,
+            //    0, new Vector2(0.8f, 0.8f),
+            //    new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+
+            //UIButtonObject uiButtonObject2 = new UIButtonObject(buttonID2, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+            //    transform2, Color.Gray, SpriteEffects.None, 0.1f, texture2, buttonText,
+            //    this.fontDictionary["menu"],
+            //    Color.DarkBlue, new Vector2(0, 2));
+
+            //uiButtonObject2.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+            //  new TrigonometricParameters(0.1f, 0.2f, 1)));
+            //uiButtonObject2.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+            //        new TrigonometricParameters(1, 0.4f, 0), Color.Lavender, Color.LavenderBlush));
+
+            //this.menuManager.Add(sceneID, uiButtonObject2);
+
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
             //add exit button - clone the audio button then just reset texture, ids etc in all the clones
             clone = (UIButtonObject)uiButtonObject.Clone();
             clone.ID = "exitbtn";
             clone.Texture = this.textureDictionary["quit"];
             //move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(0, verticalBtnSeparation);
+            clone.Transform.Translation += new Vector2(0, verticalBtnSeparation*1.9f);
             //change the texture blend color
             clone.Color = Color.Gray;
             //store the original color since if we modify with a controller and need to reset
@@ -1584,6 +1627,30 @@ namespace GDApp
                     new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.DarkRed));
             this.menuManager.Add(sceneID, clone);
             #endregion
+
+
+
+
+            clone = null;
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "controlsbtn";
+            clone.Texture = this.textureDictionary["controls"];
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(-clone.Texture.Width/10, verticalBtnSeparation);
+            clone.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0,0, clone.Texture.Width, clone.Texture.Height);
+
+            //change the texture blend color
+            clone.Color = Color.Gray;
+            //store the original color since if we modify with a controller and need to reset
+            clone.OriginalColor = clone.Color;
+            //attach another controller on the exit button just to illustrate multi-controller approach
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.Indigo, Color.Violet));
+            this.menuManager.Add(sceneID, clone);
+
+
+
+
 
             /*
             #region Audio Menu
@@ -1668,11 +1735,11 @@ namespace GDApp
 
             //add back button - clone the audio button then just reset texture, ids etc in all the clones
             clone = (UIButtonObject)uiButtonObject.Clone();
-            //move down on Y-axis for next button
+            move down on Y-axis for next button
             clone.Transform.Translation += new Vector2(0, 9 * verticalBtnSeparation);
             clone.ID = "backbtn";
             clone.Text = "Back";
-            //change the texture blend color
+            change the texture blend color
             clone.Color = Color.LightYellow;
             this.menuManager.Add(sceneID, clone);
             #endregion
@@ -1692,17 +1759,62 @@ namespace GDApp
             clone = null;
             clone = (UIButtonObject)uiButtonObject.Clone();
             clone.ID = "resumebtn";
+            clone.Transform = new Transform2D(position,
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(clone.Texture.Width / 2.0f, clone.Texture.Height / 2.0f), new Integer2(clone.Texture.Width, clone.Texture.Height));
             clone.Texture = this.textureDictionary["Resume"];
-            clone.Transform.Translation -= new Vector2(0, verticalBtnSeparation * 3);
+            clone.Transform.Translation -= new Vector2(0, verticalBtnSeparation * 7);
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                  new TrigonometricParameters(1, 0.4f, 0), Color.Blue, Color.DarkBlue));
             this.menuManager.Add(sceneID, clone);
+            
 
             clone = (UIButtonObject)uiButtonObject.Clone();
             clone.ID = "exitbtn";
             clone.Texture = this.textureDictionary["quit"];
-            clone.Transform.Translation -= new Vector2(0, verticalBtnSeparation);
+            clone.Transform = new Transform2D(position,
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(clone.Texture.Width / 2.0f, clone.Texture.Height / 2.0f), new Integer2(clone.Texture.Width, clone.Texture.Height));
+            clone.Transform.Translation -= new Vector2(0, verticalBtnSeparation *5);
+              clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.Red));
+ 
             this.menuManager.Add(sceneID, clone);
 
             #endregion
+
+            #region Controls Menu
+
+            sceneID = "controls menu";
+
+            texture = this.textureDictionary["ControlMenu"];
+            scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
+                (float)graphics.PreferredBackBufferHeight / texture.Height);
+
+            transform = new Transform2D(scale);
+            this.menuManager.Add(sceneID, new UITextureObject("controlMenuTexture", ActorType.UIStaticTexture, StatusType.Drawn,
+                transform, Color.White, SpriteEffects.None, 1, texture));
+
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "backbtn";
+            clone.Texture = this.textureDictionary["back"];
+            //move down on Y-axis for next button
+            clone.Transform.Translation = new Vector2(graphics.PreferredBackBufferWidth/2, clone.Texture.Height/2);
+            clone.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, clone.Texture.Width, clone.Texture.Height);
+            clone.Transform = new Transform2D(clone.Transform.Translation,
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(clone.Texture.Width / 2.0f, clone.Texture.Height / 2.0f), new Integer2(clone.Texture.Width, clone.Texture.Height));
+            //change the texture blend color
+            clone.Color = Color.Gray;
+            //store the original color since if we modify with a controller and need to reset
+            clone.OriginalColor = clone.Color;
+            //attach another controller on the exit button just to illustrate multi-controller approach
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.Indigo, Color.Violet));
+            this.menuManager.Add(sceneID, clone);
+
+            #endregion
+
         }
 
         private void AddGameOverMenu()
