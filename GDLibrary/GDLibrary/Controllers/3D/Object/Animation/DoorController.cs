@@ -8,8 +8,9 @@ namespace GDLibrary
         private bool opened = false;
         private bool opening = false;
         
-        public DoorController(string id, ControllerType controllerType) : base(id, controllerType)
+        public DoorController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id, controllerType)
         {
+            RegisterForEventHandling(eventDispatcher);
         }
         
         #region Event Handeling

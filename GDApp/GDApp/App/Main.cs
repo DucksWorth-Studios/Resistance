@@ -1005,7 +1005,7 @@ namespace GDApp
                     new Vector3(13.0f,15.0f,0.5f)),
                     new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
-            collidableObject.AttachController(new DoorController("Door Controller", ControllerType.Rotation));
+            collidableObject.AttachController(new DoorController("Door Controller", ControllerType.Rotation,this.eventDispatcher));
             this.objectManager.Add(collidableObject);
         }
 
@@ -1033,7 +1033,7 @@ namespace GDApp
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             cloneCollider.Enable(true, 1);
-            cloneCollider.AttachController(new BarrierController(true, "testing", ControllerType.Rotation));
+            cloneCollider.AttachController(new BarrierController(true, "testing", ControllerType.Rotation,this.eventDispatcher));
             this.objectManager.Add(cloneCollider);
             
             #endregion
@@ -1049,7 +1049,7 @@ namespace GDApp
                 new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             cloneCollider.Enable(true, 1);
-            cloneCollider.AttachController(new BarrierController(false, "testing", ControllerType.Rotation));
+            cloneCollider.AttachController(new BarrierController(false, "testing", ControllerType.Rotation,this.eventDispatcher));
             this.objectManager.Add(cloneCollider);
             
             #endregion
@@ -1230,7 +1230,7 @@ namespace GDApp
                     new Vector3(2.0f, 15.0f, 17.0f)),
                new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
-            collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation));
+            collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation, this.eventDispatcher));
             this.objectManager.Add(collidableObject);
         }
 
@@ -2192,7 +2192,8 @@ namespace GDApp
 
             if(this.keyboardManager.IsKeyDown(Keys.P))
             {
-                EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
+                //EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
+                EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase,EventCategoryType.Animator));
             }
             //exit using new gamepad manager
             if (this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
