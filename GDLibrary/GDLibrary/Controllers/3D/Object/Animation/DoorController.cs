@@ -17,11 +17,11 @@ namespace GDLibrary
 
         protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
-            eventDispatcher.animationTriggered += RotateBarrier;
+            eventDispatcher.animationTriggered += OpenDoor;
             base.RegisterForEventHandling(eventDispatcher);
         }
 
-        protected void RotateBarrier(EventData eventData)
+        protected void OpenDoor(EventData eventData)
         {
             if (eventData.EventType == EventActionType.OpenDoor)
                 opening = true;
