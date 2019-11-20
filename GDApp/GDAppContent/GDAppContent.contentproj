@@ -829,6 +829,9 @@
   <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Backgrounds\control-screen.png">
       <Name>control-screen</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Assets\Textures\UI\Menu\Backgrounds\win-screen.png">
       <Name>win-screen</Name>
       <Importer>TextureImporter</Importer>
@@ -839,6 +842,9 @@
   <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Buttons\back-Button.png">
       <Name>back-Button</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Assets\Textures\UI\Menu\Buttons\mainMenu-Button.png">
       <Name>mainMenu-Button</Name>
       <Importer>TextureImporter</Importer>
@@ -851,6 +857,7 @@
       <Name>control-button</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Assets\Models\Props\Bookshelf_01.fbx">
       <Name>Bookshelf_01</Name>
       <Importer>FbxImporter</Importer>
