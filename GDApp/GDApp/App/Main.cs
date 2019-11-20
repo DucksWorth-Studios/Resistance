@@ -1420,7 +1420,7 @@ namespace GDApp
             this.eventDispatcher.RiddleChanged += ChangePopUPState;
             this.eventDispatcher.RiddleChanged += changeActorType;
             this.eventDispatcher.PlayerChanged += LoseTriggered;
-            this.eventDispatcher.PlayerChanged += WinTriggered;
+            this.eventDispatcher.PlayerWinChanged += WinTriggered;
             this.eventDispatcher.PopUpChanged += ChangePopUPState;
             this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
         }
@@ -1540,7 +1540,8 @@ namespace GDApp
          */
         private void WinTriggered(EventData eventData)
         {
-            System.Diagnostics.Debug.WriteLine("Win event triggered");
+            EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.MainMenu));
+            //EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.mouseLock));
         }
         #endregion
 

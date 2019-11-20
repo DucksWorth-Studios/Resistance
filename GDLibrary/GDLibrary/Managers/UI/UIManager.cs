@@ -53,6 +53,10 @@ namespace GDLibrary
                 //turn off update and draw i.e. show the menu since the game is paused
                 this.StatusType = StatusType.Off;
             }
+            else if (eventData.EventType == EventActionType.OnWin)
+            {
+                this.StatusType = StatusType.Off;
+            }
         }
 
         public void Add(Actor2D actor)

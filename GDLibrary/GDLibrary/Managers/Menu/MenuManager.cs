@@ -87,6 +87,12 @@ namespace GDLibrary
                 //show the mouse
                 this.Game.IsMouseVisible = true;
             }
+            else if (eventData.EventType == EventActionType.OnWin)
+            {
+                this.SetActiveList("win-screen");
+                this.StatusType = StatusType.Update | StatusType.Drawn;
+                this.Game.IsMouseVisible = true;
+            }
 
             //set the mouse to look directly forward otherwise the camera would move forward based on some random mouse orientation
             this.mouseManager.SetPosition(this.cameraManager.ActiveCamera.ViewportCentre);

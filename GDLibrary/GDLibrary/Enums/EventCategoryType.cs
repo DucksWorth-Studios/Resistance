@@ -38,6 +38,7 @@ namespace GDLibrary
         Cutscene,
         RiddleAnswer,
         Objective,
+        Win,
 
         //all other categories of sender...
         Animator

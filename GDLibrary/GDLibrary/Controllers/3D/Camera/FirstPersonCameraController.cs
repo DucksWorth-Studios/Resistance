@@ -58,7 +58,7 @@ namespace GDLibrary
         public void  Mouselockbool(EventData eventData)
         {
 
-            System.Diagnostics.Debug.Write("IS Being Called");
+            //System.Diagnostics.Debug.Write("IS Being Called");
 
             if (!Paused) { Paused = true; }
             else { Paused = false; }

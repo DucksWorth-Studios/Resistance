@@ -50,7 +50,10 @@ namespace GDLibrary
         //how do we want this object to respond to collisions?
         private void HandleCollisions(CollidableObject collidableObjectCollider, CollidableObject collidableObjectCollidee)
         {
-            //add your response code here...
+            if(collidableObjectCollidee.ActorType == ActorType.CollidableCamera)
+            {
+                EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.Win));
+            }            
         }
         #endregion
 
