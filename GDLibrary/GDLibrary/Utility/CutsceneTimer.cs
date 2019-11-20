@@ -45,7 +45,7 @@ namespace GDLibrary
             this.secondsToWait = (int) eventData.AdditionalParameters[0];
             
             this.cameraToChangeTo = eventData.AdditionalParameters[1] as string;
-
+            //Console.WriteLine("Setting Deploy");
             this.timeToDeploy = currentTime + secondsToWait;
         }
 
