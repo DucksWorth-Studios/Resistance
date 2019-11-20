@@ -536,7 +536,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/field-desk");
             this.modelDictionary.Load("Assets/Models/Props/war-table");
             this.modelDictionary.Load("Assets/Models/Props/FilingCabinet");
-            this.modelDictionary.Load("Assets/Models/Props/book-case");
+            this.modelDictionary.Load("Assets/Models/Props/Bookshelf_01");
             this.modelDictionary.Load("Assets/Models/Props/Phonograph");
             this.modelDictionary.Load("Assets/Models/Props/computer");
             this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
@@ -1211,15 +1211,21 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-62.0f, 0.0f, -93.65f), new Vector3(0, 0, 0), new Vector3(0.05f, 0.038f, 0.045f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-64, 0, -102), 
+                new Vector3(0, 0, 0), 
+                new Vector3(0.05f, 0.038f, 0.045f), 
+                Vector3.UnitX, Vector3.UnitY);
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["bookcase"];
 
-            collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["book-case"]);
-            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2.0f, 15.0f, 17.0f)),
+            collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, 
+                this.modelDictionary["Bookshelf_01"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
+                    new Vector3(2.0f, 15.0f, 17.0f)),
                new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
+            collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation));
             this.objectManager.Add(collidableObject);
         }
 
