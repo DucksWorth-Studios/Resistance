@@ -1406,6 +1406,7 @@ namespace GDApp
             this.eventDispatcher.PlayerChanged += WinTriggered;
             this.eventDispatcher.PopUpChanged += ChangePopUPState;
             this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
+            this.eventDispatcher.Reset += Reset;
         }
         /*
          * Author: Tomas
@@ -1525,8 +1526,45 @@ namespace GDApp
         {
             System.Diagnostics.Debug.WriteLine("Win event triggered");
         }
+
+        private void Reset(EventData eventData)
+        {
+            resetLogicPuzzle();
+            resetLogicPuzzleModels();
+        }
         #endregion
 
+        #region Reset Functions
+
+        private void resetLogicPuzzle()
+        {
+            this.logicPuzzle = null;
+            this.logicPuzzle = new LogicManager(this);
+        }
+
+        private void resetLogicPuzzleModels()
+        {
+            #region Reset Switches
+            for(int i = 1; i < 5;i++)
+            {
+                Predicate<Actor3D> pred = s => s.ID == "switch-"+i;
+                CollidableObject logicSwitch = (CollidableObject) this.objectManager.Find(pred);
+
+                logicSwitch.EffectParameters.Texture = this.textureDictionary["gray"];
+            }
+            #endregion
+
+            #region Gates
+            for (int i = 1; i < 6; i++)
+            {
+                Predicate<Actor3D> pred = s => s.ID == "gate-" + i;
+                CollidableObject logicGate = (CollidableObject)this.objectManager.Find(pred);
+
+                logicGate.EffectParameters.Texture = this.textureDictionary["gray"];
+            }
+            #endregion
+        }
+        #endregion
         #region Menu & UI
 
         private void AddMenuElements()
