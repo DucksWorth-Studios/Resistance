@@ -6,10 +6,11 @@ namespace GDLibrary
     public class BookcaseController : Controller
     {
         private bool opened = false;
-        private bool opening = true;
+        private bool opening = false;
         
-        public BookcaseController(string id, ControllerType controllerType) : base(id, controllerType)
+        public BookcaseController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id, controllerType)
         {
+            RegisterForEventHandling(eventDispatcher);
         }
         
         #region Event Handeling

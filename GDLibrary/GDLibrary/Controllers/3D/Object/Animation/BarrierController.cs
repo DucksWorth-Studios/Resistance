@@ -10,9 +10,10 @@ namespace GDLibrary
         private bool rotateTopBarrier = false;
         private bool rotateBottomBarrier = false;
 
-        public BarrierController(bool rotateClockwise, string id, ControllerType controllerType) : base(id, controllerType)
+        public BarrierController(bool rotateClockwise, string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id, controllerType)
         {
             this.rotateClockwise = rotateClockwise;
+            RegisterForEventHandling(eventDispatcher);
         }
 
         #region Event Handeling
