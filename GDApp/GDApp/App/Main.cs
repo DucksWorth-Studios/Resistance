@@ -125,6 +125,7 @@ namespace GDApp
             AddMenuElements();
             AddUIElements();
             AddGameOverMenu();
+            AddWinMenu();
 #if DEBUG
             InitializeDebugTextInfo();
 #endif
@@ -535,7 +536,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/field-desk");
             this.modelDictionary.Load("Assets/Models/Props/war-table");
             this.modelDictionary.Load("Assets/Models/Props/FilingCabinet");
-            this.modelDictionary.Load("Assets/Models/Props/book-case");
+            this.modelDictionary.Load("Assets/Models/Props/Bookshelf_01");
             this.modelDictionary.Load("Assets/Models/Props/Phonograph");
             this.modelDictionary.Load("Assets/Models/Props/computer");
             this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
@@ -556,14 +557,18 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/start");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/restart-Button");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/Resume");
+
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/back-Button","back");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/control-button","controls");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/mainMenu-Button");
+
 
             //menu - backgrounds
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/Title-screen");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/game-over");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/PauseMenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/control-screen", "ControlMenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/win-screen");
 
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
@@ -1211,15 +1216,21 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-62.0f, 0.0f, -93.65f), new Vector3(0, 0, 0), new Vector3(0.05f, 0.038f, 0.045f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-64, 0, -102), 
+                new Vector3(0, 0, 0), 
+                new Vector3(0.05f, 0.038f, 0.045f), 
+                Vector3.UnitX, Vector3.UnitY);
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["bookcase"];
 
-            collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, this.modelDictionary["book-case"]);
-            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2.0f, 15.0f, 17.0f)),
+            collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, 
+                this.modelDictionary["Bookshelf_01"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
+                    new Vector3(2.0f, 15.0f, 17.0f)),
                new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
+            collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation));
             this.objectManager.Add(collidableObject);
         }
 
@@ -1880,7 +1891,105 @@ namespace GDApp
             
 
         }
-#endregion
+
+        private void AddWinMenu()
+        {
+
+            string sceneID, buttonID, buttonText;
+            Vector2 position = Vector2.Zero;
+            UIButtonObject uiButtonObject = null, clone = null;
+            int verticalBtnSeparation = 100;
+            int w, h;
+
+            w = graphics.PreferredBackBufferWidth;
+            h = graphics.PreferredBackBufferHeight;
+            float a, b, c, d;
+
+            Texture2D texture = this.textureDictionary["win-screen"];
+
+            a = (float)w / texture.Width;
+            b = (float)h / texture.Height;
+            c = (float)1 / a;
+            d = (float)1 / b;
+
+            Console.WriteLine("width " + w);
+            Console.WriteLine("height " + h);
+            Vector2 scale = new Vector2(a, b);
+
+            Transform2D transform = new Transform2D(new Vector2(0, 0), 0, scale, Vector2.One, new Integer2(1, 1));
+
+
+            Microsoft.Xna.Framework.Rectangle rect = new Microsoft.Xna.Framework.Rectangle(0, 0, w, h);
+
+            UITextureObject picture = new UITextureObject("win-screen-background", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White,
+                SpriteEffects.None, 1, texture);
+
+
+            sceneID = "win-screen";
+            this.menuManager.Add(sceneID, picture);
+
+            texture = this.textureDictionary["restart-Button"];
+            buttonID = "";
+            buttonText = "";
+            float num = texture.Height / 2;
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, (graphics.PreferredBackBufferHeight / 2) + num);
+            transform = new Transform2D(position,
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
+                this.fontDictionary["menu"],
+                Color.DarkBlue, new Vector2(0, 2));
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.Green, Color.Green));
+
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+            buttonID = "main-Menu";
+            texture = this.textureDictionary["mainMenu-Button"];
+            position += new Vector2(-5, verticalBtnSeparation);
+            transform = new Transform2D(position,
+                0, new Vector2(0.6f, 0.6f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
+                this.fontDictionary["menu"],
+                Color.DarkBlue, new Vector2(0, 2));
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.White, Color.Cyan));
+
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+
+            buttonID = "exitbtn";
+            texture = this.textureDictionary["quit"];
+            position += new Vector2(-0, verticalBtnSeparation);
+            transform = new Transform2D(position,
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
+                transform, Color.Gray, SpriteEffects.None, 0.1f, texture, buttonText,
+                this.fontDictionary["menu"],
+                Color.DarkBlue, new Vector2(0, 2));
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkRed, Color.Red));
+
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+        }
+        #endregion
         private void AddUIElements()
         {
             InitializeUIMousePointer();
