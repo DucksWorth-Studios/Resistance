@@ -40,6 +40,7 @@ namespace GDLibrary
         Objective,
 
         //all other categories of sender...
-        Animator
+        Animator,
+        Reset
     }
 }

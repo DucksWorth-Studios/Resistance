@@ -46,6 +46,7 @@ namespace GDLibrary
         public delegate void CutsceneHandler(EventData eventData);
         public delegate void AnimationHandler(EventData eventData);
         public delegate void ObjectiveHandler(EventData eventData);
+        public delegate void ResetHandler(EventData eventData);
         
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
@@ -72,6 +73,7 @@ namespace GDLibrary
         public event CutsceneHandler cutsceneChanged;
         public event AnimationHandler animationTriggered;
         public event ObjectiveHandler ObjectiveChanged;
+        public event ResetHandler Reset;
 
 
         public EventDispatcher(Game game, int initialSize)
@@ -196,6 +198,9 @@ namespace GDLibrary
                 case EventCategoryType.Objective:
                     OnObjective(eventData);
                     break;
+                case EventCategoryType.Reset:
+                    OnReset(eventData);
+                    break;
                 default:
                     break;
             }
@@ -210,7 +215,11 @@ namespace GDLibrary
         {
             lockChanged?.Invoke(eventData);
         }
-
+        
+        private void OnReset(EventData eventData)
+        {
+            Reset?.Invoke(eventData);
+        }
         //called when a menu change is requested
         protected virtual void OnMenu(EventData eventData)
         {

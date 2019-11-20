@@ -25,7 +25,29 @@ namespace GDLibrary
         private bool gateThree;
         private bool gateFour;
 
-        public LogicManager(Game game) : base(game)
+        public LogicManager(Game game,EventDispatcher eventDispatcher) : base(game)
+        {
+
+            this.switchOne = false;
+            this.switchTwo = false;
+            this.switchThree = false;
+            this.switchFour = false;
+            this.IsSolved = false;
+
+            this.gateOne = false;
+            this.gateTwo = false;
+            this.gateThree = false;
+            this.gateFour = false;
+
+            RegisterForHandling(eventDispatcher);
+        }
+
+        private void RegisterForHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.Reset += Reset;
+        }
+
+        private void Reset(EventData eventData)
         {
             this.switchOne = false;
             this.switchTwo = false;
