@@ -1,4 +1,5 @@
-using System.Security.Policy;
+using JigLibX.Collision;
+using JigLibX.Geometry;
 using Microsoft.Xna.Framework;
 
 namespace GDLibrary
