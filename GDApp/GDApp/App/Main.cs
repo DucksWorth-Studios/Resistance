@@ -456,7 +456,7 @@ namespace GDApp
             this.managerParameters = new ManagerParameters(this.objectManager,
                 this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager, this.screenManager, this.soundManager);
 
-            this.logicPuzzle = new LogicManager(this);
+            this.logicPuzzle = new LogicManager(this,this.eventDispatcher);
             Components.Add(logicPuzzle);
 
             #region Pick Manager
@@ -1529,18 +1529,12 @@ namespace GDApp
 
         private void Reset(EventData eventData)
         {
-            resetLogicPuzzle();
             resetLogicPuzzleModels();
+            resetRiddleAnswer();
         }
         #endregion
 
         #region Reset Functions
-
-        private void resetLogicPuzzle()
-        {
-            this.logicPuzzle = null;
-            this.logicPuzzle = new LogicManager(this);
-        }
 
         private void resetLogicPuzzleModels()
         {
@@ -1563,6 +1557,14 @@ namespace GDApp
                 logicGate.EffectParameters.Texture = this.textureDictionary["gray"];
             }
             #endregion
+        }
+
+        private void resetRiddleAnswer()
+        {
+            Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
+            Actor3D item = this.objectManager.Find(pred) as Actor3D;
+            item.ActorType = ActorType.CollidableProp;
+            item.StatusType = StatusType.Drawn;
         }
         #endregion
         #region Menu & UI
@@ -2187,6 +2189,11 @@ namespace GDApp
 
         protected override void Update(GameTime gameTime)
         {
+
+            if(this.keyboardManager.IsKeyDown(Keys.P))
+            {
+                EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
+            }
             //exit using new gamepad manager
             if (this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
                 this.Exit();      
