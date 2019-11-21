@@ -36,21 +36,27 @@ namespace GDLibrary
 
         public override void Update(GameTime gameTime, IActor actor)
         {
-            Actor3D parent = actor as Actor3D;
+            CollidableObject parent = actor as CollidableObject;
 
             if (rotateClockwise && rotateTopBarrier)
             {
                 if (parent.Transform.Rotation.Z < 270)
                     parent.Transform.RotateAroundZBy(1);
                 else if (parent.Transform.Rotation.Z == 270)
+                {
                     rotateTopBarrier = false;
+                    parent.Collision.RemoveAllPrimitives();
+                }
             }
             else if (!rotateClockwise && rotateBottomBarrier)
             {
                 if (parent.Transform.Rotation.Z > -90)
                     parent.Transform.RotateAroundZBy(-1);
                 else if (parent.Transform.Rotation.Z == -90)
+                {
                     rotateBottomBarrier = false;
+                    parent.Collision.RemoveAllPrimitives();
+                }
             }
 
             base.Update(gameTime, actor);
