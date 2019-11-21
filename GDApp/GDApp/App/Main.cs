@@ -604,6 +604,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/FilingCabinet");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
+            this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
 
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
@@ -1284,9 +1285,9 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-89, 9, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-89, 8.73f, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["gray"];
+            effectParameters.Texture = this.textureDictionary["GunTexture"];
 
             collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.CollidableDecorator, transform3D, effectParameters, 
                 this.modelDictionary["Gun"], new MaterialProperties(0.1f, 0.1f, 0.1f));
