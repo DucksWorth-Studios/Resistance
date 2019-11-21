@@ -2212,7 +2212,7 @@ namespace GDApp
             //if(this.keyboardManager.IsKeyDown(Keys.P))
             {
                 //EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
-                EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
+               // EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateTopBarrier, EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateBottomBarrier, EventCategoryType.Animator));
             }
