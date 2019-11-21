@@ -185,7 +185,8 @@ namespace GDLibrary
                     EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera" }));
 
                     //sends off the event to ensure camera switches back to player once event has concluded
-                    EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive,EventCategoryType.Cutscene, new object[] {10, "collidable first person camera" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive,EventCategoryType.Cutscene, new object[] {3, "collidable first person camera" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OpenDoor, EventCategoryType.Animator));
 
                     EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
 
