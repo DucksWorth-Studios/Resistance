@@ -141,6 +141,7 @@ namespace GDLibrary
                 else if(this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.CollidablePickup)
                 {
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
+                    EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
                 }
                 //Console.WriteLine("Hello");
             }
