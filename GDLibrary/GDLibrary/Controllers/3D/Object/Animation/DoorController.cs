@@ -46,8 +46,8 @@ namespace GDLibrary
                     
                     parent.Collision.RemoveAllPrimitives();
 
-                    parent.Collision.AddPrimitive(new Box(new Vector3(-85, 0, 127), Matrix.Identity,
-                            new Vector3(0.5f,13,15)),
+                    parent.Collision.AddPrimitive(new Box(new Vector3(0.2f, 0, -18), Matrix.Identity,
+                            new Vector3(2f,15,15)),
                         new MaterialProperties(0.2f, 0.8f, 0.7f));
                 }
             }
