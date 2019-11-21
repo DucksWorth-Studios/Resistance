@@ -1542,7 +1542,8 @@ namespace GDApp
         private void WinTriggered(EventData eventData)
         {
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.MainMenu));
-            //EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.mouseLock));
+            EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
+            EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.mouseLock));
         }
 
         private void Reset(EventData eventData)
