@@ -1,4 +1,4 @@
-using JigLibX.Collision;
+﻿using JigLibX.Collision;
 using JigLibX.Geometry;
 using Microsoft.Xna.Framework;
 

@@ -1,4 +1,6 @@
 ﻿using System.Security.Policy;
+using JigLibX.Collision;
+using JigLibX.Geometry;
 using Microsoft.Xna.Framework;
 
 namespace GDLibrary
@@ -31,7 +33,7 @@ namespace GDLibrary
 
         public override void Update(GameTime gameTime, IActor actor)
         {
-            Actor3D parent = actor as Actor3D;
+            CollidableObject parent = actor as CollidableObject;
 
             if (opening && !opened)
             {
@@ -41,6 +43,12 @@ namespace GDLibrary
                 {
                     opened = true;
                     opening = false;
+                    
+                    parent.Collision.RemoveAllPrimitives();
+
+                    parent.Collision.AddPrimitive(new Box(new Vector3(-85, 0, 127), Matrix.Identity,
+                            new Vector3(0.5f,13,15)),
+                        new MaterialProperties(0.2f, 0.8f, 0.7f));
                 }
             }
 
