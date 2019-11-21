@@ -1002,7 +1002,7 @@ namespace GDApp
             collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, 
                 this.modelDictionary["bunker_door"]);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
-                    new Vector3(40.0f,40.0f,0.5f)),
+                    new Vector3(40.0f,40.0f,2f)),
                     new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             collidableObject.AttachController(new DoorController("Door Controller", ControllerType.Rotation,this.eventDispatcher));
@@ -1151,7 +1151,7 @@ namespace GDApp
 
             collidableObject = new CollidableObject("field desk", ActorType.CollidableDecorator, transform3D, effectParameters,
                 this.modelDictionary["field-desk"]);
-            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(22.0f, 8.0f, 7.0f)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.AddPrimitive(new Box(new Vector3(-100.0f, 0.0f, -100.0f), Matrix.Identity, new Vector3(30.0f, 8.0f, 7.0f)), new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
         }
@@ -1178,7 +1178,7 @@ namespace GDApp
 
             cloneCollider.Transform = new Transform3D(new Vector3(-10.0f, -0.4f, -68.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
                 Vector3.UnitX, Vector3.UnitY);
-            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4, 2, 4)),
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(5, 5, 5)),
              new MaterialProperties(1, 1, 1));
             cloneCollider.Enable(true, 1);
             this.objectManager.Add(cloneCollider);
@@ -1190,7 +1190,7 @@ namespace GDApp
 
             cloneCollider.Transform = new Transform3D(new Vector3(-75.0f, -0.4f, 122.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
                 Vector3.UnitX, Vector3.UnitY);
-            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4,2,4)),
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(5, 5, 5)),
               new MaterialProperties(1, 1, 1));
             cloneCollider.Enable(true, 1);
             this.objectManager.Add(cloneCollider);
@@ -1202,7 +1202,7 @@ namespace GDApp
 
             cloneCollider.Transform = new Transform3D(new Vector3(-113.0f, -0.4f, 122.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
                 Vector3.UnitX, Vector3.UnitY);
-            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4, 2, 4)),
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(5, 5, 5)),
               new MaterialProperties(1, 1, 1));
             cloneCollider.Enable(true, 1);
             this.objectManager.Add(cloneCollider);
@@ -1227,7 +1227,7 @@ namespace GDApp
             collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, 
                 this.modelDictionary["Bookshelf_01"]);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
-                    new Vector3(2.0f, 30.0f, 30.0f)),
+                    new Vector3(8f, 30.0f, 35.0f)),
                new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation, this.eventDispatcher));
