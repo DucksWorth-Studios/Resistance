@@ -145,6 +145,11 @@ namespace GDLibrary
                 this.StatusType = StatusType.Off;
                 this.lose = true;
             }
+            else if (eventData.EventType == EventActionType.OnWin)
+            {
+                this.StatusType = StatusType.Off;
+                this.lose = true;
+            }
         }
         #endregion
 

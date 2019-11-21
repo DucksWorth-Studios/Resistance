@@ -749,9 +749,9 @@ namespace GDApp
             InitializeComputer();
             InitializeLogicPuzzleModel();
             InitializeRiddleAnswerObject();
+            InitializeWinVolumeBox();
 
 
-           
 
             ////add primitive objects - where developer defines the vertices manually
             //InitializePrimitives();
@@ -1294,6 +1294,23 @@ namespace GDApp
 
             this.objectManager.Add(collidableObject);
         }
+
+        private void InitializeWinVolumeBox()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-91, 0, 130), Vector3.Zero, new Vector3(10, 0.1f, 2), Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+
+            collidableObject = new ImmovablePickupObject("win trigger volume", ActorType.Objective, transform3D, effectParameters, this.modelDictionary["box2"],
+                this.modelDictionary["box2"], new MaterialProperties(0.1f, 0.1f, 0.1f), new PickupParameters("win trigger volume", 1));
+            collidableObject.Enable(true, 1);
+
+            this.objectManager.Add(collidableObject);
+        }
         #endregion
 
         #region Initialize Cameras
@@ -1403,7 +1420,7 @@ namespace GDApp
             this.eventDispatcher.RiddleChanged += ChangePopUPState;
             this.eventDispatcher.RiddleChanged += changeActorType;
             this.eventDispatcher.PlayerChanged += LoseTriggered;
-            this.eventDispatcher.PlayerChanged += WinTriggered;
+            this.eventDispatcher.PlayerWinChanged += WinTriggered;
             this.eventDispatcher.PopUpChanged += ChangePopUPState;
             this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
             this.eventDispatcher.Reset += Reset;
@@ -1524,7 +1541,8 @@ namespace GDApp
          */
         private void WinTriggered(EventData eventData)
         {
-            System.Diagnostics.Debug.WriteLine("Win event triggered");
+            EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.MainMenu));
+            //EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.mouseLock));
         }
 
         private void Reset(EventData eventData)

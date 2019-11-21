@@ -30,6 +30,7 @@ namespace GDLibrary
         public delegate void AddActorEventHandler(EventData eventData);
         public delegate void RemoveActorEventHandler(EventData eventData);
         public delegate void PlayerEventHandler(EventData eventData);
+        public delegate void PlayerWinEventHandler(EventData eventData);
         public delegate void GlobalSoundEventHandler(EventData eventData);
         public delegate void Sound3DEventHandler(EventData eventData);
         public delegate void Sound2DEventHandler(EventData eventData);
@@ -57,6 +58,7 @@ namespace GDLibrary
         public event AddActorEventHandler AddActorChanged;
         public event RemoveActorEventHandler RemoveActorChanged;
         public event PlayerEventHandler PlayerChanged;
+        public event PlayerWinEventHandler PlayerWinChanged;
         public event GlobalSoundEventHandler GlobalSoundChanged;
         public event Sound3DEventHandler Sound3DChanged;
         public event Sound2DEventHandler Sound2DChanged;
@@ -144,6 +146,10 @@ namespace GDLibrary
                     OnPlayer(eventData);
                     break;
 
+                case EventCategoryType.Win:
+                    OnPlayerWin(eventData);
+                    break;
+
                 case EventCategoryType.Debug:
                     OnDebug(eventData);
                     break;
@@ -206,6 +212,11 @@ namespace GDLibrary
             }
         }
 
+        private void OnPlayerWin(EventData eventData)
+        {
+            PlayerWinChanged?.Invoke(eventData);
+        }
+
         private void onRiddleAnswerInteract(EventData eventData)
         {
             RiddleAnswerChanged?.Invoke(eventData);
@@ -266,6 +277,7 @@ namespace GDLibrary
         //called when a player related event occurs (e.g. win, lose, health increase)
         protected virtual void OnPlayer(EventData eventData)
         {
+            System.Diagnostics.Debug.WriteLine("getting event");
             PlayerChanged?.Invoke(eventData);
         }
 
