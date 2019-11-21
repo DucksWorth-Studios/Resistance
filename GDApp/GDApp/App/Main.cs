@@ -735,7 +735,7 @@ namespace GDApp
             //add level elements
             //InitializeBuildings();
             InitializeExitDoor();
-            InitializeDoorBarriers();
+            //InitializeDoorBarriers();
 
             //init props
             InitializeWarTable();
@@ -994,7 +994,7 @@ namespace GDApp
             CollidableObject collidableObject;
 
             transform3D = new Transform3D(new Vector3(-85, 0, 127), new Vector3(90, 180, 0), 
-                new Vector3(0.09f, 0.01f, 0.06f), Vector3.UnitX, Vector3.UnitY);
+                new Vector3(0.09f, 0.1f, 0.06f), Vector3.UnitX, Vector3.UnitY);
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
@@ -1002,7 +1002,7 @@ namespace GDApp
             collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, 
                 this.modelDictionary["bunker_door"]);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
-                    new Vector3(13.0f,15.0f,0.5f)),
+                    new Vector3(40.0f,40.0f,0.5f)),
                     new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             collidableObject.AttachController(new DoorController("Door Controller", ControllerType.Rotation,this.eventDispatcher));
@@ -1227,7 +1227,7 @@ namespace GDApp
             collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, 
                 this.modelDictionary["Bookshelf_01"]);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
-                    new Vector3(2.0f, 15.0f, 17.0f)),
+                    new Vector3(2.0f, 30.0f, 30.0f)),
                new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation, this.eventDispatcher));
@@ -1521,7 +1521,7 @@ namespace GDApp
             EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera2" }));
             EventDispatcher.Publish(new EventData(EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
             EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
-            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] { 10, "collidable first person camera" }));
+            EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] { 5, "collidable first person camera" }));
         }
 
         /*
@@ -2208,10 +2208,12 @@ namespace GDApp
         protected override void Update(GameTime gameTime)
         {
 
-            if(this.keyboardManager.IsKeyDown(Keys.P))
+            //if(this.keyboardManager.IsKeyDown(Keys.P))
             {
                 //EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
-                EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase,EventCategoryType.Animator));
+                EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
+                //EventDispatcher.Publish(new EventData(EventActionType.RotateTopBarrier, EventCategoryType.Animator));
+                //EventDispatcher.Publish(new EventData(EventActionType.RotateBottomBarrier, EventCategoryType.Animator));
             }
             //exit using new gamepad manager
             if (this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
