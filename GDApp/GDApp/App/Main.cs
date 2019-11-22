@@ -604,6 +604,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/FilingCabinet");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
+            this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
 
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
@@ -744,7 +745,8 @@ namespace GDApp
             InitializeFieldCot();
             InitializeFieldDesk();
             InitializeFilingCabinet();
-            InitializeBookCase();
+            InitializeBookCaseDoor();
+            //InitializeBookCaseProp();
             InitializePhonoGraph();
             InitializeComputer();
             InitializeLogicPuzzleModel();
@@ -1172,9 +1174,24 @@ namespace GDApp
             //this.objectManager.Add(collidableObject);
 
             #region clones
-            #region clone 1 (2nd Room)
+            #region clones beside war table 1-3
+            for (int i = 0; i < 3; i++)
+            {
+                cloneCollider = (CollidableObject)collidableObject.Clone();
+                cloneCollider.ID += 1;
+
+                cloneCollider.Transform = new Transform3D(new Vector3(-125.0f, -0.4f, i * 10), new Vector3(0, 90, 0), new Vector3(0.05f, 0.05f, 0.05f),
+                    Vector3.UnitX, Vector3.UnitY);
+                cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(5, 5, 5)),
+                  new MaterialProperties(1, 1, 1));
+                cloneCollider.Enable(true, 1);
+                this.objectManager.Add(cloneCollider);
+            }
+            #endregion
+
+            #region clone 4 (2nd Room)
             cloneCollider = (CollidableObject)collidableObject.Clone();
-            cloneCollider.ID += 1;
+            cloneCollider.ID += 4;
 
             cloneCollider.Transform = new Transform3D(new Vector3(-10.0f, -0.4f, -68.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
                 Vector3.UnitX, Vector3.UnitY);
@@ -1184,9 +1201,9 @@ namespace GDApp
             this.objectManager.Add(cloneCollider);
             #endregion
 
-            #region clone 2 (left side of exit door)
+            #region clone 5 (left side of exit door)
             cloneCollider = (CollidableObject)collidableObject.Clone();
-            cloneCollider.ID += 2;
+            cloneCollider.ID += 5;
 
             cloneCollider.Transform = new Transform3D(new Vector3(-75.0f, -0.4f, 122.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
                 Vector3.UnitX, Vector3.UnitY);
@@ -1196,9 +1213,9 @@ namespace GDApp
             this.objectManager.Add(cloneCollider);
             #endregion
 
-            #region clone 3 (right side of exit door)
+            #region clone 6 (right side of exit door)
             cloneCollider = (CollidableObject)collidableObject.Clone();
-            cloneCollider.ID += 3;
+            cloneCollider.ID += 6;
 
             cloneCollider.Transform = new Transform3D(new Vector3(-113.0f, -0.4f, 122.0f), new Vector3(0, -180, 0), new Vector3(0.05f, 0.05f, 0.05f),
                 Vector3.UnitX, Vector3.UnitY);
@@ -1210,7 +1227,7 @@ namespace GDApp
             #endregion
         }
 
-        private void InitializeBookCase()
+        private void InitializeBookCaseDoor()
         {
             Transform3D transform3D;
             BasicEffectParameters effectParameters;
@@ -1224,7 +1241,7 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["bookcase"];
 
-            collidableObject = new CollidableObject("bookcase", ActorType.CollidableDoor, transform3D, effectParameters, 
+            collidableObject = new CollidableObject("bookcase door", ActorType.CollidableDoor, transform3D, effectParameters, 
                 this.modelDictionary["Bookshelf_01"]);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
                     new Vector3(8f, 30.0f, 35.0f)),
@@ -1233,6 +1250,35 @@ namespace GDApp
             collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation, this.eventDispatcher));
             this.objectManager.Add(collidableObject);
         }
+
+        /*
+        private void InitializeBookCaseProp()
+        {
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject = null, cloneCollider = null;
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["bookcase"];
+
+            collidableObject = new CollidableObject("Bookcase - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
+                this.modelDictionary["Bookshelf_01"]);
+
+            for (int i = 0; i < 3; i++)
+            {
+                cloneCollider = (CollidableObject)collidableObject.Clone();
+                cloneCollider.ID += 1;
+
+                cloneCollider.Transform = new Transform3D(new Vector3(-125.0f, 0, i * 18), new Vector3(0, 0, 0), new Vector3(0.05f, 0.038f, 0.045f),
+                Vector3.UnitX, Vector3.UnitY);
+
+                cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.CreateRotationY(MathHelper.Pi), new Vector3(4, 10, 10)),
+                new MaterialProperties(1, 1, 1));
+
+                cloneCollider.Enable(true, 1);
+                this.objectManager.Add(cloneCollider);
+            }
+        }
+        */
 
         private void InitializePhonoGraph()
         {
@@ -1284,9 +1330,9 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-89, 9, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-89, 8.73f, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["gray"];
+            effectParameters.Texture = this.textureDictionary["GunTexture"];
 
             collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.CollidableDecorator, transform3D, effectParameters, 
                 this.modelDictionary["Gun"], new MaterialProperties(0.1f, 0.1f, 0.1f));
