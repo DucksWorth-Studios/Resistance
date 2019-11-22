@@ -33,8 +33,8 @@ namespace GDApp
         #region Fields
 #if DEBUG
         //used to visualize debug info (e.g. FPS) and also to draw collision skins
-        private DebugDrawer debugDrawer;
-        private PhysicsDebugDrawer physicsDebugDrawer;
+        //private DebugDrawer debugDrawer;
+        //private PhysicsDebugDrawer physicsDebugDrawer;
 #endif
 
         GraphicsDeviceManager graphics;
@@ -127,7 +127,7 @@ namespace GDApp
             AddGameOverMenu();
             AddWinMenu();
 #if DEBUG
-            InitializeDebugTextInfo();
+            //InitializeDebugTextInfo();
 #endif
 
             //load game happens before cameras are loaded because we may add a third person camera that needs a reference to a loaded Actor
@@ -139,7 +139,7 @@ namespace GDApp
             StartGame();
 
 #if DEBUG
-            InitializeDebugCollisionSkinInfo();
+            //InitializeDebugCollisionSkinInfo();
 #endif
 
             InitializeEvents();
@@ -610,14 +610,14 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
 #if DEBUG
             //demo
-            this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
-            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
+            //this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
+            //this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
 #endif
             #endregion
 
             #region Fonts
 #if DEBUG
-            this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
+            //this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");
@@ -704,22 +704,22 @@ namespace GDApp
         }
 
 #if DEBUG
-        private void InitializeDebugTextInfo()
-        {
-            //add debug info in top left hand corner of the screen
-            this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
-                this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
-            Components.Add(this.debugDrawer);
+        //private void InitializeDebugTextInfo()
+        //{
+        //    //add debug info in top left hand corner of the screen
+        //    this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
+        //        this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
+        //    Components.Add(this.debugDrawer);
 
-        }
+        //}
 
-        private void InitializeDebugCollisionSkinInfo()
-        {
-            //show the collision skins
-            this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager, this.objectManager,
-                this.screenManager, this.eventDispatcher, StatusType.Off);
-            Components.Add(this.physicsDebugDrawer);
-        }
+        //private void InitializeDebugCollisionSkinInfo()
+        //{
+        //    //show the collision skins
+        //    this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager, this.objectManager,
+        //        this.screenManager, this.eventDispatcher, StatusType.Off);
+        //    Components.Add(this.physicsDebugDrawer);
+        //}
 #endif
         #endregion
 
@@ -2255,12 +2255,13 @@ namespace GDApp
         protected override void Update(GameTime gameTime)
         {
 
-            //if(this.keyboardManager.IsKeyDown(Keys.P))
+            if(this.keyboardManager.IsKeyDown(Keys.P))
             {
                 //EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
-               // EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
+                // EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateTopBarrier, EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateBottomBarrier, EventCategoryType.Animator));
+                EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "collidable first person camera" }));
             }
             //exit using new gamepad manager
             if (this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
@@ -2270,7 +2271,7 @@ namespace GDApp
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 
