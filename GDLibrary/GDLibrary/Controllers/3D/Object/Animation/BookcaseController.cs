@@ -52,7 +52,7 @@ namespace GDLibrary
                     parent.Transform.TranslateBy(new Vector3(-10, 0, -10));
 
                     parent.Collision.RemoveAllPrimitives();
-                    
+                    //NCMG
                     parent.Collision.AddPrimitive(new Box(new Vector3(-64, 0, -102), Matrix.Identity, 
                             new Vector3(15.0f, 17.0f, 2.0f)),
                         new MaterialProperties(0.2f, 0.8f, 0.7f));

@@ -46,6 +46,7 @@ namespace GDLibrary
                     
                     parent.Collision.RemoveAllPrimitives();
 
+                    //NCMG
                     parent.Collision.AddPrimitive(new Box(new Vector3(0.2f, 0, -18), Matrix.Identity,
                             new Vector3(2f,15,15)),
                         new MaterialProperties(0.2f, 0.8f, 0.7f));
