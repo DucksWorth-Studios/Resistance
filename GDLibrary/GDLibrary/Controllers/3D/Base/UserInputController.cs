@@ -7,90 +7,29 @@ Bugs:			None
 Fixes:			None
 */
 
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
-using System;
+using Microsoft.Xna.Framework.Input;
 
 namespace GDLibrary
 {
     public class UserInputController : Controller
     {
-        #region Fields
-        private Keys[] moveKeys;
-        private float moveSpeed, strafeSpeed, rotationSpeed;
-        private ManagerParameters managerParameters;
-        #endregion
-
-        #region Properties
-        public ManagerParameters ManagerParameters
-        {
-            get
-            {
-                return this.managerParameters;
-            }
-        }
-        public Keys[] MoveKeys
-        {
-            get
-            {
-                return this.moveKeys;
-            }
-            set
-            {
-                this.moveKeys = value;
-            }
-        }
-        public float MoveSpeed
-        {
-            get
-            {
-                return this.moveSpeed;
-            }
-            set
-            {
-                this.moveSpeed = value;
-            }
-        }
-        public float StrafeSpeed
-        {
-            get
-            {
-                return this.strafeSpeed;
-            }
-            set
-            {
-                this.strafeSpeed = value;
-            }
-        }
-        public float RotationSpeed
-        {
-            get
-            {
-                return this.rotationSpeed;
-            }
-            set
-            {
-                this.rotationSpeed = value;
-            }
-        }
-        #endregion
-        
         public UserInputController(string id,
             ControllerType controllerType, Keys[] moveKeys,
             float moveSpeed, float strafeSpeed, float rotationSpeed, ManagerParameters managerParameters)
             : base(id, controllerType)
         {
-            this.moveKeys = moveKeys;
-            this.moveSpeed = moveSpeed;
-            this.strafeSpeed = strafeSpeed;
-            this.rotationSpeed = rotationSpeed;
+            MoveKeys = moveKeys;
+            MoveSpeed = moveSpeed;
+            StrafeSpeed = strafeSpeed;
+            RotationSpeed = rotationSpeed;
 
-            this.managerParameters = managerParameters;
+            ManagerParameters = managerParameters;
         }
 
         public override void Update(GameTime gameTime, IActor actor)
         {
-            Actor3D parentActor = actor as Actor3D;
+            var parentActor = actor as Actor3D;
             HandleMouseInput(gameTime, parentActor);
             HandleKeyboardInput(gameTime, parentActor);
             HandleGamePadInput(gameTime, parentActor);
@@ -99,7 +38,6 @@ namespace GDLibrary
 
         public virtual void HandleGamePadInput(GameTime gameTime, Actor3D parentActor)
         {
-
         }
 
         public virtual void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
@@ -109,6 +47,24 @@ namespace GDLibrary
         public virtual void HandleKeyboardInput(GameTime gameTime, Actor3D parentActor)
         {
         }
+
+        #region Fields
+
+        #endregion
+
+        #region Properties
+
+        public ManagerParameters ManagerParameters { get; }
+
+        public Keys[] MoveKeys { get; set; }
+
+        public float MoveSpeed { get; set; }
+
+        public float StrafeSpeed { get; set; }
+
+        public float RotationSpeed { get; set; }
+
+        #endregion
 
         //Add Equals, Clone, ToString, GetHashCode...
     }

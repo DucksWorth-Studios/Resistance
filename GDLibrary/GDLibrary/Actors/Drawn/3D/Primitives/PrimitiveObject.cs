@@ -8,6 +8,7 @@ Date Updated:	27/11/17
 Bugs:			None
 Fixes:			None
 */
+
 using Microsoft.Xna.Framework;
 
 namespace GDLibrary
@@ -15,55 +16,39 @@ namespace GDLibrary
     public class PrimitiveObject : DrawnActor3D
     {
         #region Variables
-        private IVertexData vertexData;
-        #endregion 
 
-        #region Properties
-        public IVertexData VertexData
-        {
-            get
-            {
-                return this.vertexData;
-            }
-            set
-            {
-                this.vertexData = value;
-            }
-        }
-
-        public BoundingSphere BoundingSphere
-        {
-            get
-            {
-                return new BoundingSphere(this.Transform.Translation, this.Transform.Scale.Length());
-            }
-        }
         #endregion
 
-        public PrimitiveObject(string id, ActorType actorType, Transform3D transform, 
-            EffectParameters effectParameters, StatusType statusType, IVertexData vertexData) 
+        public PrimitiveObject(string id, ActorType actorType, Transform3D transform,
+            EffectParameters effectParameters, StatusType statusType, IVertexData vertexData)
             : base(id, actorType, transform, effectParameters, statusType)
         {
-            this.vertexData = vertexData;
+            VertexData = vertexData;
         }
 
         public new object Clone()
         {
-            PrimitiveObject actor = new PrimitiveObject("clone - " + ID, //deep
-               this.ActorType, //deep
-               (Transform3D)this.Transform.Clone(), //deep
-               (EffectParameters)this.EffectParameters.Clone(), //deep
-               this.StatusType, //deep
-               this.vertexData); //shallow - its ok if objects refer to the same vertices
+            var actor = new PrimitiveObject("clone - " + ID, //deep
+                ActorType, //deep
+                (Transform3D) Transform.Clone(), //deep
+                (EffectParameters) EffectParameters.Clone(), //deep
+                StatusType, //deep
+                VertexData); //shallow - its ok if objects refer to the same vertices
 
-            if (this.ControllerList != null)
-            {
+            if (ControllerList != null)
                 //clone each of the (behavioural) controllers
-                foreach (IController controller in this.ControllerList)
-                    actor.AttachController((IController)controller.Clone());
-            }
+                foreach (var controller in ControllerList)
+                    actor.AttachController((IController) controller.Clone());
 
             return actor;
         }
+
+        #region Properties
+
+        public IVertexData VertexData { get; set; }
+
+        public BoundingSphere BoundingSphere => new BoundingSphere(Transform.Translation, Transform.Scale.Length());
+
+        #endregion
     }
 }

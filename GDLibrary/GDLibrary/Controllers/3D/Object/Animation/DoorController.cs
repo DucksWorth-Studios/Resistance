@@ -11,8 +11,8 @@ namespace GDLibrary
 {
     public class DoorController : Controller
     {
-        private bool opened = false;
-        private bool opening = false;
+        private bool opened;
+        private bool opening;
         private CollidableObject parent;
 
         /*
@@ -22,6 +22,36 @@ namespace GDLibrary
             controllerType)
         {
             RegisterForEventHandling(eventDispatcher);
+        }
+
+        public override void Update(GameTime gameTime, IActor actor)
+        {
+            var parent = actor as CollidableObject;
+
+            if (this.parent == null)
+                this.parent = parent;
+
+            if (opening && !opened)
+            {
+                if (parent.Transform.Rotation.Y > 90)
+                {
+                    parent.Transform.RotateAroundYBy(-1);
+                }
+                else if (parent.Transform.Rotation.Y <= 90)
+                {
+                    opened = true;
+                    opening = false;
+
+                    parent.Collision.RemoveAllPrimitives();
+
+                    //NCMG
+                    parent.Collision.AddPrimitive(new Box(new Vector3(0.2f, 0, -18), Matrix.Identity,
+                            new Vector3(2, 15, 15)),
+                        new MaterialProperties(0.2f, 0.8f, 0.7f));
+                }
+            }
+
+            base.Update(gameTime, actor);
         }
 
         #region Event Handeling
@@ -41,10 +71,10 @@ namespace GDLibrary
 
         protected void Reset(EventData eventData)
         {
-            if (this.parent != null)
+            if (parent != null)
             {
                 opened = false;
-                this.parent.Transform.RotateAroundYBy(90);
+                parent.Transform.RotateAroundYBy(90);
 
                 //TODO - Find a better way of updating collision
                 parent.Collision.RemoveAllPrimitives();
@@ -55,33 +85,5 @@ namespace GDLibrary
         }
 
         #endregion
-
-        public override void Update(GameTime gameTime, IActor actor)
-        {
-            CollidableObject parent = actor as CollidableObject;
-
-            if (this.parent == null)
-                this.parent = parent;
-
-            if (opening && !opened)
-            {
-                if (parent.Transform.Rotation.Y > 90)
-                    parent.Transform.RotateAroundYBy(-1);
-                else if (parent.Transform.Rotation.Y <= 90)
-                {
-                    opened = true;
-                    opening = false;
-
-                    parent.Collision.RemoveAllPrimitives();
-
-                    //NCMG
-                    parent.Collision.AddPrimitive(new Box(new Vector3(0.2f, 0, -18), Matrix.Identity,
-                            new Vector3(2, 15, 15)),
-                        new MaterialProperties(0.2f, 0.8f, 0.7f));
-                }
-            }
-
-            base.Update(gameTime, actor);
-        }
     }
 }

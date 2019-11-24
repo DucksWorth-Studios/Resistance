@@ -6,6 +6,7 @@ Date Updated:	13/11/17
 Bugs:			None
 Fixes:			None
 */
+
 using JigLibX.Collision;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -14,47 +15,43 @@ namespace GDLibrary
     public class ImmovablePickupObject : TriangleMeshObject
     {
         #region Fields
-        private PickupParameters pickupParameters;
+
         #endregion
 
-        #region Properties
-        public PickupParameters PickupParameters
-        {
-            get
-            {
-                return this.pickupParameters;
-            }
-            set
-            {
-                this.pickupParameters = value;
-            }
-        }
-        #endregion
-
-        public ImmovablePickupObject(string id, ActorType actorType, Transform3D transform, EffectParameters effectParameters,
-            Model model, Model lowPolygonModel, 
-            MaterialProperties materialProperties, PickupParameters pickupParameters) 
+        public ImmovablePickupObject(string id, ActorType actorType, Transform3D transform,
+            EffectParameters effectParameters,
+            Model model, Model lowPolygonModel,
+            MaterialProperties materialProperties, PickupParameters pickupParameters)
             : base(id, actorType, transform, effectParameters, model, lowPolygonModel, materialProperties)
         {
-            this.pickupParameters = pickupParameters;
+            PickupParameters = pickupParameters;
             //register for callback on CDCR
-            this.Body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
+            Body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
         }
 
+        #region Properties
+
+        public PickupParameters PickupParameters { get; set; }
+
+        #endregion
+
         #region Event Handling
+
         protected virtual bool CollisionSkin_callbackFn(CollisionSkin collider, CollisionSkin collidee)
         {
-            HandleCollisions(collider.Owner.ExternalData as CollidableObject, collidee.Owner.ExternalData as CollidableObject);
+            HandleCollisions(collider.Owner.ExternalData as CollidableObject,
+                collidee.Owner.ExternalData as CollidableObject);
             return true;
         }
+
         //how do we want this object to respond to collisions?
-        private void HandleCollisions(CollidableObject collidableObjectCollider, CollidableObject collidableObjectCollidee)
+        private void HandleCollisions(CollidableObject collidableObjectCollider,
+            CollidableObject collidableObjectCollidee)
         {
-            if(collidableObjectCollidee.ActorType == ActorType.CollidableCamera)
-            {
+            if (collidableObjectCollidee.ActorType == ActorType.CollidableCamera)
                 EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.Win));
-            }            
         }
+
         #endregion
 
         //public new object Clone()

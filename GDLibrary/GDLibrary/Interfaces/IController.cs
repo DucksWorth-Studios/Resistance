@@ -8,8 +8,8 @@ Bugs:			None
 Fixes:			None
 */
 
-using Microsoft.Xna.Framework;
 using System;
+using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
@@ -17,10 +17,11 @@ namespace GDLibrary
     {
         void Update(GameTime gameTime, IActor actor); //update the actor controller by this controller
         void SetActor(IActor actor); //reset the actor controller by this controller
-        string GetID(); //used when we want to interrogate a controller and see if it is "the one" that we want to enable/disable, based on ID.
+
+        string
+            GetID(); //used when we want to interrogate a controller and see if it is "the one" that we want to enable/disable, based on ID.
 
         //allows us to play, pause, reset, stop a controller
         bool SetControllerPlayStatus(PlayStatusType playStatusType);
-
     }
 }

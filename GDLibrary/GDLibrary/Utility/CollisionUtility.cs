@@ -1,6 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
@@ -14,7 +13,7 @@ namespace GDLibrary
         private static Vector2 rightTop;
 
         /// <summary>
-        /// Calculates an axis aligned rectangle which fully contains an arbitrarily transformed axis aligned rectangle.
+        ///     Calculates an axis aligned rectangle which fully contains an arbitrarily transformed axis aligned rectangle.
         /// </summary>
         /// <param name="rectangle">Original bounding rectangle.</param>
         /// <param name="transform">World transform of the rectangle.</param>
@@ -36,13 +35,13 @@ namespace GDLibrary
 
             // Find the minimum and maximum extents of the rectangle in world space
             min = Vector2.Min(Vector2.Min(leftTop, rightTop),
-                                      Vector2.Min(leftBottom, rightBottom));
+                Vector2.Min(leftBottom, rightBottom));
             max = Vector2.Max(Vector2.Max(leftTop, rightTop),
-                                      Vector2.Max(leftBottom, rightBottom));
+                Vector2.Max(leftBottom, rightBottom));
 
             // Return that as a rectangle
-            return new Rectangle((int)Math.Round(min.X), (int)Math.Round(min.Y),
-                                 (int)Math.Round(max.X - min.X), (int)Math.Round(max.Y - min.Y));
+            return new Rectangle((int) Math.Round(min.X), (int) Math.Round(min.Y),
+                (int) Math.Round(max.X - min.X), (int) Math.Round(max.Y - min.Y));
         }
 
         //a predicate function to be used by PickingManager for ray picking of collidable objects - defines what types are valid
@@ -52,7 +51,8 @@ namespace GDLibrary
             if (collidableObject.Collision.Owner.Immovable)
                 return false;
 
-            return collidableObject.ActorType == ActorType.CollidableProp || collidableObject.ActorType == ActorType.CollidablePickup;
+            return collidableObject.ActorType == ActorType.CollidableProp ||
+                   collidableObject.ActorType == ActorType.CollidablePickup;
         }
 
         public static bool IsCollidableObjectPlayer(CollidableObject collidableObject)
@@ -64,7 +64,8 @@ namespace GDLibrary
             return collidableObject.ActorType == ActorType.Player;
         }
 
-        public static string GetMouseStringFromCollidableObject(CollidableObject collidableObject, float distanceToObject)
+        public static string GetMouseStringFromCollidableObject(CollidableObject collidableObject,
+            float distanceToObject)
         {
             return collidableObject.ID + " [" + distanceToObject + "]";
         }

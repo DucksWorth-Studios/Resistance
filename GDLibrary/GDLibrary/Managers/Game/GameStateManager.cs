@@ -15,33 +15,28 @@ namespace GDLibrary
 {
     public class GameStateManager : PausableGameComponent
     {
-        public GameStateManager(Game game, EventDispatcher eventDispatcher, StatusType statusType) 
+        public GameStateManager(Game game, EventDispatcher eventDispatcher, StatusType statusType)
             : base(game, eventDispatcher, statusType)
         {
-
         }
 
         #region Event Handling
+
         protected override void EventDispatcher_MenuChanged(EventData eventData)
         {
             //did the event come from the main menu and is it a start game event
             if (eventData.EventType == EventActionType.OnStart)
-            {
                 //turn on update and draw i.e. hide the menu
-                this.StatusType = StatusType.Update | StatusType.Drawn;
-            }
+                StatusType = StatusType.Update | StatusType.Drawn;
             //did the event come from the main menu and is it a pause game event
             else if (eventData.EventType == EventActionType.OnPause)
-            {
                 //turn off update and draw i.e. show the menu since the game is paused
-                this.StatusType = StatusType.Off;
-            }
+                StatusType = StatusType.Off;
             else if (eventData.EventType == EventActionType.OnLose)
-            {
                 //turn off update and draw i.e. show the menu since the game is paused
-                this.StatusType = StatusType.Off;
-            }
+                StatusType = StatusType.Off;
         }
+
         #endregion
     }
 }

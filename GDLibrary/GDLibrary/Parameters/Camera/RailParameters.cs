@@ -14,20 +14,54 @@ namespace GDLibrary
 {
     public class RailParameters
     {
+        public RailParameters(string id, Vector3 start, Vector3 end)
+        {
+            this.start = start;
+            this.end = end;
+            ID = id;
+
+            isDirty = true;
+        }
+
+
+        //Returns true if the position is between start and end, otherwise false
+        public bool InsideRail(Vector3 position)
+        {
+            var distanceToStart = Vector3.Distance(position, start);
+            var distanceToEnd = Vector3.Distance(position, end);
+            return distanceToStart <= length && distanceToEnd <= length;
+        }
+
+
+        private void Update()
+        {
+            if (isDirty)
+            {
+                length = Math.Abs(Vector3.Distance(start, end));
+                look = Vector3.Normalize(end - start);
+                midPoint = (start + end) / 2;
+                isDirty = false;
+            }
+        }
+
         #region Fields
-        private string id;
-        private Vector3 start, end, midPoint, look;
+
+        private Vector3 start;
+        private readonly Vector3 end;
+        private Vector3 midPoint, look;
         private bool isDirty;
         private float length;
+
         #endregion
 
         #region Properties
+
         public Vector3 Look
         {
             get
             {
                 Update();
-                return this.look;
+                return look;
             }
         }
 
@@ -36,7 +70,7 @@ namespace GDLibrary
             get
             {
                 Update();
-                return this.length;
+                return length;
             }
         }
 
@@ -45,77 +79,34 @@ namespace GDLibrary
             get
             {
                 Update();
-                return this.midPoint;
+                return midPoint;
             }
         }
+
         public Vector3 Start
         {
-            get
-            {
-                return this.start;
-            }
+            get => start;
             set
             {
-                this.start = value;
-                this.isDirty = true;
+                start = value;
+                isDirty = true;
             }
         }
+
         public Vector3 End
         {
-            get
-            {
-                return this.end;
-            }
+            get => end;
             set
             {
-                this.start = value;
-                this.isDirty = true;
+                start = value;
+                isDirty = true;
             }
         }
-        public string ID
-        {
-            get
-            {
-                return this.id;
-            }
-            set
-            {
-                this.id = value;
-            }
-        }
+
+        public string ID { get; set; }
+
         #endregion
 
-        public RailParameters(string id, Vector3 start, Vector3 end)
-        {
-            this.start = start;
-            this.end = end;
-            this.id = id;
-
-            this.isDirty = true;
-        }
-
-
-        //Returns true if the position is between start and end, otherwise false
-        public bool InsideRail(Vector3 position)
-        {
-            float distanceToStart = Vector3.Distance(position, start);
-            float distanceToEnd = Vector3.Distance(position, end);
-            return ((distanceToStart <= length) && (distanceToEnd <= length));
-        }
-
-
-        private void Update()
-        {
-            if (this.isDirty)
-            {
-                this.length = Math.Abs(Vector3.Distance(start, end));
-                this.look = Vector3.Normalize(end - start);
-                this.midPoint = (start + end) / 2;
-                this.isDirty = false;
-            }
-        }
-
         //Add Equals, Clone, ToString, GetHashCode...
-
     }
 }

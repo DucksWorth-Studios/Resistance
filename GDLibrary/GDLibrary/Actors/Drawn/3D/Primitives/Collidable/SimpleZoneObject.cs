@@ -15,36 +15,28 @@ namespace GDLibrary
 {
     public class SimpleZoneObject : Actor3D
     {
-
         #region Variables
-        private ICollisionPrimitive collisionPrimitive;
+
         #endregion
 
-        #region Properties
-        public ICollisionPrimitive CollisionPrimitive
-        {
-            get
-            {
-                return collisionPrimitive;
-            }
-            set
-            {
-                collisionPrimitive = value;
-            }
-        }
-        #endregion
-
-        public SimpleZoneObject(string id, ActorType actorType, Transform3D transform, StatusType statusType, ICollisionPrimitive collisionPrimitive)
+        public SimpleZoneObject(string id, ActorType actorType, Transform3D transform, StatusType statusType,
+            ICollisionPrimitive collisionPrimitive)
             : base(id, actorType, transform, statusType)
         {
-            this.collisionPrimitive = collisionPrimitive;
+            CollisionPrimitive = collisionPrimitive;
         }
+
+        #region Properties
+
+        public ICollisionPrimitive CollisionPrimitive { get; set; }
+
+        #endregion
 
         public override void Update(GameTime gameTime)
         {
             //update collision primitive with new object position
-            if (collisionPrimitive != null)
-                collisionPrimitive.Update(gameTime, this.Transform);
+            if (CollisionPrimitive != null)
+                CollisionPrimitive.Update(gameTime, Transform);
         }
     }
 }

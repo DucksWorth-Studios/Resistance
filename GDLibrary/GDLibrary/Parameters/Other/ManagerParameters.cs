@@ -7,88 +7,46 @@ Date Updated:	25/11/17
 Bugs:			None
 Fixes:			None
 */
+
 namespace GDLibrary
 {
     public class ManagerParameters
     {
+        //useful for objects that need access to ALL managers
+        public ManagerParameters(ObjectManager objectManager, CameraManager cameraManager,
+            MouseManager mouseManager, KeyboardManager keyboardManager, GamePadManager gamePadManager,
+            ScreenManager screenManager, SoundManager soundManager)
+        {
+            ObjectManager = objectManager;
+            CameraManager = cameraManager;
+            MouseManager = mouseManager;
+            KeyboardManager = keyboardManager;
+            GamePadManager = gamePadManager;
+            ScreenManager = screenManager;
+            SoundManager = soundManager;
+        }
+
         #region Fields
-        private ObjectManager objectManager;
-        private CameraManager cameraManager;
-        private MouseManager mouseManager;
-        private KeyboardManager keyboardManager;
-        private GamePadManager gamePadManager;
-        private ScreenManager screenManager;
-        private SoundManager soundManager;
+
         #endregion
 
         #region Properties
+
         //only getters since we would rarely want to re-define a manager during gameplay
-        public ObjectManager ObjectManager
-        {
-            get
-            {
-                return this.objectManager;
-            }
-        }
-        public CameraManager CameraManager
-        {
-            get
-            {
-                return this.cameraManager;
-            }
-        }
-        public MouseManager MouseManager
-        {
-            get
-            {
-                return this.mouseManager;
-            }
-        }
-        public KeyboardManager KeyboardManager
-        {
-            get
-            {
-                return this.keyboardManager;
-            }
-        }
-        public GamePadManager GamePadManager
-        {
-            get
-            {
-                return this.gamePadManager;
-            }
-        }
-        public ScreenManager ScreenManager
-        {
-            get
-            {
-                return this.screenManager;
-            }
-        }
-        public SoundManager SoundManager
-        {
-            get
-            {
-                return this.soundManager;
-            }
-        }
+        public ObjectManager ObjectManager { get; }
+
+        public CameraManager CameraManager { get; }
+
+        public MouseManager MouseManager { get; }
+
+        public KeyboardManager KeyboardManager { get; }
+
+        public GamePadManager GamePadManager { get; }
+
+        public ScreenManager ScreenManager { get; }
+
+        public SoundManager SoundManager { get; }
+
         #endregion
-
-
-        //useful for objects that need access to ALL managers
-        public ManagerParameters(ObjectManager objectManager, CameraManager cameraManager,
-            MouseManager mouseManager, KeyboardManager keyboardManager, GamePadManager gamePadManager, 
-            ScreenManager screenManager, SoundManager soundManager)
-        {
-            this.objectManager = objectManager;
-            this.cameraManager = cameraManager;
-            this.mouseManager = mouseManager;
-            this.keyboardManager = keyboardManager;
-            this.gamePadManager = gamePadManager;
-            this.screenManager = screenManager;
-            this.soundManager = soundManager;
-        }
-
-
     }
 }

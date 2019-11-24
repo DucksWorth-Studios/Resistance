@@ -40,8 +40,9 @@ namespace GDLibrary
 
         //sent by player when gains or loses health 
         OnHealthDelta,
+
         //sent to set to a specific start/end value
-        OnHealthSet, 
+        OnHealthSet,
 
         //sent by game state manager
         OnLose,
@@ -75,7 +76,7 @@ namespace GDLibrary
         OnSetMousePosition,
 
         Interact,
-        
+
         //Animation events
         RotateTopBarrier,
         RotateBottomBarrier,

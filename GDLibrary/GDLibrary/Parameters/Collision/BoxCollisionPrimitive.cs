@@ -15,55 +15,32 @@ namespace GDLibrary
 {
     public class BoxCollisionPrimitive : ICollisionPrimitive
     {
-        #region Variables
-        private static Vector3 min = -1 * Vector3.One, max = Vector3.One;
-        private BoundingBox boundingBox, originalBoundingBox;
-        private Transform3D transform3D;
-        #endregion
-
-        #region Properties
-        public BoundingBox BoundingBox
+        public BoxCollisionPrimitive(Transform3D transform3D)
         {
-            get
-            {
-                return boundingBox;
-            }
-        }
-        private Transform3D Transform3D
-        {
-            get
-            {
-                return transform3D;
-            }
-        }
-        #endregion
-
-        public BoxCollisionPrimitive(Transform3D transform3D) 
-        {
-            this.transform3D = transform3D;
-            this.boundingBox = new BoundingBox(transform3D.Scale/2 * min, transform3D.Scale/2 * max);
-            this.originalBoundingBox = this.boundingBox;
+            Transform3D = transform3D;
+            boundingBox = new BoundingBox(transform3D.Scale / 2 * min, transform3D.Scale / 2 * max);
+            originalBoundingBox = boundingBox;
         }
 
         public bool Intersects(BoundingBox box)
         {
-            return this.boundingBox.Intersects(box);      
+            return boundingBox.Intersects(box);
         }
 
         public bool Intersects(BoundingSphere sphere)
         {
-            return this.boundingBox.Intersects(sphere);
+            return boundingBox.Intersects(sphere);
         }
 
         public bool Intersects(ICollisionPrimitive collisionPrimitive)
         {
-            return collisionPrimitive.Intersects(this.boundingBox);
+            return collisionPrimitive.Intersects(boundingBox);
         }
 
         //tests if the bounding box for this primitive, when moved, will intersect with the collisionPrimitive passed into the method
         public bool Intersects(ICollisionPrimitive collisionPrimitive, Vector3 translation)
         {
-            BoundingBox projectedBox = this.boundingBox;
+            var projectedBox = boundingBox;
             projectedBox.Max += translation;
             projectedBox.Min += translation;
             return collisionPrimitive.Intersects(projectedBox);
@@ -71,36 +48,53 @@ namespace GDLibrary
 
         public bool Intersects(Ray ray)
         {
-            return (ray.Intersects(this.boundingBox) > 0);
+            return ray.Intersects(boundingBox) > 0;
         }
 
         //detect intersection and passes back distance to intersected primitive
         public bool Intersects(Ray ray, out float? distance)
         {
-            distance = ray.Intersects(this.boundingBox);
-            return (distance > 0);
+            distance = ray.Intersects(boundingBox);
+            return distance > 0;
         }
 
         public bool Intersects(BoundingFrustum frustum)
         {
-            return ((frustum.Contains(this.boundingBox) == ContainmentType.Contains)
-            || (frustum.Contains(this.boundingBox) == ContainmentType.Intersects));
+            return frustum.Contains(boundingBox) == ContainmentType.Contains
+                   || frustum.Contains(boundingBox) == ContainmentType.Intersects;
         }
 
         public void Update(GameTime gameTime, Transform3D transform)
         {
-            this.boundingBox.Max = originalBoundingBox.Max + transform.Translation;
-            this.boundingBox.Min = originalBoundingBox.Min + transform.Translation;
-        }
-
-        public override string ToString()
-        {
-            return this.boundingBox.ToString();
+            boundingBox.Max = originalBoundingBox.Max + transform.Translation;
+            boundingBox.Min = originalBoundingBox.Min + transform.Translation;
         }
 
         public object Clone()
         {
-            return new BoxCollisionPrimitive((Transform3D)this.Transform3D.Clone());
+            return new BoxCollisionPrimitive((Transform3D) Transform3D.Clone());
         }
+
+        public override string ToString()
+        {
+            return boundingBox.ToString();
+        }
+
+        #region Variables
+
+        private static readonly Vector3 min = -1 * Vector3.One;
+        private static readonly Vector3 max = Vector3.One;
+        private BoundingBox boundingBox;
+        private readonly BoundingBox originalBoundingBox;
+
+        #endregion
+
+        #region Properties
+
+        public BoundingBox BoundingBox => boundingBox;
+
+        private Transform3D Transform3D { get; }
+
+        #endregion
     }
 }

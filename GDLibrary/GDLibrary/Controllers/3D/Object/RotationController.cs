@@ -7,72 +7,72 @@ Date Updated:	24/10/17
 Bugs:			None
 Fixes:			None
 */
+
 using Microsoft.Xna.Framework;
+
 namespace GDLibrary
 {
     public class RotationController : Controller
     {
-        #region Fields
-        private Vector3 rotation;
-        private int count = 0;
-        #endregion
-
-        #region Properties
-        public Vector3 Rotation
-        {
-            get
-            {
-                return this.rotation;
-            }
-            set
-            {
-                this.rotation = value;
-            }
-        }
-        #endregion
         public RotationController(string id, ControllerType controllerType, Vector3 rotation)
             : base(id, controllerType)
         {
             this.rotation = rotation;
         }
 
+        #region Properties
+
+        public Vector3 Rotation
+        {
+            get => rotation;
+            set => rotation = value;
+        }
+
+        #endregion
+
         public override void Update(GameTime gameTime, IActor actor)
         {
-            Actor3D parentActor = actor as Actor3D;
+            var parentActor = actor as Actor3D;
             if (parentActor != null)
             {
-                parentActor.Transform.RotateBy(this.rotation * count * gameTime.ElapsedGameTime.Milliseconds);
+                parentActor.Transform.RotateBy(rotation * count * gameTime.ElapsedGameTime.Milliseconds);
                 count++;
             }
         }
 
         public override bool Equals(object obj)
         {
-            RotationController other = obj as RotationController;
+            var other = obj as RotationController;
 
             if (other == null)
                 return false;
-            else if (this == other)
+            if (this == other)
                 return true;
 
-            return this.rotation.Equals(other.Rotation)
-                        && base.Equals(obj);
+            return rotation.Equals(other.Rotation)
+                   && base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            int hash = 1;
-            hash = hash * 31 + this.rotation.GetHashCode();
+            var hash = 1;
+            hash = hash * 31 + rotation.GetHashCode();
             hash = hash * 11 + base.GetHashCode();
             return hash;
         }
 
         public override object Clone()
         {
-            return new RotationController("clone - " + this.ID, //deep
-                this.ControllerType, //deep
-                this.rotation); //deep
+            return new RotationController("clone - " + ID, //deep
+                ControllerType, //deep
+                rotation); //deep
         }
+
+        #region Fields
+
+        private Vector3 rotation;
+        private int count;
+
+        #endregion
     }
 }
-

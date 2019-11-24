@@ -13,85 +13,72 @@ Bugs:			None
 Fixes:			None
 */
 
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GDLibrary
 {
     public class BufferedVertexData<T> : VertexData<T> where T : struct, IVertexType
     {
-        #region Variables
-        private VertexBuffer vertexBuffer;
-        private GraphicsDevice graphicsDevice;
-        #endregion
-
-        #region Properties
-        public VertexBuffer VertexBuffer
-        {
-            get
-            {
-                return vertexBuffer;
-            }
-            set
-            {
-                vertexBuffer = value;
-
-            }
-        }
-        public GraphicsDevice GraphicsDevice
-        {
-            get
-            {
-                return this.graphicsDevice;
-            }
-        }
-        #endregion
-
         //allows developer to pass in vertices AND buffer - more efficient since buffer is defined ONCE outside of the object instead of a new VertexBuffer for EACH instance of the class
-        public BufferedVertexData(GraphicsDevice graphicsDevice, T[] vertices, VertexBuffer vertexBuffer, PrimitiveType primitiveType, int primitiveCount)
+        public BufferedVertexData(GraphicsDevice graphicsDevice, T[] vertices, VertexBuffer vertexBuffer,
+            PrimitiveType primitiveType, int primitiveCount)
             : base(vertices, primitiveType, primitiveCount)
         {
-            this.graphicsDevice = graphicsDevice;
-            this.VertexBuffer = vertexBuffer;
-            
+            GraphicsDevice = graphicsDevice;
+            VertexBuffer = vertexBuffer;
+
             //set data on the reserved space
-            this.vertexBuffer.SetData<T>(this.Vertices);
+            VertexBuffer.SetData(Vertices);
         }
-    
+
         //buffer is created INSIDE the class so each class has a buffer - not efficient
-        public BufferedVertexData(GraphicsDevice graphicsDevice, T[] vertices, PrimitiveType primitiveType, int primitiveCount)
+        public BufferedVertexData(GraphicsDevice graphicsDevice, T[] vertices, PrimitiveType primitiveType,
+            int primitiveCount)
             : base(vertices, primitiveType, primitiveCount)
         {
-            this.graphicsDevice = graphicsDevice;
-            this.VertexBuffer = new VertexBuffer(graphicsDevice, typeof(T), vertices.Length, BufferUsage.None);
-            
+            GraphicsDevice = graphicsDevice;
+            VertexBuffer = new VertexBuffer(graphicsDevice, typeof(T), vertices.Length, BufferUsage.None);
+
             //set data on the reserved space
-            this.vertexBuffer.SetData<T>(this.Vertices);
+            VertexBuffer.SetData(Vertices);
         }
 
 
         public void SetData(T[] vertices)
         {
-            this.Vertices = vertices;
+            Vertices = vertices;
             //set data on the reserved space
-            this.vertexBuffer.SetData<T>(this.Vertices);
+            VertexBuffer.SetData(Vertices);
         }
 
         public override void Draw(GameTime gameTime, Effect effect)
         {
             //this is what we want GFX to draw
-            effect.GraphicsDevice.SetVertexBuffer(this.vertexBuffer);
+            effect.GraphicsDevice.SetVertexBuffer(VertexBuffer);
 
             //draw!
-            effect.GraphicsDevice.DrawPrimitives(this.PrimitiveType, 0, this.PrimitiveCount);           
+            effect.GraphicsDevice.DrawPrimitives(PrimitiveType, 0, PrimitiveCount);
         }
 
         public new object Clone()
         {
-            return new BufferedVertexData<T>(this.graphicsDevice,  //shallow - reference
-                this.Vertices, //shallow - reference
-                this.PrimitiveType, //struct - deep
-                this.PrimitiveCount); //deep - primitive
+            return new BufferedVertexData<T>(GraphicsDevice, //shallow - reference
+                Vertices, //shallow - reference
+                PrimitiveType, //struct - deep
+                PrimitiveCount); //deep - primitive
         }
+
+        #region Variables
+
+        #endregion
+
+        #region Properties
+
+        public VertexBuffer VertexBuffer { get; set; }
+
+        public GraphicsDevice GraphicsDevice { get; }
+
+        #endregion
     }
 }

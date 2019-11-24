@@ -7,27 +7,23 @@
  */
 
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace GDLibrary
 {
     public class CutsceneTimer : GameComponent
     {
-        private string id;
         private string cameraToChangeTo;
         private int currentTime;
+        private string id;
         private int secondsToWait;
         private int timeToDeploy;
-        
 
-        public CutsceneTimer(string id,EventDispatcher eventDispatcher ,Game game) : base(game)
+
+        public CutsceneTimer(string id, EventDispatcher eventDispatcher, Game game) : base(game)
         {
             this.id = id;
-            this.timeToDeploy = -1;
-            
+            timeToDeploy = -1;
+
 
             RegesterForEvent(eventDispatcher);
         }
@@ -42,22 +38,20 @@ namespace GDLibrary
          */
         public void timeFunction(EventData eventData)
         {
-            this.secondsToWait = (int) eventData.AdditionalParameters[0];
-            
-            this.cameraToChangeTo = eventData.AdditionalParameters[1] as string;
+            secondsToWait = (int) eventData.AdditionalParameters[0];
+
+            cameraToChangeTo = eventData.AdditionalParameters[1] as string;
             //Console.WriteLine("Setting Deploy");
-            this.timeToDeploy = currentTime + secondsToWait;
+            timeToDeploy = currentTime + secondsToWait;
         }
 
         // Waits till the time is appropriate and fires off an event to change back to First Person Camera
         public override void Update(GameTime gameTime)
         {
-            if(gameTime.TotalGameTime.Seconds == this.timeToDeploy)
-            {
-                
-                EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive,EventCategoryType.Camera, new object[] {cameraToChangeTo}));
-            }
-            this.currentTime = gameTime.TotalGameTime.Seconds;
+            if (gameTime.TotalGameTime.Seconds == timeToDeploy)
+                EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera,
+                    new object[] {cameraToChangeTo}));
+            currentTime = gameTime.TotalGameTime.Seconds;
             base.Update(gameTime);
         }
     }

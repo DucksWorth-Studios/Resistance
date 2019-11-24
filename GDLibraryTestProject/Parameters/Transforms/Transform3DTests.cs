@@ -8,12 +8,12 @@ namespace GDLibraryTestProject
     [TestClass]
     public class Transform3DTests
     {
-
         [TestMethod]
         public void CloneTest()
         {
-            Transform3D original = new Transform3D(new Vector3(0, 0, 20), Vector3.Zero, Vector3.One, -Vector3.UnitZ, Vector3.UnitY);
-            Transform3D clone = (Transform3D)original.Clone();
+            var original = new Transform3D(new Vector3(0, 0, 20), Vector3.Zero, Vector3.One, -Vector3.UnitZ,
+                Vector3.UnitY);
+            var clone = (Transform3D) original.Clone();
             Assert.AreEqual(original, clone);
 
             //change clone and should be distince from original because its a deep copy
@@ -25,8 +25,9 @@ namespace GDLibraryTestProject
         public void ResetTest()
         {
             //original and a copy for comparison after reset
-            Transform3D original = new Transform3D(new Vector3(0, 0, 20), Vector3.Zero, Vector3.One, -Vector3.UnitZ, Vector3.UnitY);
-            Transform3D clone = (Transform3D)original.Clone();
+            var original = new Transform3D(new Vector3(0, 0, 20), Vector3.Zero, Vector3.One, -Vector3.UnitZ,
+                Vector3.UnitY);
+            var clone = (Transform3D) original.Clone();
 
             //change somethings in the original
 
@@ -42,6 +43,5 @@ namespace GDLibraryTestProject
             //ensure its been reset
             Assert.AreEqual(original, clone);
         }
-
     }
 }

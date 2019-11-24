@@ -7,9 +7,9 @@ Bugs:			None
 Fixes:			None
 */
 
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 //base class from which all drawn, collidable, 
 //non-collidable, trigger volumes, and camera inherit
@@ -17,7 +17,6 @@ namespace GDLibrary
 {
     public interface IActor
     {
-
         string GetID();
         float GetAlpha();
         ActorType GetActorType();
@@ -33,12 +32,11 @@ namespace GDLibrary
 
         //find all based on user-defined properties (e.g. ID, ControllerType etc)
         List<IController> FindControllers(Predicate<IController> predicate);
+
         //allows us to set the PlayStatus for all controllers simultaneously (e.g. play all, reset all, stop all)
         void SetAllControllers(PlayStatusType playStatusType);
+
         //allows us to set the PlayStatus for all controllers with the same GROUP parameters simultaneously (e.g. "play" all controllers with a group ID of 1)
         void SetAllControllers(PlayStatusType playStatusType, Predicate<IController> predicate);
-
-
-
     }
 }

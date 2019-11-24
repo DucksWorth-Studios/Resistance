@@ -7,7 +7,6 @@ Bugs:
 Fixes:			None
 */
 
-using System;
 using GDLibrary;
 using Microsoft.Xna.Framework;
 
@@ -19,12 +18,17 @@ namespace GDApp
         private bool riddleSolved;
         private bool winBroadcasted;
 
-        public MyGameStateManager(Game game, EventDispatcher eventDispatcher, StatusType statusType) 
+        public MyGameStateManager(Game game, EventDispatcher eventDispatcher, StatusType statusType)
             : base(game, eventDispatcher, statusType)
         {
             logicPuzzleSolved = false;
             riddleSolved = false;
             winBroadcasted = false;
+        }
+
+        protected override void ApplyUpdate(GameTime gameTime)
+        {
+            base.ApplyUpdate(gameTime);
         }
 
         #region Event Handeling
@@ -50,10 +54,5 @@ namespace GDApp
         }
 
         #endregion
-
-        protected override void ApplyUpdate(GameTime gameTime)
-        {
-            base.ApplyUpdate(gameTime);
-        }
     }
 }

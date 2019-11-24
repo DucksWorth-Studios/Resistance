@@ -11,64 +11,45 @@ Bugs:			None
 Fixes:			None
 */
 
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 namespace GDLibrary
 {
     public class VertexData<T> : IVertexData where T : struct, IVertexType
     {
-        #region Variables
-        private T[] vertices;
-        private PrimitiveType primitiveType;
-        private int primitiveCount;
-        #endregion
-
-        #region Properties
-        public PrimitiveType PrimitiveType
-        {
-            get
-            {
-                return this.primitiveType;
-            }
-        }
-        public int PrimitiveCount
-        {
-            get
-            {
-                return this.primitiveCount;
-            }
-        }
-        public T[] Vertices
-        {
-            get
-            {
-                return this.vertices;
-            }
-            set
-            {
-                this.vertices = value;
-            }
-        }
-        #endregion
-
         public VertexData(T[] vertices, PrimitiveType primitiveType, int primitiveCount)
         {
-            this.vertices = vertices;
-            this.primitiveType = primitiveType;
-            this.primitiveCount = primitiveCount;
+            Vertices = vertices;
+            PrimitiveType = primitiveType;
+            PrimitiveCount = primitiveCount;
         }
 
         public virtual void Draw(GameTime gameTime, Effect effect)
         {
-            effect.GraphicsDevice.DrawUserPrimitives<T>(this.primitiveType, this.vertices, 0, this.primitiveCount);
+            effect.GraphicsDevice.DrawUserPrimitives(PrimitiveType, Vertices, 0, PrimitiveCount);
         }
 
         public object Clone()
         {
             return new VertexData<T>(
-                this.Vertices, //shallow - reference
-                this.PrimitiveType,  //struct - deep
-                this.PrimitiveCount);  //deep - primitive
+                Vertices, //shallow - reference
+                PrimitiveType, //struct - deep
+                PrimitiveCount); //deep - primitive
         }
+
+        #region Variables
+
+        #endregion
+
+        #region Properties
+
+        public PrimitiveType PrimitiveType { get; }
+
+        public int PrimitiveCount { get; }
+
+        public T[] Vertices { get; set; }
+
+        #endregion
     }
 }

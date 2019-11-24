@@ -15,7 +15,7 @@ namespace GDLibrary
         Drive, //applied to 3D model
         FirstPerson, //applied to camera
         ThirdPerson, //applied to camera
-        Rail,  //applied to camera or model
+        Rail, //applied to camera or model
         Track, //applied to camera or model
         Security, //applied to camera
 

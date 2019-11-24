@@ -13,31 +13,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GDLibrary
 {
-
     public class FirstPersonCameraController : UserInputController
     {
-        #region Fields
-        //local vars
-        private Vector3 translation;
-        Vector2 mousePosition = Vector2.Zero;
-        Vector2 OldmousePosition = Vector2.Zero;
-        Vector2 mouseDelta = Vector2.Zero;
-        Vector2 mouseDeltaTemp = Vector2.One;
-
-        bool Paused = true;
-        protected bool inPopUp = false;
-
-
-
-        #endregion
-
-        #region Properties
-        #endregion
-
-        public FirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed, ManagerParameters managerParameters,EventDispatcher eventDispatcher)
+        public FirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed,
+            float strafeSpeed, float rotationSpeed, ManagerParameters managerParameters,
+            EventDispatcher eventDispatcher)
             : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, managerParameters)
         {
-            
             RegisterForEventHandling(eventDispatcher);
         }
 
@@ -46,7 +28,7 @@ namespace GDLibrary
         {
             eventDispatcher.lockChanged += Mouselockbool;
             eventDispatcher.RiddleChanged += MovementBlock;
-            
+
             //eventDispatcher.PopUpChanged += changeState;
         }
 
@@ -55,21 +37,20 @@ namespace GDLibrary
             inPopUp = false;
         }
 
-        public void  Mouselockbool(EventData eventData)
+        public void Mouselockbool(EventData eventData)
         {
-
             //System.Diagnostics.Debug.Write("IS Being Called");
 
-            if (!Paused) { Paused = true; }
-            else { Paused = false; }
-  
-           
+            if (!Paused)
+                Paused = true;
+            else
+                Paused = false;
         }
 
         public void MovementBlock(EventData eventData)
         {
             Console.WriteLine("Movement");
-            if(!inPopUp)
+            if (!inPopUp)
             {
                 Console.WriteLine("Movement2");
                 inPopUp = true;
@@ -88,78 +69,83 @@ namespace GDLibrary
 
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
-
             if (ManagerParameters.KeyboardManager.IsKeyPushed(Keys.Escape))
-            { 
-                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
-                
-            }
+                EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
 
-  
 
             if (!Paused && !inPopUp)
             {
-
-                mousePosition = -this.ManagerParameters.MouseManager.GetDeltaFromCentre(this.ManagerParameters.CameraManager.ActiveCamera.ViewportCentre);
-                mouseDelta = mouseDelta + mousePosition * gameTime.ElapsedGameTime.Milliseconds * this.RotationSpeed;
+                mousePosition =
+                    -ManagerParameters.MouseManager.GetDeltaFromCentre(ManagerParameters.CameraManager.ActiveCamera
+                        .ViewportCentre);
+                mouseDelta = mouseDelta + mousePosition * gameTime.ElapsedGameTime.Milliseconds * RotationSpeed;
 
                 if (OldmousePosition == mousePosition && OldmousePosition != Vector2.Zero)
                 {
                     mouseDelta = mouseDeltaTemp;
 
                     parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
-                    this.ManagerParameters.MouseManager.SetPosition(new Vector2(this.ManagerParameters.ScreenManager.ScreenResolution.X / 2, this.ManagerParameters.ScreenManager.ScreenResolution.Y / 2));
+                    ManagerParameters.MouseManager.SetPosition(new Vector2(
+                        ManagerParameters.ScreenManager.ScreenResolution.X / 2,
+                        ManagerParameters.ScreenManager.ScreenResolution.Y / 2));
                 }
 
                 parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
                 OldmousePosition = mousePosition;
 
-                if (mousePosition != Vector2.Zero) { mouseDeltaTemp = mouseDelta; }
-
+                if (mousePosition != Vector2.Zero) mouseDeltaTemp = mouseDelta;
             }
-        } 
+        }
 
 
         public override void HandleKeyboardInput(GameTime gameTime, Actor3D parentActor)
         {
             translation = Vector3.Zero;
-            
-            
-                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
-                {
-                    translation = gameTime.ElapsedGameTime.Milliseconds
-                                * this.MoveSpeed * parentActor.Transform.Look;
-                }
-                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
-                {
-                    translation = -gameTime.ElapsedGameTime.Milliseconds
-                            * this.MoveSpeed * parentActor.Transform.Look;
-                }
 
-                if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
-                {
-                   //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
-                    translation += -gameTime.ElapsedGameTime.Milliseconds
-                             * this.StrafeSpeed * parentActor.Transform.Right;
-                }
-                else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
-                {
-                    //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
-                    translation += gameTime.ElapsedGameTime.Milliseconds
-                            * this.StrafeSpeed * parentActor.Transform.Right;
-                }
 
-                //Was a move button(s) pressed?
-                if (translation != Vector3.Zero)
-                {
-                    //remove y-axis component of the translation
-                    translation.Y = 0;
-                    //apply
-                    parentActor.Transform.TranslateBy(translation);
-                }
-            
-            
+            if (ManagerParameters.KeyboardManager.IsKeyDown(MoveKeys[0]))
+                translation = gameTime.ElapsedGameTime.Milliseconds
+                              * MoveSpeed * parentActor.Transform.Look;
+            else if (ManagerParameters.KeyboardManager.IsKeyDown(MoveKeys[1]))
+                translation = -gameTime.ElapsedGameTime.Milliseconds
+                              * MoveSpeed * parentActor.Transform.Look;
+
+            if (ManagerParameters.KeyboardManager.IsKeyDown(MoveKeys[2]))
+                //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
+                translation += -gameTime.ElapsedGameTime.Milliseconds
+                               * StrafeSpeed * parentActor.Transform.Right;
+            else if (ManagerParameters.KeyboardManager.IsKeyDown(MoveKeys[3]))
+                //What's the significance of the +=? Remove it and see if we can move forward/backward AND strafe.
+                translation += gameTime.ElapsedGameTime.Milliseconds
+                               * StrafeSpeed * parentActor.Transform.Right;
+
+            //Was a move button(s) pressed?
+            if (translation != Vector3.Zero)
+            {
+                //remove y-axis component of the translation
+                translation.Y = 0;
+                //apply
+                parentActor.Transform.TranslateBy(translation);
+            }
         }
+
+        #region Fields
+
+        //local vars
+        private Vector3 translation;
+        private Vector2 mousePosition = Vector2.Zero;
+        private Vector2 OldmousePosition = Vector2.Zero;
+        private Vector2 mouseDelta = Vector2.Zero;
+        private Vector2 mouseDeltaTemp = Vector2.One;
+
+        private bool Paused = true;
+        protected bool inPopUp;
+
+        #endregion
+
+        #region Properties
+
+        #endregion
 
         //Add Equals, Clone, ToString, GetHashCode...
     }

@@ -6,35 +6,26 @@ Date Updated:	30/8/17
 Bugs:			None
 Fixes:			None
 */
+
 namespace GDLibrary
 {
-    
     public class TargetController : Controller
     {
         #region Fields
-        private IActor targetActor;
-        #endregion
-
-        #region Properties
-        public IActor TargetActor
-        {
-            get
-            {
-                return targetActor;
-            }
-            set
-            {
-                targetActor = value;
-            }
-        }
 
         #endregion
 
         public TargetController(string id, ControllerType controllerType, IActor targetActor)
             : base(id, controllerType)
         {
-            this.targetActor = targetActor;
+            TargetActor = targetActor;
         }
+
+        #region Properties
+
+        public IActor TargetActor { get; set; }
+
+        #endregion
 
         //Add Equals, Clone, ToString, GetHashCode...
     }

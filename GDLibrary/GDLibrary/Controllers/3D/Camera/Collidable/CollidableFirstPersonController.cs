@@ -9,116 +9,42 @@ Fixes:			None
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace GDLibrary
 {
     /// <summary>
-    /// A collidable camera has a body and collision skin from a player object but it has no modeldata or texture
+    ///     A collidable camera has a body and collision skin from a player object but it has no modeldata or texture
     /// </summary>
     public class CollidableFirstPersonCameraController : FirstPersonCameraController
     {
-        #region Fields
-        private PlayerObject playerObject;
-        private float radius, height;
-        private float accelerationRate, decelerationRate, mass, jumpHeight;
-        private Vector3 translationOffset;
-        #endregion
-
-        #region Properties
-        public float Radius
-        {
-            get
-            {
-                return this.radius;
-            }
-            set
-            {
-                this.radius = (value > 0) ? value : 1;
-            }
-        }
-        public float Height
-        {
-            get
-            {
-                return this.height;
-            }
-            set
-            {
-                this.height = (value > 0) ? value : 1;
-            }
-        }
-        public float AccelerationRate
-        {
-            get
-            {
-                return this.accelerationRate;
-            }
-            set
-            {
-                this.accelerationRate = (value != 0) ? value : 1;
-            }
-        }
-        public float DecelerationRate
-        {
-            get
-            {
-                return this.decelerationRate;
-            }
-            set
-            {
-                this.decelerationRate = (value != 0) ? value : 1;
-            }
-        }
-        public float Mass
-        {
-            get
-            {
-                return this.mass;
-            }
-            set
-            {
-                this.mass = (value > 0) ? value : 1;
-            }
-        }
-        public float JumpHeight
-        {
-            get
-            {
-                return this.jumpHeight;
-            }
-            set
-            {
-                this.jumpHeight = (value > 0) ? value : 1;
-            }
-        }
-        #endregion
-
         //uses the default PlayerObject as the collidable object for the camera
-        public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
-           ManagerParameters managerParameters, EventDispatcher eventDispatcher,
-           IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
-           float mass, float jumpHeight, Vector3 translationOffset)
-           : this(id, controllerType,moveKeys, moveSpeed, strafeSpeed, rotationSpeed,
-            managerParameters, eventDispatcher,
-            parentActor, radius, height, accelerationRate, decelerationRate,
-            mass, jumpHeight, translationOffset, null)
+        public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys,
+            float moveSpeed, float strafeSpeed, float rotationSpeed,
+            ManagerParameters managerParameters, EventDispatcher eventDispatcher,
+            IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
+            float mass, float jumpHeight, Vector3 translationOffset)
+            : this(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed,
+                managerParameters, eventDispatcher,
+                parentActor, radius, height, accelerationRate, decelerationRate,
+                mass, jumpHeight, translationOffset, null)
         {
         }
 
         //allows developer to specify the type of collidable object to be used as basis for the camera
-        public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
-            ManagerParameters managerParameters,EventDispatcher eventDispatcher,
+        public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys,
+            float moveSpeed, float strafeSpeed, float rotationSpeed,
+            ManagerParameters managerParameters, EventDispatcher eventDispatcher,
             IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
             float mass, float jumpHeight, Vector3 translationOffset, PlayerObject collidableObject)
-            : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, managerParameters,eventDispatcher)
+            : base(id, controllerType, moveKeys, moveSpeed, strafeSpeed, rotationSpeed, managerParameters,
+                eventDispatcher)
         {
-            this.Radius = radius;
+            Radius = radius;
             this.height = height;
-            this.AccelerationRate = accelerationRate;
-            this.DecelerationRate = decelerationRate;
-            this.Mass = mass;
-            this.JumpHeight = jumpHeight;
+            AccelerationRate = accelerationRate;
+            DecelerationRate = decelerationRate;
+            Mass = mass;
+            JumpHeight = jumpHeight;
 
             //allows us to tweak the camera position within the player object 
             this.translationOffset = translationOffset;
@@ -130,32 +56,28 @@ namespace GDLibrary
              * This code allows the user to pass in their own PlayerObject (e.g. HeroPlayerObject) to be used for the collidable object basis for the camera.
              */
             if (collidableObject != null)
-            {
-                this.playerObject = collidableObject;
-            }
+                playerObject = collidableObject;
             else
-            {
-                this.playerObject = new PlayerObject(this.ID + " - player object", ActorType.CollidableCamera, (parentActor as Actor3D).Transform,
-                 null, null, this.MoveKeys, radius, height, accelerationRate, decelerationRate, jumpHeight,
-                 translationOffset, this.ManagerParameters.KeyboardManager);
-            }
+                playerObject = new PlayerObject(ID + " - player object", ActorType.CollidableCamera,
+                    (parentActor as Actor3D).Transform,
+                    null, null, MoveKeys, radius, height, accelerationRate, decelerationRate, jumpHeight,
+                    translationOffset, ManagerParameters.KeyboardManager);
 
             playerObject.Enable(false, mass);
-
         }
 
         public override void Update(GameTime gameTime, IActor actor)
         {
             //updates the sound manager to tell it where the 1st person camera is right now for any 3D sounds
             //did NOT use an event here as the frequency of calls to this event would FLOOD the system
-            this.ManagerParameters.SoundManager.UpdateListenerPosition((actor as Actor3D).Transform.Translation);
+            ManagerParameters.SoundManager.UpdateListenerPosition((actor as Actor3D).Transform.Translation);
             HandleMouseInput(gameTime, actor as Actor3D);
             base.Update(gameTime, actor);
         }
 
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
-            if (!inPopUp) { base.HandleMouseInput(gameTime, parentActor); }
+            if (!inPopUp) base.HandleMouseInput(gameTime, parentActor);
         }
 
 
@@ -169,71 +91,121 @@ namespace GDLibrary
              *    A capsule's collision response won't alter as a result of any rotation since its cross-section is spherical across the XZ-plane.
              */
 
-            if ((parentActor != null) && (parentActor != null))
+            if (parentActor != null && parentActor != null)
             {
                 if (!inPopUp)
                 {
                     //crouch
-                    if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
-                    {
-                        this.playerObject.CharacterBody.IsCrouching = !this.playerObject.CharacterBody.IsCrouching;
-                    }
+                    if (ManagerParameters.KeyboardManager.IsKeyDown(MoveKeys[5]))
+                        playerObject.CharacterBody.IsCrouching = !playerObject.CharacterBody.IsCrouching;
 
                     //forward/backward
-                    if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[0]))
+                    if (ManagerParameters.KeyboardManager.IsKeyDown(MoveKeys[0]))
                     {
-                        Vector3 restrictedLook = parentActor.Transform.Look;
+                        var restrictedLook = parentActor.Transform.Look;
                         restrictedLook.Y = 0;
-                        this.playerObject.CharacterBody.Velocity += restrictedLook * this.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                        playerObject.CharacterBody.Velocity +=
+                            restrictedLook * MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
                     }
-                    else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
+                    else if (ManagerParameters.KeyboardManager.IsKeyDown(MoveKeys[1]))
                     {
-                        Vector3 restrictedLook = parentActor.Transform.Look;
+                        var restrictedLook = parentActor.Transform.Look;
                         restrictedLook.Y = 0;
-                        this.playerObject.CharacterBody.Velocity -= restrictedLook * this.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                        playerObject.CharacterBody.Velocity -=
+                            restrictedLook * MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else //decelerate to zero when not pressed
                     {
-                        this.playerObject.CharacterBody.DesiredVelocity = Vector3.Zero;
+                        playerObject.CharacterBody.DesiredVelocity = Vector3.Zero;
                     }
 
                     //strafe left/right
-                    if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[2]))
+                    if (ManagerParameters.KeyboardManager.IsKeyDown(MoveKeys[2]))
                     {
-                        Vector3 restrictedRight = parentActor.Transform.Right;
+                        var restrictedRight = parentActor.Transform.Right;
                         restrictedRight.Y = 0;
-                        this.playerObject.CharacterBody.Velocity -= restrictedRight * this.StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                        playerObject.CharacterBody.Velocity -=
+                            restrictedRight * StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
                     }
-                    else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
+                    else if (ManagerParameters.KeyboardManager.IsKeyDown(MoveKeys[3]))
                     {
-                        Vector3 restrictedRight = parentActor.Transform.Right;
+                        var restrictedRight = parentActor.Transform.Right;
                         restrictedRight.Y = 0;
-                        this.playerObject.CharacterBody.Velocity += restrictedRight * this.StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                        playerObject.CharacterBody.Velocity +=
+                            restrictedRight * StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else //decelerate to zero when not pressed
                     {
-                        this.playerObject.CharacterBody.DesiredVelocity = Vector3.Zero;
+                        playerObject.CharacterBody.DesiredVelocity = Vector3.Zero;
                     }
 
                     //update the camera position to reflect the collision skin position
-                    parentActor.Transform.Translation = this.playerObject.CharacterBody.Position;
+                    parentActor.Transform.Translation = playerObject.CharacterBody.Position;
                 }
                 else
                 {
-                    if (this.ManagerParameters.KeyboardManager.IsKeyPushed(Keys.Tab))
+                    if (ManagerParameters.KeyboardManager.IsKeyPushed(Keys.Tab))
                     {
-                        this.inPopUp = false;
-                        this.ManagerParameters.MouseManager.SetPosition(new Vector2(this.ManagerParameters.ScreenManager.ScreenResolution.X / 2, this.ManagerParameters.ScreenManager.ScreenResolution.Y / 2));
+                        inPopUp = false;
+                        ManagerParameters.MouseManager.SetPosition(new Vector2(
+                            ManagerParameters.ScreenManager.ScreenResolution.X / 2,
+                            ManagerParameters.ScreenManager.ScreenResolution.Y / 2));
                         EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.PopUpDown));
-
                     }
                 }
             }
-
         }
+
+        #region Fields
+
+        private readonly PlayerObject playerObject;
+        private float radius, height;
+        private float accelerationRate, decelerationRate, mass, jumpHeight;
+        private Vector3 translationOffset;
+
+        #endregion
+
+        #region Properties
+
+        public float Radius
+        {
+            get => radius;
+            set => radius = value > 0 ? value : 1;
+        }
+
+        public float Height
+        {
+            get => height;
+            set => height = value > 0 ? value : 1;
+        }
+
+        public float AccelerationRate
+        {
+            get => accelerationRate;
+            set => accelerationRate = value != 0 ? value : 1;
+        }
+
+        public float DecelerationRate
+        {
+            get => decelerationRate;
+            set => decelerationRate = value != 0 ? value : 1;
+        }
+
+        public float Mass
+        {
+            get => mass;
+            set => mass = value > 0 ? value : 1;
+        }
+
+        public float JumpHeight
+        {
+            get => jumpHeight;
+            set => jumpHeight = value > 0 ? value : 1;
+        }
+
+        #endregion
 
 
         //to do - clone, dispose
-
     }
 }

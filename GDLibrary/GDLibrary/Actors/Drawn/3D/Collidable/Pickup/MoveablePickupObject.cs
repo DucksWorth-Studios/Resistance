@@ -6,7 +6,7 @@ Date Updated:	13/11/17
 Bugs:			None
 Fixes:			None
 */
-using GDLibrary;
+
 using JigLibX.Collision;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -15,41 +15,38 @@ namespace GDLibrary
     public class MoveablePickupObject : CollidableObject
     {
         #region Fields
-        private PickupParameters pickupParameters;
+
         #endregion
 
-        #region Properties
-        public PickupParameters PickupParameters
-        {
-            get
-            {
-                return this.pickupParameters;
-            }
-            set
-            {
-                this.pickupParameters = value;
-            }
-        }
-        #endregion
-
-        public MoveablePickupObject(string id, ActorType actorType, Transform3D transform, EffectParameters effectParameters,
+        public MoveablePickupObject(string id, ActorType actorType, Transform3D transform,
+            EffectParameters effectParameters,
             Model model, PickupParameters pickupParameters)
             : base(id, actorType, transform, effectParameters, model)
         {
-            this.pickupParameters = pickupParameters;
+            PickupParameters = pickupParameters;
 
             //register for callback on CDCR
-            this.Body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
+            Body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
         }
 
+        #region Properties
+
+        public PickupParameters PickupParameters { get; set; }
+
+        #endregion
+
         #region Event Handling
+
         protected virtual bool CollisionSkin_callbackFn(CollisionSkin collider, CollisionSkin collidee)
         {
-            HandleCollisions(collider.Owner.ExternalData as CollidableObject, collidee.Owner.ExternalData as CollidableObject);
+            HandleCollisions(collider.Owner.ExternalData as CollidableObject,
+                collidee.Owner.ExternalData as CollidableObject);
             return true;
         }
+
         //how do we want this object to respond to collisions?
-        private void HandleCollisions(CollidableObject collidableObjectCollider, CollidableObject collidableObjectCollidee)
+        private void HandleCollisions(CollidableObject collidableObjectCollider,
+            CollidableObject collidableObjectCollidee)
         {
             ////add your response code here...
             //if(collidableObjectCollider.ActorType == ActorType.Player)
@@ -57,6 +54,7 @@ namespace GDLibrary
             //    EventDispatcher.Publish(new EventData(this, EventActionType.OnRemoveActor, EventCategoryType.SystemRemove));
             //}
         }
+
         #endregion
 
         //public new object Clone()
@@ -75,6 +73,5 @@ namespace GDLibrary
         //    this.body = null;
         //    return base.Remove();
         //}
-
     }
 }

@@ -10,6 +10,7 @@ Date Updated:	12/11/17
 Bugs:			None
 Fixes:			None
 */
+
 using System;
 
 namespace GDLibrary
@@ -21,63 +22,13 @@ namespace GDLibrary
         public static readonly GroupParameters One = new GroupParameters("One", 1, 0);
         public static readonly GroupParameters Two = new GroupParameters("Two", 2, 0);
 
-        #region Fields
-        private string name;
-        private int uniqueGroupID;
-        private int uniqueSubGroupID;
-        #endregion
-
-        #region  Properties
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                this.name = (value.Length != 0) ? value : "default";
-            }
-        }
-        public int UniqueGroupID
-        {
-            get
-            {
-                return this.uniqueGroupID;
-            }
-            set
-            {
-                this.uniqueGroupID = (value < 0) ? value : 0; 
-            }
-        }
-        public int UniqueSubGroupID
-        {
-            get
-            {
-                return this.uniqueSubGroupID;
-            }
-            set
-            {
-                this.uniqueSubGroupID = (value < 0) ? value : 0;
-            }
-        }
-        //allows us to determine if the GroupParameters for an actor were "actively" set by the developer
-        public bool WasSet
-        {
-            get
-            {
-                return !this.name.Equals("default") && this.uniqueGroupID != -1;
-            }
-        }
-        #endregion
-
         public GroupParameters()
             : this("default", -1, -1)
         {
         }
 
         public GroupParameters(int uniqueGroupID)
-         : this("common group name", uniqueGroupID, -1)
+            : this("common group name", uniqueGroupID, -1)
         {
         }
 
@@ -88,36 +39,69 @@ namespace GDLibrary
 
         public GroupParameters(string name, int uniqueGroupID, int uniqueSubGroupID)
         {
-            this.Name = name;
-            this.UniqueGroupID = uniqueGroupID;
-            this.UniqueSubGroupID = uniqueSubGroupID;
+            Name = name;
+            UniqueGroupID = uniqueGroupID;
+            UniqueSubGroupID = uniqueSubGroupID;
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
 
         public override bool Equals(object obj)
         {
-            GroupParameters other = obj as GroupParameters;
-            return this.name.Equals(other.Name) 
-                && this.uniqueGroupID == other.UniqueGroupID
-                    && this.uniqueSubGroupID == other.UniqueSubGroupID;
+            var other = obj as GroupParameters;
+            return name.Equals(other.Name)
+                   && uniqueGroupID == other.UniqueGroupID
+                   && uniqueSubGroupID == other.UniqueSubGroupID;
         }
 
         public override int GetHashCode()
         {
-            int hash = 1;
-            hash = hash * 11 + this.name.GetHashCode();
-            hash = hash * 17 + this.uniqueGroupID.GetHashCode();
-            hash = hash * 31 + this.uniqueSubGroupID.GetHashCode();
+            var hash = 1;
+            hash = hash * 11 + name.GetHashCode();
+            hash = hash * 17 + uniqueGroupID.GetHashCode();
+            hash = hash * 31 + uniqueSubGroupID.GetHashCode();
             return hash;
         }
 
         public override string ToString()
         {
-            return "Name:" + this.name + ", UniqueGroupID: " + this.uniqueGroupID + ", UniqueSubGroupID: " + this.UniqueSubGroupID;
+            return "Name:" + name + ", UniqueGroupID: " + uniqueGroupID + ", UniqueSubGroupID: " + UniqueSubGroupID;
         }
 
-        public object Clone()
+        #region Fields
+
+        private string name;
+        private int uniqueGroupID;
+        private int uniqueSubGroupID;
+
+        #endregion
+
+        #region  Properties
+
+        public string Name
         {
-            return this.MemberwiseClone();
+            get => name;
+            set => name = value.Length != 0 ? value : "default";
         }
+
+        public int UniqueGroupID
+        {
+            get => uniqueGroupID;
+            set => uniqueGroupID = value < 0 ? value : 0;
+        }
+
+        public int UniqueSubGroupID
+        {
+            get => uniqueSubGroupID;
+            set => uniqueSubGroupID = value < 0 ? value : 0;
+        }
+
+        //allows us to determine if the GroupParameters for an actor were "actively" set by the developer
+        public bool WasSet => !name.Equals("default") && uniqueGroupID != -1;
+
+        #endregion
     }
 }

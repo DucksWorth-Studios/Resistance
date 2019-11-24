@@ -15,62 +15,40 @@ namespace GDLibrary
     public class Actor2D : Actor
     {
         #region Fields
-        private Transform2D transform;
-        #endregion
 
-        #region Properties
-        public Transform2D Transform
-        {
-            get
-            {
-                return this.transform;
-            }
-            set
-            {
-                this.transform = value;
-            }
-        }
-        public Matrix World
-        {
-            get
-            {
-                return this.transform.World;
-            }
-        }
         #endregion
 
         public Actor2D(string id, ActorType actorType, Transform2D transform, StatusType statusType)
             : base(id, actorType, statusType)
         {
-            this.transform = transform;
+            Transform = transform;
         }
 
         public override Matrix GetWorldMatrix()
         {
-            return this.transform.World;
+            return Transform.World;
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-
         }
 
         public override bool Equals(object obj)
         {
-            Actor2D other = obj as Actor2D;
+            var other = obj as Actor2D;
 
             if (other == null)
                 return false;
-            else if (this == other)
+            if (this == other)
                 return true;
 
-            return this.Transform.Equals(other.Transform) && base.Equals(obj);
+            return Transform.Equals(other.Transform) && base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            int hash = 1;
-            hash = hash * 31 + this.Transform.GetHashCode();
+            var hash = 1;
+            hash = hash * 31 + Transform.GetHashCode();
             hash = hash * 17 + base.GetHashCode();
             return hash;
         }
@@ -78,13 +56,13 @@ namespace GDLibrary
         public new object Clone()
         {
             IActor actor = new Actor2D("clone - " + ID, //deep
-               this.ActorType, //deep
-               (Transform2D)this.transform.Clone(), //deep
-               this.StatusType); //deep
+                ActorType, //deep
+                (Transform2D) Transform.Clone(), //deep
+                StatusType); //deep
 
             //clone each of the (behavioural) controllers
-            foreach (IController controller in this.ControllerList)
-                actor.AttachController((IController)controller.Clone());
+            foreach (var controller in ControllerList)
+                actor.AttachController((IController) controller.Clone());
 
             return actor;
         }
@@ -92,9 +70,16 @@ namespace GDLibrary
         public override bool Remove()
         {
             //tag for garbage collection
-            this.transform = null;
+            Transform = null;
             return base.Remove();
         }
 
+        #region Properties
+
+        public Transform2D Transform { get; set; }
+
+        public Matrix World => Transform.World;
+
+        #endregion
     }
 }

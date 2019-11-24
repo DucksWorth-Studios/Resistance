@@ -1,20 +1,22 @@
-﻿using GDLibrary;
+﻿using System;
+using GDLibrary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace GDApp
 {
     public class MyAppMenuManager : MenuManager
     {
-        public MyAppMenuManager(Game game, MouseManager mouseManager, KeyboardManager keyboardManager, CameraManager cameraManager,
-            SpriteBatch spriteBatch, EventDispatcher eventDispatcher, 
-            StatusType statusType) : base(game, mouseManager, keyboardManager, cameraManager, spriteBatch, eventDispatcher, statusType)
+        public MyAppMenuManager(Game game, MouseManager mouseManager, KeyboardManager keyboardManager,
+            CameraManager cameraManager,
+            SpriteBatch spriteBatch, EventDispatcher eventDispatcher,
+            StatusType statusType) : base(game, mouseManager, keyboardManager, cameraManager, spriteBatch,
+            eventDispatcher, statusType)
         {
-
         }
 
         #region Event Handling
+
         protected override void EventDispatcher_MenuChanged(EventData eventData)
         {
             //call base method to show/hide the menu
@@ -26,7 +28,7 @@ namespace GDApp
                 ////add event to stop background menu music here...
                 //object[] additionalParameters = { "menu elevator music", 1 };
                 //EventDispatcher.Publish(new EventData(EventActionType.OnStop, EventCategoryType.Sound2D, additionalParameters));
-                this.SetActiveList("pause menu");
+                SetActiveList("pause menu");
             }
             else if (eventData.EventType == EventActionType.OnPause)
             {
@@ -46,6 +48,7 @@ namespace GDApp
                 //this.SetActiveList("win-screen");
             }
         }
+
         #endregion
 
         protected override void HandleMouseOver(UIObject currentUIObject, GameTime gameTime)
@@ -54,86 +57,89 @@ namespace GDApp
             //if greater than X milliseconds then play a boing and reset accumulated time
             //object[] additionalParameters = { "boing" };
             //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
-
         }
-
 
 
         //add the code here to say how click events are handled by your code
         protected override void HandleMouseClick(UIObject clickedUIObject, GameTime gameTime)
         {
-                //notice that the IDs are the same as the button IDs specified when we created the menu in Main::AddMenuElements()
-                switch (clickedUIObject.ID)
+            //notice that the IDs are the same as the button IDs specified when we created the menu in Main::AddMenuElements()
+            switch (clickedUIObject.ID)
+            {
+                case "startbtn":
+                    DoStart();
+                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                    break;
+
+                case "resumebtn":
+                    DoStart();
+                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                    break;
+
+                case "exitbtn":
+                    DoExit();
+                    break;
+
+                case "audiobtn":
+                    SetActiveList(
+                        "audio menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
+                    break;
+
+                case "volumeUpbtn":
                 {
-                    case "startbtn":
-                        DoStart();
-                        EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                    //curly brackets scope additionalParameters to be local to this case
+                    object[] additionalParameters = {0.1f};
+                    EventDispatcher.Publish(new EventData(EventActionType.OnVolumeUp, EventCategoryType.GlobalSound,
+                        additionalParameters));
+                }
                     break;
 
-                    case "resumebtn":
-                        DoStart();
-                        EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
-                        break;
-
-                    case "exitbtn":
-                        DoExit();
-                        break;
-
-                    case "audiobtn":
-                        SetActiveList("audio menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
-                        break;
-
-                    case "volumeUpbtn":
-                        { //curly brackets scope additionalParameters to be local to this case
-                            object[] additionalParameters = { 0.1f };
-                            EventDispatcher.Publish(new EventData(EventActionType.OnVolumeUp, EventCategoryType.GlobalSound, additionalParameters));
-                        }
-                        break;
-
-                    case "volumeDownbtn":
-                        {  
-                            object[] additionalParameters = { 0.1f };
-                            EventDispatcher.Publish(new EventData(EventActionType.OnVolumeDown, EventCategoryType.GlobalSound, additionalParameters));
-                        }
-                        break;
-
-                    case "volumeMutebtn":
-                        {
-                            object[] additionalParameters = { 0.0f, "Xact category name for game sounds goes here..."};
-                            EventDispatcher.Publish(new EventData(EventActionType.OnMute, EventCategoryType.GlobalSound, additionalParameters));
-                        }
-                        break;
-
-                    case "volumeUnMutebtn":
-                    {
-                        object[] additionalParameters = { 0.5f, "Xact category name for game sounds goes here..." };
-                        EventDispatcher.Publish(new EventData(EventActionType.OnUnMute, EventCategoryType.GlobalSound, additionalParameters));
-                    }
+                case "volumeDownbtn":
+                {
+                    object[] additionalParameters = {0.1f};
+                    EventDispatcher.Publish(new EventData(EventActionType.OnVolumeDown, EventCategoryType.GlobalSound,
+                        additionalParameters));
+                }
                     break;
 
-                    case "backbtn":
-                        SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
-                        break;
-                    case "main-Menu":
-                        SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
-                        break;
+                case "volumeMutebtn":
+                {
+                    object[] additionalParameters = {0.0f, "Xact category name for game sounds goes here..."};
+                    EventDispatcher.Publish(new EventData(EventActionType.OnMute, EventCategoryType.GlobalSound,
+                        additionalParameters));
+                }
+                    break;
 
-                    case "controlsbtn":
-                        SetActiveList("controls menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
-                        break;
-                    case "restart-Button":
+                case "volumeUnMutebtn":
+                {
+                    object[] additionalParameters = {0.5f, "Xact category name for game sounds goes here..."};
+                    EventDispatcher.Publish(new EventData(EventActionType.OnUnMute, EventCategoryType.GlobalSound,
+                        additionalParameters));
+                }
+                    break;
+
+                case "backbtn":
+                    SetActiveList(
+                        "main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
+                    break;
+                case "main-Menu":
+                    SetActiveList(
+                        "main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
+                    break;
+
+                case "controlsbtn":
+                    SetActiveList(
+                        "controls menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
+                    break;
+                case "restart-Button":
                     Console.WriteLine("In Button");
                     DoRestart();
                     EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
                     //SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
                     break;
-
-                default:
-                        break;
-                }
+            }
 
             //add event to play mouse click sound here...
-
         }
 
         private void DoStart()
@@ -150,8 +156,7 @@ namespace GDApp
 
         private void DoExit()
         {
-            this.Game.Exit();
+            Game.Exit();
         }
-
     }
 }

@@ -14,65 +14,61 @@ namespace GDLibrary
 {
     public class StatefulBool
     {
-        private int capacity;
-        private List<bool> stateList;
+        private readonly int capacity;
+        private readonly List<bool> stateList;
 
         public StatefulBool(int capacity)
         {
             this.capacity = capacity;
-            this.stateList = new List<bool>(capacity);
+            stateList = new List<bool>(capacity);
         }
 
         public void Update(bool state)
         {
-            this.stateList.Insert(0, state);
+            stateList.Insert(0, state);
 
             //ensure that there are always just "capacity" states stored
-            if(this.stateList.Count > this.capacity)
-                this.stateList.RemoveAt(this.stateList.Count - 1);
+            if (stateList.Count > capacity)
+                stateList.RemoveAt(stateList.Count - 1);
         }
 
         //returns true if state goes from false to true
         public bool IsActivating()
         {
-            if (this.stateList.Count >= 2)
-                return (this.stateList[0] && !this.stateList[1]);
-            else
-                return false;
+            if (stateList.Count >= 2)
+                return stateList[0] && !stateList[1];
+            return false;
         }
 
         //returns true if state goes from true to false
         public bool IsDeactivating()
         {
-            if (this.stateList.Count >= 2)
-                return (!this.stateList[0] && this.stateList[1]);
-            else
-                return false;
+            if (stateList.Count >= 2)
+                return !stateList[0] && stateList[1];
+            return false;
         }
 
         //returns the last stored state
         public bool IsActive()
         {
-            if (this.stateList.Count >= 1)
-                return this.stateList[0];
-            else
-                return false;
+            if (stateList.Count >= 1)
+                return stateList[0];
+            return false;
         }
 
         //returns true if active over first two successive states in the list
         public bool IsStillActive()
         {
-            if (this.stateList.Count > 1)
-                return this.stateList[0] && this.stateList[1];
-            else
-                return false;
+            if (stateList.Count > 1)
+                return stateList[0] && stateList[1];
+            return false;
         }
 
         public override string ToString()
         {
-            StringBuilder str = new StringBuilder();
+            var str = new StringBuilder();
 
-            foreach(bool state in this.stateList)
+            foreach (var state in stateList)
             {
                 str.Append(state);
                 str.Append(",");
@@ -80,6 +76,5 @@ namespace GDLibrary
 
             return str.ToString();
         }
-
     }
 }

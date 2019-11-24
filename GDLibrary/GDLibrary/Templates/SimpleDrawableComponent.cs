@@ -6,9 +6,8 @@ namespace GDLibrary
     public class SimpleDrawableComponent : DrawableGameComponent
     {
         public SimpleDrawableComponent(Game game)
-        : base(game)
+            : base(game)
         {
-
         }
 
         public override void Update(GameTime gameTime)

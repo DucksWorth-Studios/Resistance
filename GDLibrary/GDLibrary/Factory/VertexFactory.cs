@@ -8,32 +8,32 @@ Bugs:
 Fixes:			None
 */
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GDLibrary
 {
-
-    public static class VertexFactory 
+    public static class VertexFactory
     {
         //constant
         public static int ROUND_PRECISION_FLOAT = 3;
 
         /******************************************** Wireframe - Origin, Line, Circle, Quad, Cube & Billboard ********************************************/
 
-        public static VertexPositionColor[] GetVerticesPositionColorLine(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColor[] GetVerticesPositionColorLine(int sidelength,
+            out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.LineList;
             primitiveCount = 1;
 
-            VertexPositionColor[] vertices = new VertexPositionColor[2];
+            var vertices = new VertexPositionColor[2];
 
-            float halfSideLength = sidelength / 2.0f;
+            var halfSideLength = sidelength / 2.0f;
 
-            Vector3 left = new Vector3(-halfSideLength, 0, 0);
-            Vector3 right = new Vector3(halfSideLength, 0, 0);
+            var left = new Vector3(-halfSideLength, 0, 0);
+            var right = new Vector3(halfSideLength, 0, 0);
 
             vertices[0] = new VertexPositionColor(left, Color.White);
             vertices[1] = new VertexPositionColor(right, Color.White);
@@ -41,12 +41,13 @@ namespace GDLibrary
             return vertices;
         }
 
-        public static VertexPositionColor[] GetVerticesPositionColorOriginHelper(out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColor[] GetVerticesPositionColorOriginHelper(out PrimitiveType primitiveType,
+            out int primitiveCount)
         {
             primitiveType = PrimitiveType.LineList;
             primitiveCount = 10;
 
-            VertexPositionColor[] vertices = new VertexPositionColor[20];
+            var vertices = new VertexPositionColor[20];
 
             //x-axis
             vertices[0] = new VertexPositionColor(-Vector3.UnitX, Color.DarkRed);
@@ -87,55 +88,57 @@ namespace GDLibrary
         }
 
         //returns the vertices for a simple sphere (i.e. 3 circles) with a user-defined radius and sweep angle
-        public static VertexPositionColor[] GetVerticesPositionColorSphere(int radius, int sweepAngleInDegrees, out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColor[] GetVerticesPositionColorSphere(int radius, int sweepAngleInDegrees,
+            out PrimitiveType primitiveType, out int primitiveCount)
         {
-            List<VertexPositionColor> vertexList = new List<VertexPositionColor>();
+            var vertexList = new List<VertexPositionColor>();
 
             //get vertices for each plane e.g. XY, XZ
-            VertexPositionColor[] verticesSinglePlane = GetVerticesPositionColorCircle(radius, sweepAngleInDegrees, OrientationType.XYAxis);
-            AddArrayElementsToList<VertexPositionColor>(verticesSinglePlane, vertexList);
+            var verticesSinglePlane =
+                GetVerticesPositionColorCircle(radius, sweepAngleInDegrees, OrientationType.XYAxis);
+            AddArrayElementsToList(verticesSinglePlane, vertexList);
 
             verticesSinglePlane = GetVerticesPositionColorCircle(radius, sweepAngleInDegrees, OrientationType.XZAxis);
-            AddArrayElementsToList<VertexPositionColor>(verticesSinglePlane, vertexList);
+            AddArrayElementsToList(verticesSinglePlane, vertexList);
 
             primitiveType = PrimitiveType.LineStrip;
             primitiveCount = vertexList.Count - 1;
 
             return vertexList.ToArray();
-
         }
 
         //Adds the contents of a list to an array
         public static void AddArrayElementsToList<T>(T[] array, List<T> list)
         {
-            foreach (T obj in array)
+            foreach (var obj in array)
                 list.Add(obj);
         }
 
         //returns the vertices for a circle with a user-defined radius, sweep angle, and orientation
-        public static VertexPositionColor[] GetVerticesPositionColorCircle(int radius, int sweepAngleInDegrees, OrientationType orientationType)
+        public static VertexPositionColor[] GetVerticesPositionColorCircle(int radius, int sweepAngleInDegrees,
+            OrientationType orientationType)
         {
             //sweep angle should also be >= 1 and a multiple of 360
             //if angle is not a multiple of 360 the circle will not close - remember we are drawing with a LineStrip
-            if ((sweepAngleInDegrees < 1) || (360 % sweepAngleInDegrees != 0))
+            if (sweepAngleInDegrees < 1 || 360 % sweepAngleInDegrees != 0)
                 return null;
 
             //number of segments forming the circle (e.g. for sweepAngleInDegrees == 90 we have 4 segments)
-            int segmentCount = 360 / sweepAngleInDegrees;
+            var segmentCount = 360 / sweepAngleInDegrees;
 
             //segment angle
-            float rads = MathHelper.ToRadians(sweepAngleInDegrees);
+            var rads = MathHelper.ToRadians(sweepAngleInDegrees);
 
             //we need one more vertex to close the circle (e.g. 4 + 1 vertices to draw four lines)
-            VertexPositionColor[] vertices = new VertexPositionColor[segmentCount + 1];
+            var vertices = new VertexPositionColor[segmentCount + 1];
 
             float a, b;
 
-            for (int i = 0; i < vertices.Length; i++)
+            for (var i = 0; i < vertices.Length; i++)
             {
                 //round the values so we dont end up with the two oordinate values very close to but not equals to 0
-                a = (float)(radius * Math.Round(Math.Cos(rads * i), ROUND_PRECISION_FLOAT));
-                b = (float)(radius * Math.Round(Math.Sin(rads * i), ROUND_PRECISION_FLOAT));
+                a = (float) (radius * Math.Round(Math.Cos(rads * i), ROUND_PRECISION_FLOAT));
+                b = (float) (radius * Math.Round(Math.Sin(rads * i), ROUND_PRECISION_FLOAT));
 
                 if (orientationType == OrientationType.XYAxis)
                     vertices[i] = new VertexPositionColor(new Vector3(a, b, 0), Color.White);
@@ -148,19 +151,20 @@ namespace GDLibrary
             return vertices;
         }
 
-        public static VertexPositionColor[] GetVerticesPositionColorQuad(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColor[] GetVerticesPositionColorQuad(int sidelength,
+            out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.TriangleStrip;
             primitiveCount = 2;
 
-            VertexPositionColor[] vertices = new VertexPositionColor[4];
+            var vertices = new VertexPositionColor[4];
 
-            float halfSideLength = sidelength / 2.0f;
+            var halfSideLength = sidelength / 2.0f;
 
-            Vector3 topLeft = new Vector3(-halfSideLength, halfSideLength, 0);
-            Vector3 topRight = new Vector3(halfSideLength, halfSideLength, 0);
-            Vector3 bottomLeft = new Vector3(-halfSideLength, -halfSideLength, 0);
-            Vector3 bottomRight = new Vector3(halfSideLength, -halfSideLength, 0);
+            var topLeft = new Vector3(-halfSideLength, halfSideLength, 0);
+            var topRight = new Vector3(halfSideLength, halfSideLength, 0);
+            var bottomLeft = new Vector3(-halfSideLength, -halfSideLength, 0);
+            var bottomRight = new Vector3(halfSideLength, -halfSideLength, 0);
 
             //quad coplanar with the XY-plane (i.e. forward facing normal along UnitZ)
             vertices[0] = new VertexPositionColor(topLeft, Color.White);
@@ -172,43 +176,46 @@ namespace GDLibrary
         }
 
         //returns the vertices for a billboard which has a custom vertex declaration
-        public static VertexBillboard[] GetVertexBillboard(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexBillboard[] GetVertexBillboard(int sidelength, out PrimitiveType primitiveType,
+            out int primitiveCount)
         {
             primitiveType = PrimitiveType.TriangleStrip;
             primitiveCount = 2;
 
-            VertexBillboard[] vertices = new VertexBillboard[4];
-            float halfSideLength = sidelength / 2.0f;
+            var vertices = new VertexBillboard[4];
+            var halfSideLength = sidelength / 2.0f;
 
-            Vector2 uvTopLeft = new Vector2(0, 0);
-            Vector2 uvTopRight = new Vector2(1, 0);
-            Vector2 uvBottomLeft = new Vector2(0, 1);
-            Vector2 uvBottomRight = new Vector2(1, 1);
+            var uvTopLeft = new Vector2(0, 0);
+            var uvTopRight = new Vector2(1, 0);
+            var uvBottomLeft = new Vector2(0, 1);
+            var uvBottomRight = new Vector2(1, 1);
 
             //quad coplanar with the XY-plane (i.e. forward facing normal along UnitZ)
             vertices[0] = new VertexBillboard(Vector3.Zero, new Vector4(uvTopLeft, -halfSideLength, halfSideLength));
             vertices[1] = new VertexBillboard(Vector3.Zero, new Vector4(uvTopRight, halfSideLength, halfSideLength));
-            vertices[2] = new VertexBillboard(Vector3.Zero, new Vector4(uvBottomLeft, -halfSideLength, -halfSideLength));
-            vertices[3] = new VertexBillboard(Vector3.Zero, new Vector4(uvBottomRight, halfSideLength, -halfSideLength));
+            vertices[2] =
+                new VertexBillboard(Vector3.Zero, new Vector4(uvBottomLeft, -halfSideLength, -halfSideLength));
+            vertices[3] =
+                new VertexBillboard(Vector3.Zero, new Vector4(uvBottomRight, halfSideLength, -halfSideLength));
 
             return vertices;
         }
 
         public static VertexPositionColor[] GetVerticesPositionColorCube(int sidelength)
         {
-            VertexPositionColor[] vertices = new VertexPositionColor[36];
+            var vertices = new VertexPositionColor[36];
 
-            float halfSideLength = sidelength / 2.0f;
+            var halfSideLength = sidelength / 2.0f;
 
-            Vector3 topLeftFront = new Vector3(-halfSideLength, halfSideLength, halfSideLength);
-            Vector3 topLeftBack = new Vector3(-halfSideLength, halfSideLength, -halfSideLength);
-            Vector3 topRightFront = new Vector3(halfSideLength, halfSideLength, halfSideLength);
-            Vector3 topRightBack = new Vector3(halfSideLength, halfSideLength, -halfSideLength);
+            var topLeftFront = new Vector3(-halfSideLength, halfSideLength, halfSideLength);
+            var topLeftBack = new Vector3(-halfSideLength, halfSideLength, -halfSideLength);
+            var topRightFront = new Vector3(halfSideLength, halfSideLength, halfSideLength);
+            var topRightBack = new Vector3(halfSideLength, halfSideLength, -halfSideLength);
 
-            Vector3 bottomLeftFront = new Vector3(-halfSideLength, -halfSideLength, halfSideLength);
-            Vector3 bottomLeftBack = new Vector3(-halfSideLength, -halfSideLength, -halfSideLength);
-            Vector3 bottomRightFront = new Vector3(halfSideLength, -halfSideLength, halfSideLength);
-            Vector3 bottomRightBack = new Vector3(halfSideLength, -halfSideLength, -halfSideLength);
+            var bottomLeftFront = new Vector3(-halfSideLength, -halfSideLength, halfSideLength);
+            var bottomLeftBack = new Vector3(-halfSideLength, -halfSideLength, -halfSideLength);
+            var bottomRightFront = new Vector3(halfSideLength, -halfSideLength, halfSideLength);
+            var bottomRightBack = new Vector3(halfSideLength, -halfSideLength, -halfSideLength);
 
             //top - 1 polygon for the top
             vertices[0] = new VertexPositionColor(topLeftFront, Color.White);
@@ -270,7 +277,7 @@ namespace GDLibrary
         //defined vertices for a new shape in our game
         public static VertexPositionColor[] GetColoredTriangle(out PrimitiveType primitiveType, out int primitiveCount)
         {
-            VertexPositionColor[] vertices = new VertexPositionColor[3];
+            var vertices = new VertexPositionColor[3];
             vertices[0] = new VertexPositionColor(new Vector3(0, 1, 0), Color.White); //T
             vertices[1] = new VertexPositionColor(new Vector3(1, 0, 0), Color.White); //R
             vertices[2] = new VertexPositionColor(new Vector3(-1, 0, 0), Color.White); //L
@@ -282,17 +289,18 @@ namespace GDLibrary
         }
 
         //TriangleStrip
-        public static VertexPositionColorTexture[] GetTextureQuadVertices(out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColorTexture[] GetTextureQuadVertices(out PrimitiveType primitiveType,
+            out int primitiveCount)
         {
-            float halfLength = 0.5f;
+            var halfLength = 0.5f;
 
-            Vector3 topLeft = new Vector3(-halfLength, halfLength, 0);
-            Vector3 topRight = new Vector3(halfLength, halfLength, 0);
-            Vector3 bottomLeft = new Vector3(-halfLength, -halfLength, 0);
-            Vector3 bottomRight = new Vector3(halfLength, -halfLength, 0);
+            var topLeft = new Vector3(-halfLength, halfLength, 0);
+            var topRight = new Vector3(halfLength, halfLength, 0);
+            var bottomLeft = new Vector3(-halfLength, -halfLength, 0);
+            var bottomRight = new Vector3(halfLength, -halfLength, 0);
 
             //quad coplanar with the XY-plane (i.e. forward facing normal along UnitZ)
-            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[4];
+            var vertices = new VertexPositionColorTexture[4];
             vertices[0] = new VertexPositionColorTexture(topLeft, Color.White, Vector2.Zero);
             vertices[1] = new VertexPositionColorTexture(topRight, Color.White, Vector2.UnitX);
             vertices[2] = new VertexPositionColorTexture(bottomLeft, Color.White, Vector2.UnitY);
@@ -304,75 +312,76 @@ namespace GDLibrary
             return vertices;
         }
 
-        public static VertexPositionColor[] GetSpiralVertices(int radius, int angleInDegrees, float verticalIncrement, out int primitiveCount)
+        public static VertexPositionColor[] GetSpiralVertices(int radius, int angleInDegrees, float verticalIncrement,
+            out int primitiveCount)
         {
-            VertexPositionColor[] vertices = GetCircleVertices(radius, angleInDegrees, out primitiveCount, 
+            var vertices = GetCircleVertices(radius, angleInDegrees, out primitiveCount,
                 OrientationType.XZAxis);
 
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                vertices[i].Position.Y = verticalIncrement * i;
-            }
+            for (var i = 0; i < vertices.Length; i++) vertices[i].Position.Y = verticalIncrement * i;
 
             return vertices;
         }
 
         public static VertexPositionColor[] GetSphereVertices(int radius, int angleInDegrees, out int primitiveCount)
         {
-            List<VertexPositionColor> vertList = new List<VertexPositionColor>();
+            var vertList = new List<VertexPositionColor>();
 
             vertList.AddRange(GetCircleVertices(radius, angleInDegrees, out primitiveCount, OrientationType.XYAxis));
             vertList.AddRange(GetCircleVertices(radius, angleInDegrees, out primitiveCount, OrientationType.YZAxis));
             vertList.AddRange(GetCircleVertices(radius, angleInDegrees, out primitiveCount, OrientationType.XZAxis));
-            primitiveCount = vertList.Count - 1;      
+            primitiveCount = vertList.Count - 1;
             return vertList.ToArray();
         }
 
-        public static VertexPositionColor[] GetCircleVertices(int radius, int angleInDegrees, out int primitiveCount,  OrientationType orientationType)
+        public static VertexPositionColor[] GetCircleVertices(int radius, int angleInDegrees, out int primitiveCount,
+            OrientationType orientationType)
         {
             primitiveCount = 360 / angleInDegrees;
-            VertexPositionColor[] vertices = new VertexPositionColor[primitiveCount + 1];
+            var vertices = new VertexPositionColor[primitiveCount + 1];
 
-            Vector3 position = Vector3.Zero;
-            float angleInRadians = MathHelper.ToRadians(angleInDegrees);
+            var position = Vector3.Zero;
+            var angleInRadians = MathHelper.ToRadians(angleInDegrees);
 
-            for (int i = 0; i <= primitiveCount; i++)
+            for (var i = 0; i <= primitiveCount; i++)
             {
                 if (orientationType == OrientationType.XYAxis)
                 {
-                    position.X = (float)(radius * Math.Cos(i * angleInRadians));
-                    position.Y = (float)(radius * Math.Sin(i * angleInRadians));
+                    position.X = (float) (radius * Math.Cos(i * angleInRadians));
+                    position.Y = (float) (radius * Math.Sin(i * angleInRadians));
                 }
                 else if (orientationType == OrientationType.XZAxis)
                 {
-                    position.X = (float)(radius * Math.Cos(i * angleInRadians));
-                    position.Z = (float)(radius * Math.Sin(i * angleInRadians));
+                    position.X = (float) (radius * Math.Cos(i * angleInRadians));
+                    position.Z = (float) (radius * Math.Sin(i * angleInRadians));
                 }
                 else
                 {
-                    position.Y = (float)(radius * Math.Cos(i * angleInRadians));
-                    position.Z = (float)(radius * Math.Sin(i * angleInRadians));
+                    position.Y = (float) (radius * Math.Cos(i * angleInRadians));
+                    position.Z = (float) (radius * Math.Sin(i * angleInRadians));
                 }
 
                 vertices[i] = new VertexPositionColor(position, Color.White);
             }
+
             return vertices;
         }
 
         /******************************************** Textured - Quad, Cube & Pyramid ********************************************/
 
-        public static VertexPositionColorTexture[] GetVerticesPositionColorTextureQuad(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColorTexture[] GetVerticesPositionColorTextureQuad(int sidelength,
+            out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.TriangleStrip;
             primitiveCount = 2;
 
-            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[4];
-            float halfSideLength = sidelength / 2.0f;
+            var vertices = new VertexPositionColorTexture[4];
+            var halfSideLength = sidelength / 2.0f;
 
-            Vector3 topLeft = new Vector3(-halfSideLength, halfSideLength, 0);
-            Vector3 topRight = new Vector3(halfSideLength, halfSideLength, 0);
-            Vector3 bottomLeft = new Vector3(-halfSideLength, -halfSideLength, 0);
-            Vector3 bottomRight = new Vector3(halfSideLength, -halfSideLength, 0);
+            var topLeft = new Vector3(-halfSideLength, halfSideLength, 0);
+            var topRight = new Vector3(halfSideLength, halfSideLength, 0);
+            var bottomLeft = new Vector3(-halfSideLength, -halfSideLength, 0);
+            var bottomRight = new Vector3(halfSideLength, -halfSideLength, 0);
 
             //quad coplanar with the XY-plane (i.e. forward facing normal along UnitZ)
             vertices[0] = new VertexPositionColorTexture(topLeft, Color.White, Vector2.Zero);
@@ -383,30 +392,31 @@ namespace GDLibrary
             return vertices;
         }
 
-        public static VertexPositionColorTexture[] GetVerticesPositionTexturedCube(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColorTexture[] GetVerticesPositionTexturedCube(int sidelength,
+            out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.TriangleList;
             primitiveCount = 12;
 
-            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[36];
+            var vertices = new VertexPositionColorTexture[36];
 
-            float halfSideLength = sidelength / 2.0f;
+            var halfSideLength = sidelength / 2.0f;
 
-            Vector3 topLeftFront = new Vector3(-halfSideLength, halfSideLength, halfSideLength);
-            Vector3 topLeftBack = new Vector3(-halfSideLength, halfSideLength, -halfSideLength);
-            Vector3 topRightFront = new Vector3(halfSideLength, halfSideLength, halfSideLength);
-            Vector3 topRightBack = new Vector3(halfSideLength, halfSideLength, -halfSideLength);
+            var topLeftFront = new Vector3(-halfSideLength, halfSideLength, halfSideLength);
+            var topLeftBack = new Vector3(-halfSideLength, halfSideLength, -halfSideLength);
+            var topRightFront = new Vector3(halfSideLength, halfSideLength, halfSideLength);
+            var topRightBack = new Vector3(halfSideLength, halfSideLength, -halfSideLength);
 
-            Vector3 bottomLeftFront = new Vector3(-halfSideLength, -halfSideLength, halfSideLength);
-            Vector3 bottomLeftBack = new Vector3(-halfSideLength, -halfSideLength, -halfSideLength);
-            Vector3 bottomRightFront = new Vector3(halfSideLength, -halfSideLength, halfSideLength);
-            Vector3 bottomRightBack = new Vector3(halfSideLength, -halfSideLength, -halfSideLength);
+            var bottomLeftFront = new Vector3(-halfSideLength, -halfSideLength, halfSideLength);
+            var bottomLeftBack = new Vector3(-halfSideLength, -halfSideLength, -halfSideLength);
+            var bottomRightFront = new Vector3(halfSideLength, -halfSideLength, halfSideLength);
+            var bottomRightBack = new Vector3(halfSideLength, -halfSideLength, -halfSideLength);
 
             //uv coordinates
-            Vector2 uvTopLeft = new Vector2(0, 0);
-            Vector2 uvTopRight = new Vector2(1, 0);
-            Vector2 uvBottomLeft = new Vector2(0, 1);
-            Vector2 uvBottomRight = new Vector2(1, 1);
+            var uvTopLeft = new Vector2(0, 0);
+            var uvTopRight = new Vector2(1, 0);
+            var uvBottomLeft = new Vector2(0, 1);
+            var uvBottomRight = new Vector2(1, 1);
 
 
             //top - 1 polygon for the top
@@ -466,25 +476,28 @@ namespace GDLibrary
             return vertices;
         }
 
-        public static VertexPositionColorTexture[] GetVerticesPositionTexturedPyramidSquare(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionColorTexture[] GetVerticesPositionTexturedPyramidSquare(int sidelength,
+            out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.TriangleList;
             primitiveCount = 6;
 
-            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[18];
-            float halfSideLength = sidelength / 2.0f;
+            var vertices = new VertexPositionColorTexture[18];
+            var halfSideLength = sidelength / 2.0f;
 
-            Vector3 topCentre = new Vector3(0, 0.71f * sidelength, 0); //multiplier gives a pyramid where the length of the rising edges == length of the base edges
-            Vector3 frontLeft = new Vector3(-halfSideLength, 0, halfSideLength);
-            Vector3 frontRight = new Vector3(halfSideLength, 0, halfSideLength);
-            Vector3 backLeft = new Vector3(-halfSideLength, 0, -halfSideLength);
-            Vector3 backRight = new Vector3(halfSideLength, 0, -halfSideLength);
+            var topCentre =
+                new Vector3(0, 0.71f * sidelength,
+                    0); //multiplier gives a pyramid where the length of the rising edges == length of the base edges
+            var frontLeft = new Vector3(-halfSideLength, 0, halfSideLength);
+            var frontRight = new Vector3(halfSideLength, 0, halfSideLength);
+            var backLeft = new Vector3(-halfSideLength, 0, -halfSideLength);
+            var backRight = new Vector3(halfSideLength, 0, -halfSideLength);
 
-            Vector2 uvTopCentre = new Vector2(0.5f, 0);
-            Vector2 uvTopLeft = new Vector2(0, 0);
-            Vector2 uvTopRight = new Vector2(1, 0);
-            Vector2 uvBottomLeft = new Vector2(0, 1);
-            Vector2 uvBottomRight = new Vector2(1, 1);
+            var uvTopCentre = new Vector2(0.5f, 0);
+            var uvTopLeft = new Vector2(0, 0);
+            var uvTopRight = new Vector2(1, 0);
+            var uvBottomLeft = new Vector2(0, 1);
+            var uvBottomRight = new Vector2(1, 1);
 
             //front 
             vertices[0] = new VertexPositionColorTexture(topCentre, Color.White, uvTopCentre);
@@ -521,30 +534,31 @@ namespace GDLibrary
         /******************************************** Textured & Normal - Cube ********************************************/
 
         //adding normals - step 1 - add the vertices for the object shape
-        public static VertexPositionNormalTexture[] GetVerticesPositionNormalTexturedCube(int sidelength, out PrimitiveType primitiveType, out int primitiveCount)
+        public static VertexPositionNormalTexture[] GetVerticesPositionNormalTexturedCube(int sidelength,
+            out PrimitiveType primitiveType, out int primitiveCount)
         {
             primitiveType = PrimitiveType.TriangleList;
             primitiveCount = 12;
 
-            VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[36];
+            var vertices = new VertexPositionNormalTexture[36];
 
-            float halfSideLength = sidelength / 2.0f;
+            var halfSideLength = sidelength / 2.0f;
 
-            Vector3 topLeftFront = new Vector3(-halfSideLength, halfSideLength, halfSideLength);
-            Vector3 topLeftBack = new Vector3(-halfSideLength, halfSideLength, -halfSideLength);
-            Vector3 topRightFront = new Vector3(halfSideLength, halfSideLength, halfSideLength);
-            Vector3 topRightBack = new Vector3(halfSideLength, halfSideLength, -halfSideLength);
+            var topLeftFront = new Vector3(-halfSideLength, halfSideLength, halfSideLength);
+            var topLeftBack = new Vector3(-halfSideLength, halfSideLength, -halfSideLength);
+            var topRightFront = new Vector3(halfSideLength, halfSideLength, halfSideLength);
+            var topRightBack = new Vector3(halfSideLength, halfSideLength, -halfSideLength);
 
-            Vector3 bottomLeftFront = new Vector3(-halfSideLength, -halfSideLength, halfSideLength);
-            Vector3 bottomLeftBack = new Vector3(-halfSideLength, -halfSideLength, -halfSideLength);
-            Vector3 bottomRightFront = new Vector3(halfSideLength, -halfSideLength, halfSideLength);
-            Vector3 bottomRightBack = new Vector3(halfSideLength, -halfSideLength, -halfSideLength);
+            var bottomLeftFront = new Vector3(-halfSideLength, -halfSideLength, halfSideLength);
+            var bottomLeftBack = new Vector3(-halfSideLength, -halfSideLength, -halfSideLength);
+            var bottomRightFront = new Vector3(halfSideLength, -halfSideLength, halfSideLength);
+            var bottomRightBack = new Vector3(halfSideLength, -halfSideLength, -halfSideLength);
 
             //uv coordinates
-            Vector2 uvTopLeft = new Vector2(0, 0);
-            Vector2 uvTopRight = new Vector2(1, 0);
-            Vector2 uvBottomLeft = new Vector2(0, 1);
-            Vector2 uvBottomRight = new Vector2(1, 1);
+            var uvTopLeft = new Vector2(0, 0);
+            var uvTopRight = new Vector2(1, 0);
+            var uvBottomLeft = new Vector2(0, 1);
+            var uvBottomRight = new Vector2(1, 1);
 
 
             //top - 1 polygon for the top
@@ -603,13 +617,5 @@ namespace GDLibrary
 
             return vertices;
         }
-
-
-
-
-
-
-
-
     }
 }

@@ -9,6 +9,7 @@ Fixes:			None
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
 namespace GDLibrary
 {
     public sealed class LerpSpeed
@@ -20,9 +21,11 @@ namespace GDLibrary
         public static readonly float Fast = SpeedMultiplier * Medium;
         public static readonly float VeryFast = SpeedMultiplier * Fast;
     }
+
     public sealed class AppData
     {
         #region Common
+
         public static int IndexMoveForward = 0;
         public static int IndexMoveBackward = 1;
         public static int IndexRotateLeft = 2;
@@ -35,15 +38,17 @@ namespace GDLibrary
         public static int LoseTimerMinutes = 10;
         public static int LoseTimerSeconds = 0;
         public static string LoseTimerID = "Lose Timer";
+
         #endregion
 
         #region Camera
+
         public static readonly int CurveEvaluationPrecision = 4;
 
         public static readonly float CameraRotationSpeed = 0.01f;
         public static readonly float CameraMoveSpeed = 0.025f;
         public static readonly float CameraStrafeSpeed = 0.6f * CameraMoveSpeed;
-    
+
         //JigLib related collidable camera properties
         public static readonly float CollidableCameraJumpHeight = 12;
         public static readonly float CollidableCameraMoveSpeed = 0.6f;
@@ -52,9 +57,13 @@ namespace GDLibrary
         public static readonly float CollidableCameraViewHeight = 16; //how tall is the first person player?
         public static readonly float CollidableCameraMass = 10;
 
-        public static readonly Keys[] CameraMoveKeys = { Keys.W, Keys.S, Keys.A, Keys.D, 
-                                         Keys.Space, Keys.C, Keys.LeftShift, Keys.RightShift};
-        public static readonly Keys[] CameraMoveKeys_Alt1 = { Keys.T, Keys.G, Keys.F, Keys.H };
+        public static readonly Keys[] CameraMoveKeys =
+        {
+            Keys.W, Keys.S, Keys.A, Keys.D,
+            Keys.Space, Keys.C, Keys.LeftShift, Keys.RightShift
+        };
+
+        public static readonly Keys[] CameraMoveKeys_Alt1 = {Keys.T, Keys.G, Keys.F, Keys.H};
 
         public static readonly float CameraThirdPersonScrollSpeedDistanceMultiplier = 0.00125f;
         public static readonly float CameraThirdPersonScrollSpeedElevatationMultiplier = 0.01f;
@@ -73,11 +82,19 @@ namespace GDLibrary
         #endregion
 
         #region Player
+
         public static readonly string PlayerOneID = "player1";
         public static readonly string PlayerTwoID = "player2";
 
-        public static readonly Keys[] PlayerOneMoveKeys = { Keys.U, Keys.J, Keys.H, Keys.K, Keys.Y, Keys.I, Keys.N, Keys.M};
-        public static readonly Keys[] PlayerTwoMoveKeys = { Keys.NumPad8, Keys.NumPad5, Keys.NumPad4, Keys.NumPad6, Keys.NumPad7, Keys.NumPad9, Keys.NumPad2, Keys.NumPad3 };
+        public static readonly Keys[] PlayerOneMoveKeys =
+            {Keys.U, Keys.J, Keys.H, Keys.K, Keys.Y, Keys.I, Keys.N, Keys.M};
+
+        public static readonly Keys[] PlayerTwoMoveKeys =
+        {
+            Keys.NumPad8, Keys.NumPad5, Keys.NumPad4, Keys.NumPad6, Keys.NumPad7, Keys.NumPad9, Keys.NumPad2,
+            Keys.NumPad3
+        };
+
         public static readonly float PlayerMoveSpeed = 0.1f;
         public static readonly float PlayerStrafeSpeed = 0.7f * PlayerMoveSpeed;
         public static readonly float PlayerRotationSpeed = 0.08f;
@@ -88,7 +105,12 @@ namespace GDLibrary
 
         public static readonly float SquirrelPlayerMoveSpeed = 0.4f;
         public static readonly float SquirrelPlayerRotationSpeed = 0.2f;
-        public static readonly Keys[] SquirrelPlayerMoveKeys = { Keys.NumPad8, Keys.NumPad5, Keys.NumPad4, Keys.NumPad6, Keys.NumPad7, Keys.NumPad1, Keys.NumPad2, Keys.NumPad3 };
+
+        public static readonly Keys[] SquirrelPlayerMoveKeys =
+        {
+            Keys.NumPad8, Keys.NumPad5, Keys.NumPad4, Keys.NumPad6, Keys.NumPad7, Keys.NumPad1, Keys.NumPad2,
+            Keys.NumPad3
+        };
 
         public static readonly float DudeMoveSpeed = 0.15f;
         public static readonly float DudeRotationSpeed = 0.1f;
@@ -97,29 +119,39 @@ namespace GDLibrary
         #endregion
 
         #region Menu
+
         public static readonly Keys KeyPauseShowMenu = Keys.Escape;
         public static readonly Keys KeyToggleCameraLayout = Keys.F1;
+
         #endregion
 
         #region Mouse
+
         //defines how much the mouse has to move in pixels before a movement is registered - see MouseManager::HasMoved()
         public static readonly float MouseSensitivity = 1;
 
         //always ensure that we start picking OUTSIDE the collidable first person camera radius - otherwise we will always pick ourself!
         public static readonly float PickStartDistance = CollidableCameraCapsuleRadius * 2f;
-        public static readonly float PickEndDistance = 1000; //can be related to camera far clip plane radius but should be limited to typical level max diameter
+
+        public static readonly float
+            PickEndDistance =
+                1000; //can be related to camera far clip plane radius but should be limited to typical level max diameter
+
         public static readonly bool EnablePickAndPlace = true;
 
         #endregion
 
         #region UI
+
         public static readonly string PlayerOneProgressID = PlayerOneID + " progress";
         public static readonly string PlayerTwoProgressID = PlayerTwoID + " progress";
         public static readonly string PlayerOneProgressControllerID = PlayerOneProgressID + " ctrllr";
         public static readonly string PlayerTwoProgressControllerID = PlayerTwoProgressID + " ctrllr";
+
         #endregion
 
         #region JigLibX
+
         public static readonly Vector3 Gravity = -10 * Vector3.UnitY;
         public static readonly Vector3 BigGravity = 5 * Gravity;
 
@@ -127,26 +159,27 @@ namespace GDLibrary
 
 
         #region Video
+
         public static readonly string VideoIDMainHall;
         public static readonly string ControllerIDSuffix = " controller";
+
         #endregion
 
         #region Primitive ids used by vertexData dictionary
+
         public static readonly string TexturedQuadID = "textured quad";
         public static readonly string TexturedBillboardQuadID = "textured billboard quad";
 
         #endregion
 
         #region Effect parameter ids used by the effect dictionary
+
         public static readonly string LitModelsEffectID = "lit models basic effect";
         public static readonly string UnlitModelsEffectID = "unlit models basic effect";
         public static readonly string UnLitPrimitivesEffectID = "unlit primitives basic effect";
         public static readonly string UnlitModelDualEffectID = "unlit models dual effect";
         public static readonly string UnlitBillboardsEffectID = "unlit billboards effect";
 
-
-
         #endregion
-
     }
 }

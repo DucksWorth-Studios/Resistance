@@ -12,79 +12,62 @@ namespace GDLibrary
     public class TrigonometricParameters
     {
         #region Fields
-        private float maxAmplitude, angularFrequency, phaseAngle;
-        #endregion
 
-        #region Properties
-        public float MaxAmplitude
-        {
-            get
-            {
-                return this.maxAmplitude;
-            }
-            set
-            {
-                this.maxAmplitude = (value > 0) ? value : 1;
-            }
-        }
-        public float AngularFrequency
-        {
-            get
-            {
-                return this.angularFrequency;
-            }
-            set
-            {
-                this.angularFrequency = (value > 0) ? value : 1;
-            }
-        }
-        public float PhaseAngle
-        {
-            get
-            {
-                return this.phaseAngle;
-            }
-            set
-            {
-                this.phaseAngle = value;
-            }
-        }
+        private float maxAmplitude, angularFrequency;
+
         #endregion
 
         public TrigonometricParameters(float maxAmplitude, float angularFrequency, float phaseAngle)
         {
-            this.MaxAmplitude = maxAmplitude;
-            this.AngularFrequency = angularFrequency;
-            this.PhaseAngle = phaseAngle;
+            MaxAmplitude = maxAmplitude;
+            AngularFrequency = angularFrequency;
+            PhaseAngle = phaseAngle;
         }
 
         public TrigonometricParameters(float maxAmplitude, float angularFrequency)
             : this(maxAmplitude, angularFrequency, 0)
         {
-          
         }
 
         public override bool Equals(object obj)
         {
-            TrigonometricParameters other = obj as TrigonometricParameters;
-            return this.maxAmplitude == other.MaxAmplitude
-                && this.angularFrequency == other.AngularFrequency
-                    && this.phaseAngle == other.PhaseAngle;
+            var other = obj as TrigonometricParameters;
+            return maxAmplitude == other.MaxAmplitude
+                   && angularFrequency == other.AngularFrequency
+                   && PhaseAngle == other.PhaseAngle;
         }
 
         public override int GetHashCode()
         {
-            int hash = 1;
-            hash = hash * 31 + this.maxAmplitude.GetHashCode();
-            hash = hash * 17 + this.angularFrequency.GetHashCode();
-            hash = hash * 11 + this.phaseAngle.GetHashCode();
+            var hash = 1;
+            hash = hash * 31 + maxAmplitude.GetHashCode();
+            hash = hash * 17 + angularFrequency.GetHashCode();
+            hash = hash * 11 + PhaseAngle.GetHashCode();
             return hash;
         }
 
         public object Clone()
         {
             //deep because all variables are either C# types (e.g. primitives, structs, or enums) or  XNA types
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
+
+        #region Properties
+
+        public float MaxAmplitude
+        {
+            get => maxAmplitude;
+            set => maxAmplitude = value > 0 ? value : 1;
+        }
+
+        public float AngularFrequency
+        {
+            get => angularFrequency;
+            set => angularFrequency = value > 0 ? value : 1;
+        }
+
+        public float PhaseAngle { get; set; }
+
+        #endregion
     }
 }

@@ -2,51 +2,25 @@
 {
     public class Integer
     {
-        #region Statics
-        public static Integer Zero
-        {
-            get
-            {
-                return new Integer(0);
-            }
-        }
-        public static Integer One
-        {
-            get
-            {
-                return new Integer(1);
-            }
-        }
-        #endregion
-
         #region Fields
-        private int value;
-        #endregion
 
-        #region Properties
-      
-        public int Value
-        {
-            get
-            {
-                return value;
-            }
-            set
-            {
-                this.value = value;
-            }
-        }
         #endregion
 
 
         public Integer(int value)
         {
-            this.value = value;
+            Value = value;
         }
+
+        #region Properties
+
+        public int Value { get; set; }
+
+        #endregion
 
         public override string ToString()
         {
-            return "Value: " + this.value;
+            return "Value: " + Value;
         }
 
         public static Integer operator *(Integer x, int multiplier)
@@ -76,7 +50,15 @@
 
         public object Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
+
+        #region Statics
+
+        public static Integer Zero => new Integer(0);
+
+        public static Integer One => new Integer(1);
+
+        #endregion
     }
 }

@@ -1,60 +1,37 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
     public class Curve1D
     {
-        #region Fields
-        private Curve curve;
-        private CurveLoopType curveLookType;
-        private bool bSet;
-        #endregion
-
-        #region Properties
-        public CurveLoopType CurveLookType
-        {
-            get
-            {
-                return curveLookType;
-            }
-        }
-        public Curve Curve
-        {
-            get
-            {
-                return curve;
-            }
-        }
-        #endregion
-
         //See CurveLoopType - https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.curvelooptype.aspx
         public Curve1D(CurveLoopType curveLookType)
         {
-            this.curveLookType = curveLookType;
+            CurveLookType = curveLookType;
 
-            this.curve = new Curve();
-            this.curve.PreLoop = curveLookType;
-            this.curve.PostLoop = curveLookType;
+            Curve = new Curve();
+            Curve.PreLoop = curveLookType;
+            Curve.PostLoop = curveLookType;
         }
 
         public void Add(float value, float timeInSecs)
         {
             timeInSecs *= 1000; //convert to milliseconds
-            this.curve.Keys.Add(new CurveKey(timeInSecs, value));
-            this.bSet = false;
+            Curve.Keys.Add(new CurveKey(timeInSecs, value));
+            bSet = false;
             //Set();
         }
 
         private void Set()
         {
-            SetTangents(curve);
-            this.bSet = true;
+            SetTangents(Curve);
+            bSet = true;
         }
 
         public void Clear()
         {
-            this.curve.Keys.Clear(); 
+            Curve.Keys.Clear();
         }
 
         public float Evaluate(float timeInSecs, int decimalPrecision)
@@ -62,7 +39,7 @@ namespace GDLibrary
             if (!bSet)
                 Set();
 
-            return (float)Math.Round(this.curve.Evaluate(timeInSecs), decimalPrecision);
+            return (float) Math.Round(Curve.Evaluate(timeInSecs), decimalPrecision);
         }
 
         private void SetTangents(Curve curve)
@@ -72,7 +49,7 @@ namespace GDLibrary
             CurveKey next;
             int prevIndex;
             int nextIndex;
-            for (int i = 0; i < curve.Keys.Count; i++)
+            for (var i = 0; i < curve.Keys.Count; i++)
             {
                 prevIndex = i - 1;
                 if (prevIndex < 0) prevIndex = i;
@@ -90,8 +67,8 @@ namespace GDLibrary
 
         private static void SetCurveKeyTangent(ref CurveKey prev, ref CurveKey cur, ref CurveKey next)
         {
-            float dt = next.Position - prev.Position;
-            float dv = next.Value - prev.Value;
+            var dt = next.Position - prev.Position;
+            var dv = next.Value - prev.Value;
             if (Math.Abs(dv) < float.Epsilon)
             {
                 cur.TangentIn = 0;
@@ -105,6 +82,20 @@ namespace GDLibrary
                 cur.TangentOut = dv * (next.Position - cur.Position) / dt;
             }
         }
+
+        #region Fields
+
+        private bool bSet;
+
+        #endregion
+
+        #region Properties
+
+        public CurveLoopType CurveLookType { get; }
+
+        public Curve Curve { get; }
+
+        #endregion
 
         //Add Equals, Clone, ToString, GetHashCode...
     }

@@ -23,11 +23,11 @@ namespace GDLibrary
         Opacity,
         SystemAdd, //used to send add related events e.g. remove objects from ojectmanager, camera manager, ui manager
         SystemRemove, //used to send remove related events e.g. remove objects from ojectmanager, camera manager, ui manager
-        Debug,   //used to send debug related events e.g. show/hide debug info
+        Debug, //used to send debug related events e.g. show/hide debug info
         Sound3D,
         Sound2D,
-        ObjectPicking,   //used to notify listening objects that we have picked something with the mouse
-        Mouse,              //used to send mouse related events e.g. set mouse position
+        ObjectPicking, //used to notify listening objects that we have picked something with the mouse
+        Mouse, //used to send mouse related events e.g. set mouse position
         Video,
         GlobalSound,
         Interactive,

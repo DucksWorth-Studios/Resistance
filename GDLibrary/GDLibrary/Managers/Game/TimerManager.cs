@@ -13,155 +13,9 @@ namespace GDLibrary
 {
     public class TimerManager : PausableGameComponent, IEnumerable<TimerUtility>
     {
-        #region Fields
-
-        private List<TimerUtility> timerList;
-        private int lastGameSecond = 0;
-        private bool loseEventFired = false;
-
-        #endregion
-
-        #region Constructors
-
-        public TimerManager(TimerUtility timer, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
-            base(game, eventDispatcher, statusType)
-        {
-            this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(timer);
-
-            //register with the event dispatcher for the events of interest
-            RegisterForEventHandling(eventDispatcher);
-        }
-
-        public TimerManager(string id, int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
-            base(game, eventDispatcher, statusType)
-        {
-            this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(new TimerUtility(id, minutes, statusType));
-
-            //register with the event dispatcher for the events of interest
-            RegisterForEventHandling(eventDispatcher);
-        }
-
-        public TimerManager(string id, int hours, int minutes, Game game, EventDispatcher eventDispatcher,
-            StatusType statusType) :
-            base(game, eventDispatcher, statusType)
-        {
-            this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(new TimerUtility(id, hours, minutes, statusType));
-
-            //register with the event dispatcher for the events of interest
-            RegisterForEventHandling(eventDispatcher);
-        }
-
-        public TimerManager(string id, int hours, int minutes, int seconds, Game game, EventDispatcher eventDispatcher,
-            StatusType statusType) :
-            base(game, eventDispatcher, statusType)
-        {
-            this.timerList = new List<TimerUtility>(0);
-            this.timerList.Add(new TimerUtility(id, hours, minutes, seconds, statusType));
-
-            //register with the event dispatcher for the events of interest
-            RegisterForEventHandling(eventDispatcher);
-        }
-
-        #endregion
-
         #region Properties
 
-        public List<TimerUtility> TimerList
-        {
-            get => timerList;
-            set => timerList = value;
-        }
-
-        #endregion
-
-        #region EnumeratorProperties
-
-        #region Add
-
-        public void Add(TimerUtility timer)
-        {
-            timerList.Add(timer);
-        }
-
-        public void Add(string id, int minutes, StatusType statusType)
-        {
-            timerList.Add(new TimerUtility(id, minutes, statusType));
-        }
-
-        public void Add(string id, int hours, int minutes, StatusType statusType)
-        {
-            timerList.Add(new TimerUtility(id, hours, minutes, statusType));
-        }
-
-        public void Add(string id, int hours, int minutes, int seconds, StatusType statusType)
-        {
-            timerList.Add(new TimerUtility(id, hours, minutes, seconds, statusType));
-        }
-
-        #endregion
-
-        public bool Remove(Predicate<TimerUtility> predicate)
-        {
-            TimerUtility foundTimer = this.timerList.Find(predicate);
-            if (foundTimer != null)
-                return this.timerList.Remove(foundTimer);
-
-            return false;
-        }
-
-        public int RemoveAll(Predicate<TimerUtility> predicate)
-        {
-            return this.timerList.RemoveAll(predicate);
-        }
-
-        #region GetEnumerator
-
-        public IEnumerator<TimerUtility> GetEnumerator()
-        {
-            return this.timerList.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Event Handeling
-
-        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
-        {
-            eventDispatcher.ScreenChanged += EventDispatcher_MenuChanged;
-            base.RegisterForEventHandling(eventDispatcher);
-        }
-
-        protected override void EventDispatcher_MenuChanged(EventData eventData)
-        {
-            //did the event come from the main menu and is it a start game event
-            if (eventData.EventType == EventActionType.OnStart)
-            {
-                //turn on update for all timers
-                foreach (TimerUtility timer in timerList)
-                {
-                    timer.StatusType = StatusType.Update;
-                }
-            }
-            //did the event come from the main menu and is it a start game event
-            else if (eventData.EventType == EventActionType.OnPause)
-            {
-                //turn off update for all timers
-                foreach (TimerUtility timer in timerList)
-                {
-                    timer.StatusType = StatusType.Off;
-                }
-            }
-        }
+        public List<TimerUtility> TimerList { get; set; }
 
         #endregion
 
@@ -171,16 +25,17 @@ namespace GDLibrary
             {
                 lastGameSecond = (int) gameTime.TotalGameTime.TotalSeconds;
 
-                foreach (TimerUtility timer in TimerList)
-                {
+                foreach (var timer in TimerList)
                     if ((timer.StatusType & StatusType.Update) != 0)
                     {
-                        int tempHrs = timer.Hours;
-                        int tempMins = timer.Minutes;
-                        int tempSecs = timer.Seconds;
+                        var tempHrs = timer.Hours;
+                        var tempMins = timer.Minutes;
+                        var tempSecs = timer.Seconds;
 
                         if (timer.Seconds > 0)
+                        {
                             timer.Seconds -= 1;
+                        }
                         else if (timer.Seconds == 0)
                         {
                             if (timer.Minutes > 0)
@@ -205,25 +60,165 @@ namespace GDLibrary
                                         loseEventFired = true;
                                     }
                                     else
+                                    {
                                         Debug.WriteLine(
                                             "Event doesn't exist for this timer " + timer.ID);
+                                    }
                                 }
                                 else
+                                {
                                     throw new Exception("Hour check has gone wrong");
+                                }
                             }
                             else
+                            {
                                 throw new Exception("Minute check has gone wrong");
+                            }
                         }
                         else
+                        {
                             throw new Exception("Second check has gone wrong");
+                        }
 
                         /*
                         System.Diagnostics.Debug.WriteLine("Old - " + tempHrs + ":" + tempMins + ":" + tempSecs +
                                                            "\tNew - " + timer);
                         */
                     }
-                }
             }
         }
+
+        #region Fields
+
+        private int lastGameSecond;
+        private bool loseEventFired;
+
+        #endregion
+
+        #region Constructors
+
+        public TimerManager(TimerUtility timer, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
+            base(game, eventDispatcher, statusType)
+        {
+            TimerList = new List<TimerUtility>(0);
+            TimerList.Add(timer);
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
+        }
+
+        public TimerManager(string id, int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
+            base(game, eventDispatcher, statusType)
+        {
+            TimerList = new List<TimerUtility>(0);
+            TimerList.Add(new TimerUtility(id, minutes, statusType));
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
+        }
+
+        public TimerManager(string id, int hours, int minutes, Game game, EventDispatcher eventDispatcher,
+            StatusType statusType) :
+            base(game, eventDispatcher, statusType)
+        {
+            TimerList = new List<TimerUtility>(0);
+            TimerList.Add(new TimerUtility(id, hours, minutes, statusType));
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
+        }
+
+        public TimerManager(string id, int hours, int minutes, int seconds, Game game, EventDispatcher eventDispatcher,
+            StatusType statusType) :
+            base(game, eventDispatcher, statusType)
+        {
+            TimerList = new List<TimerUtility>(0);
+            TimerList.Add(new TimerUtility(id, hours, minutes, seconds, statusType));
+
+            //register with the event dispatcher for the events of interest
+            RegisterForEventHandling(eventDispatcher);
+        }
+
+        #endregion
+
+        #region EnumeratorProperties
+
+        #region Add
+
+        public void Add(TimerUtility timer)
+        {
+            TimerList.Add(timer);
+        }
+
+        public void Add(string id, int minutes, StatusType statusType)
+        {
+            TimerList.Add(new TimerUtility(id, minutes, statusType));
+        }
+
+        public void Add(string id, int hours, int minutes, StatusType statusType)
+        {
+            TimerList.Add(new TimerUtility(id, hours, minutes, statusType));
+        }
+
+        public void Add(string id, int hours, int minutes, int seconds, StatusType statusType)
+        {
+            TimerList.Add(new TimerUtility(id, hours, minutes, seconds, statusType));
+        }
+
+        #endregion
+
+        public bool Remove(Predicate<TimerUtility> predicate)
+        {
+            var foundTimer = TimerList.Find(predicate);
+            if (foundTimer != null)
+                return TimerList.Remove(foundTimer);
+
+            return false;
+        }
+
+        public int RemoveAll(Predicate<TimerUtility> predicate)
+        {
+            return TimerList.RemoveAll(predicate);
+        }
+
+        #region GetEnumerator
+
+        public IEnumerator<TimerUtility> GetEnumerator()
+        {
+            return TimerList.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Event Handeling
+
+        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.ScreenChanged += EventDispatcher_MenuChanged;
+            base.RegisterForEventHandling(eventDispatcher);
+        }
+
+        protected override void EventDispatcher_MenuChanged(EventData eventData)
+        {
+            //did the event come from the main menu and is it a start game event
+            if (eventData.EventType == EventActionType.OnStart)
+                //turn on update for all timers
+                foreach (var timer in TimerList)
+                    timer.StatusType = StatusType.Update;
+            //did the event come from the main menu and is it a start game event
+            else if (eventData.EventType == EventActionType.OnPause)
+                //turn off update for all timers
+                foreach (var timer in TimerList)
+                    timer.StatusType = StatusType.Off;
+        }
+
+        #endregion
     }
 }

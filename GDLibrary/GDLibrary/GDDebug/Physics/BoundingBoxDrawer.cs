@@ -6,43 +6,45 @@ Date Updated:	27/10/17
 Bugs:			
 Fixes:			None
 */
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GDLibrary
 {
     //See http://timjones.tw/blog/archive/2010/12/10/drawing-an-xna-model-bounding-box
     public class BoundingBoxBuffers
     {
-        public VertexBuffer Vertices;
-        public int VertexCount;
         public IndexBuffer Indices;
         public int PrimitiveCount;
+        public int VertexCount;
+        public VertexBuffer Vertices;
     }
 
     //See http://timjones.tw/blog/archive/2010/12/10/drawing-an-xna-model-bounding-box
     public class BoundingBoxDrawer
     {
-        public static BoundingBoxBuffers CreateBoundingBoxBuffers(BoundingBox boundingBox, GraphicsDevice graphicsDevice)
+        public static BoundingBoxBuffers CreateBoundingBoxBuffers(BoundingBox boundingBox,
+            GraphicsDevice graphicsDevice)
         {
-            BoundingBoxBuffers boundingBoxBuffers = new BoundingBoxBuffers();
+            var boundingBoxBuffers = new BoundingBoxBuffers();
 
             boundingBoxBuffers.PrimitiveCount = 24;
             boundingBoxBuffers.VertexCount = 48;
 
-            VertexBuffer vertexBuffer = new VertexBuffer(graphicsDevice,
+            var vertexBuffer = new VertexBuffer(graphicsDevice,
                 typeof(VertexPositionColor), boundingBoxBuffers.VertexCount,
                 BufferUsage.WriteOnly);
-            List<VertexPositionColor> vertices = new List<VertexPositionColor>();
+            var vertices = new List<VertexPositionColor>();
 
             const float ratio = 5.0f;
 
-            Vector3 xOffset = new Vector3((boundingBox.Max.X - boundingBox.Min.X) / ratio, 0, 0);
-            Vector3 yOffset = new Vector3(0, (boundingBox.Max.Y - boundingBox.Min.Y) / ratio, 0);
-            Vector3 zOffset = new Vector3(0, 0, (boundingBox.Max.Z - boundingBox.Min.Z) / ratio);
-            Vector3[] corners = boundingBox.GetCorners();
+            var xOffset = new Vector3((boundingBox.Max.X - boundingBox.Min.X) / ratio, 0, 0);
+            var yOffset = new Vector3(0, (boundingBox.Max.Y - boundingBox.Min.Y) / ratio, 0);
+            var zOffset = new Vector3(0, 0, (boundingBox.Max.Z - boundingBox.Min.Z) / ratio);
+            var corners = boundingBox.GetCorners();
 
             // Corner 1.
             AddVertex(vertices, corners[0]);
@@ -111,9 +113,10 @@ namespace GDLibrary
             vertexBuffer.SetData(vertices.ToArray());
             boundingBoxBuffers.Vertices = vertexBuffer;
 
-            IndexBuffer indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, boundingBoxBuffers.VertexCount,
+            var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits,
+                boundingBoxBuffers.VertexCount,
                 BufferUsage.WriteOnly);
-            indexBuffer.SetData(Enumerable.Range(0, boundingBoxBuffers.VertexCount).Select(i => (short)i).ToArray());
+            indexBuffer.SetData(Enumerable.Range(0, boundingBoxBuffers.VertexCount).Select(i => (short) i).ToArray());
             boundingBoxBuffers.Indices = indexBuffer;
 
             return boundingBoxBuffers;
@@ -124,7 +127,8 @@ namespace GDLibrary
             vertices.Add(new VertexPositionColor(position, Color.White));
         }
 
-        public static void DrawBoundingBox(BoundingBoxBuffers buffers, BasicEffect effect, GraphicsDevice graphicsDevice, Camera3D camera)
+        public static void DrawBoundingBox(BoundingBoxBuffers buffers, BasicEffect effect,
+            GraphicsDevice graphicsDevice, Camera3D camera)
         {
             graphicsDevice.SetVertexBuffer(buffers.Vertices);
             graphicsDevice.Indices = buffers.Indices;
@@ -133,13 +137,12 @@ namespace GDLibrary
             effect.View = camera.View;
             effect.Projection = camera.ProjectionParameters.Projection;
 
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 graphicsDevice.DrawIndexedPrimitives(PrimitiveType.LineList, 0, 0,
                     buffers.VertexCount, 0, buffers.PrimitiveCount);
             }
         }
-
     }
 }

@@ -7,22 +7,20 @@ Bugs:			None
 Fixes:			None
 */
 
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace GDLibrary
 {
     /// <summary>
-    /// Provides methods to determine the state of keyboard keys.
+    ///     Provides methods to determine the state of keyboard keys.
     /// </summary>
     public class KeyboardManager : GameComponent
     {
         #region Fields
-        protected KeyboardState newState, oldState;
-        #endregion
 
-        #region Properties
+        protected KeyboardState newState, oldState;
+
         #endregion
 
         public KeyboardManager(Game game)
@@ -32,8 +30,8 @@ namespace GDLibrary
         }
 
         /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
+        ///     Allows the game component to perform any initialization it needs to before starting
+        ///     to run.  This is where it can query for any required services and load content.
         /// </summary>
         public override void Initialize()
         {
@@ -41,57 +39,62 @@ namespace GDLibrary
 
             base.Initialize();
         }
+
         /// <summary>
-        /// Allows the game component to update itself.
+        ///     Allows the game component to update itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
             //store the old keyboard state for later comparison
-            this.oldState = this.newState; 
+            oldState = newState;
             //get the current state in THIS update
-            this.newState = Keyboard.GetState();
+            newState = Keyboard.GetState();
             base.Update(gameTime);
         }
 
         //is any key pressed on the keyboard?
         public bool IsKeyPressed()
         {
-            return (this.newState.GetPressedKeys().Length != 0);
+            return newState.GetPressedKeys().Length != 0;
         }
 
         //is a key pressed?
         public bool IsKeyDown(Keys key)
         {
-            return this.newState.IsKeyDown(key);
+            return newState.IsKeyDown(key);
         }
 
         public bool IsKeyUp(Keys key)
         {
-            return this.newState.IsKeyUp(key);
+            return newState.IsKeyUp(key);
         }
 
         public bool IsKeyPushed(Keys key)
         {
-            return this.newState.IsKeyUp(key) && this.oldState.IsKeyDown(key);
+            return newState.IsKeyUp(key) && oldState.IsKeyDown(key);
         }
 
 
         //is a key pressed now that was not pressed in the last update?
         public bool IsFirstKeyPress(Keys key)
         {
-            return this.newState.IsKeyDown(key) && this.oldState.IsKeyUp(key);
+            return newState.IsKeyDown(key) && oldState.IsKeyUp(key);
         }
 
         //has the keyboard state changed since the last update?
         public bool IsStateChanged()
         {
-            return !this.newState.Equals(oldState); //false if no change, otherwise true
+            return !newState.Equals(oldState); //false if no change, otherwise true
         }
 
         public bool IsAnyKeyPressed()
         {
-            return this.newState.GetPressedKeys().Length == 0 ? false : true; 
+            return newState.GetPressedKeys().Length == 0 ? false : true;
         }
+
+        #region Properties
+
+        #endregion
     }
 }

@@ -9,9 +9,9 @@ namespace GDLibrary
 {
     public class BarrierController : Controller
     {
-        private bool rotateClockwise;
-        private bool rotateTopBarrier = false;
-        private bool rotateBottomBarrier = false;
+        private bool rotateBottomBarrier;
+        private readonly bool rotateClockwise;
+        private bool rotateTopBarrier;
 
         /*
          * Authors: Cameron & Tomas
@@ -21,6 +21,38 @@ namespace GDLibrary
         {
             this.rotateClockwise = rotateClockwise;
             RegisterForEventHandling(eventDispatcher);
+        }
+
+        public override void Update(GameTime gameTime, IActor actor)
+        {
+            var parent = actor as CollidableObject;
+
+            if (rotateClockwise && rotateTopBarrier)
+            {
+                if (parent.Transform.Rotation.Z < 270)
+                {
+                    parent.Transform.RotateAroundZBy(1);
+                }
+                else if (parent.Transform.Rotation.Z == 270)
+                {
+                    rotateTopBarrier = false;
+                    parent.Collision.RemoveAllPrimitives();
+                }
+            }
+            else if (!rotateClockwise && rotateBottomBarrier)
+            {
+                if (parent.Transform.Rotation.Z > -90)
+                {
+                    parent.Transform.RotateAroundZBy(-1);
+                }
+                else if (parent.Transform.Rotation.Z == -90)
+                {
+                    rotateBottomBarrier = false;
+                    parent.Collision.RemoveAllPrimitives();
+                }
+            }
+
+            base.Update(gameTime, actor);
         }
 
         #region Event Handeling
@@ -40,33 +72,5 @@ namespace GDLibrary
         }
 
         #endregion
-
-        public override void Update(GameTime gameTime, IActor actor)
-        {
-            CollidableObject parent = actor as CollidableObject;
-
-            if (rotateClockwise && rotateTopBarrier)
-            {
-                if (parent.Transform.Rotation.Z < 270)
-                    parent.Transform.RotateAroundZBy(1);
-                else if (parent.Transform.Rotation.Z == 270)
-                {
-                    rotateTopBarrier = false;
-                    parent.Collision.RemoveAllPrimitives();
-                }
-            }
-            else if (!rotateClockwise && rotateBottomBarrier)
-            {
-                if (parent.Transform.Rotation.Z > -90)
-                    parent.Transform.RotateAroundZBy(-1);
-                else if (parent.Transform.Rotation.Z == -90)
-                {
-                    rotateBottomBarrier = false;
-                    parent.Collision.RemoveAllPrimitives();
-                }
-            }
-
-            base.Update(gameTime, actor);
-        }
     }
 }

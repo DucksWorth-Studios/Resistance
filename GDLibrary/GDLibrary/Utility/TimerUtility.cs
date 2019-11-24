@@ -7,13 +7,12 @@ namespace GDLibrary
 {
     public class TimerUtility
     {
-        #region Fields
+        public override string ToString()
+        {
+            return Hours + ":" + Minutes + ":" + Seconds;
+        }
 
-        private string id;
-        private int hours = 0;
-        private int minutes = 0;
-        private int seconds = 0;
-        private StatusType statusType;
+        #region Fields
 
         #endregion
 
@@ -21,67 +20,42 @@ namespace GDLibrary
 
         public TimerUtility(string id, int minutes, StatusType statusType)
         {
-            this.id = id;
-            this.minutes = minutes;
-            this.statusType = statusType;
+            ID = id;
+            Minutes = minutes;
+            StatusType = statusType;
         }
 
         public TimerUtility(string id, int hours, int minutes, StatusType statusType)
         {
-            this.id = id;
-            this.hours = hours;
-            this.minutes = minutes;
-            this.statusType = statusType;
+            ID = id;
+            Hours = hours;
+            Minutes = minutes;
+            StatusType = statusType;
         }
 
         public TimerUtility(string id, int hours, int minutes, int seconds, StatusType statusType)
         {
-            this.id = id;
-            this.hours = hours;
-            this.minutes = minutes;
-            this.seconds = seconds;
-            this.statusType = statusType;
+            ID = id;
+            Hours = hours;
+            Minutes = minutes;
+            Seconds = seconds;
+            StatusType = statusType;
         }
 
         #endregion
 
         #region Properties
 
-        public string ID
-        {
-            get => id;
-            set => id = value;
-        }
+        public string ID { get; set; }
 
-        public int Hours
-        {
-            get => hours;
-            set => hours = value;
-        }
+        public int Hours { get; set; }
 
-        public int Minutes
-        {
-            get => minutes;
-            set => minutes = value;
-        }
+        public int Minutes { get; set; }
 
-        public int Seconds
-        {
-            get => seconds;
-            set => seconds = value;
-        }
+        public int Seconds { get; set; }
 
-        public StatusType StatusType
-        {
-            get => statusType;
-            set => statusType = value;
-        }
+        public StatusType StatusType { get; set; }
 
         #endregion
-
-        public override string ToString()
-        {
-            return Hours + ":" + Minutes + ":" + Seconds;
-        }
     }
 }

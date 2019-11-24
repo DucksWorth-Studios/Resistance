@@ -28,7 +28,8 @@ namespace GDLibrary
 
 
         //returns a viewport with padding on horizontal and vertical edges - used by cameras typically to make room for game state
-        public static Viewport Pad(Viewport viewport, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+        public static Viewport Pad(Viewport viewport, int leftPadding, int topPadding, int rightPadding,
+            int bottomPadding)
         {
             //reduce by whatever padding has been specified
             return new Viewport(
@@ -44,7 +45,7 @@ namespace GDLibrary
             return new Viewport(
                 viewport.X + deflateHorizontal,
                 viewport.Y + deflateVertical,
-                viewport.Width - 2*deflateHorizontal,
+                viewport.Width - 2 * deflateHorizontal,
                 viewport.Height - 2 * deflateVertical);
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using JigLibX.Physics;
+using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
@@ -10,27 +10,28 @@ namespace GDLibrary
         protected static readonly float DefaultMinPickPlaceDistance = 20;
         protected static readonly float DefaultMaxPickPlaceDistance = 100;
         private static readonly int DefaultDistanceToTargetPrecision = 1;
-
-        private ManagerParameters managerParameters;
-        private float pickStartDistance;
-        private float pickEndDistance;
-        private Predicate<CollidableObject> collisionPredicate;
-        private PickingBehaviourType pickingBehaviourType;
+        private bool bCurrentlyPicking;
+        private Camera3D camera;
+        private float cameraPickDistance;
+        private readonly Predicate<CollidableObject> collisionPredicate;
+        private bool currentlyOpen;
 
         //local vars
         private CollidableObject currentPickedObject;
-        private Vector3 pos, normal;
+        private readonly ConstraintVelocity damperController = new ConstraintVelocity();
         private float distanceToObject;
-        private Camera3D camera;
-        private float cameraPickDistance;
-        private bool bCurrentlyPicking;
-        private ConstraintWorldPoint objectController = new ConstraintWorldPoint();
-        private ConstraintVelocity damperController = new ConstraintVelocity();
-        private bool currentlyOpen;
+
+        private readonly ManagerParameters managerParameters;
+        private readonly ConstraintWorldPoint objectController = new ConstraintWorldPoint();
+        private readonly float pickEndDistance;
+        private readonly PickingBehaviourType pickingBehaviourType;
+        private readonly float pickStartDistance;
+        private Vector3 pos, normal;
 
         public PickingManager(Game game, EventDispatcher eventDispatcher, StatusType statusType,
-           ManagerParameters managerParameters, PickingBehaviourType pickingBehaviourType, float pickStartDistance, float pickEndDistance, Predicate<CollidableObject> collisionPredicate)
-           : base(game, eventDispatcher, statusType)
+            ManagerParameters managerParameters, PickingBehaviourType pickingBehaviourType, float pickStartDistance,
+            float pickEndDistance, Predicate<CollidableObject> collisionPredicate)
+            : base(game, eventDispatcher, statusType)
         {
             this.managerParameters = managerParameters;
 
@@ -50,38 +51,29 @@ namespace GDLibrary
 
         public void changeState(EventData eventdata)
         {
-            if(currentlyOpen)
-            {
+            if (currentlyOpen)
                 currentlyOpen = false;
-            }
             else
-            {
                 currentlyOpen = true;
-            }
-
         }
 
         #region Event Handling
+
         protected override void EventDispatcher_MenuChanged(EventData eventData)
         {
             //did the event come from the main menu and is it a start game event
             if (eventData.EventType == EventActionType.OnStart)
-            {
                 //turn on update and enable picking
-                this.StatusType = StatusType.Update;
-            }
+                StatusType = StatusType.Update;
             //did the event come from the main menu and is it a pause game event
             else if (eventData.EventType == EventActionType.OnPause)
-            {
                 //turn off update to disable picking
-                this.StatusType = StatusType.Off;
-            }
+                StatusType = StatusType.Off;
             else if (eventData.EventType == EventActionType.OnLose)
-            {
                 //turn off update and draw i.e. show the menu since the game is paused
-                this.StatusType = StatusType.Off;
-            }
+                StatusType = StatusType.Off;
         }
+
         #endregion
 
         protected override void HandleInput(GameTime gameTime)
@@ -101,14 +93,7 @@ namespace GDLibrary
 
         protected override void HandleMouse(GameTime gameTime)
         {
-            if (this.pickingBehaviourType == PickingBehaviourType.InteractWithObject)
-            {
-                InteractWithObject(gameTime);
-            }
-            else
-            {
-
-            }
+            if (pickingBehaviourType == PickingBehaviourType.InteractWithObject) InteractWithObject(gameTime);
         }
 
         /**
@@ -117,119 +102,128 @@ namespace GDLibrary
          */
         private void InteractWithObject(GameTime gameTime)
         {
-            if (this.managerParameters.MouseManager.IsLeftButtonClickedOnce())
+            if (managerParameters.MouseManager.IsLeftButtonClickedOnce())
             {
-                this.camera = this.managerParameters.CameraManager.ActiveCamera;
-                this.currentPickedObject = this.managerParameters.MouseManager.GetPickedObject(camera, camera.ViewportCentre,
-                    this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
+                camera = managerParameters.CameraManager.ActiveCamera;
+                currentPickedObject = managerParameters.MouseManager.GetPickedObject(camera, camera.ViewportCentre,
+                    pickStartDistance, pickEndDistance, out pos, out normal) as CollidableObject;
 
-                if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.Interactable)
-                { 
+                if (currentPickedObject != null && currentPickedObject.ActorType == ActorType.Interactable)
+                {
                     //generate event to tell object manager and physics manager to remove the object
-                    EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.Interact, EventCategoryType.Interactive));
+                    EventDispatcher.Publish(new EventData(currentPickedObject, EventActionType.Interact,
+                        EventCategoryType.Interactive));
                     //Console.WriteLine("Interacting");
                 }
-                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.PopUP)
+                else if (currentPickedObject != null && currentPickedObject.ActorType == ActorType.PopUP)
                 {
-                    if(!currentlyOpen)
-                    {
+                    if (!currentlyOpen)
                         //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.MainMenu));
                         //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.mouseLock));
                         EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
-                    } 
                 }
-                else if(this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.CollidablePickup)
+                else if (currentPickedObject != null && currentPickedObject.ActorType == ActorType.CollidablePickup)
                 {
-                    EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
+                    EventDispatcher.Publish(new EventData(currentPickedObject, EventActionType.RiddleSolved,
+                        EventCategoryType.RiddleAnswer));
                     EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
                 }
+
                 //Console.WriteLine("Hello");
             }
         }
 
         private void DoPickAndPlace(GameTime gameTime)
-        { 
-            if (this.managerParameters.MouseManager.IsMiddleButtonClicked())
+        {
+            if (managerParameters.MouseManager.IsMiddleButtonClicked())
             {
-                if (!this.bCurrentlyPicking)
+                if (!bCurrentlyPicking)
                 {
-                    this.camera = this.managerParameters.CameraManager.ActiveCamera;
-                    this.currentPickedObject = this.managerParameters.MouseManager.GetPickedObject(camera, camera.ViewportCentre,
-                        this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
+                    camera = managerParameters.CameraManager.ActiveCamera;
+                    currentPickedObject = managerParameters.MouseManager.GetPickedObject(camera, camera.ViewportCentre,
+                        pickStartDistance, pickEndDistance, out pos, out normal) as CollidableObject;
 
-                    this.distanceToObject = (float)Math.Round(Vector3.Distance(camera.Transform.Translation, pos), DefaultDistanceToTargetPrecision);
+                    distanceToObject = (float) Math.Round(Vector3.Distance(camera.Transform.Translation, pos),
+                        DefaultDistanceToTargetPrecision);
 
-                    if (this.currentPickedObject != null && IsValidCollision(currentPickedObject, pos, normal))
+                    if (currentPickedObject != null && IsValidCollision(currentPickedObject, pos, normal))
                     {
-                        Vector3 vectorDeltaFromCentreOfMass = pos - this.currentPickedObject.Collision.Owner.Position;
-                        vectorDeltaFromCentreOfMass = Vector3.Transform(vectorDeltaFromCentreOfMass, Matrix.Transpose(this.currentPickedObject.Collision.Owner.Orientation));
-                        cameraPickDistance = (this.managerParameters.CameraManager.ActiveCamera.Transform.Translation - pos).Length();
+                        var vectorDeltaFromCentreOfMass = pos - currentPickedObject.Collision.Owner.Position;
+                        vectorDeltaFromCentreOfMass = Vector3.Transform(vectorDeltaFromCentreOfMass,
+                            Matrix.Transpose(currentPickedObject.Collision.Owner.Orientation));
+                        cameraPickDistance = (managerParameters.CameraManager.ActiveCamera.Transform.Translation - pos)
+                            .Length();
 
                         //remove any controller from any previous pick-release 
                         objectController.Destroy();
                         damperController.Destroy();
 
-                        this.currentPickedObject.Collision.Owner.SetActive();
+                        currentPickedObject.Collision.Owner.SetActive();
                         //move object by pos (i.e. point of collision and not centre of mass)
-                        this.objectController.Initialise(this.currentPickedObject.Collision.Owner, vectorDeltaFromCentreOfMass, pos);
+                        objectController.Initialise(currentPickedObject.Collision.Owner, vectorDeltaFromCentreOfMass,
+                            pos);
                         //dampen velocity (linear and angular) on object to Zero
-                        this.damperController.Initialise(this.currentPickedObject.Collision.Owner, ConstraintVelocity.ReferenceFrame.Body, Vector3.Zero, Vector3.Zero);
-                        this.objectController.EnableConstraint();
-                        this.damperController.EnableConstraint();
+                        damperController.Initialise(currentPickedObject.Collision.Owner,
+                            ConstraintVelocity.ReferenceFrame.Body, Vector3.Zero, Vector3.Zero);
+                        objectController.EnableConstraint();
+                        damperController.EnableConstraint();
                         //we're picking a valid object for the first time
-                        this.bCurrentlyPicking = true;
+                        bCurrentlyPicking = true;
 
                         //update mouse text
-                        object[] additionalParameters = {currentPickedObject, this.distanceToObject};
-                        EventDispatcher.Publish(new EventData(EventActionType.OnObjectPicked, EventCategoryType.ObjectPicking, additionalParameters));
+                        object[] additionalParameters = {currentPickedObject, distanceToObject};
+                        EventDispatcher.Publish(new EventData(EventActionType.OnObjectPicked,
+                            EventCategoryType.ObjectPicking, additionalParameters));
                     }
                 }
 
                 //if we have an object picked from the last update then move it according to the mouse pointer
-                if (objectController.IsConstraintEnabled && (objectController.Body != null))
-                { 
-                   // Vector3 delta = objectController.Body.Position - this.managerParameters.CameraManager.ActiveCamera.Transform.Translation;
-                    Vector3 direction = this.managerParameters.MouseManager.GetMouseRay(this.managerParameters.CameraManager.ActiveCamera).Direction;
-                    cameraPickDistance += this.managerParameters.MouseManager.GetDeltaFromScrollWheel() * 0.1f;
-                    Vector3 result = this.managerParameters.CameraManager.ActiveCamera.Transform.Translation + cameraPickDistance * direction;
+                if (objectController.IsConstraintEnabled && objectController.Body != null)
+                {
+                    // Vector3 delta = objectController.Body.Position - this.managerParameters.CameraManager.ActiveCamera.Transform.Translation;
+                    var direction = managerParameters.MouseManager
+                        .GetMouseRay(managerParameters.CameraManager.ActiveCamera).Direction;
+                    cameraPickDistance += managerParameters.MouseManager.GetDeltaFromScrollWheel() * 0.1f;
+                    var result = managerParameters.CameraManager.ActiveCamera.Transform.Translation +
+                                 cameraPickDistance * direction;
                     //set the desired world position
-                    objectController.WorldPosition = this.managerParameters.CameraManager.ActiveCamera.Transform.Translation + cameraPickDistance * direction;
+                    objectController.WorldPosition =
+                        managerParameters.CameraManager.ActiveCamera.Transform.Translation +
+                        cameraPickDistance * direction;
                     objectController.Body.SetActive();
                 }
             }
             else //releasing object
             {
-                if (this.bCurrentlyPicking)
+                if (bCurrentlyPicking)
                 {
                     //release object from constraints and allow to behave as defined by gravity etc
                     objectController.DisableConstraint();
                     damperController.DisableConstraint();
-                    
-                    //notify listeners that we're no longer picking
-                    object[] additionalParameters = { NoObjectSelectedText };
-                    EventDispatcher.Publish(new EventData(EventActionType.OnNonePicked, EventCategoryType.ObjectPicking, additionalParameters));
 
-                    this.bCurrentlyPicking = false;
+                    //notify listeners that we're no longer picking
+                    object[] additionalParameters = {NoObjectSelectedText};
+                    EventDispatcher.Publish(new EventData(EventActionType.OnNonePicked, EventCategoryType.ObjectPicking,
+                        additionalParameters));
+
+                    bCurrentlyPicking = false;
                 }
             }
         }
 
         protected override void HandleKeyboard(GameTime gameTime)
         {
-
         }
 
         protected override void HandleGamePad(GameTime gameTime)
         {
-
         }
 
         //called when over collidable/pickable object
         protected virtual bool IsValidCollision(CollidableObject collidableObject, Vector3 pos, Vector3 normal)
         {
             //if not null then call method to see if its an object that conforms to our predicate (e.g. ActorType::CollidablePickup), otherwise return false
-            return (collidableObject != null) ? this.collisionPredicate(collidableObject) : false;
+            return collidableObject != null ? collisionPredicate(collidableObject) : false;
         }
-
     }
 }

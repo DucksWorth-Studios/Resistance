@@ -6,114 +6,27 @@ Date Updated:	24/10/17
 Bugs:			None
 Fixes:			None
 */
+
 using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
     public class ThirdPersonController : TargetController
     {
-        #region Fields
-        private float elevationAngle, distance, scrollSpeedDistanceMultiplier, scrollSpeedElevationMultiplier;
-
-        //used to dampen camera movement
-        private Vector3 oldTranslation;
-        private Vector3 oldCameraToTarget;
-        private float translationLerpSpeed, lookLerpSpeed;
-        private MouseManager mouseManager;
-        #endregion
-
-        #region Properties
-        public float TranslationLerpSpeed
-        {
-            get
-            {
-                return translationLerpSpeed;
-            }
-            set
-            {
-
-                //lerp speed should be in the range >0 and <=1
-                translationLerpSpeed = (value > 0) && (value <= 1) ? value : 0.1f;
-            }
-        }
-        public float LookLerpSpeed
-        {
-            get
-            {
-                return lookLerpSpeed;
-            }
-            set
-            {
-
-                //lerp speed should be in the range >0 and <=1
-                lookLerpSpeed = (value > 0) && (value <= 1) ? value : 0.1f;
-            }
-        }
-        public float ScrollSpeedDistanceMultiplier
-        {
-            get
-            {
-                return scrollSpeedDistanceMultiplier;
-            }
-            set
-            {
-                //distanceScrollMultiplier should not be lower than 0
-                scrollSpeedDistanceMultiplier = (value > 0) ? value : 1;
-            }
-        }
-
-        public float ScrollSpeedElevationMultiplier
-        {
-            get
-            {
-                return scrollSpeedElevationMultiplier;
-            }
-            set
-            {
-                //scrollSpeedElevationMulitplier should not be lower than 0
-                scrollSpeedElevationMultiplier = (value > 0) ? value : 1;
-            }
-        }
-
-        public float Distance
-        {
-            get
-            {
-                return distance;
-            }
-            set
-            {
-                //distance should not be lower than 0
-                distance = (value > 0) ? value : 1;
-            }
-        }
-        public float ElevationAngle
-        {
-            get
-            {
-                return elevationAngle;
-            }
-            set
-            {
-                elevationAngle = value % 360;
-                elevationAngle = MathHelper.ToRadians(elevationAngle);
-            }
-        }
-        #endregion
-
         public ThirdPersonController(string id, ControllerType controllerType, Actor targetActor,
-            float distance, float scrollSpeedDistanceMultiplier, float elevationAngle, 
-                float scrollSpeedElevationMultiplier, float translationLerpSpeed, float lookLerpSpeed, MouseManager mouseManager)
+            float distance, float scrollSpeedDistanceMultiplier, float elevationAngle,
+            float scrollSpeedElevationMultiplier, float translationLerpSpeed, float lookLerpSpeed,
+            MouseManager mouseManager)
             : base(id, controllerType, targetActor)
         {
             //call properties to set validation on distance and radian conversion
-            this.Distance = distance;
+            Distance = distance;
 
             //allows us to control distance and elevation from the mouse scroll wheel
-            this.ScrollSpeedDistanceMultiplier = scrollSpeedDistanceMultiplier;
-            this.ScrollSpeedElevationMultiplier = scrollSpeedElevationMultiplier;
+            ScrollSpeedDistanceMultiplier = scrollSpeedDistanceMultiplier;
+            ScrollSpeedElevationMultiplier = scrollSpeedElevationMultiplier;
             //notice that we pass the incoming angle through the property to convert it to radians
-            this.ElevationAngle = elevationAngle;
+            ElevationAngle = elevationAngle;
 
             //dampen camera translation reaction
             this.translationLerpSpeed = translationLerpSpeed;
@@ -127,7 +40,7 @@ namespace GDLibrary
         public override void Update(GameTime gameTime, IActor actor)
         {
             UpdateFromScrollWheel(gameTime);
-            UpdateParent(gameTime, actor as Actor3D, this.TargetActor as Actor3D);
+            UpdateParent(gameTime, actor as Actor3D, TargetActor as Actor3D);
         }
 
         private void UpdateParent(GameTime gameTime, Actor3D parentActor, Actor3D targetActor)
@@ -135,63 +48,62 @@ namespace GDLibrary
             if (targetActor != null)
             {
                 //rotate the target look around the target right to get a vector pointing away from the target at a specified elevation
-                Vector3 cameraToTarget = Vector3.Transform(targetActor.Transform.Look,
-                    Matrix.CreateFromAxisAngle(targetActor.Transform.Right, this.elevationAngle));
+                var cameraToTarget = Vector3.Transform(targetActor.Transform.Look,
+                    Matrix.CreateFromAxisAngle(targetActor.Transform.Right, elevationAngle));
 
                 //normalize to give unit length, otherwise distance from camera to target will vary over time
                 cameraToTarget.Normalize();
 
                 //set the position of the camera to be a set distance from target and at certain elevation angle
-                parentActor.Transform.Translation = Vector3.Lerp(this.oldTranslation, cameraToTarget * this.distance + targetActor.Transform.Translation, this.translationLerpSpeed);
+                parentActor.Transform.Translation = Vector3.Lerp(oldTranslation,
+                    cameraToTarget * distance + targetActor.Transform.Translation, translationLerpSpeed);
 
                 //set the camera to look at the target object
-                parentActor.Transform.Look = Vector3.Lerp(this.oldCameraToTarget, cameraToTarget, this.lookLerpSpeed);
+                parentActor.Transform.Look = Vector3.Lerp(oldCameraToTarget, cameraToTarget, lookLerpSpeed);
 
                 //store old values for lerp
-                this.oldTranslation = parentActor.Transform.Translation;
-                this.oldCameraToTarget = -cameraToTarget;
+                oldTranslation = parentActor.Transform.Translation;
+                oldCameraToTarget = -cameraToTarget;
             }
         }
 
         private void UpdateFromScrollWheel(GameTime gameTime)
         {
             //get magnitude and direction of scroll change
-            float scrollWheelDelta = -this.mouseManager.GetDeltaFromScrollWheel() * gameTime.ElapsedGameTime.Milliseconds;
+            float scrollWheelDelta = -mouseManager.GetDeltaFromScrollWheel() * gameTime.ElapsedGameTime.Milliseconds;
 
             //if something changed then update
             if (scrollWheelDelta != 0)
-            {
                 //move camera closer to, or further, from the target
-                this.Distance += this.scrollSpeedDistanceMultiplier * scrollWheelDelta;
+                Distance += scrollSpeedDistanceMultiplier * scrollWheelDelta;
 
-                //try uncommenting this line and see how we can affect the elevation angle also
-                //this.ElevationAngle += this.scrollSpeedElevationMultiplier * scrollWheelDelta;
-            }
+            //try uncommenting this line and see how we can affect the elevation angle also
+            //this.ElevationAngle += this.scrollSpeedElevationMultiplier * scrollWheelDelta;
         }
 
         public override bool Equals(object obj)
         {
-            ThirdPersonController other = obj as ThirdPersonController;
+            var other = obj as ThirdPersonController;
 
             if (other == null)
                 return false;
-            else if (this == other)
+            if (this == other)
                 return true;
 
-            return this.elevationAngle.Equals(other.ElevationAngle)
-                    && this.distance.Equals(other.Distance)
-                      && this.translationLerpSpeed.Equals(other.TranslationLerpSpeed)
-                        && this.lookLerpSpeed.Equals(other.LookLerpSpeed)
-                        && base.Equals(obj);
+            return elevationAngle.Equals(other.ElevationAngle)
+                   && distance.Equals(other.Distance)
+                   && translationLerpSpeed.Equals(other.TranslationLerpSpeed)
+                   && lookLerpSpeed.Equals(other.LookLerpSpeed)
+                   && base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            int hash = 1;
-            hash = hash * 31 + this.elevationAngle.GetHashCode();
-            hash = hash * 17 + this.distance.GetHashCode();
-            hash = hash * 41 + this.translationLerpSpeed.GetHashCode();
-            hash = hash * 47 + this.lookLerpSpeed.GetHashCode();
+            var hash = 1;
+            hash = hash * 31 + elevationAngle.GetHashCode();
+            hash = hash * 17 + distance.GetHashCode();
+            hash = hash * 41 + translationLerpSpeed.GetHashCode();
+            hash = hash * 47 + lookLerpSpeed.GetHashCode();
             hash = hash * 11 + base.GetHashCode();
             return hash;
         }
@@ -199,16 +111,72 @@ namespace GDLibrary
         //be careful when cloning this controller as we will need to reset the target actor - assuming the clone attaches to a different target
         public override object Clone()
         {
-            return new ThirdPersonController("clone - " + this.ID, //deep
-                this.ControllerType, //deep
-                this.TargetActor as Actor, //shallow - a ref
-                this.distance, //deep
-                this.scrollSpeedDistanceMultiplier, //deep
-                this.elevationAngle, //deep
-                this.scrollSpeedElevationMultiplier, //deep
-                this.translationLerpSpeed, //deep
-                this.lookLerpSpeed, //deep
-                this.mouseManager); //shallow - a ref
+            return new ThirdPersonController("clone - " + ID, //deep
+                ControllerType, //deep
+                TargetActor as Actor, //shallow - a ref
+                distance, //deep
+                scrollSpeedDistanceMultiplier, //deep
+                elevationAngle, //deep
+                scrollSpeedElevationMultiplier, //deep
+                translationLerpSpeed, //deep
+                lookLerpSpeed, //deep
+                mouseManager); //shallow - a ref
         }
+
+        #region Fields
+
+        private float elevationAngle, distance, scrollSpeedDistanceMultiplier, scrollSpeedElevationMultiplier;
+
+        //used to dampen camera movement
+        private Vector3 oldTranslation;
+        private Vector3 oldCameraToTarget;
+        private float translationLerpSpeed, lookLerpSpeed;
+        private readonly MouseManager mouseManager;
+
+        #endregion
+
+        #region Properties
+
+        public float TranslationLerpSpeed
+        {
+            get => translationLerpSpeed;
+            set => translationLerpSpeed = value > 0 && value <= 1 ? value : 0.1f;
+        }
+
+        public float LookLerpSpeed
+        {
+            get => lookLerpSpeed;
+            set => lookLerpSpeed = value > 0 && value <= 1 ? value : 0.1f;
+        }
+
+        public float ScrollSpeedDistanceMultiplier
+        {
+            get => scrollSpeedDistanceMultiplier;
+            set => scrollSpeedDistanceMultiplier = value > 0 ? value : 1;
+        }
+
+        public float ScrollSpeedElevationMultiplier
+        {
+            get => scrollSpeedElevationMultiplier;
+            set => scrollSpeedElevationMultiplier = value > 0 ? value : 1;
+        }
+
+        public float Distance
+        {
+            get => distance;
+            set => distance = value > 0 ? value : 1;
+        }
+
+        public float ElevationAngle
+        {
+            get => elevationAngle;
+            set
+            {
+                elevationAngle = value % 360;
+                elevationAngle = MathHelper.ToRadians(elevationAngle);
+            }
+        }
+
+        #endregion
     }
 }

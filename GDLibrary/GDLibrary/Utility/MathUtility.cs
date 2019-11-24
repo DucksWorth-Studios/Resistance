@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
@@ -17,12 +17,11 @@ namespace GDLibrary
 
         public static int RandomExcludeNumber(int excludedValue, int max)
         {
-            Random random = new Random();
-            int randomValue = 0;
+            var random = new Random();
+            var randomValue = 0;
             do
             {
                 randomValue = random.Next(max);
-
             } while (randomValue == excludedValue);
 
             return randomValue;
@@ -30,13 +29,12 @@ namespace GDLibrary
 
         public static int RandomExcludeRange(int lo, int hi, int max)
         {
-            Random random = new Random();
-            int randomValue = 0;
+            var random = new Random();
+            var randomValue = 0;
             do
             {
                 randomValue = random.Next(max);
-
-            } while ((randomValue >= lo) && (randomValue <= hi));
+            } while (randomValue >= lo && randomValue <= hi);
 
             return randomValue;
         }
@@ -57,19 +55,21 @@ namespace GDLibrary
         public static Color Lerp(Color a, Color b, float lerpFactor)
         {
             //Lerp between R, G, B, and A channels for each color
-            return new Color((int)MathHelper.Lerp(a.R, b.R, lerpFactor),
-                        (int)MathHelper.Lerp(a.G, b.G, lerpFactor),
-                            (int)MathHelper.Lerp(a.B, b.B, lerpFactor),
-                                (int)MathHelper.Lerp(a.A, b.A, lerpFactor));
+            return new Color((int) MathHelper.Lerp(a.R, b.R, lerpFactor),
+                (int) MathHelper.Lerp(a.G, b.G, lerpFactor),
+                (int) MathHelper.Lerp(a.B, b.B, lerpFactor),
+                (int) MathHelper.Lerp(a.A, b.A, lerpFactor));
         }
 
         //lerps along a sine wave with properties defined by TrigonometricParameters (i.e. max amplitude, phase, speed) - see UISineLerpController
-        public static float SineLerpByElapsedTime(TrigonometricParameters trigonometricParameters, float totalElapsedTime)
+        public static float SineLerpByElapsedTime(TrigonometricParameters trigonometricParameters,
+            float totalElapsedTime)
         {
             //range - max amplitude -> + max amplitude
-            float lerpFactor = (float)(trigonometricParameters.MaxAmplitude
-                * Math.Sin(trigonometricParameters.AngularFrequency
-                * MathHelper.ToRadians(totalElapsedTime) + trigonometricParameters.PhaseAngle));
+            var lerpFactor = (float) (trigonometricParameters.MaxAmplitude
+                                      * Math.Sin(trigonometricParameters.AngularFrequency
+                                                 * MathHelper.ToRadians(totalElapsedTime) +
+                                                 trigonometricParameters.PhaseAngle));
             //range 0 -> 2* max amplitude
             lerpFactor += trigonometricParameters.MaxAmplitude;
             //range 0 -> max amplitude
@@ -81,22 +81,23 @@ namespace GDLibrary
         public static Vector2 Round(Vector2 a, int precision)
         {
             //takes two translations x1,y1 and x2,y2 and interpolates linearly between them using a factor    
-            return new Vector2((float)Math.Round(a.X, precision), (float)Math.Round(a.Y, precision));
+            return new Vector2((float) Math.Round(a.X, precision), (float) Math.Round(a.Y, precision));
         }
 
         public static Vector3 Round(Vector3 a, int precision)
         {
             //takes two translations x1,y1 and x2,y2 and interpolates linearly between them using a factor    
-            return new Vector3((float)Math.Round(a.X, precision), 
-                (float)Math.Round(a.Y, precision),
-                    (float)Math.Round(a.Z, precision));
+            return new Vector3((float) Math.Round(a.X, precision),
+                (float) Math.Round(a.Y, precision),
+                (float) Math.Round(a.Z, precision));
         }
 
         //object to target vector, also provides access to distance from object to target
-        public static Vector3 GetNormalizedObjectToTargetVector(Transform3D start, Transform3D target, out float distance)
+        public static Vector3 GetNormalizedObjectToTargetVector(Transform3D start, Transform3D target,
+            out float distance)
         {
             //camera to target object vector
-            Vector3 vectorToTarget = target.Translation - start.Translation;
+            var vectorToTarget = target.Translation - start.Translation;
 
             //distance from camera to target
             distance = vectorToTarget.Length();
@@ -116,7 +117,8 @@ namespace GDLibrary
 
         public static void SetDistanceFromCamera(Actor3D actor, Camera3D activeCamera)
         {
-            actor.Transform.DistanceToCamera = Vector3.Distance(actor.Transform.Translation, activeCamera.Transform.Translation);
+            actor.Transform.DistanceToCamera =
+                Vector3.Distance(actor.Transform.Translation, activeCamera.Transform.Translation);
         }
     }
 }

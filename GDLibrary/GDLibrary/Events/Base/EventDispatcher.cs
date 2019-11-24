@@ -9,46 +9,82 @@ Fixes:			None
 Comments:       Should consider making this class a Singleton because of the static message Stack - See https://msdn.microsoft.com/en-us/library/ff650316.aspx
 */
 
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
     public class EventDispatcher : GameComponent
     {
-        //See Queue doc - https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.queue-1?view=netframework-4.7.1
-        private static Queue<EventData> queue; //stores events in arrival sequence
-        private static HashSet<EventData> uniqueSet; //prevents the same event from existing in the stack for a single update cycle (e.g. when playing a sound based on keyboard press)
-      
+        public delegate void AddActorEventHandler(EventData eventData);
+
+        public delegate void AnimationHandler(EventData eventData);
+
 
         //a delegate is basically a list - the list contains a pointer to a function - this function pointer comes from the object wishing to be notified when the event occurs.
         public delegate void CameraEventHandler(EventData eventData);
-        public delegate void MenuEventHandler(EventData eventData);
-        public delegate void ScreenEventHandler(EventData eventData);
-        public delegate void OpacityEventHandler(EventData eventData);
-        public delegate void AddActorEventHandler(EventData eventData);
-        public delegate void RemoveActorEventHandler(EventData eventData);
-        public delegate void PlayerEventHandler(EventData eventData);
-        public delegate void PlayerWinEventHandler(EventData eventData);
-        public delegate void GlobalSoundEventHandler(EventData eventData);
-        public delegate void Sound3DEventHandler(EventData eventData);
-        public delegate void Sound2DEventHandler(EventData eventData);
-        public delegate void ObjectPickingEventHandler(EventData eventData);
-        public delegate void MouseEventHandler(EventData eventData);
-        public delegate void VideoEventHandler(EventData eventData);
-        public delegate void DebugEventHandler(EventData eventData);
-        public delegate void InteractHandler(EventData eventData);
-        public delegate void mouseLockingHandler(EventData eventData);
-        public delegate void PuzzleHandler(EventData eventData);
-        public delegate void RiddleHandler(EventData eventData);
-        public delegate void RiddleAnswerHandler(EventData eventData);
-        public delegate void PopUpHandler(EventData eventData);
+
         public delegate void CutsceneHandler(EventData eventData);
-        public delegate void AnimationHandler(EventData eventData);
+
+        public delegate void DebugEventHandler(EventData eventData);
+
+        public delegate void GlobalSoundEventHandler(EventData eventData);
+
+        public delegate void InteractHandler(EventData eventData);
+
+        public delegate void MenuEventHandler(EventData eventData);
+
+        public delegate void MouseEventHandler(EventData eventData);
+
+        public delegate void mouseLockingHandler(EventData eventData);
+
         public delegate void ObjectiveHandler(EventData eventData);
+
+        public delegate void ObjectPickingEventHandler(EventData eventData);
+
+        public delegate void OpacityEventHandler(EventData eventData);
+
+        public delegate void PlayerEventHandler(EventData eventData);
+
+        public delegate void PlayerWinEventHandler(EventData eventData);
+
+        public delegate void PopUpHandler(EventData eventData);
+
+        public delegate void PuzzleHandler(EventData eventData);
+
+        public delegate void RemoveActorEventHandler(EventData eventData);
+
         public delegate void ResetHandler(EventData eventData);
-        
+
+        public delegate void RiddleAnswerHandler(EventData eventData);
+
+        public delegate void RiddleHandler(EventData eventData);
+
+        public delegate void ScreenEventHandler(EventData eventData);
+
+        public delegate void Sound2DEventHandler(EventData eventData);
+
+        public delegate void Sound3DEventHandler(EventData eventData);
+
+        public delegate void VideoEventHandler(EventData eventData);
+
+        //See Queue doc - https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.queue-1?view=netframework-4.7.1
+        private static Queue<EventData> queue; //stores events in arrival sequence
+
+        private static HashSet<EventData>
+            uniqueSet; //prevents the same event from existing in the stack for a single update cycle (e.g. when playing a sound based on keyboard press)
+
+        private EventData eventData;
+
+
+        public EventDispatcher(Game game, int initialSize)
+            : base(game)
+        {
+            queue = new Queue<EventData>(initialSize);
+            uniqueSet = new HashSet<EventData>(new EventDataEqualityComparer());
+        }
+
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
@@ -77,13 +113,6 @@ namespace GDLibrary
         public event ObjectiveHandler ObjectiveChanged;
         public event ResetHandler Reset;
 
-
-        public EventDispatcher(Game game, int initialSize)
-            : base(game)
-        {
-            queue = new Queue<EventData>(initialSize);
-            uniqueSet = new HashSet<EventData>(new EventDataEqualityComparer());
-        }
         public static void Publish(EventData eventData)
         {
             //this prevents the same event being added multiple times within a single update e.g. 10x bell ring sounds
@@ -94,10 +123,9 @@ namespace GDLibrary
             }
         }
 
-        EventData eventData;
         public override void Update(GameTime gameTime)
-        { 
-            for (int i = 0; i < queue.Count; i++)
+        {
+            for (var i = 0; i < queue.Count; i++)
             {
                 eventData = queue.Dequeue();
                 Process(eventData);
@@ -207,8 +235,6 @@ namespace GDLibrary
                 case EventCategoryType.Reset:
                     OnReset(eventData);
                     break;
-                default:
-                    break;
             }
         }
 
@@ -226,11 +252,12 @@ namespace GDLibrary
         {
             lockChanged?.Invoke(eventData);
         }
-        
+
         private void OnReset(EventData eventData)
         {
             Reset?.Invoke(eventData);
         }
+
         //called when a menu change is requested
         protected virtual void OnMenu(EventData eventData)
         {
@@ -277,7 +304,7 @@ namespace GDLibrary
         //called when a player related event occurs (e.g. win, lose, health increase)
         protected virtual void OnPlayer(EventData eventData)
         {
-            System.Diagnostics.Debug.WriteLine("getting event");
+            Debug.WriteLine("getting event");
             PlayerChanged?.Invoke(eventData);
         }
 
@@ -347,12 +374,12 @@ namespace GDLibrary
         {
             cutsceneChanged?.Invoke(eventData);
         }
-        
+
         protected virtual void OnAnimation(EventData eventData)
         {
             animationTriggered?.Invoke(eventData);
         }
-        
+
         protected virtual void OnObjective(EventData eventData)
         {
             ObjectiveChanged?.Invoke(eventData);

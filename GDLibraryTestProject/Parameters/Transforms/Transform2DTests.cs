@@ -11,8 +11,8 @@ namespace GDLibraryTestProject
         [TestMethod]
         public void CloneTest()
         {
-            Transform2D original = new Transform2D(new Vector2(10, 10), 45, Vector2.One, Vector2.Zero, new Integer2(10, 20));
-            Transform2D clone = (Transform2D)original.Clone();
+            var original = new Transform2D(new Vector2(10, 10), 45, Vector2.One, Vector2.Zero, new Integer2(10, 20));
+            var clone = (Transform2D) original.Clone();
             Assert.AreEqual(original, clone);
 
             //change clone and should be distince from original because its a deep copy
@@ -24,11 +24,11 @@ namespace GDLibraryTestProject
         public void ResetTest()
         {
             //original and a copy for comparison after reset
-            Transform2D original = new Transform2D(new Vector2(10, 10), 45, Vector2.One, Vector2.Zero, new Integer2(10, 20));
-            Transform2D clone = (Transform2D)original.Clone();
+            var original = new Transform2D(new Vector2(10, 10), 45, Vector2.One, Vector2.Zero, new Integer2(10, 20));
+            var clone = (Transform2D) original.Clone();
 
             //change somethings in the original
-            
+
             original.Translation = Vector2.Zero;
             original.RotationInDegrees = 45;
             original.Scale = new Vector2(45, 55);
@@ -40,6 +40,5 @@ namespace GDLibraryTestProject
             //ensure its been reset
             Assert.AreEqual(original, clone);
         }
-
     }
 }

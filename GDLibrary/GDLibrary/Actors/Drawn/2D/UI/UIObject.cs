@@ -6,37 +6,33 @@ namespace GDLibrary
     public class UIObject : DrawnActor2D
     {
         #region Fields
-        private StatefulBool mouseOverState;
-        #endregion
 
-        #region Properties
-        public StatefulBool MouseOverState
-        {
-            get
-            {
-                return this.mouseOverState;
-            }
-        }
         #endregion
 
         public UIObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
             Color color, SpriteEffects spriteEffects, float layerDepth)
             : base(id, actorType, transform, statusType, color, spriteEffects, layerDepth)
         {
-            this.mouseOverState = new StatefulBool(2); 
+            MouseOverState = new StatefulBool(2);
         }
+
+        #region Properties
+
+        public StatefulBool MouseOverState { get; private set; }
+
+        #endregion
 
         public override int GetHashCode()
         {
-            int hash = 1;
-            hash = hash * 31 + this.mouseOverState.GetHashCode();
+            var hash = 1;
+            hash = hash * 31 + MouseOverState.GetHashCode();
             hash = hash * 17 + base.GetHashCode();
             return hash;
         }
 
         public override bool Remove()
         {
-            this.mouseOverState = null;
+            MouseOverState = null;
             return base.Remove();
         }
     }

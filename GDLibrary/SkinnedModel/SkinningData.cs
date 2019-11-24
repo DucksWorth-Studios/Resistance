@@ -1,32 +1,36 @@
 #region File Description
+
 //-----------------------------------------------------------------------------
 // SkinningData.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
 #endregion
 
 #region Using Statements
+
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+
 #endregion
 
 namespace SkinnedModel
 {
     /// <summary>
-    /// Combines all the data needed to render and animate a skinned object.
-    /// This is typically stored in the Tag property of the Model being animated.
+    ///     Combines all the data needed to render and animate a skinned object.
+    ///     This is typically stored in the Tag property of the Model being animated.
     /// </summary>
     public class SkinningData
     {
         /// <summary>
-        /// Constructs a new skinning data object.
+        ///     Constructs a new skinning data object.
         /// </summary>
         public SkinningData(Dictionary<string, AnimationClip> animationClips,
-                            List<Matrix> bindPose, List<Matrix> inverseBindPose,
-                            List<int> skeletonHierarchy)
+            List<Matrix> bindPose, List<Matrix> inverseBindPose,
+            List<int> skeletonHierarchy)
         {
             AnimationClips = animationClips;
             BindPose = bindPose;
@@ -36,7 +40,7 @@ namespace SkinnedModel
 
 
         /// <summary>
-        /// Private constructor for use by the XNB deserializer.
+        ///     Private constructor for use by the XNB deserializer.
         /// </summary>
         private SkinningData()
         {
@@ -44,33 +48,33 @@ namespace SkinnedModel
 
 
         /// <summary>
-        /// Gets a collection of animation clips. These are stored by name in a
-        /// dictionary, so there could for instance be clips for "Walk", "Run",
-        /// "JumpReallyHigh", etc.
+        ///     Gets a collection of animation clips. These are stored by name in a
+        ///     dictionary, so there could for instance be clips for "Walk", "Run",
+        ///     "JumpReallyHigh", etc.
         /// </summary>
         [ContentSerializer]
-        public Dictionary<string, AnimationClip> AnimationClips { get; private set; }
+        public Dictionary<string, AnimationClip> AnimationClips { get; }
 
 
         /// <summary>
-        /// Bindpose matrices for each bone in the skeleton,
-        /// relative to the parent bone.
+        ///     Bindpose matrices for each bone in the skeleton,
+        ///     relative to the parent bone.
         /// </summary>
         [ContentSerializer]
-        public List<Matrix> BindPose { get; private set; }
+        public List<Matrix> BindPose { get; }
 
 
         /// <summary>
-        /// Vertex to bonespace transforms for each bone in the skeleton.
+        ///     Vertex to bonespace transforms for each bone in the skeleton.
         /// </summary>
         [ContentSerializer]
-        public List<Matrix> InverseBindPose { get; private set; }
+        public List<Matrix> InverseBindPose { get; }
 
 
         /// <summary>
-        /// For each bone in the skeleton, stores the index of the parent bone.
+        ///     For each bone in the skeleton, stores the index of the parent bone.
         /// </summary>
         [ContentSerializer]
-        public List<int> SkeletonHierarchy { get; private set; }
+        public List<int> SkeletonHierarchy { get; }
     }
 }

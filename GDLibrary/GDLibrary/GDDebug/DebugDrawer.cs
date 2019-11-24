@@ -7,34 +7,17 @@ Bugs:			None
 Fixes:			None
 Mods:           None
 */
+
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Text;
 
 namespace GDLibrary
 {
     public class DebugDrawer : PausableDrawableGameComponent
     {
-
-        #region Fields 
-        //statics
-        private static readonly float DefaultLayerDepth = 0;
-        private ManagerParameters managerParameters;
-        private SpriteFont spriteFont;
-        private SpriteBatch spriteBatch;
-        private Color textColor;
-        private Vector2 textHoriVertOffset;
-        private int totalElapsedTime;
-        private Vector2 textPosition;
-        private int frameCount;
-        private StringBuilder fpsText;
-        private float textHeight;
-        #endregion
-
-        #region Properties 
-        #endregion
         public DebugDrawer(Game game, ManagerParameters managerParameters,
-            SpriteBatch spriteBatch, SpriteFont spriteFont, Color textColor, Vector2 textHoriVertOffset, 
+            SpriteBatch spriteBatch, SpriteFont spriteFont, Color textColor, Vector2 textHoriVertOffset,
             EventDispatcher eventDispatcher,
             StatusType statusType)
             : base(game, eventDispatcher, statusType)
@@ -45,9 +28,9 @@ namespace GDLibrary
             this.textColor = textColor;
             this.textHoriVertOffset = textHoriVertOffset;
 
-            this.fpsText = new StringBuilder("FPS:N/A");
+            fpsText = new StringBuilder("FPS:N/A");
             //measure string height so we know how much vertical spacing is needed for multi-line debug info
-            this.textHeight = this.spriteFont.MeasureString(this.fpsText).Y;
+            textHeight = this.spriteFont.MeasureString(fpsText).Y;
         }
 
         protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
@@ -56,16 +39,93 @@ namespace GDLibrary
             base.RegisterForEventHandling(eventDispatcher);
         }
 
+        protected override void ApplyUpdate(GameTime gameTime)
+        {
+            //total time since last update to FPS text
+            totalElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
+            frameCount++;
+
+            //if 1 second has elapsed
+            if (totalElapsedTime >= 1000)
+            {
+                //set the FPS text
+                fpsText = new StringBuilder("FPS:" + frameCount);
+                //reset the count and the elapsed time
+                totalElapsedTime = 0;
+                frameCount = 0;
+            }
+        }
+
+        protected override void ApplyDraw(GameTime gameTime)
+        {
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp,
+                DepthStencilState.Default, null);
+            if (managerParameters.ScreenManager.ScreenType == ScreenUtility.ScreenType.SingleScreen)
+                DrawDebugInfo(managerParameters.CameraManager.ActiveCamera);
+            else
+                foreach (var camera in managerParameters.CameraManager)
+                    DrawDebugInfo(camera);
+            spriteBatch.End();
+        }
+
+        private void DrawDebugInfo(Camera3D camera)
+        {
+            textPosition = new Vector2(camera.Viewport.X, camera.Viewport.Y) + textHoriVertOffset;
+            spriteBatch.DrawString(spriteFont, "ID:" + camera.ID, textPosition, textColor,
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
+
+            textPosition.Y += textHeight;
+            spriteBatch.DrawString(spriteFont, fpsText, textPosition, textColor,
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
+
+            textPosition.Y += textHeight;
+            spriteBatch.DrawString(spriteFont,
+                "Pos:" + MathUtility.Round(camera.Transform.Translation, 1), textPosition, textColor,
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
+
+            textPosition.Y += textHeight;
+            spriteBatch.DrawString(spriteFont,
+                "Look:" + MathUtility.Round(camera.Transform.Look, 1), textPosition, textColor,
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
+
+            textPosition.Y += textHeight;
+            spriteBatch.DrawString(spriteFont,
+                "Nr. Drawn Obj.:" + managerParameters.ObjectManager.DebugDrawCount, textPosition, textColor,
+                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
+        }
+
+        #region Fields 
+
+        //statics
+        private static readonly float DefaultLayerDepth = 0;
+        private readonly ManagerParameters managerParameters;
+        private readonly SpriteFont spriteFont;
+        private readonly SpriteBatch spriteBatch;
+        private readonly Color textColor;
+        private readonly Vector2 textHoriVertOffset;
+        private int totalElapsedTime;
+        private Vector2 textPosition;
+        private int frameCount;
+        private StringBuilder fpsText;
+        private readonly float textHeight;
+
+        #endregion
+
+        #region Properties 
+
+        #endregion
+
         #region Event Handling
+
         //enable dynamic show/hide of debug info
         private void EventDispatcher_DebugChanged(EventData eventData)
         {
-            if(eventData.EventType == EventActionType.OnToggleDebug)
+            if (eventData.EventType == EventActionType.OnToggleDebug)
             {
-                if (this.StatusType == StatusType.Off)
-                    this.StatusType = StatusType.Drawn | StatusType.Update;
+                if (StatusType == StatusType.Off)
+                    StatusType = StatusType.Drawn | StatusType.Update;
                 else
-                    this.StatusType = StatusType.Off;
+                    StatusType = StatusType.Off;
             }
         }
 
@@ -74,81 +134,17 @@ namespace GDLibrary
         {
             //did the event come from the main menu and is it a start game event
             if (eventData.EventType == EventActionType.OnStart)
-            {
                 //turn on update and draw i.e. hide the menu
-                this.StatusType = StatusType.Update | StatusType.Drawn;
-            }
+                StatusType = StatusType.Update | StatusType.Drawn;
             //did the event come from the main menu and is it a start game event
             else if (eventData.EventType == EventActionType.OnPause)
-            {
                 //turn off update and draw i.e. show the menu since the game is paused
-                this.StatusType = StatusType.Off;
-            }
+                StatusType = StatusType.Off;
             else if (eventData.EventType == EventActionType.OnLose)
-            {
                 //turn off update and draw i.e. show the menu since the game is paused
-                this.StatusType = StatusType.Off;
-            }
+                StatusType = StatusType.Off;
         }
+
         #endregion
-
-        protected override void ApplyUpdate(GameTime gameTime)
-        {
-
-            //total time since last update to FPS text
-            this.totalElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
-            this.frameCount++;
-
-            //if 1 second has elapsed
-            if (this.totalElapsedTime >= 1000)
-            {
-                //set the FPS text
-                this.fpsText = new StringBuilder("FPS:" + this.frameCount);
-                //reset the count and the elapsed time
-                this.totalElapsedTime = 0;
-                this.frameCount = 0;
-            }
-        }
-
-        protected override void ApplyDraw(GameTime gameTime)
-        {
-            this.spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, null);
-            if (this.managerParameters.ScreenManager.ScreenType == ScreenUtility.ScreenType.SingleScreen)
-            {
-                DrawDebugInfo(this.managerParameters.CameraManager.ActiveCamera);
-            }
-            else
-            {
-                foreach (Camera3D camera in this.managerParameters.CameraManager)
-                    DrawDebugInfo(camera);
-            }
-            this.spriteBatch.End();
-        }
-
-        private void DrawDebugInfo(Camera3D camera)
-        {     
-            this.textPosition = new Vector2(camera.Viewport.X, camera.Viewport.Y) + this.textHoriVertOffset;
-            this.spriteBatch.DrawString(this.spriteFont, "ID:" + camera.ID, this.textPosition, this.textColor, 
-                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth); 
-
-            this.textPosition.Y += this.textHeight;
-            this.spriteBatch.DrawString(this.spriteFont, this.fpsText, this.textPosition, this.textColor,
-                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
-
-            this.textPosition.Y += this.textHeight;
-            this.spriteBatch.DrawString(this.spriteFont, 
-                "Pos:" + MathUtility.Round(camera.Transform.Translation, 1).ToString(), this.textPosition, this.textColor,
-                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
-
-            this.textPosition.Y += this.textHeight;
-            this.spriteBatch.DrawString(this.spriteFont,
-                "Look:" + MathUtility.Round(camera.Transform.Look, 1).ToString(), this.textPosition, this.textColor,
-                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
-
-            this.textPosition.Y += this.textHeight;
-            this.spriteBatch.DrawString(this.spriteFont,
-                "Nr. Drawn Obj.:" + this.managerParameters.ObjectManager.DebugDrawCount, this.textPosition, this.textColor,
-                0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
-        }
     }
 }
