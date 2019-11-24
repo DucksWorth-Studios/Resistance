@@ -1614,7 +1614,6 @@ namespace GDApp
             this.cameraManager.SetActiveCamera(pred);
 
             
-            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
         }
 
         
