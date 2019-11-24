@@ -259,6 +259,10 @@ namespace GDLibrary
             this.isDirty = true;
         }
 
+        /*
+         * Author: Cameron
+         * This will apply rotation to an object around the X axis
+         */
         public void RotateAroundXBy(float magnitude) //in degrees
         {
             this.rotation.X += magnitude;
@@ -266,6 +270,10 @@ namespace GDLibrary
             this.isDirty = true;
         }
 
+        /*
+         * Author: Cameron
+         * This will apply rotation to an object around the Z axis
+         */
         public void RotateAroundZBy(float magnitude) //in degrees
         {
             this.rotation.Z += magnitude;
@@ -273,6 +281,10 @@ namespace GDLibrary
             this.isDirty = true;
         }
 
+        /*
+         * Author: Cameron
+         * This will apply rotation to an object around the Z axis
+         */
         public void RotateAroundZBy(Vector3 lookVector, float magnitude) //in degrees
         {
             this.rotation.Z += magnitude;

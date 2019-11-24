@@ -1,7 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*
+Function: 		Holds a list of timers that get updated every second
+Author: 		Cameron
+*/
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Microsoft.Xna.Framework;
 
 namespace GDLibrary
 {
@@ -17,7 +23,7 @@ namespace GDLibrary
 
         #region Constructors
 
-        public TimerManager(TimerUtility timer, Game game, EventDispatcher eventDispatcher, StatusType statusType) : 
+        public TimerManager(TimerUtility timer, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
             base(game, eventDispatcher, statusType)
         {
             this.timerList = new List<TimerUtility>(0);
@@ -37,7 +43,8 @@ namespace GDLibrary
             RegisterForEventHandling(eventDispatcher);
         }
 
-        public TimerManager(string id, int hours, int minutes, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
+        public TimerManager(string id, int hours, int minutes, Game game, EventDispatcher eventDispatcher,
+            StatusType statusType) :
             base(game, eventDispatcher, statusType)
         {
             this.timerList = new List<TimerUtility>(0);
@@ -47,7 +54,8 @@ namespace GDLibrary
             RegisterForEventHandling(eventDispatcher);
         }
 
-        public TimerManager(string id, int hours, int minutes, int seconds, Game game, EventDispatcher eventDispatcher, StatusType statusType) :
+        public TimerManager(string id, int hours, int minutes, int seconds, Game game, EventDispatcher eventDispatcher,
+            StatusType statusType) :
             base(game, eventDispatcher, statusType)
         {
             this.timerList = new List<TimerUtility>(0);
@@ -107,7 +115,6 @@ namespace GDLibrary
         public int RemoveAll(Predicate<TimerUtility> predicate)
         {
             return this.timerList.RemoveAll(predicate);
-
         }
 
         #region GetEnumerator
@@ -155,6 +162,7 @@ namespace GDLibrary
                 }
             }
         }
+
         #endregion
 
         public override void Update(GameTime gameTime)
@@ -192,11 +200,13 @@ namespace GDLibrary
                                 {
                                     if (timer.ID.Equals("Lose Timer") && !loseEventFired)
                                     {
-                                        EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.Player));
+                                        EventDispatcher.Publish(new EventData(EventActionType.OnLose,
+                                            EventCategoryType.Player));
                                         loseEventFired = true;
                                     }
                                     else
-                                        System.Diagnostics.Debug.WriteLine("Event doesn't exist for this timer " + timer.ID);
+                                        Debug.WriteLine(
+                                            "Event doesn't exist for this timer " + timer.ID);
                                 }
                                 else
                                     throw new Exception("Hour check has gone wrong");
@@ -206,6 +216,7 @@ namespace GDLibrary
                         }
                         else
                             throw new Exception("Second check has gone wrong");
+
                         /*
                         System.Diagnostics.Debug.WriteLine("Old - " + tempHrs + ":" + tempMins + ":" + tempSecs +
                                                            "\tNew - " + timer);
@@ -214,6 +225,5 @@ namespace GDLibrary
                 }
             }
         }
-
     }
 }
