@@ -16,7 +16,7 @@ namespace GDLibrary
         private CollidableObject parent;
 
         /*
-         * Author: Tomas
+         * Authors: Cameron & Tomas
          */
         public BookcaseController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id,
             controllerType)

@@ -1,4 +1,9 @@
-﻿using System.Security.Policy;
+﻿/*
+Function: 		Rotates the door model based on animation triggers
+Author: 		Cameron
+*/
+
+using System.Security.Policy;
 using JigLibX.Collision;
 using JigLibX.Geometry;
 using Microsoft.Xna.Framework;
@@ -11,6 +16,9 @@ namespace GDLibrary
         private bool opening = false;
         private CollidableObject parent;
         
+        /*
+         * Authors: Cameron & Tomas
+         */
         public DoorController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id, controllerType)
         {
             RegisterForEventHandling(eventDispatcher);
