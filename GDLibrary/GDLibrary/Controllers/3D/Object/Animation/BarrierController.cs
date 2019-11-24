@@ -2,9 +2,8 @@
 Function: 		Rotates the barrier models based on animation triggers
 Author: 		Cameron
 */
-using JigLibX.Math;
+
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 
 namespace GDLibrary
 {
@@ -17,7 +16,8 @@ namespace GDLibrary
         /*
          * Authors: Cameron & Tomas
          */
-        public BarrierController(bool rotateClockwise, string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id, controllerType)
+        public BarrierController(bool rotateClockwise, string id, ControllerType controllerType,
+            EventDispatcher eventDispatcher) : base(id, controllerType)
         {
             this.rotateClockwise = rotateClockwise;
             RegisterForEventHandling(eventDispatcher);
