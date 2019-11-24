@@ -1,4 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*
+Function: 		Holds a list of timers that get updated every second
+Author: 		Cameron
+*/
+
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
