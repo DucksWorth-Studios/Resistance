@@ -1,4 +1,9 @@
-﻿namespace GDLibrary
+﻿/*
+Function: 		Class to hold values for a timer
+Author: 		Cameron
+*/
+
+namespace GDLibrary
 {
     public class TimerUtility
     {
