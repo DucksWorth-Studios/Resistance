@@ -478,7 +478,8 @@ namespace GDApp
             Components.Add(cutsceneTimer);
 
 
-            this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
+            this.timerManager = new TimerManager(AppData.LoseTimerID, AppData.LoseTimerHours, AppData.LoseTimerMinutes, 
+                AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
 
 
@@ -1601,6 +1602,7 @@ namespace GDApp
             resetLogicPuzzleModels();
             resetRiddleAnswer();
             resetFPCamera();
+            resetLoseTimer();
         }
         #endregion
 
@@ -1637,6 +1639,7 @@ namespace GDApp
             item.StatusType = StatusType.Drawn;
         }
 
+
         private void resetFPCamera()
         {
            Integer2 screenResolution = ScreenUtility.HD720;
@@ -1649,6 +1652,26 @@ namespace GDApp
             this.cameraManager.SetActiveCamera(pred);
             EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
         }
+
+        
+        /*
+         * Author: Cameron
+         * This will be used to reset the lose timer to its default value when reset is called
+         */
+        private void resetLoseTimer()
+        {
+            foreach (TimerUtility timer in timerManager.TimerList)
+            {
+                if (timer.ID.Equals(AppData.LoseTimerID))
+                {
+                    timer.Hours = AppData.LoseTimerHours;
+                    timer.Minutes = AppData.LoseTimerMinutes;
+                    timer.Seconds = AppData.LoseTimerSeconds;
+                }
+            }
+        }
+        
+
         #endregion
         #region Menu & UI
 
