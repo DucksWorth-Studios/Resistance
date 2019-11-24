@@ -8,6 +8,7 @@ namespace GDLibrary
     {
         private bool opened = false;
         private bool opening = false;
+        private CollidableObject parent;
         
         public BookcaseController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id, controllerType)
         {
@@ -19,6 +20,7 @@ namespace GDLibrary
         protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
         {
             eventDispatcher.animationTriggered += RotateBookcase;
+            eventDispatcher.Reset += Reset;
             base.RegisterForEventHandling(eventDispatcher);
         }
 
@@ -27,12 +29,30 @@ namespace GDLibrary
             if (eventData.EventType == EventActionType.OpenBookcase)
                 opening = true;
         }
+        
+        protected void Reset(EventData eventData)
+        {
+            if (this.parent != null)
+            {
+                opened = false;
+                this.parent.Transform.RotateAroundYBy(-90);
+                
+                //TODO - Find a better way of updating collision
+                parent.Collision.RemoveAllPrimitives();
+                parent.Collision.AddPrimitive(new Box(new Vector3(-64, 0, -102), Matrix.Identity, 
+                        new Vector3(8f, 30.0f, 35.0f)),
+                    new MaterialProperties(0.2f, 0.8f, 0.7f));
+            }
+        }
 
         #endregion
 
         public override void Update(GameTime gameTime, IActor actor)
         {
             CollidableObject parent = actor as CollidableObject;
+
+            if (this.parent == null)
+                this.parent = parent;
 
             if (opening && !opened)
             {
