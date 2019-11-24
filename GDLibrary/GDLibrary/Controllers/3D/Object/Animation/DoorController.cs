@@ -3,7 +3,6 @@ Function: 		Rotates the door model based on animation triggers
 Author: 		Cameron
 */
 
-using System.Security.Policy;
 using JigLibX.Collision;
 using JigLibX.Geometry;
 using Microsoft.Xna.Framework;
@@ -15,15 +14,16 @@ namespace GDLibrary
         private bool opened = false;
         private bool opening = false;
         private CollidableObject parent;
-        
+
         /*
          * Authors: Cameron & Tomas
          */
-        public DoorController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id, controllerType)
+        public DoorController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id,
+            controllerType)
         {
             RegisterForEventHandling(eventDispatcher);
         }
-        
+
         #region Event Handeling
 
         protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
@@ -45,11 +45,11 @@ namespace GDLibrary
             {
                 opened = false;
                 this.parent.Transform.RotateAroundYBy(90);
-                
+
                 //TODO - Find a better way of updating collision
                 parent.Collision.RemoveAllPrimitives();
                 parent.Collision.AddPrimitive(new Box(new Vector3(0.2f, 0, -18), Matrix.Identity,
-                        new Vector3(40,40,2f)),
+                        new Vector3(40, 40, 2)),
                     new MaterialProperties(0.2f, 0.8f, 0.7f));
             }
         }
@@ -62,7 +62,7 @@ namespace GDLibrary
 
             if (this.parent == null)
                 this.parent = parent;
-            
+
             if (opening && !opened)
             {
                 if (parent.Transform.Rotation.Y > 90)
@@ -71,12 +71,12 @@ namespace GDLibrary
                 {
                     opened = true;
                     opening = false;
-                    
+
                     parent.Collision.RemoveAllPrimitives();
 
                     //NCMG
                     parent.Collision.AddPrimitive(new Box(new Vector3(0.2f, 0, -18), Matrix.Identity,
-                            new Vector3(2f,15,15)),
+                            new Vector3(2, 15, 15)),
                         new MaterialProperties(0.2f, 0.8f, 0.7f));
                 }
             }
