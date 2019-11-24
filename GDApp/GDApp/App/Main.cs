@@ -122,6 +122,7 @@ namespace GDApp
             InitializeManagers(screenResolution, screenType, isMouseVisible, numberOfGamePadPlayers);
 
             //menu and UI elements
+            
             AddMenuElements();
             AddUIElements();
             AddGameOverMenu();
@@ -445,6 +446,7 @@ namespace GDApp
             this.menuManager = new MyAppMenuManager(this, this.mouseManager, this.keyboardManager, this.cameraManager, spriteBatch, this.eventDispatcher, StatusType.Off);
             //set the main menu to be the active menu scene
             this.menuManager.SetActiveList("main menu");
+            //this.menuManager.SetActiveList("lose-screen");
             Components.Add(this.menuManager);
 
             //ui (e.g. reticule, inventory, progress)
@@ -1599,6 +1601,7 @@ namespace GDApp
         {
             resetLogicPuzzleModels();
             resetRiddleAnswer();
+            resetFPCamera();
             resetLoseTimer();
         }
         #endregion
@@ -1635,6 +1638,21 @@ namespace GDApp
             item.ActorType = ActorType.CollidableProp;
             item.StatusType = StatusType.Drawn;
         }
+
+
+        private void resetFPCamera()
+        {
+           Integer2 screenResolution = ScreenUtility.HD720;
+            Predicate<Camera3D> pred = s => s.ID == "collidable first person camera";
+            this.cameraManager.Remove(pred);
+
+            InitializeCollidableFirstPersonDemo(screenResolution);
+
+            
+            this.cameraManager.SetActiveCamera(pred);
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
+        }
+
         
         /*
          * Author: Cameron
@@ -1653,6 +1671,7 @@ namespace GDApp
             }
         }
         
+
         #endregion
         #region Menu & UI
 
@@ -1980,7 +1999,7 @@ namespace GDApp
             this.menuManager.Add(sceneID,picture);
 
             texture = this.textureDictionary["restart-Button"];
-            buttonID = "";
+            buttonID = "restart-Button";
             buttonText = "";
             position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, graphics.PreferredBackBufferHeight - texture.Height);
             transform = new Transform2D(position,
@@ -2056,7 +2075,7 @@ namespace GDApp
             this.menuManager.Add(sceneID, picture);
 
             texture = this.textureDictionary["restart-Button"];
-            buttonID = "";
+            buttonID = "restart-Button";
             buttonText = "";
             float num = texture.Height / 2;
             position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, (graphics.PreferredBackBufferHeight / 2) + num);
@@ -2280,11 +2299,11 @@ namespace GDApp
             if(this.keyboardManager.IsKeyDown(Keys.P))
             {
                 //EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
-                 EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
-                EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
+                // EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
+                //EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateTopBarrier, EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateBottomBarrier, EventCategoryType.Animator));
-                //EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "collidable first person camera" }));
+                EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "collidable first person camera" }));
             }
             //exit using new gamepad manager
             if (this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
