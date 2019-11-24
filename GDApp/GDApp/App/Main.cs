@@ -81,6 +81,7 @@ namespace GDApp
         #region Properties
         #endregion
 
+
         #region Constructor
         public Main()
         {
@@ -758,41 +759,10 @@ namespace GDApp
 
 
 
-            ////add primitive objects - where developer defines the vertices manually
-            //InitializePrimitives();
+
 
         }
 
-        //private void InitializePrimitives()
-        //{
-        //    //get a copy of the effect parameters
-        //    BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnLitPrimitivesEffectID].Clone() as BasicEffectParameters;
-        //    effectParameters.Texture = this.textureDictionary["checkerboard"];
-        //    effectParameters.DiffuseColor = Color.Yellow;
-        //    effectParameters.Alpha = 0.4f;
-
-        //    //define location
-        //    Transform3D transform = new Transform3D(new Vector3(0, 40, 0), new Vector3(40, 4, 1));
-
-        //    //create primitive
-        //    PrimitiveObject primitiveObject = new PrimitiveObject("simple primitive", ActorType.Primitive,
-        //        transform, effectParameters, StatusType.Drawn | StatusType.Update, this.vertexDataDictionary[AppData.TexturedQuadID]);
-
-        //    PrimitiveObject clonedPrimitiveObject = null;
-
-        //    for (int i = 1; i <= 4; i++)
-        //    {
-        //        clonedPrimitiveObject = primitiveObject.Clone() as PrimitiveObject;
-        //        clonedPrimitiveObject.Transform.Translation += new Vector3(0, 5 * i, 0);
-
-        //        //we could also attach controllers here instead to give each a different rotation
-        //        clonedPrimitiveObject.AttachController(new RotationController("rot controller", ControllerType.Rotation, new Vector3(0.1f * i, 0, 0)));
-
-        //        //add to manager
-        //        this.objectManager.Add(clonedPrimitiveObject);
-        //    }
-
-        //}
 
         private void InitializeCollidableWalls(int worldScale)
         {
@@ -1077,27 +1047,7 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
         }
 
-        //private void InitializeCeilingLights()
-        //{
-        //    BasicEffectParameters effectParameters;
-        //    ModelObject modelObject = null, cloneModel = null;
 
-        //    effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-        //    effectParameters.Texture = this.textureDictionary["LightTexture"];
-
-        //    modelObject = new ModelObject("Ceiling light - ", ActorType.Decorator, Transform3D.Zero, effectParameters,
-        //        this.modelDictionary["lamp"]);
-
-        //    #region first ceiling light
-        //    cloneModel = (ModelObject)modelObject.Clone();
-        //    cloneModel.ID += 1;
-
-        //    cloneModel.Transform = new Transform3D(new Vector3(0, 20, 0), new Vector3(0, 0, 0), new Vector3(2.0f, 2.0f, 2.0f), 
-        //        Vector3.UnitX, Vector3.UnitY);
-
-        //    this.objectManager.Add(cloneModel);
-        //    #endregion
-        //}
 
         private void InitializeAmmoBoxes()
         {
@@ -1462,8 +1412,6 @@ namespace GDApp
         /*
         * Any Events That are to be initialised in main will happen in here
         */
-        /*This method is used to initialse all events related to the main.cs
-         */
         private void InitializeEvents()
         {
             this.eventDispatcher.InteractChanged += Interactive;
@@ -1597,6 +1545,10 @@ namespace GDApp
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.mouseLock));
         }
 
+        /**
+        * Author: Tomas
+        * used to reset all objects and cameras
+        */
         private void Reset(EventData eventData)
         {
             resetLogicPuzzleModels();
@@ -1607,7 +1559,10 @@ namespace GDApp
         #endregion
 
         #region Reset Functions
-
+        /**
+         * Author: Tomas
+         * Resets logic puzzle models to default state
+         */ 
         private void resetLogicPuzzleModels()
         {
             #region Reset Switches
@@ -1630,7 +1585,10 @@ namespace GDApp
             }
             #endregion
         }
-
+        /**
+         * Author: Tomas
+         * used to reset Answer Object to Collidable prop
+         */
         private void resetRiddleAnswer()
         {
             Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
@@ -1639,7 +1597,11 @@ namespace GDApp
             item.StatusType = StatusType.Drawn;
         }
 
-
+        /**
+         * Author: Tomas
+         * Resets The Fps camera by creating a new one and setting it as the active camera
+         * this helped avoid a bug where original camera would not reset properly
+         */
         private void resetFPCamera()
         {
            Integer2 screenResolution = ScreenUtility.HD720;
@@ -1650,7 +1612,8 @@ namespace GDApp
 
             
             this.cameraManager.SetActiveCamera(pred);
-            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
+
+            
         }
 
         
@@ -1720,44 +1683,6 @@ namespace GDApp
 
             this.menuManager.Add(sceneID, uiButtonObject);
 
-
-            //// controls button
-            ///
-
-
-            //string buttonID2 = "controlsbtn";
-            //Texture2D texture2 = this.textureDictionary["controls"];
-            //Vector2 position2 = new Vector2(graphics.PreferredBackBufferWidth / 2.0f,1);
-            //Transform2D transform2 = new Transform2D(position,
-            //    0, new Vector2(0.8f, 0.8f),
-            //    new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
-
-            //UIButtonObject uiButtonObject2 = new UIButtonObject(buttonID2, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
-            //    transform2, Color.Gray, SpriteEffects.None, 0.1f, texture2, buttonText,
-            //    this.fontDictionary["menu"],
-            //    Color.DarkBlue, new Vector2(0, 2));
-
-            //uiButtonObject2.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
-            //  new TrigonometricParameters(0.1f, 0.2f, 1)));
-            //uiButtonObject2.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-            //        new TrigonometricParameters(1, 0.4f, 0), Color.Lavender, Color.LavenderBlush));
-
-            //this.menuManager.Add(sceneID, uiButtonObject2);
-
-
-
-
-
-          
-
-
-
-
-
-
-
-
-
             //add exit button - clone the audio button then just reset texture, ids etc in all the clones
             clone = (UIButtonObject)uiButtonObject.Clone();
             clone.ID = "exitbtn";
@@ -1793,103 +1718,6 @@ namespace GDApp
             clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
                     new TrigonometricParameters(1, 0.4f, 0), Color.Indigo, Color.Violet));
             this.menuManager.Add(sceneID, clone);
-
-
-
-
-
-            /*
-            #region Audio Menu
-            sceneID = "audio menu";
-
-            //retrieve the audio menu background texture
-            texture = this.textureDictionary["audiomenu"];
-            //scale the texture to fit the entire screen
-            scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
-                (float)graphics.PreferredBackBufferHeight / texture.Height);
-            transform = new Transform2D(scale);
-            this.menuManager.Add(sceneID, new UITextureObject("audiomenuTexture", ActorType.UIStaticTexture,
-                StatusType.Drawn, //notice we dont need to update a static texture
-                transform, Color.White, SpriteEffects.None,
-                1, //depth is 1 so its always sorted to the back of other menu elements
-                texture));
-
-
-            //add volume up button - clone the audio button then just reset texture, ids etc in all the clones
-            clone = (UIButtonObject)uiButtonObject.Clone();
-            clone.ID = "volumeUpbtn";
-            clone.Text = "Volume Up";
-            //change the texture blend color
-            clone.Color = Color.LightPink;
-            this.menuManager.Add(sceneID, clone);
-
-            //add volume down button - clone the audio button then just reset texture, ids etc in all the clones
-            clone = (UIButtonObject)uiButtonObject.Clone();
-            //move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(0, verticalBtnSeparation);
-            clone.ID = "volumeDownbtn";
-            clone.Text = "Volume Down";
-            //change the texture blend color
-            clone.Color = Color.LightGreen;
-            this.menuManager.Add(sceneID, clone);
-
-            //add volume mute button - clone the audio button then just reset texture, ids etc in all the clones
-            clone = (UIButtonObject)uiButtonObject.Clone();
-            //move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(0, 2 * verticalBtnSeparation);
-            clone.ID = "volumeMutebtn";
-            clone.Text = "Volume Mute";
-            //change the texture blend color
-            clone.Color = Color.LightBlue;
-            this.menuManager.Add(sceneID, clone);
-
-            //add volume mute button - clone the audio button then just reset texture, ids etc in all the clones
-            clone = (UIButtonObject)uiButtonObject.Clone();
-            //move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(0, 3 * verticalBtnSeparation);
-            clone.ID = "volumeUnMutebtn";
-            clone.Text = "Volume Un-mute";
-            //change the texture blend color
-            clone.Color = Color.LightSalmon;
-            this.menuManager.Add(sceneID, clone);
-
-            //add back button - clone the audio button then just reset texture, ids etc in all the clones
-            clone = (UIButtonObject)uiButtonObject.Clone();
-            //move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(0, 4 * verticalBtnSeparation);
-            clone.ID = "backbtn";
-            clone.Text = "Back";
-            //change the texture blend color
-            clone.Color = Color.LightYellow;
-            this.menuManager.Add(sceneID, clone);
-            #endregion
-
-            #region Controls Menu
-            sceneID = "controls menu";
-
-            //retrieve the controls menu background texture
-            texture = this.textureDictionary["controlsmenu"];
-            //scale the texture to fit the entire screen
-            scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
-                (float)graphics.PreferredBackBufferHeight / texture.Height);
-            transform = new Transform2D(scale);
-            this.menuManager.Add(sceneID, new UITextureObject("controlsmenuTexture", ActorType.UIStaticTexture,
-                StatusType.Drawn, //notice we dont need to update a static texture
-                transform, Color.White, SpriteEffects.None,
-                1, //depth is 1 so its always sorted to the back of other menu elements
-                texture));
-
-            //add back button - clone the audio button then just reset texture, ids etc in all the clones
-            clone = (UIButtonObject)uiButtonObject.Clone();
-            move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(0, 9 * verticalBtnSeparation);
-            clone.ID = "backbtn";
-            clone.Text = "Back";
-            change the texture blend color
-            clone.Color = Color.LightYellow;
-            this.menuManager.Add(sceneID, clone);
-            #endregion
-    */
 
             #region Pause Menu
             sceneID = "pause menu";
@@ -1963,6 +1791,10 @@ namespace GDApp
 
         }
 
+        /**
+         * Author: Tomas
+         * Simple Game Over Menu
+         */
         private void AddGameOverMenu()
         {
             string sceneID, buttonID, buttonText;
@@ -2038,6 +1870,10 @@ namespace GDApp
 
         }
 
+        /**
+        * Author: Tomas
+        * Simple Win Menu
+        */
         private void AddWinMenu()
         {
 
