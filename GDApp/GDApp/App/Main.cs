@@ -2275,12 +2275,12 @@ namespace GDApp
 
             if(this.keyboardManager.IsKeyDown(Keys.P))
             {
-                EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
+                //EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
                 // EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateTopBarrier, EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateBottomBarrier, EventCategoryType.Animator));
-                //EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "collidable first person camera" }));
+                EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "collidable first person camera" }));
             }
             //exit using new gamepad manager
             if (this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
