@@ -1963,6 +1963,10 @@ namespace GDApp
 
         }
 
+        /**
+         * Author: Tomas
+         * Simple Game Over Menu
+         */
         private void AddGameOverMenu()
         {
             string sceneID, buttonID, buttonText;
@@ -2038,6 +2042,10 @@ namespace GDApp
 
         }
 
+        /**
+        * Author: Tomas
+        * Simple Win Menu
+        */
         private void AddWinMenu()
         {
 
