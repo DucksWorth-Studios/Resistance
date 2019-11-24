@@ -1,5 +1,5 @@
 ﻿/*
-Function: 		Rotates the bookcase model based on animation triggeres
+Function: 		Rotates the bookcase model based on animation triggers
 Author: 		Cameron
 */
 
