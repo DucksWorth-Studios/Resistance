@@ -1,4 +1,8 @@
-﻿using JigLibX.Collision;
+﻿/*
+Function: 		Rotates the bookcase model based on animation triggeres
+Author: 		Cameron
+*/
+using JigLibX.Collision;
 using JigLibX.Geometry;
 using Microsoft.Xna.Framework;
 
@@ -10,6 +14,9 @@ namespace GDLibrary
         private bool opening = false;
         private CollidableObject parent;
         
+        /*
+         * Author: Tomas
+         */
         public BookcaseController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id, controllerType)
         {
             RegisterForEventHandling(eventDispatcher);
