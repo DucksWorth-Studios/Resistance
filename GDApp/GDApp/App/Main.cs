@@ -476,7 +476,8 @@ namespace GDApp
             Components.Add(cutsceneTimer);
 
 
-            this.timerManager = new TimerManager("Lose Timer", AppData.LoseTimerHours, AppData.LoseTimerMinutes, AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
+            this.timerManager = new TimerManager(AppData.LoseTimerID, AppData.LoseTimerHours, AppData.LoseTimerMinutes, 
+                AppData.LoseTimerSeconds, this, eventDispatcher, StatusType.Off);
             Components.Add(timerManager);
 
 
