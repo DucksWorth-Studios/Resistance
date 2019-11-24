@@ -1599,6 +1599,7 @@ namespace GDApp
         {
             resetLogicPuzzleModels();
             resetRiddleAnswer();
+            resetLoseTimer();
         }
         #endregion
 
@@ -1634,6 +1635,24 @@ namespace GDApp
             item.ActorType = ActorType.CollidableProp;
             item.StatusType = StatusType.Drawn;
         }
+        
+        /*
+         * Author: Cameron
+         * This will be used to reset the lose timer to its default value when reset is called
+         */
+        private void resetLoseTimer()
+        {
+            foreach (TimerUtility timer in timerManager.TimerList)
+            {
+                if (timer.ID.Equals(AppData.LoseTimerID))
+                {
+                    timer.Hours = AppData.LoseTimerHours;
+                    timer.Minutes = AppData.LoseTimerMinutes;
+                    timer.Seconds = AppData.LoseTimerSeconds;
+                }
+            }
+        }
+        
         #endregion
         #region Menu & UI
 
