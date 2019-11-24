@@ -1639,9 +1639,15 @@ namespace GDApp
 
         private void resetFPCamera()
         {
-            Camera3D camera = this.cameraManager.ActiveCamera;
+           Integer2 screenResolution = ScreenUtility.HD720;
+            Predicate<Camera3D> pred = s => s.ID == "collidable first person camera";
+            this.cameraManager.Remove(pred);
 
-            camera.Transform.Translation = new Vector3(-98, 1.1f * AppData.CollidableCameraViewHeight, 104);
+            InitializeCollidableFirstPersonDemo(screenResolution);
+
+            
+            this.cameraManager.SetActiveCamera(pred);
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
         }
         #endregion
         #region Menu & UI
