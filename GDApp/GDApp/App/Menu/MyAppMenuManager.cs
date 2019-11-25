@@ -126,7 +126,7 @@ namespace GDApp
                     Console.WriteLine("In Button");
                     DoRestart();
                     EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
-                    EventDispatcher.Publish(new EventData(EventActionType.OnStart, EventCategoryType.MainMenu));
+                    DoStart();
                     //SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
                     break;
 
