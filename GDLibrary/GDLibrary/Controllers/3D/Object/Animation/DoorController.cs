@@ -41,7 +41,7 @@ namespace GDLibrary
 
         protected void Reset(EventData eventData)
         {
-            if (this.parent != null)
+            if (this.parent != null  && parent.Transform.Rotation.Y <= 90)
             {
                 opened = false;
                 this.parent.Transform.RotateAroundYBy(90);
