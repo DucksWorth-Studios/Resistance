@@ -32,7 +32,7 @@ namespace GDLibrary
         public static int IndexStrafeLeft = 6;
         public static int IndexStrafeRight = 7;
         public static int LoseTimerHours = 0;
-        public static int LoseTimerMinutes = 10;
+        public static int LoseTimerMinutes = 5;
         public static int LoseTimerSeconds = 0;
         public static string LoseTimerID = "Lose Timer";
         #endregion
