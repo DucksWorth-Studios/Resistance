@@ -15,6 +15,7 @@ namespace GDLibrary
     {
         #region Fields
         private PickupParameters pickupParameters;
+        private bool collided = false;
         #endregion
 
         #region Properties
@@ -33,12 +34,14 @@ namespace GDLibrary
 
         public ImmovablePickupObject(string id, ActorType actorType, Transform3D transform, EffectParameters effectParameters,
             Model model, Model lowPolygonModel, 
-            MaterialProperties materialProperties, PickupParameters pickupParameters) 
+            MaterialProperties materialProperties, PickupParameters pickupParameters, EventDispatcher eventDispatcher) 
             : base(id, actorType, transform, effectParameters, model, lowPolygonModel, materialProperties)
         {
             this.pickupParameters = pickupParameters;
             //register for callback on CDCR
             this.Body.CollisionSkin.callbackFn += CollisionSkin_callbackFn;
+
+            RegisterForHandling(eventDispatcher);
         }
 
         #region Event Handling
@@ -50,13 +53,23 @@ namespace GDLibrary
         //how do we want this object to respond to collisions?
         private void HandleCollisions(CollidableObject collidableObjectCollider, CollidableObject collidableObjectCollidee)
         {
-            if(collidableObjectCollidee.ActorType == ActorType.CollidableCamera)
+            if (collidableObjectCollidee.ActorType == ActorType.CollidableCamera && this.collided == false)
             {
+                this.collided = true;
                 EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.Win));
             }            
         }
         #endregion
 
+        void RegisterForHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.Reset += reset;
+        }
+
+        void reset(EventData eventData)
+        {
+            this.collided = false;
+        }
         //public new object Clone()
         //{
         //    return new CollidableObject("clone - " + ID, //deep

@@ -1307,7 +1307,7 @@ namespace GDApp
             effectParameters.Texture = this.textureDictionary["gray"];
 
             collidableObject = new ImmovablePickupObject("win trigger volume", ActorType.Objective, transform3D, effectParameters, this.modelDictionary["box2"],
-                this.modelDictionary["box2"], new MaterialProperties(0.1f, 0.1f, 0.1f), new PickupParameters("win trigger volume", 1));
+                this.modelDictionary["box2"], new MaterialProperties(0.1f, 0.1f, 0.1f), new PickupParameters("win trigger volume", 1),this.eventDispatcher);
             collidableObject.Enable(true, 1);
 
             this.objectManager.Add(collidableObject);
@@ -2019,8 +2019,6 @@ namespace GDApp
                 count++;
             }
         }
-
-        
 
         #region Effects
         private void InitializeEffects()
