@@ -546,6 +546,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
             this.modelDictionary.Load("Assets/Models/Props/Gun");
             this.modelDictionary.Load("Assets/Models/Props/wine-bottle");
+            this.modelDictionary.Load("Assets/Models/Props/globe");
             #endregion
 
             #region Textures
@@ -610,6 +611,8 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Globe/mp");
+            this.textureDictionary.Load("Assets/Textures/Props/Globe/mtlscr");
 
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
@@ -758,6 +761,7 @@ namespace GDApp
             InitializeRiddleAnswerObject();
             InitializeWinVolumeBox();
             InitialiseWineBottles();
+            InitialiseGlobe();
         }
 
 
@@ -1321,6 +1325,23 @@ namespace GDApp
 
             ModelObject model = new ModelObject("WineBottle01", ActorType.Decorator, transform, effectParameters, 
                 this.modelDictionary["wine-bottle"]);
+            this.objectManager.Add(model);
+        }
+        
+        /*
+         * Author: Cameron
+         */
+        private void InitialiseGlobe()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-106, 4.5f, -6), 
+                new Vector3(0, 90, 0), 
+                new Vector3(0.2f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["mp"];
+
+            ModelObject model = new ModelObject("Globe", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["globe"]);
             this.objectManager.Add(model);
         }
         
