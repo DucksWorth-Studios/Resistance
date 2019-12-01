@@ -1540,9 +1540,11 @@ namespace GDApp
          */
         private void WinTriggered(EventData eventData)
         {
+            object[] addParams = { "victory.wav" };
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.mouseLock));
+            this.soundManager.PlayCue("victory");
         }
 
         /**
