@@ -33,8 +33,8 @@ namespace GDApp
         #region Fields
 #if DEBUG
         //used to visualize debug info (e.g. FPS) and also to draw collision skins
-        //private DebugDrawer debugDrawer;
-        //private PhysicsDebugDrawer physicsDebugDrawer;
+        private DebugDrawer debugDrawer;
+        private PhysicsDebugDrawer physicsDebugDrawer;
 #endif
 
         GraphicsDeviceManager graphics;
@@ -129,7 +129,7 @@ namespace GDApp
             AddGameOverMenu();
             AddWinMenu();
 #if DEBUG
-            //InitializeDebugTextInfo();
+            InitializeDebugTextInfo();
 #endif
 
             //load game happens before cameras are loaded because we may add a third person camera that needs a reference to a loaded Actor
@@ -621,7 +621,7 @@ namespace GDApp
 
             #region Fonts
 #if DEBUG
-            //this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
+            this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");
@@ -708,14 +708,14 @@ namespace GDApp
         }
 
 #if DEBUG
-        //private void InitializeDebugTextInfo()
-        //{
-        //    //add debug info in top left hand corner of the screen
-        //    this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
-        //        this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
-        //    Components.Add(this.debugDrawer);
+        private void InitializeDebugTextInfo()
+        {
+            //add debug info in top left hand corner of the screen
+            this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
+                this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
+            Components.Add(this.debugDrawer);
 
-        //}
+        }
 
         //private void InitializeDebugCollisionSkinInfo()
         //{
