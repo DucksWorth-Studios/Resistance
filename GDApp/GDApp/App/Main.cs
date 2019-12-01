@@ -545,6 +545,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/computer");
             this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
             this.modelDictionary.Load("Assets/Models/Props/Gun");
+            this.modelDictionary.Load("Assets/Models/Props/wine-bottle");
             #endregion
 
             #region Textures
@@ -756,11 +757,7 @@ namespace GDApp
             InitializeLogicPuzzleModel();
             InitializeRiddleAnswerObject();
             InitializeWinVolumeBox();
-
-
-
-
-
+            InitialiseWineBottles();
         }
 
 
@@ -1047,8 +1044,6 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
         }
 
-
-
         private void InitializeAmmoBoxes()
         {
             BasicEffectParameters effectParameters;
@@ -1312,6 +1307,23 @@ namespace GDApp
 
             this.objectManager.Add(collidableObject);
         }
+        
+        /*
+         * Author: Cameron
+         */
+        private void InitialiseWineBottles()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-105.5f, 4.4f, 35), 
+                new Vector3(0, 90, 0), 
+                new Vector3(0.003f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+
+            ModelObject model = new ModelObject("WineBottle01", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["wine-bottle"]);
+            this.objectManager.Add(model);
+        }
+        
         #endregion
 
         #region Initialize Cameras
