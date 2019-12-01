@@ -548,6 +548,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/wine-bottle");
             this.modelDictionary.Load("Assets/Models/Props/globe");
             this.modelDictionary.Load("Assets/Models/Props/Stielhandgranate", "grenade");
+            this.modelDictionary.Load("Assets/Models/Props/GermanHelmet", "helmet");
             #endregion
 
             #region Textures
@@ -615,6 +616,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Globe/mp");
             this.textureDictionary.Load("Assets/Textures/Props/Globe/mtlscr");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/grenadetexture", "grenade");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/German Helmet", "helmet");
 
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
@@ -765,6 +767,7 @@ namespace GDApp
             InitialiseWineBottles();
             InitialiseGlobe();
             InitialiseGrenade();
+            InitialiseHelmet();
         }
 
 
@@ -1352,7 +1355,7 @@ namespace GDApp
         
         /*
          * Author: Cameron
-         * Taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/726051
+         * Taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/758204
          */
         private void InitialiseGrenade()
         {
@@ -1385,6 +1388,24 @@ namespace GDApp
             clone.Transform.RotateAroundYBy(1);
             clone.Transform.RotateAroundZBy(90);
             this.objectManager.Add(clone);
+        }
+        
+        /*
+         * Author: Cameron
+         * Taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/672646
+         */
+        private void InitialiseHelmet()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-120, 1, -100), 
+                new Vector3(0, 90, 0), 
+                new Vector3(1), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["helmet"];
+
+            ModelObject model = new ModelObject("Helmet", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["helmet"]);
+            this.objectManager.Add(model);
         }
         
         #endregion
