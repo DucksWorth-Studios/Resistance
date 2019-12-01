@@ -1314,6 +1314,7 @@ namespace GDApp
         
         /*
          * Author: Cameron
+         * Model taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/719267
          */
         private void InitialiseWineBottles()
         {
@@ -1330,6 +1331,7 @@ namespace GDApp
         
         /*
          * Author: Cameron
+         * Taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/726051
          */
         private void InitialiseGlobe()
         {
