@@ -547,6 +547,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/Gun");
             this.modelDictionary.Load("Assets/Models/Props/wine-bottle");
             this.modelDictionary.Load("Assets/Models/Props/globe");
+            this.modelDictionary.Load("Assets/Models/Props/Stielhandgranate", "grenade");
             #endregion
 
             #region Textures
@@ -613,6 +614,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
             this.textureDictionary.Load("Assets/Textures/Props/Globe/mp");
             this.textureDictionary.Load("Assets/Textures/Props/Globe/mtlscr");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/grenadetexture", "grenade");
 
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
@@ -762,6 +764,7 @@ namespace GDApp
             InitializeWinVolumeBox();
             InitialiseWineBottles();
             InitialiseGlobe();
+            InitialiseGrenade();
         }
 
 
@@ -1345,6 +1348,43 @@ namespace GDApp
             ModelObject model = new ModelObject("Globe", ActorType.Decorator, transform, effectParameters, 
                 this.modelDictionary["globe"]);
             this.objectManager.Add(model);
+        }
+        
+        /*
+         * Author: Cameron
+         * Taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/726051
+         */
+        private void InitialiseGrenade()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-68, 0.5f, 35), 
+                new Vector3(0, 90, 0), 
+                new Vector3(0.05f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["grenade"];
+
+            ModelObject model = new ModelObject("Grenade00", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["grenade"]);
+            this.objectManager.Add(model);
+
+            ModelObject clone = (ModelObject)model.Clone();
+            
+            clone.Transform.TranslateBy(new Vector3(1, 0, -0.1f));
+            clone.Transform.RotateAroundYBy(2);
+            clone.Transform.RotateAroundZBy(10);
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)model.Clone();
+            clone.Transform.TranslateBy(new Vector3(2, 0, 0.1f));
+            clone.Transform.RotateAroundYBy(-2);
+            clone.Transform.RotateAroundZBy(30);
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)model.Clone();
+            clone.Transform.TranslateBy(new Vector3(-1, 0, -0.1f));
+            clone.Transform.RotateAroundYBy(1);
+            clone.Transform.RotateAroundZBy(90);
+            this.objectManager.Add(clone);
         }
         
         #endregion
