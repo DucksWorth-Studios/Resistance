@@ -141,6 +141,10 @@ namespace GDLibrary
                 this.PauseCue(cueName);
             else if (eventData.EventType == EventActionType.OnResume)
                 this.ResumeCue(cueName);
+            else if (eventData.EventType == EventActionType.OnWin)
+                this.PlayCue(cueName);
+            else if (eventData.EventType == EventActionType.OnLose)
+                this.PlayCue(cueName);
             else //OnStop
             {
                 //since we can only pass refereneces in AdditionalParameters and AudioStopOption is an enum (i.e. a primitive type) then we need to hack the code a little

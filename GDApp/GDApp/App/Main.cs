@@ -1529,9 +1529,11 @@ namespace GDApp
          */
         private void LoseTriggered(EventData eventData)
         {
+            object[] addParams = { "lose" };
             EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
-            System.Diagnostics.Debug.WriteLine("Lose event triggered");
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.Sound2D, addParams));
+            this.soundManager.Pause3DCue("game-main-soundtrack");
         }
 
         /*
@@ -1540,9 +1542,12 @@ namespace GDApp
          */
         private void WinTriggered(EventData eventData)
         {
+            object[] addParams = { "victory" };
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.mouseLock));
+            EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.Sound2D, addParams));
+            this.soundManager.Pause3DCue("game-main-soundtrack");
         }
 
         /**
