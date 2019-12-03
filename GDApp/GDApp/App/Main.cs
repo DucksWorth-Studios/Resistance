@@ -549,6 +549,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/globe");
             this.modelDictionary.Load("Assets/Models/Props/Stielhandgranate", "grenade");
             this.modelDictionary.Load("Assets/Models/Props/GermanHelmet", "helmet");
+            this.modelDictionary.Load("Assets/Models/Props/hat2", "hat");
             #endregion
 
             #region Textures
@@ -617,6 +618,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Globe/mtlscr");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/grenadetexture", "grenade");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/German Helmet", "helmet");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/hat");
 
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
@@ -768,6 +770,7 @@ namespace GDApp
             InitialiseGlobe();
             InitialiseGrenade();
             InitialiseHelmet();
+            InitialiseHat();
         }
 
 
@@ -1405,6 +1408,23 @@ namespace GDApp
 
             ModelObject model = new ModelObject("Helmet", ActorType.Decorator, transform, effectParameters, 
                 this.modelDictionary["helmet"]);
+            this.objectManager.Add(model);
+        }
+        
+        /*
+         * Author: Cameron
+         */
+        private void InitialiseHat()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-106, 6.6f, -120), 
+                new Vector3(0, 0, 0), 
+                new Vector3(0.01f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["hat"];
+
+            ModelObject model = new ModelObject("Hat", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["hat"]);
             this.objectManager.Add(model);
         }
         
