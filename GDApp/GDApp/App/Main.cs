@@ -610,6 +610,12 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
 
+            //propaganda
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/ww2-propaganda_waffenss", "poster-1");
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/poster2", "poster-2");
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/cuft", "poster-3");
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/unsere-luftwaffe", "poster-4");
+
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
 #if DEBUG
@@ -756,10 +762,7 @@ namespace GDApp
             InitializeLogicPuzzleModel();
             InitializeRiddleAnswerObject();
             InitializeWinVolumeBox();
-
-
-
-
+            InitializePosters();                    
 
         }
 
@@ -1047,7 +1050,15 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
         }
 
+        private void InitializePosters()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-85, 5, -30), Vector3.Zero, new Vector3(1, 1, 1), Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["poster-1"];
 
+            ModelObject model = new ModelObject("poster", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
+            this.objectManager.Add(model);
+        }
 
         private void InitializeAmmoBoxes()
         {
