@@ -33,8 +33,8 @@ namespace GDApp
         #region Fields
 #if DEBUG
         //used to visualize debug info (e.g. FPS) and also to draw collision skins
-        //private DebugDrawer debugDrawer;
-        //private PhysicsDebugDrawer physicsDebugDrawer;
+        private DebugDrawer debugDrawer;
+        private PhysicsDebugDrawer physicsDebugDrawer;
 #endif
 
         GraphicsDeviceManager graphics;
@@ -129,7 +129,7 @@ namespace GDApp
             AddGameOverMenu();
             AddWinMenu();
 #if DEBUG
-            //InitializeDebugTextInfo();
+            InitializeDebugTextInfo();
 #endif
 
             //load game happens before cameras are loaded because we may add a third person camera that needs a reference to a loaded Actor
@@ -545,6 +545,13 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/computer");
             this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
             this.modelDictionary.Load("Assets/Models/Props/Gun");
+            this.modelDictionary.Load("Assets/Models/Props/wine-bottle");
+            this.modelDictionary.Load("Assets/Models/Props/globe");
+            this.modelDictionary.Load("Assets/Models/Props/Stielhandgranate", "grenade");
+            this.modelDictionary.Load("Assets/Models/Props/GermanHelmet", "helmet");
+            this.modelDictionary.Load("Assets/Models/Props/hat2", "hat");
+            this.modelDictionary.Load("Assets/Models/Props/phone3", "phone");
+            this.modelDictionary.Load("Assets/Models/Props/shelf1", "shelf");
             #endregion
 
             #region Textures
@@ -609,6 +616,13 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Globe/mp");
+            this.textureDictionary.Load("Assets/Textures/Props/Globe/mtlscr");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/grenadetexture", "grenade");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/German Helmet", "helmet");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/hat");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonetex", "phone");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/wood");
 
             //propaganda
             this.textureDictionary.Load("Assets/Textures/Props/Propaganda/ww2-propaganda_waffenss", "poster-1");
@@ -627,7 +641,7 @@ namespace GDApp
 
             #region Fonts
 #if DEBUG
-            //this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
+            this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");
@@ -714,14 +728,14 @@ namespace GDApp
         }
 
 #if DEBUG
-        //private void InitializeDebugTextInfo()
-        //{
-        //    //add debug info in top left hand corner of the screen
-        //    this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
-        //        this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
-        //    Components.Add(this.debugDrawer);
+        private void InitializeDebugTextInfo()
+        {
+            //add debug info in top left hand corner of the screen
+            this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
+                this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
+            Components.Add(this.debugDrawer);
 
-        //}
+        }
 
         //private void InitializeDebugCollisionSkinInfo()
         //{
@@ -762,8 +776,14 @@ namespace GDApp
             InitializeLogicPuzzleModel();
             InitializeRiddleAnswerObject();
             InitializeWinVolumeBox();
-            InitializePosters();                    
-
+            InitialiseWineBottles();
+            InitialiseGlobe();
+            InitialiseGrenade();
+            InitialiseHelmet();
+            InitialiseHat();
+            InitialisePhone();
+            InitialiseShelf();
+            InitializePosters();       
         }
 
 
@@ -1335,6 +1355,183 @@ namespace GDApp
 
             this.objectManager.Add(collidableObject);
         }
+        
+        /*
+         * Author: Cameron
+         * Model taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/719267
+         */
+        private void InitialiseWineBottles()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-105.5f, 4.4f, 35), 
+                new Vector3(0, 90, 0), 
+                new Vector3(0.003f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+
+            ModelObject model = new ModelObject("WineBottle01", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["wine-bottle"]);
+            this.objectManager.Add(model);
+        }
+        
+        /*
+         * Author: Cameron
+         * Taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/726051
+         */
+        private void InitialiseGlobe()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-106, 4.5f, -6), 
+                new Vector3(0, 90, 0), 
+                new Vector3(0.2f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["mp"];
+
+            ModelObject model = new ModelObject("Globe", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["globe"]);
+            this.objectManager.Add(model);
+        }
+        
+        /*
+         * Author: Cameron
+         * Taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/758204
+         */
+        private void InitialiseGrenade()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-68, 0.5f, 35), 
+                new Vector3(0, 90, 0), 
+                new Vector3(0.05f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["grenade"];
+
+            ModelObject model = new ModelObject("Grenade00", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["grenade"]);
+            this.objectManager.Add(model);
+
+            ModelObject clone = (ModelObject)model.Clone();
+            
+            clone.Transform.TranslateBy(new Vector3(1, 0, -0.1f));
+            clone.Transform.RotateAroundYBy(2);
+            clone.Transform.RotateAroundZBy(10);
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)model.Clone();
+            clone.Transform.TranslateBy(new Vector3(2, 0, 0.1f));
+            clone.Transform.RotateAroundYBy(-2);
+            clone.Transform.RotateAroundZBy(30);
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)model.Clone();
+            clone.Transform.TranslateBy(new Vector3(-1, 0, -0.1f));
+            clone.Transform.RotateAroundYBy(1);
+            clone.Transform.RotateAroundZBy(90);
+            this.objectManager.Add(clone);
+        }
+        
+        /*
+         * Author: Cameron
+         * Taken from https://www.turbosquid.com/FullPreview/Index.cfm/ID/672646
+         */
+        private void InitialiseHelmet()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-120, 1, -100), 
+                new Vector3(0, 90, 0), 
+                new Vector3(1), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["helmet"];
+
+            ModelObject model = new ModelObject("Helmet", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["helmet"]);
+            this.objectManager.Add(model);
+        }
+        
+        /*
+         * Author: Cameron
+         */
+        private void InitialiseHat()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-106, 6.6f, -120), 
+                new Vector3(0, 0, 0), 
+                new Vector3(0.01f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["hat"];
+
+            ModelObject model = new ModelObject("Hat", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["hat"]);
+            this.objectManager.Add(model);
+        }
+        
+        /*
+         * Author: Cameron
+         */
+        private void InitialisePhone()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-94, 6.6f, -120), 
+                new Vector3(0, 0, 0), 
+                new Vector3(0.01f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["phone"];
+
+            ModelObject model = new ModelObject("Phone", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["phone"]);
+            this.objectManager.Add(model);
+        }
+        
+        /*
+        * Author: Cameron
+        */
+        private void InitialiseShelf()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-66, 8, -50), 
+                new Vector3(0, -90, 0), 
+                new Vector3(0.05f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["wood"];
+
+            ModelObject model = new ModelObject("Shelf", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["shelf"]);
+            this.objectManager.Add(model);
+
+            #region Right Wall
+
+            ModelObject clone = (ModelObject)model.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 30));
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)clone.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 30));
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)clone.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 30));
+            this.objectManager.Add(clone);
+
+            #endregion
+
+            #region Left Wall
+
+            clone = (ModelObject)model.Clone();
+            clone.Transform.RotateAroundYBy(180);
+            clone.Transform.TranslateBy(new Vector3(-57, 0, 0));
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)clone.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 30));
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)clone.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 60));
+            this.objectManager.Add(clone);
+
+            #endregion
+            
+        }
+        
+        
         #endregion
 
         #region Initialize Cameras
@@ -2034,6 +2231,10 @@ namespace GDApp
             // this.uiManager.Add(myUIMouseObject);
         }
 
+        /*
+         * Author: Cameron
+         * Setup the timer UI
+         */
         private void InitializeTimerUI()
         {
             int count = 1;
