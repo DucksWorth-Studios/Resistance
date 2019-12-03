@@ -624,6 +624,12 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonetex", "phone");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/wood");
 
+            //propaganda
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/ww2-propaganda_waffenss", "poster-1");
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/poster2", "poster-2");
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/cuft", "poster-3");
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/unsere-luftwaffe", "poster-4");
+
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
 #if DEBUG
@@ -777,6 +783,7 @@ namespace GDApp
             InitialiseHat();
             InitialisePhone();
             InitialiseShelf();
+            InitializePosters();       
         }
 
 
@@ -1063,6 +1070,23 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
         }
 
+        private void InitializePosters()
+        {
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
+            ModelObject model = null, clone = null;
+            model = new ModelObject("poster-", ActorType.Decorator, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
+
+            for(int i = 1; i < 5; i++)
+            {
+                clone = (ModelObject)model.Clone();
+                clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
+                clone.Transform.Translation = new Vector3(-65, 15, -30 + (i * 25));
+                clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
+                this.objectManager.Add(clone);
+            }
+
+        }
+
         private void InitializeAmmoBoxes()
         {
             BasicEffectParameters effectParameters;
@@ -1218,6 +1242,7 @@ namespace GDApp
             collidableObject.Enable(true, 1);
             collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation, this.eventDispatcher));
             this.objectManager.Add(collidableObject);
+            
         }
 
         /*
@@ -1262,8 +1287,12 @@ namespace GDApp
 
             phonograph.Position = new Vector3(-100.0f, 7.0f, -121.0f);
             phonograph.DopplerScale = 500000f;
+            phonograph.Up = Vector3.UnitY;
+            phonograph.Forward = Vector3.UnitZ;
 
             this.soundManager.Play3DCue("game-main-soundtrack", phonograph);
+            this.soundManager.PlayCue("old-computer");
+
 
         }
 
@@ -1560,6 +1589,7 @@ namespace GDApp
                     camera + " controller",
                     ControllerType.CollidableFirstPerson,
                     AppData.CameraMoveKeys,
+                    this.soundManager,
                     AppData.CollidableCameraMoveSpeed, AppData.CollidableCameraStrafeSpeed, AppData.CameraRotationSpeed,
                     this.managerParameters,
                     eventDispatcher,
@@ -1720,9 +1750,11 @@ namespace GDApp
          */
         private void LoseTriggered(EventData eventData)
         {
+            object[] addParams = { "lose" };
             EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
-            System.Diagnostics.Debug.WriteLine("Lose event triggered");
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.Sound2D, addParams));
+            this.soundManager.Pause3DCue("game-main-soundtrack");
         }
 
         /*
@@ -1731,9 +1763,12 @@ namespace GDApp
          */
         private void WinTriggered(EventData eventData)
         {
+            object[] addParams = { "victory" };
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.mouseLock));
+            EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.Sound2D, addParams));
+            this.soundManager.Pause3DCue("game-main-soundtrack");
         }
 
         /**

@@ -23,6 +23,8 @@ namespace GDLibrary
         private float radius, height;
         private float accelerationRate, decelerationRate, mass, jumpHeight;
         private Vector3 translationOffset;
+        SoundManager soundManager;
+        bool isPaused = true;
         #endregion
 
         #region Properties
@@ -95,7 +97,7 @@ namespace GDLibrary
         #endregion
 
         //uses the default PlayerObject as the collidable object for the camera
-        public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys, float moveSpeed, float strafeSpeed, float rotationSpeed,
+        public CollidableFirstPersonCameraController(string id, ControllerType controllerType, Keys[] moveKeys,SoundManager soundManager, float moveSpeed, float strafeSpeed, float rotationSpeed,
            ManagerParameters managerParameters, EventDispatcher eventDispatcher,
            IActor parentActor, float radius, float height, float accelerationRate, float decelerationRate,
            float mass, float jumpHeight, Vector3 translationOffset)
@@ -104,6 +106,7 @@ namespace GDLibrary
             parentActor, radius, height, accelerationRate, decelerationRate,
             mass, jumpHeight, translationOffset, null)
         {
+            this.soundManager = soundManager;
         }
 
         //allows developer to specify the type of collidable object to be used as basis for the camera
@@ -148,10 +151,26 @@ namespace GDLibrary
         {
             //updates the sound manager to tell it where the 1st person camera is right now for any 3D sounds
             //did NOT use an event here as the frequency of calls to this event would FLOOD the system
-            this.ManagerParameters.SoundManager.UpdateListenerPosition((actor as Actor3D).Transform.Translation);
+            Actor3D parent = actor as Actor3D;
+
+            this.ManagerParameters.SoundManager.UpdateListenerPosition(parent.Transform.Translation, parent.Transform.Look);
             HandleMouseInput(gameTime, actor as Actor3D);
             base.Update(gameTime, actor);
         }
+
+        protected override void RegisterForEventHandling(EventDispatcher eventDispatcher)
+        {
+            eventDispatcher.lockChanged += movmentLock;
+            eventDispatcher.lockChanged += Mouselockbool;
+            eventDispatcher.RiddleChanged += MovementBlock;
+        }
+
+        public void movmentLock(EventData eventData)
+        {
+            if (isPaused) { isPaused = false; }
+            else { isPaused = true; }
+        }
+
 
         public override void HandleMouseInput(GameTime gameTime, Actor3D parentActor)
         {
@@ -171,7 +190,7 @@ namespace GDLibrary
 
             if ((parentActor != null) && (parentActor != null))
             {
-                if (!inPopUp)
+                if (!inPopUp && !isPaused)
                 {
                     //crouch
                     if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[5]))
@@ -185,12 +204,14 @@ namespace GDLibrary
                         Vector3 restrictedLook = parentActor.Transform.Look;
                         restrictedLook.Y = 0;
                         this.playerObject.CharacterBody.Velocity += restrictedLook * this.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                        soundManager.PlayCue("footstep-concrete");
                     }
                     else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[1]))
                     {
                         Vector3 restrictedLook = parentActor.Transform.Look;
                         restrictedLook.Y = 0;
                         this.playerObject.CharacterBody.Velocity -= restrictedLook * this.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                        soundManager.PlayCue("footstep-concrete");
                     }
                     else //decelerate to zero when not pressed
                     {
@@ -203,12 +224,14 @@ namespace GDLibrary
                         Vector3 restrictedRight = parentActor.Transform.Right;
                         restrictedRight.Y = 0;
                         this.playerObject.CharacterBody.Velocity -= restrictedRight * this.StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                        soundManager.PlayCue("footstep-concrete");
                     }
                     else if (this.ManagerParameters.KeyboardManager.IsKeyDown(this.MoveKeys[3]))
                     {
                         Vector3 restrictedRight = parentActor.Transform.Right;
                         restrictedRight.Y = 0;
                         this.playerObject.CharacterBody.Velocity += restrictedRight * this.StrafeSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                        soundManager.PlayCue("footstep-concrete");
                     }
                     else //decelerate to zero when not pressed
                     {

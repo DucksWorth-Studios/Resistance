@@ -141,6 +141,10 @@ namespace GDLibrary
                 this.PauseCue(cueName);
             else if (eventData.EventType == EventActionType.OnResume)
                 this.ResumeCue(cueName);
+            else if (eventData.EventType == EventActionType.OnWin)
+                this.PlayCue(cueName);
+            else if (eventData.EventType == EventActionType.OnLose)
+                this.PlayCue(cueName);
             else //OnStop
             {
                 //since we can only pass refereneces in AdditionalParameters and AudioStopOption is an enum (i.e. a primitive type) then we need to hack the code a little
@@ -330,9 +334,10 @@ namespace GDLibrary
 
      
         //Called by the listener to update relative positions (i.e. everytime the 1st Person camera moves it should call this method so that the 3D sounds heard reflect the new camera position)
-        public void UpdateListenerPosition(Vector3 position)
+        public void UpdateListenerPosition(Vector3 position, Vector3 forward)
         {
             this.audioListener.Position = position;
+            this.audioListener.Forward = forward;
         }
 
         // Pause all playing sounds
