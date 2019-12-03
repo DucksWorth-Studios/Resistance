@@ -2101,6 +2101,10 @@ namespace GDApp
             // this.uiManager.Add(myUIMouseObject);
         }
 
+        /*
+         * Author: Cameron
+         * Setup the timer UI
+         */
         private void InitializeTimerUI()
         {
             int count = 1;
