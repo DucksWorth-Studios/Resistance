@@ -550,6 +550,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/Stielhandgranate", "grenade");
             this.modelDictionary.Load("Assets/Models/Props/GermanHelmet", "helmet");
             this.modelDictionary.Load("Assets/Models/Props/hat2", "hat");
+            this.modelDictionary.Load("Assets/Models/Props/phone3", "phone");
             #endregion
 
             #region Textures
@@ -619,6 +620,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/grenadetexture", "grenade");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/German Helmet", "helmet");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/hat");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonetex", "phone");
 
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
@@ -771,6 +773,7 @@ namespace GDApp
             InitialiseGrenade();
             InitialiseHelmet();
             InitialiseHat();
+            InitialisePhone();
         }
 
 
@@ -1425,6 +1428,23 @@ namespace GDApp
 
             ModelObject model = new ModelObject("Hat", ActorType.Decorator, transform, effectParameters, 
                 this.modelDictionary["hat"]);
+            this.objectManager.Add(model);
+        }
+        
+        /*
+         * Author: Cameron
+         */
+        private void InitialisePhone()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-94, 6.6f, -120), 
+                new Vector3(0, 0, 0), 
+                new Vector3(0.01f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["phone"];
+
+            ModelObject model = new ModelObject("Phone", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["phone"]);
             this.objectManager.Add(model);
         }
         
