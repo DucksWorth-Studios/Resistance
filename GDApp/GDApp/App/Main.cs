@@ -1052,12 +1052,19 @@ namespace GDApp
 
         private void InitializePosters()
         {
-            Transform3D transform = new Transform3D(new Vector3(-85, 5, -30), Vector3.Zero, new Vector3(1, 1, 1), Vector3.UnitX, Vector3.UnitY);
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["poster-1"];
+            ModelObject model = null, clone = null;
+            model = new ModelObject("poster-", ActorType.Decorator, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
 
-            ModelObject model = new ModelObject("poster", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
-            this.objectManager.Add(model);
+            for(int i = 1; i < 5; i++)
+            {
+                clone = (ModelObject)model.Clone();
+                clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
+                clone.Transform.Translation = new Vector3(-65, 15, -30 + (i * 25));
+                clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
+                this.objectManager.Add(clone);
+            }
+
         }
 
         private void InitializeAmmoBoxes()
