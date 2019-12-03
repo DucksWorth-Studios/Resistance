@@ -1204,6 +1204,7 @@ namespace GDApp
             collidableObject.Enable(true, 1);
             collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation, this.eventDispatcher));
             this.objectManager.Add(collidableObject);
+            
         }
 
         /*
@@ -1248,8 +1249,12 @@ namespace GDApp
 
             phonograph.Position = new Vector3(-100.0f, 7.0f, -121.0f);
             phonograph.DopplerScale = 500000f;
+            phonograph.Up = Vector3.UnitY;
+            phonograph.Forward = Vector3.UnitZ;
 
             this.soundManager.Play3DCue("game-main-soundtrack", phonograph);
+            this.soundManager.PlayCue("old-computer");
+
 
         }
 
@@ -1369,6 +1374,7 @@ namespace GDApp
                     camera + " controller",
                     ControllerType.CollidableFirstPerson,
                     AppData.CameraMoveKeys,
+                    this.soundManager,
                     AppData.CollidableCameraMoveSpeed, AppData.CollidableCameraStrafeSpeed, AppData.CameraRotationSpeed,
                     this.managerParameters,
                     eventDispatcher,
