@@ -334,9 +334,10 @@ namespace GDLibrary
 
      
         //Called by the listener to update relative positions (i.e. everytime the 1st Person camera moves it should call this method so that the 3D sounds heard reflect the new camera position)
-        public void UpdateListenerPosition(Vector3 position)
+        public void UpdateListenerPosition(Vector3 position, Vector3 forward)
         {
             this.audioListener.Position = position;
+            this.audioListener.Forward = forward;
         }
 
         // Pause all playing sounds
