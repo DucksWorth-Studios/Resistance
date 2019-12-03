@@ -551,6 +551,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/GermanHelmet", "helmet");
             this.modelDictionary.Load("Assets/Models/Props/hat2", "hat");
             this.modelDictionary.Load("Assets/Models/Props/phone3", "phone");
+            this.modelDictionary.Load("Assets/Models/Props/shelf1", "shelf");
             #endregion
 
             #region Textures
@@ -621,6 +622,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/German Helmet", "helmet");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/hat");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonetex", "phone");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/wood");
 
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
@@ -774,6 +776,7 @@ namespace GDApp
             InitialiseHelmet();
             InitialiseHat();
             InitialisePhone();
+            InitialiseShelf();
         }
 
 
@@ -1447,6 +1450,58 @@ namespace GDApp
                 this.modelDictionary["phone"]);
             this.objectManager.Add(model);
         }
+        
+        /*
+        * Author: Cameron
+        */
+        private void InitialiseShelf()
+        {
+            Transform3D transform = new Transform3D(new Vector3(-66, 8, -50), 
+                new Vector3(0, -90, 0), 
+                new Vector3(0.05f), 
+                Vector3.UnitX, Vector3.UnitY);
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["wood"];
+
+            ModelObject model = new ModelObject("Shelf", ActorType.Decorator, transform, effectParameters, 
+                this.modelDictionary["shelf"]);
+            this.objectManager.Add(model);
+
+            #region Right Wall
+
+            ModelObject clone = (ModelObject)model.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 30));
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)clone.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 30));
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)clone.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 30));
+            this.objectManager.Add(clone);
+
+            #endregion
+
+            #region Left Wall
+
+            clone = (ModelObject)model.Clone();
+            clone.Transform.RotateAroundYBy(180);
+            clone.Transform.TranslateBy(new Vector3(-57, 0, 0));
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)clone.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 30));
+            this.objectManager.Add(clone);
+            
+            clone = (ModelObject)clone.Clone();
+            clone.Transform.TranslateBy(new Vector3(0, 0, 60));
+            this.objectManager.Add(clone);
+
+            #endregion
+            
+        }
+        
         
         #endregion
 
