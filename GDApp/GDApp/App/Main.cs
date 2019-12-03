@@ -610,6 +610,12 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
 
+            //propaganda
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/ww2-propaganda_waffenss", "poster-1");
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/poster2", "poster-2");
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/cuft", "poster-3");
+            this.textureDictionary.Load("Assets/Textures/Props/Propaganda/unsere-luftwaffe", "poster-4");
+
             //interactable
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
 #if DEBUG
@@ -756,10 +762,7 @@ namespace GDApp
             InitializeLogicPuzzleModel();
             InitializeRiddleAnswerObject();
             InitializeWinVolumeBox();
-
-
-
-
+            InitializePosters();                    
 
         }
 
@@ -1047,7 +1050,22 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
         }
 
+        private void InitializePosters()
+        {
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
+            ModelObject model = null, clone = null;
+            model = new ModelObject("poster-", ActorType.Decorator, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
 
+            for(int i = 1; i < 5; i++)
+            {
+                clone = (ModelObject)model.Clone();
+                clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
+                clone.Transform.Translation = new Vector3(-65, 15, -30 + (i * 25));
+                clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
+                this.objectManager.Add(clone);
+            }
+
+        }
 
         private void InitializeAmmoBoxes()
         {
