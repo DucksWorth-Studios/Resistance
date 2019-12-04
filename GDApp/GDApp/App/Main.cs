@@ -958,6 +958,25 @@ namespace GDApp
             collidableObject.AddPrimitive(new Box(transform3D.Translation, Matrix.Identity, new Vector3(worldScale * 2.54f, 0.001f, worldScale * 2.54f)), new MaterialProperties(0.8f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1); //change to false, see what happens.
             this.objectManager.Add(collidableObject);
+
+
+
+
+            #region exithallway
+     
+            transform3D = new Transform3D(new Vector3(-91, 0, 230), Vector3.Zero, new Vector3(20, 0.1f, 80), Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["concreteFloor"];
+
+            collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
+            collidableObject.AddPrimitive(new Box(transform3D.Translation, Matrix.Identity, new Vector3(100, 0.001f, 100)),
+                new MaterialProperties(0.8f, 0.8f, 0.7f));
+
+            
+            collidableObject.Enable(true, 1);
+
+            this.objectManager.Add(collidableObject);
+            #endregion
         }
 
         private void InitializeNonCollidableCeiling(int worldScale)
@@ -1347,7 +1366,7 @@ namespace GDApp
 
             transform3D = new Transform3D(new Vector3(-91, 0, 130), Vector3.Zero, new Vector3(10, 0.1f, 2), Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["gray"];
+            effectParameters.Texture = this.textureDictionary["concreteFloor"];
 
             collidableObject = new ImmovablePickupObject("win trigger volume", ActorType.Objective, transform3D, effectParameters, this.modelDictionary["box2"],
                 this.modelDictionary["box2"], new MaterialProperties(0.1f, 0.1f, 0.1f), new PickupParameters("win trigger volume", 1),this.eventDispatcher);
