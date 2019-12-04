@@ -532,7 +532,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_01", "barrier");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoorSmooth", "bunker_door");
-
+            this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_01", "ExitDoor");
             //props
             this.modelDictionary.Load("Assets/Models/Props/lamp");
             this.modelDictionary.Load("Assets/Models/Props/ammo-box");
@@ -756,7 +756,7 @@ namespace GDApp
             InitializeCollidableWalls(worldScale);
             InitializeCollidableGround(worldScale);
             InitializeNonCollidableCeiling(worldScale);
-
+            InitialiseExitHallDoors();
             //add level elements
             //InitializeBuildings();
             InitializeExitDoor();
@@ -925,6 +925,35 @@ namespace GDApp
             this.objectManager.Add(clonePlane);
             #endregion
             #endregion
+
+            #region ExitHall
+            #region Left Exit Wall
+                clonePlane = (CollidableObject)prototypeModel.Clone();
+                clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
+                clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 10.0f);
+                clonePlane.Transform.Translation = new Vector3((-2.56f * worldScale) / 4.0f, (2.54f * worldScale) / 20.0f, 222);
+                clonePlane.AddPrimitive(new Box(clonePlane.Transform.Translation, Matrix.CreateRotationX(MathHelper.PiOver2) * Matrix.CreateRotationY(MathHelper.PiOver2),
+                    new Vector3(clonePlane.Transform.Scale.X * 2.54f, clonePlane.Transform.Scale.Y * 2.54f, clonePlane.Transform.Scale.Z * 2.54f)),
+                    new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clonePlane.Enable(true, 1);
+                this.objectManager.Add(clonePlane);
+            #endregion
+
+            #region Right Exit Wall
+
+                clonePlane = (CollidableObject)prototypeModel.Clone();
+                clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
+                clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 10.0f);
+                clonePlane.Transform.Translation = new Vector3((-4.7f * worldScale) / 4.0f, (2.54f * worldScale) / 20.0f, 222);
+                clonePlane.AddPrimitive(new Box(clonePlane.Transform.Translation, Matrix.CreateRotationX(MathHelper.PiOver2) * Matrix.CreateRotationY(MathHelper.PiOver2),
+                    new Vector3(clonePlane.Transform.Scale.X * 2.54f, clonePlane.Transform.Scale.Y * 2.54f, clonePlane.Transform.Scale.Z * 2.54f)),
+                    new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clonePlane.Enable(true, 1);
+                this.objectManager.Add(clonePlane);
+
+            #endregion
+
+            #endregion
         }
 
         //the ground is simply a large flat box with a Box primitive collision surface attached
@@ -969,7 +998,7 @@ namespace GDApp
             effectParameters.Texture = this.textureDictionary["concreteFloor"];
 
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
-            collidableObject.AddPrimitive(new Box(transform3D.Translation, Matrix.Identity, new Vector3(100, 0.001f, 100)),
+            collidableObject.AddPrimitive(new Box(transform3D.Translation, Matrix.Identity, new Vector3(20, 0.001f, 200)),
                 new MaterialProperties(0.8f, 0.8f, 0.7f));
 
             
@@ -977,6 +1006,55 @@ namespace GDApp
 
             this.objectManager.Add(collidableObject);
             #endregion
+        }
+
+        private void InitialiseExitHallDoors()
+        {
+            Transform3D transform3D;
+            BasicEffectParameters effectParameters;
+            CollidableObject archetype,collidableObject;
+
+            transform3D = new Transform3D(new Vector3(-65, 0, 140), new Vector3(90, 270, 0),
+                new Vector3(0.07f, 0.05f, 0.05f), Vector3.UnitX, Vector3.UnitY);
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["aluminum"];
+
+            archetype = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters,
+                this.modelDictionary["ExitDoor"]);
+
+            for(int i = 0; i < 6; i++)
+            {
+                collidableObject =(CollidableObject) archetype.Clone();
+                collidableObject.Transform.Translation += new Vector3(0,0, 30 * i);
+
+                collidableObject.AddPrimitive(new Box(archetype.Transform.Translation, Matrix.Identity,
+                    new Vector3(1f, 1f, 1f)),
+                    new MaterialProperties(0.2f, 0.8f, 0.7f));
+                collidableObject.Enable(true, 1);
+
+                this.objectManager.Add(collidableObject);
+
+            }
+
+            transform3D = new Transform3D(new Vector3(-116.8f, 0, 160), new Vector3(90, 90, 0),
+                new Vector3(0.07f, 0.05f, 0.05f), Vector3.UnitX, Vector3.UnitY);
+
+            archetype.Transform = transform3D;
+
+            for (int i = 0; i < 6; i++)
+            {
+                collidableObject = (CollidableObject)archetype.Clone();
+                collidableObject.Transform.Translation += new Vector3(0, 0, 30 * i);
+
+                collidableObject.AddPrimitive(new Box(archetype.Transform.Translation, Matrix.Identity,
+                    new Vector3(1f, 1f, 1f)),
+                    new MaterialProperties(0.2f, 0.8f, 0.7f));
+                collidableObject.Enable(true, 1);
+
+                this.objectManager.Add(collidableObject);
+
+            }
         }
 
         private void InitializeNonCollidableCeiling(int worldScale)
@@ -987,6 +1065,12 @@ namespace GDApp
 
             ModelObject model = new ModelObject("ceiling", ActorType.NonCollidableCeiling, transform, effectParameters, this.modelDictionary["box2"]);
             this.objectManager.Add(model);
+
+            #region exit Ceiling
+            transform = new Transform3D(new Vector3(-91, 25, 230), Vector3.Zero, new Vector3(20, 0.1f, 80), Vector3.UnitX, Vector3.UnitY);
+            model = new ModelObject("ceiling exit hall", ActorType.NonCollidableCeiling, transform, effectParameters, this.modelDictionary["box2"]);
+            this.objectManager.Add(model);
+            #endregion
         }
 
         private void InitializeBuildings()
