@@ -634,8 +634,8 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
 #if DEBUG
             //demo
-            this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
-            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
+            //this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
+            //this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
 #endif
             #endregion
 
@@ -1161,7 +1161,7 @@ namespace GDApp
             collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, 
                 this.modelDictionary["bunker_door"]);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
-                    new Vector3(1f,1f,1f)),
+                    new Vector3(30f,50f,5f)),
                     new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             collidableObject.AttachController(new DoorController("Door Controller", ControllerType.Rotation,this.eventDispatcher));
@@ -2506,9 +2506,9 @@ namespace GDApp
             //            AddUIElements();
             //            #endregion
 
-            //#if DEBUG
-                        //InitializeDebugTextInfo();
-            //#endif
+#if DEBUG
+            //InitializeDebugTextInfo();
+#endif
         }
 
         protected override void UnloadContent()
