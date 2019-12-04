@@ -33,8 +33,8 @@ namespace GDApp
         #region Fields
 #if DEBUG
         //used to visualize debug info (e.g. FPS) and also to draw collision skins
-        private DebugDrawer debugDrawer;
-        private PhysicsDebugDrawer physicsDebugDrawer;
+        //private DebugDrawer debugDrawer;
+        //private PhysicsDebugDrawer physicsDebugDrawer;
 #endif
 
         GraphicsDeviceManager graphics;
@@ -129,7 +129,7 @@ namespace GDApp
             AddGameOverMenu();
             AddWinMenu();
 #if DEBUG
-            InitializeDebugTextInfo();
+            //InitializeDebugTextInfo();
 #endif
 
             //load game happens before cameras are loaded because we may add a third person camera that needs a reference to a loaded Actor
@@ -141,7 +141,7 @@ namespace GDApp
             StartGame();
 
 #if DEBUG
-            InitializeDebugCollisionSkinInfo();
+            //InitializeDebugCollisionSkinInfo();
 #endif
 
             InitializeEvents();
@@ -641,7 +641,7 @@ namespace GDApp
 
             #region Fonts
 #if DEBUG
-            this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
+            //this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");
@@ -728,22 +728,22 @@ namespace GDApp
         }
 
 #if DEBUG
-        private void InitializeDebugTextInfo()
-        {
-            //add debug info in top left hand corner of the screen
-            this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
-                this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
-            Components.Add(this.debugDrawer);
+        //private void InitializeDebugTextInfo()
+        //{
+        //    //add debug info in top left hand corner of the screen
+        //    this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
+        //        this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
+        //    Components.Add(this.debugDrawer);
 
-        }
+        //}
 
-        private void InitializeDebugCollisionSkinInfo()
-        {
-            //show the collision skins
-            this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager, this.objectManager,
-                this.screenManager, this.eventDispatcher, StatusType.Off);
-            Components.Add(this.physicsDebugDrawer);
-        }
+        //private void InitializeDebugCollisionSkinInfo()
+        //{
+        //    //show the collision skins
+        //    this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager, this.objectManager,
+        //        this.screenManager, this.eventDispatcher, StatusType.Off);
+        //    Components.Add(this.physicsDebugDrawer);
+        //}
 #endif
         #endregion
 
@@ -754,6 +754,7 @@ namespace GDApp
             int worldScale = 100;
             //collidable
             InitializeCollidableWalls(worldScale);
+            InitialiseStairs(worldScale);
             InitializeCollidableGround(worldScale);
             InitializeNonCollidableCeiling(worldScale);
             InitialiseExitHallDoors();
@@ -905,19 +906,19 @@ namespace GDApp
             #region Exit End Wall
             clonePlane = (CollidableObject)prototypeModel.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
-            clonePlane.Transform.Scale = new Vector3(xScale, 10, worldScale / 10.0f);
-            clonePlane.Transform.Translation = new Vector3((-2.493f * worldScale) / 2.2f, (2.54f * worldScale) / 20.0f, (6.6f * worldScale) / 2f);
+            clonePlane.Transform.Scale = new Vector3(xScale, 30, worldScale / 5.0f);
+            clonePlane.Transform.Translation = new Vector3((-2.493f * worldScale) / 2.2f, (2.54f * worldScale) / 20.0f, (7f * worldScale) / 2f);
             clonePlane.AddPrimitive(new Box(clonePlane.Transform.Translation, Matrix.CreateRotationX(MathHelper.PiOver2),
                 new Vector3(clonePlane.Transform.Scale.X * 2.54f, clonePlane.Transform.Scale.Y * 2.54f, clonePlane.Transform.Scale.Z * 2.54f)),
                 new MaterialProperties(0.1f, 0.1f, 0.1f));
             clonePlane.Enable(true, 1);
             this.objectManager.Add(clonePlane);
 
-            //right side of door
+            ////right side of door
             clonePlane = (CollidableObject)prototypeModel.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
-            clonePlane.Transform.Scale = new Vector3(xScale *0.8f, 10, worldScale / 10.0f);
-            clonePlane.Transform.Translation = new Vector3((-2.55f * worldScale) / 3.5f, (2.54f * worldScale) / 20.0f, (6.6f * worldScale) / 2f);
+            clonePlane.Transform.Scale = new Vector3(xScale * 0.8f, 30, worldScale / 5.0f);
+            clonePlane.Transform.Translation = new Vector3((-2.55f * worldScale) / 3.5f, (2.54f * worldScale) / 20.0f, (7f * worldScale) / 2f);
             clonePlane.AddPrimitive(new Box(clonePlane.Transform.Translation, Matrix.CreateRotationX(MathHelper.PiOver2),
                 new Vector3(clonePlane.Transform.Scale.X * 2.54f, clonePlane.Transform.Scale.Y * 2.54f, clonePlane.Transform.Scale.Z * 2.54f)),
                 new MaterialProperties(0.1f, 0.1f, 0.1f));
@@ -984,7 +985,32 @@ namespace GDApp
 
         private void InitialiseStairs(int worldScale)
         {
+            float xScale = 0.833f * worldScale / 8.0f;
+            //first we will create a prototype plane and then simply clone it for each of the skybox decorator elements (e.g. ground, front, top etc). 
+            Transform3D transform = new Transform3D(new Vector3((-2.02f * worldScale) / 2.2f, 0.8f, (6.6f * worldScale) / 2f), new Vector3(xScale * 0.66f, 4, worldScale / 60f));
+            
+            //clone the dictionary effect and set unique properties for the hero player object
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["wall"];
 
+            CollidableObject prototypeModel = new CollidableObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
+
+           
+
+            for (int i = 0; i < 9; i++)
+            {
+                CollidableObject clonePlane = null;
+                clonePlane = (CollidableObject)prototypeModel.Clone();
+                clonePlane.ID = "stair"+i;
+
+                clonePlane.Transform.Translation += new Vector3(0,4*i,10*i);
+
+                clonePlane.AddPrimitive(new Box(clonePlane.Transform.Translation, Matrix.CreateRotationX(MathHelper.PiOver2),
+                    new Vector3(clonePlane.Transform.Scale.X * 2.54f, clonePlane.Transform.Scale.Y * 2.54f, clonePlane.Transform.Scale.Z * 2.54f)),
+                    new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clonePlane.Enable(true, 1);
+                this.objectManager.Add(clonePlane);
+            }
         }
 
         //the ground is simply a large flat box with a Box primitive collision surface attached
@@ -2481,7 +2507,7 @@ namespace GDApp
             //            #endregion
 
             //#if DEBUG
-                        InitializeDebugTextInfo();
+                        //InitializeDebugTextInfo();
             //#endif
         }
 
