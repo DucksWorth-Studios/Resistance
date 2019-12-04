@@ -1013,20 +1013,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Models\Architecture\Doors\BunkerDoorHatch.FBX">
-      <Name>BunkerDoorHatch</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\Models\Architecture\Doors\BunkerDoorPivot.FBX">
-      <Name>BunkerDoorPivot</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Assets\Models\Architecture\Doors\BunkerDoorSmooth.FBX">
       <Name>BunkerDoorSmooth</Name>
       <Importer>FbxImporter</Importer>
