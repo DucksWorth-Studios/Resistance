@@ -141,7 +141,7 @@ namespace GDApp
             StartGame();
 
 #if DEBUG
-            //InitializeDebugCollisionSkinInfo();
+            InitializeDebugCollisionSkinInfo();
 #endif
 
             InitializeEvents();
@@ -531,7 +531,7 @@ namespace GDApp
             //architecture
             this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_01", "barrier");
-            this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_01", "bunker_door");
+            this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoorSmooth", "bunker_door");
 
             //props
             this.modelDictionary.Load("Assets/Models/Props/lamp");
@@ -634,8 +634,8 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
 #if DEBUG
             //demo
-            //this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
-            //this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
+            this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
+            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
 #endif
             #endregion
 
@@ -737,13 +737,13 @@ namespace GDApp
 
         }
 
-        //private void InitializeDebugCollisionSkinInfo()
-        //{
-        //    //show the collision skins
-        //    this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager, this.objectManager,
-        //        this.screenManager, this.eventDispatcher, StatusType.Off);
-        //    Components.Add(this.physicsDebugDrawer);
-        //}
+        private void InitializeDebugCollisionSkinInfo()
+        {
+            //show the collision skins
+            this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager, this.objectManager,
+                this.screenManager, this.eventDispatcher, StatusType.Off);
+            Components.Add(this.physicsDebugDrawer);
+        }
 #endif
         #endregion
 
@@ -871,7 +871,7 @@ namespace GDApp
             clonePlane = (CollidableObject)prototypeModel.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 10.0f);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.2f, (2.54f * worldScale) / 20.0f, (2.54f * worldScale) / 2f);
+            clonePlane.Transform.Translation = new Vector3((-2.493f * worldScale) / 2.2f, (2.54f * worldScale) / 20.0f, (2.54f * worldScale) / 2f);
             clonePlane.AddPrimitive(new Box(clonePlane.Transform.Translation, Matrix.CreateRotationX(MathHelper.PiOver2),
                 new Vector3(clonePlane.Transform.Scale.X * 2.54f, clonePlane.Transform.Scale.Y * 2.54f, clonePlane.Transform.Scale.Z * 2.54f)),
                 new MaterialProperties(0.1f, 0.1f, 0.1f));
@@ -882,7 +882,7 @@ namespace GDApp
             clonePlane = (CollidableObject)prototypeModel.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale, 1, worldScale / 10.0f);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 3.5f, (2.54f * worldScale) / 20.0f, (2.54f * worldScale) / 2f);
+            clonePlane.Transform.Translation = new Vector3((-2.55f * worldScale) / 3.5f, (2.54f * worldScale) / 20.0f, (2.54f * worldScale) / 2f);
             clonePlane.AddPrimitive(new Box(clonePlane.Transform.Translation, Matrix.CreateRotationX(MathHelper.PiOver2),
                 new Vector3(clonePlane.Transform.Scale.X * 2.54f, clonePlane.Transform.Scale.Y * 2.54f, clonePlane.Transform.Scale.Z * 2.54f)),
                 new MaterialProperties(0.1f, 0.1f, 0.1f));
@@ -892,10 +892,10 @@ namespace GDApp
             //top of door way
             clonePlane = (CollidableObject)prototypeModel.Clone();
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
-            clonePlane.Transform.Scale = new Vector3(xScale / 1.6f, 1, worldScale / 40);
-            clonePlane.Transform.Translation = new Vector3((-2.54f * worldScale) / 2.7f, worldScale / 4.35f, (2.54f * worldScale) / 2f);
-            clonePlane.AddPrimitive(new Box(clonePlane.Transform.Translation, Matrix.CreateRotationX(MathHelper.PiOver2),
-                new Vector3(clonePlane.Transform.Scale.X * 2.54f, clonePlane.Transform.Scale.Y * 2.54f, clonePlane.Transform.Scale.Z * 2.54f)),
+            clonePlane.Transform.Scale = new Vector3(xScale / 1.88f, 1, worldScale / 30);
+            clonePlane.Transform.Translation = new Vector3((-2.514f * worldScale) / 2.7f, worldScale / 4.6f, (2.54f * worldScale) / 2f);
+            clonePlane.AddPrimitive(new Box(new Vector3(0,20,0), Matrix.CreateRotationX(MathHelper.PiOver2),
+                new Vector3(0,0,0)),
                 new MaterialProperties(0.1f, 0.1f, 0.1f));
             clonePlane.Enable(true, 1);
             this.objectManager.Add(clonePlane);
@@ -992,8 +992,8 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-85, 0, 127), new Vector3(90, 180, 0), 
-                new Vector3(0.09f, 0.1f, 0.06f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-86, 0, 127), new Vector3(90, 180, 0), 
+                new Vector3(0.07f, 0.05f, 0.05f), Vector3.UnitX, Vector3.UnitY);
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
@@ -1001,7 +1001,7 @@ namespace GDApp
             collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, 
                 this.modelDictionary["bunker_door"]);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
-                    new Vector3(40.0f,40.0f,2f)),
+                    new Vector3(1f,1f,1f)),
                     new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             collidableObject.AttachController(new DoorController("Door Controller", ControllerType.Rotation,this.eventDispatcher));
@@ -1552,7 +1552,7 @@ namespace GDApp
             string viewportDictionaryKey = "full viewport";
             float drawDepth = 0;
 
-            camera = new Camera3D(id, ActorType.Camera, new Transform3D(new Vector3(-70, 1.1f * AppData.CollidableCameraViewHeight + 6, 40),
+            camera = new Camera3D(id, ActorType.Camera, new Transform3D(new Vector3(-70, 24, 40),
                 new Vector3(-0.25f, -0.25f, 1), Vector3.UnitY),
                    ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], drawDepth, StatusType.Update);
 
@@ -1560,7 +1560,7 @@ namespace GDApp
 
             cloneCamera = null;
 
-            cloneCamera = new Camera3D("Door Cutscene Camera2", ActorType.Camera, new Transform3D(new Vector3(-120, 1.1f * AppData.CollidableCameraViewHeight + 6, -70),
+            cloneCamera = new Camera3D("Door Cutscene Camera2", ActorType.Camera, new Transform3D(new Vector3(-120, 24, -70),
                 new Vector3(1, -0.25f, -0.4f), Vector3.UnitY),
                    ProjectionParameters.StandardDeepSixteenNine, this.viewPortDictionary[viewportDictionaryKey], drawDepth, StatusType.Update);
 
@@ -1832,13 +1832,17 @@ namespace GDApp
         {
            Integer2 screenResolution = ScreenUtility.HD720;
             Predicate<Camera3D> pred = s => s.ID == "collidable first person camera";
-            this.cameraManager.Remove(pred);
+            
+
+            Camera3D camera = this.cameraManager.find(pred);
+            camera.ID = "x";
+            //Predicate<Camera3D> predicate = s => s.ID == "x";
+            //this.cameraManager.Remove(predicate);
 
             InitializeCollidableFirstPersonDemo(screenResolution);
 
-            
-            this.cameraManager.SetActiveCamera(pred);
 
+            this.cameraManager.SetActiveCamera(pred);
             
         }
 
@@ -2343,7 +2347,7 @@ namespace GDApp
             //            #endregion
 
             //#if DEBUG
-            //            InitializeDebugTextInfo();
+                        InitializeDebugTextInfo();
             //#endif
         }
 
@@ -2363,11 +2367,11 @@ namespace GDApp
             if(this.keyboardManager.IsKeyDown(Keys.P))
             {
                 //EventDispatcher.Publish(new EventData(EventActionType.OnRestart,EventCategoryType.Reset));
-                // EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
+                 EventDispatcher.Publish(new EventData(EventActionType.OpenDoor,EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateTopBarrier, EventCategoryType.Animator));
                 //EventDispatcher.Publish(new EventData(EventActionType.RotateBottomBarrier, EventCategoryType.Animator));
-                EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "collidable first person camera" }));
+                //EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "collidable first person camera" }));
             }
             //exit using new gamepad manager
             if (this.gamePadManager.IsPlayerConnected(PlayerIndex.One) && this.gamePadManager.IsButtonPressed(PlayerIndex.One, Buttons.Back))
