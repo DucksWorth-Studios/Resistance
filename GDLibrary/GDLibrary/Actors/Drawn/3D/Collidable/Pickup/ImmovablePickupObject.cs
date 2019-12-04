@@ -8,6 +8,7 @@ Fixes:			None
 */
 using JigLibX.Collision;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace GDLibrary
 {
@@ -15,7 +16,7 @@ namespace GDLibrary
     {
         #region Fields
         private PickupParameters pickupParameters;
-        private bool collided = false;
+        private bool inactive = true;
         #endregion
 
         #region Properties
@@ -53,9 +54,10 @@ namespace GDLibrary
         //how do we want this object to respond to collisions?
         private void HandleCollisions(CollidableObject collidableObjectCollider, CollidableObject collidableObjectCollidee)
         {
-            if (collidableObjectCollidee.ActorType == ActorType.CollidableCamera && this.collided == false)
+            if (collidableObjectCollidee.ActorType == ActorType.CollidableCamera && this.inactive == false)
             {
-                this.collided = true;
+                this.inactive = true;
+                Console.WriteLine(collidableObjectCollidee.ID);
                 EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.Win));
             }            
         }
@@ -64,11 +66,18 @@ namespace GDLibrary
         void RegisterForHandling(EventDispatcher eventDispatcher)
         {
             eventDispatcher.Reset += reset;
+            eventDispatcher.animationTriggered += activate;
         }
-
+        //The inactive bool is triggered when the doors are activated this 
+        //is to allow the reset function to reset all items before the object triggers the win scenario
         void reset(EventData eventData)
         {
-            this.collided = false;
+            this.inactive = true;
+        }
+
+        void activate(EventData eventData)
+        {
+            this.inactive = false;
         }
         //public new object Clone()
         //{

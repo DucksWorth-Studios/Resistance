@@ -1000,7 +1000,7 @@
       <Name>unsere-luftwaffe</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-      </Compile>
+    </Compile>
     <Compile Include="Assets\Audio\footstep-concrete.wav">
       <Name>footstep-concrete</Name>
       <Importer>WavImporter</Importer>
@@ -1010,6 +1010,27 @@
       <Name>old-computer</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Architecture\Doors\BunkerDoorHatch.FBX">
+      <Name>BunkerDoorHatch</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Architecture\Doors\BunkerDoorPivot.FBX">
+      <Name>BunkerDoorPivot</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Architecture\Doors\BunkerDoorSmooth.FBX">
+      <Name>BunkerDoorSmooth</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
