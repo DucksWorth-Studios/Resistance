@@ -646,7 +646,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Propaganda/unsere-luftwaffe", "poster-4");
 
             //interactable
-            this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture" + this.riddleId, "riddleObjTexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-" + this.riddleId, "riddleObjTexture");
 
             //load riddle pop up
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/riddlePopup-" + this.riddleId, "popup");
