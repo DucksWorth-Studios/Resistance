@@ -7,11 +7,13 @@ namespace GDApp
 {
     public class MyAppMenuManager : MenuManager
     {
+        private int lastPlayTime;
+        string oldID = "";
+
         public MyAppMenuManager(Game game, MouseManager mouseManager, KeyboardManager keyboardManager, CameraManager cameraManager,
             SpriteBatch spriteBatch, EventDispatcher eventDispatcher, 
             StatusType statusType) : base(game, mouseManager, keyboardManager, cameraManager, spriteBatch, eventDispatcher, statusType)
         {
-
         }
 
         #region Event Handling
@@ -52,9 +54,14 @@ namespace GDApp
         {
             //accumulate time over menu item
             //if greater than X milliseconds then play a boing and reset accumulated time
-            //object[] additionalParameters = { "boing" };
-            //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+            object[] additionalParameters = { "morse_button1" };
 
+            //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+            if(oldID != currentUIObject.GetID())
+            {
+                EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+                oldID = currentUIObject.GetID();
+            }
         }
 
 

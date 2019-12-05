@@ -1013,6 +1013,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Audio\morse_button1.wav">
+      <Name>morse_button1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
     <Compile Include="Assets\Models\Architecture\Doors\BunkerDoorSmooth.FBX">
       <Name>BunkerDoorSmooth</Name>
       <Importer>FbxImporter</Importer>
