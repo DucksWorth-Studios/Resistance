@@ -76,6 +76,9 @@ namespace GDApp
 
         private ManagerParameters managerParameters;
 
+        //random number for riddle
+        private int riddleId;
+
         #endregion
 
         #region Properties
@@ -101,6 +104,7 @@ namespace GDApp
             Integer2 screenResolution = ScreenUtility.HD720;
             ScreenUtility.ScreenType screenType = ScreenUtility.ScreenType.SingleScreen;
             int numberOfGamePadPlayers = 1;
+            this.riddleId = GenerateRandomNum(1, 4); // gets a random number between 1 and 4
 
             //set the title
             Window.Title = "Resistance";
@@ -155,6 +159,17 @@ namespace GDApp
 
 
             base.Initialize();
+        }
+
+        /*
+         * Authors: Andrew
+         * Generates a random number between two values
+         * will be used to pick the riddle that will be used in the game
+         */
+        private int GenerateRandomNum(int min, int max)
+        {
+            Random rand = new Random();
+            return rand.Next(min, max);
         }
 
   
@@ -544,7 +559,6 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/Phonograph");
             this.modelDictionary.Load("Assets/Models/Props/computer");
             this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
-            this.modelDictionary.Load("Assets/Models/Props/Gun");
             this.modelDictionary.Load("Assets/Models/Props/wine-bottle");
             this.modelDictionary.Load("Assets/Models/Props/globe");
             this.modelDictionary.Load("Assets/Models/Props/Stielhandgranate", "grenade");
@@ -552,6 +566,9 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/hat2", "hat");
             this.modelDictionary.Load("Assets/Models/Props/phone3", "phone");
             this.modelDictionary.Load("Assets/Models/Props/shelf1", "shelf");
+
+            //riddle object
+            this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-" + this.riddleId, "riddleAnswerObj");
             #endregion
 
             #region Textures
@@ -602,8 +619,6 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Colours/gray");
             this.textureDictionary.Load("Assets/Colours/green");
             this.textureDictionary.Load("Assets/Colours/black");
-            //load riddle pop up
-            this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/the-riddle", "popup");
 
             //props
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/ammo-box");
@@ -631,7 +646,10 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Propaganda/unsere-luftwaffe", "poster-4");
 
             //interactable
-            this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
+            this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture" + this.riddleId, "riddleObjTexture");
+
+            //load riddle pop up
+            this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/riddlePopup-" + this.riddleId, "popup");
 #if DEBUG
             //demo
             //this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
@@ -1490,10 +1508,10 @@ namespace GDApp
 
             transform3D = new Transform3D(new Vector3(-89, 8.73f, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["GunTexture"];
+            effectParameters.Texture = this.textureDictionary["riddleObjTexture"];
 
             collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.CollidableDecorator, transform3D, effectParameters, 
-                this.modelDictionary["Gun"], new MaterialProperties(0.1f, 0.1f, 0.1f));
+                this.modelDictionary["riddleAnswerObj"], new MaterialProperties(0.1f, 0.1f, 0.1f));
             collidableObject.Enable(true, 1);
 
             this.objectManager.Add(collidableObject);
