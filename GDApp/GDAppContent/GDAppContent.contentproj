@@ -1000,7 +1000,7 @@
       <Name>unsere-luftwaffe</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-      </Compile>
+    </Compile>
     <Compile Include="Assets\Audio\footstep-concrete.wav">
       <Name>footstep-concrete</Name>
       <Importer>WavImporter</Importer>
@@ -1008,6 +1008,13 @@
     </Compile>
     <Compile Include="Assets\Audio\old-computer.wav">
       <Name>old-computer</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Audio\morse_button1.wav">
+      <Name>morse_button1</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

@@ -1,7 +1,7 @@
 Signature = XACT3;
 Version = 18;
 Content Version = 46;
-Release = June 2010;
+Release = February 2010;
 
 Options
 {
@@ -210,7 +210,7 @@ Global Settings
         Read Only = 0;
         Time = 0;
         Value = 0.000000;
-        Initial Value = -0.000000;
+        Initial Value = 0.000000;
         Min = 0.000000;
         Max = 5000.000000;
     }
@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::f45d3aa0-7fcf-4733-b26c-1568ae50aa33;
+            Name = Sound::fda59693-7733-4e87-a351-cef05e16f20b;
             Property = 0;
             Sound = 1;
             Line Color = 4291388006;
@@ -249,7 +249,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::1d3a0673-cbb7-46ed-b778-4847c65deb17;
+            Name = Sound::be3c2653-c6b9-468c-b98e-52e644a3249a;
             Property = 0;
             Sound = 1;
             Line Color = 4293476393;
@@ -286,8 +286,14 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 1278336685;
-    Bank Last Revised High = 30779847;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 0;
+    PC Bank Last Modified High = 0;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
+    Bank Last Revised Low = 4176759089;
+    Bank Last Revised High = 30780244;
 
     Wave
     {
@@ -403,6 +409,29 @@ Wave Bank
             Last Modified High = 30779846;
         }
     }
+
+    Wave
+    {
+        Name = morse_button1;
+        File = morse_button1.wav;
+        Build Settings Last Modified Low = 4026052622;
+        Build Settings Last Modified High = 30780244;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 2;
+            Sampling Rate = 44100;
+            Bits Per Sample = 1;
+            Play Region Offset = 44;
+            Play Region Length = 17164;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 3911415298;
+            Last Modified High = 30780244;
+        }
+    }
 }
 
 Sound Bank
@@ -412,6 +441,8 @@ Sound Bank
     Windows File = Win\Music Sound Bank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
 
     Sound
     {
@@ -663,6 +694,53 @@ Sound Bank
         }
     }
 
+    Sound
+    {
+        Name = morse_button1;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaker Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = Music Wave Bank;
+                    Bank Index = 0;
+                    Entry Name = morse_button1;
+                    Entry Index = 5;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
     Cue
     {
         Name = victory;
@@ -786,6 +864,39 @@ Sound Bank
             Index = 4;
             Weight Min = 0;
             Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = morse_button1;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = morse_button1;
+            Index = 5;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+
+        Instance Limit
+        {
+            Max Instances = 1;
+            Behavior = 0;
+
+            Crossfade
+            {
+                Fade In = 0;
+                Fade Out = 0;
+                Crossfade Type = 0;
+            }
         }
     }
 }
