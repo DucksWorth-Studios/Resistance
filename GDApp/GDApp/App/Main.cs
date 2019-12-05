@@ -2447,6 +2447,32 @@ namespace GDApp
 
             this.effectDictionary.Add(AppData.LitModelsEffectID, new BasicEffectParameters(basicEffect));
             #endregion
+            
+            #region Darkened Lit objects
+            //create a BasicEffect and set the lighting conditions for all models that use this effect in their EffectParameters field
+            basicEffect = new BasicEffect(graphics.GraphicsDevice);
+
+            basicEffect.TextureEnabled = true;
+            //basicEffect.LightingEnabled = false;
+
+
+            basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.38f, 0.38f, 0.38f); // a red light
+            basicEffect.DirectionalLight0.Direction = new Vector3(1, 1, 1);  // coming along the x-axis
+            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
+            basicEffect.SpecularPower = 0.5f;
+
+            basicEffect.DirectionalLight1.Enabled = true;
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.5f, 0.5f, 0.4f); // a red light
+            basicEffect.DirectionalLight1.Direction = new Vector3(-1, -1, -1);  // coming along the x-axis
+            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
+            basicEffect.SpecularPower = 0.5f;
+
+            basicEffect.AmbientLightColor = new Vector3(1, 1, 1);
+            basicEffect.EmissiveColor = new Vector3(1, 1, 1);
+
+            this.effectDictionary.Add(AppData.DarkLitModelsEffectID, new BasicEffectParameters(basicEffect));
+            #endregion
 
             #region For Unlit objects
             //used for model objects that dont interact with lighting i.e. sky
