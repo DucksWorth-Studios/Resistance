@@ -1051,7 +1051,7 @@ namespace GDApp
             #region exithallway
      
             transform3D = new Transform3D(new Vector3(-91, 0, 230), Vector3.Zero, new Vector3(20, 0.1f, 80), Vector3.UnitX, Vector3.UnitY);
-            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["concreteFloor"];
 
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
@@ -1074,7 +1074,7 @@ namespace GDApp
             transform3D = new Transform3D(new Vector3(-65, 0, 140), new Vector3(90, 270, 0),
                 new Vector3(0.07f, 0.05f, 0.05f), Vector3.UnitX, Vector3.UnitY);
 
-            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
 
             archetype = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters,
@@ -2453,23 +2453,21 @@ namespace GDApp
             basicEffect = new BasicEffect(graphics.GraphicsDevice);
 
             basicEffect.TextureEnabled = true;
-            //basicEffect.LightingEnabled = false;
-
 
             basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
-            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.38f, 0.38f, 0.38f); // a red light
-            basicEffect.DirectionalLight0.Direction = new Vector3(1, 1, 1);  // coming along the x-axis
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.19f); // a red light
+            basicEffect.DirectionalLight0.Direction = new Vector3(1);  // coming along the x-axis
             basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
-            basicEffect.SpecularPower = 0.5f;
+            basicEffect.SpecularPower = 0.1f;
 
             basicEffect.DirectionalLight1.Enabled = true;
-            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.5f, 0.5f, 0.4f); // a red light
-            basicEffect.DirectionalLight1.Direction = new Vector3(-1, -1, -1);  // coming along the x-axis
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.25f, 0.25f, 0.2f); // a red light
+            basicEffect.DirectionalLight1.Direction = new Vector3(-1);  // coming along the x-axis
             basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
-            basicEffect.SpecularPower = 0.5f;
+            basicEffect.SpecularPower = 0.1f;
 
-            basicEffect.AmbientLightColor = new Vector3(1, 1, 1);
-            basicEffect.EmissiveColor = new Vector3(1, 1, 1);
+            basicEffect.AmbientLightColor = new Vector3(1);
+            basicEffect.EmissiveColor = new Vector3(1);
 
             this.effectDictionary.Add(AppData.DarkLitModelsEffectID, new BasicEffectParameters(basicEffect));
             #endregion
