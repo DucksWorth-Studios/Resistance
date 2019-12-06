@@ -994,7 +994,7 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3((-2.02f * worldScale) / 2.2f, 0.8f, (6.6f * worldScale) / 2f), new Vector3(xScale * 0.66f, 4, worldScale / 60f));
             
             //clone the dictionary effect and set unique properties for the hero player object
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["wall"];
 
             CollidableObject prototypeModel = new CollidableObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
