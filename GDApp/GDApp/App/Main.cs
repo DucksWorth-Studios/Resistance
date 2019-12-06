@@ -905,6 +905,8 @@ namespace GDApp
 
             #region Exit End Wall
             clonePlane = (CollidableObject)prototypeModel.Clone();
+            clonePlane.EffectParameters =
+                this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale, 30, worldScale / 5.0f);
             clonePlane.Transform.Translation = new Vector3((-2.493f * worldScale) / 2.2f, (2.54f * worldScale) / 20.0f, (7f * worldScale) / 2f);
@@ -916,6 +918,8 @@ namespace GDApp
 
             ////right side of door
             clonePlane = (CollidableObject)prototypeModel.Clone();
+            clonePlane.EffectParameters =
+                this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale * 0.8f, 30, worldScale / 5.0f);
             clonePlane.Transform.Translation = new Vector3((-2.55f * worldScale) / 3.5f, (2.54f * worldScale) / 20.0f, (7f * worldScale) / 2f);
