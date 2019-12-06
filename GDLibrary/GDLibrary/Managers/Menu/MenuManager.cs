@@ -189,7 +189,7 @@ namespace GDLibrary
                 //only handle mouseover and mouse click for buttons
                 if (currentUIObject.ActorType == ActorType.UIButton)
                 {
-                    //add an if to check that this is a interactive UIButton object
+                    //add an if to check that this is a interactive UIButton objectmyMenu
                     if (currentUIObject.Transform.Bounds.Intersects(this.mouseManager.Bounds))
                     {
                         //if mouse is over a new ui object then set old to "IsMouseOver=false"
