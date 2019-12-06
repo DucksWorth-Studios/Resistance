@@ -20,7 +20,7 @@ namespace GDLibrary
 
         public UITimer(Transform2D transform, float layerDepth, SpriteFont spriteFont, TimerUtility timer) :
             base("Default Timer", ActorType.UIDynamicText, StatusType.Drawn | StatusType.Update, 
-                transform, Color.Red, SpriteEffects.None, layerDepth, 
+                transform, Color.WhiteSmoke, SpriteEffects.None, layerDepth, 
                 timer.ToString(), spriteFont)
         {
             this.timer = timer;
