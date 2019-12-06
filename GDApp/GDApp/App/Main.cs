@@ -2473,7 +2473,7 @@ namespace GDApp
             basicEffect.DirectionalLight1.Enabled = true;
             basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.25f, 0.25f, 0.2f); // a red light
             basicEffect.DirectionalLight1.Direction = new Vector3(-1);  // coming along the x-axis
-            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
+            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0); // with green highlights
             basicEffect.SpecularPower = 0.1f;
 
             basicEffect.AmbientLightColor = new Vector3(1);
