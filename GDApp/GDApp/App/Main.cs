@@ -1848,7 +1848,7 @@ namespace GDApp
         
             UITextureObject bar = this.menuManager.ActiveList.Find(predicate) as UITextureObject;
 
-            if (delta < 0)
+            if (delta < 0 && bar.SourceRectangleWidth != 0)
             {
                 bar.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, bar.SourceRectangleWidth - bar.Texture.Width / 4, bar.SourceRectangleHeight);
             }
