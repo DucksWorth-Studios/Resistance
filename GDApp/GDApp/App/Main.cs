@@ -1269,6 +1269,18 @@ namespace GDApp
                 this.objectManager.Add(clone);
             }
             #endregion
+
+            #region front wall
+            for (i = 1; i < 3; i++)
+            {
+                clone = (ModelObject)model.Clone();
+                clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
+                clone.Transform.Translation = new Vector3(-135 + (i * 25), 15, -125);
+                clone.Transform.Rotation = new Vector3(0, 90, 0);
+                clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
+                this.objectManager.Add(clone);
+            }
+            #endregion
         }
 
         private void InitializeAmmoBoxes()
