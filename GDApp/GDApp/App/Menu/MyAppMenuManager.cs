@@ -85,16 +85,18 @@ namespace GDApp
 
                     case "volumeUpbtn":
                         { //curly brackets scope additionalParameters to be local to this case
-                            object[] additionalParameters = { 0.1f };
+                            object[] additionalParameters = { 0.25f };
                             EventDispatcher.Publish(new EventData(EventActionType.OnVolumeUp, EventCategoryType.GlobalSound, additionalParameters));
+                            EventDispatcher.Publish(new EventData(EventActionType.OnVolumeChange, EventCategoryType.volume, additionalParameters));
                         }
                         break;
 
                     case "volumeDownbtn":
                         {  
-                            object[] additionalParameters = { 0.1f };
+                            object[] additionalParameters = { -0.25f };
                             EventDispatcher.Publish(new EventData(EventActionType.OnVolumeDown, EventCategoryType.GlobalSound, additionalParameters));
-                        }
+                            EventDispatcher.Publish(new EventData(EventActionType.OnVolumeChange, EventCategoryType.volume, additionalParameters));
+                    }
                         break;
 
                     case "volumeMutebtn":

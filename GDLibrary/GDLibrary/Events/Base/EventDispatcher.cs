@@ -48,6 +48,7 @@ namespace GDLibrary
         public delegate void AnimationHandler(EventData eventData);
         public delegate void ObjectiveHandler(EventData eventData);
         public delegate void ResetHandler(EventData eventData);
+        public delegate void VolumeHandler(EventData eventData);
         
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
@@ -76,6 +77,7 @@ namespace GDLibrary
         public event AnimationHandler animationTriggered;
         public event ObjectiveHandler ObjectiveChanged;
         public event ResetHandler Reset;
+        public event VolumeHandler VolumeChanged;
 
 
         public EventDispatcher(Game game, int initialSize)
@@ -204,6 +206,9 @@ namespace GDLibrary
                 case EventCategoryType.Objective:
                     OnObjective(eventData);
                     break;
+                case EventCategoryType.volume:
+                    OnVolume(eventData);
+                    break;
                 case EventCategoryType.Reset:
                     OnReset(eventData);
                     break;
@@ -226,7 +231,11 @@ namespace GDLibrary
         {
             lockChanged?.Invoke(eventData);
         }
-        
+        private void OnVolume(EventData eventData)
+        {
+            VolumeChanged?.Invoke(eventData);
+        }
+
         private void OnReset(EventData eventData)
         {
             Reset?.Invoke(eventData);
