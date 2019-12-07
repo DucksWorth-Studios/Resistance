@@ -25,6 +25,14 @@ namespace GDLibrary
         {
             this.timer = timer;
         }
+        
+        public UITimer(Transform2D transform, Color color, float layerDepth, SpriteFont spriteFont, TimerUtility timer) :
+            base("Default Timer", ActorType.UIDynamicText, StatusType.Drawn | StatusType.Update, 
+                transform, color, SpriteEffects.None, layerDepth, 
+                timer.ToString(), spriteFont)
+        {
+            this.timer = timer;
+        }
 
         public override void Update(GameTime gameTime)
         {
