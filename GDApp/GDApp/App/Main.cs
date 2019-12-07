@@ -2584,8 +2584,19 @@ namespace GDApp
                 Transform2D timerTransform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth-130, 25 * count),
                     0, Vector2.One, Vector2.Zero, Integer2.Zero);
 
-                UITimer uiTimer = new UITimer(timerTransform, 0.1f, fontDictionary["timerFont"], timer);
+                UITimer uiTimer = new UITimer(timerTransform, Color.WhiteSmoke, 0.1f, 
+                        fontDictionary["timerFont"], timer);
                 this.uiManager.Add(uiTimer);
+
+                /*
+                //An experimental shadow
+                Transform2D shadowTimerTransform = new Transform2D(new Vector2(timerTransform.Translation.X - 4,
+                    timerTransform.Translation.Y - 2),
+                    0, new Vector2(1.1f), Vector2.Zero, Integer2.Zero);
+                UITimer uiShadowTimer = new UITimer(shadowTimerTransform, Color.Black, 1, 
+                    fontDictionary["timerFont"], timer);
+                this.uiManager.Add(uiShadowTimer);
+                */
                 count++;
             }
         }
