@@ -1246,16 +1246,41 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
             ModelObject model = null, clone = null;
             model = new ModelObject("poster-", ActorType.Decorator, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
+            int i = 1;
 
-            for(int i = 1; i < 5; i++)
+            #region right wall
+            for (i = 1; i < 3; i++)
             {
                 clone = (ModelObject)model.Clone();
                 clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
-                clone.Transform.Translation = new Vector3(-65, 15, -30 + (i * 25));
+                clone.Transform.Translation = new Vector3(-65, 15, 50 + (i * 25));
                 clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
                 this.objectManager.Add(clone);
             }
+            #endregion
 
+            #region left wall
+            for (i = 3; i < 5; i++)
+            {
+                clone = (ModelObject)model.Clone();
+                clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
+                clone.Transform.Translation = new Vector3(-125.5f, 15, 0 + (i * 25));
+                clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
+                this.objectManager.Add(clone);
+            }
+            #endregion
+
+            #region front wall
+            for (i = 1; i < 3; i++)
+            {
+                clone = (ModelObject)model.Clone();
+                clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
+                clone.Transform.Translation = new Vector3(-135 + (i * 25), 15, -125);
+                clone.Transform.Rotation = new Vector3(0, 90, 0);
+                clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
+                this.objectManager.Add(clone);
+            }
+            #endregion
         }
 
         private void InitializeAmmoBoxes()
@@ -1447,7 +1472,7 @@ namespace GDApp
 
         private void InitializePhonoGraph()
         {
-            Transform3D transform = new Transform3D(new Vector3(-100.0f, 7.0f, -121.0f), new Vector3(0, 180, 0), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
+            Transform3D transform = new Transform3D(new Vector3(-100.0f, 6.7f, -120.0f), new Vector3(0, 180, 0), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["phonograph"];
 
