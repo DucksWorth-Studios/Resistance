@@ -916,6 +916,8 @@ namespace GDApp
 
             #region Exit End Wall
             clonePlane = (CollidableObject)prototypeModel.Clone();
+            clonePlane.EffectParameters =
+                this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale, 30, worldScale / 5.0f);
             clonePlane.Transform.Translation = new Vector3((-2.493f * worldScale) / 2.2f, (2.54f * worldScale) / 20.0f, (7f * worldScale) / 2f);
@@ -927,6 +929,8 @@ namespace GDApp
 
             ////right side of door
             clonePlane = (CollidableObject)prototypeModel.Clone();
+            clonePlane.EffectParameters =
+                this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale * 0.8f, 30, worldScale / 5.0f);
             clonePlane.Transform.Translation = new Vector3((-2.55f * worldScale) / 3.5f, (2.54f * worldScale) / 20.0f, (7f * worldScale) / 2f);
@@ -966,6 +970,8 @@ namespace GDApp
             #region ExitHall
             #region Left Exit Wall
                 clonePlane = (CollidableObject)prototypeModel.Clone();
+                clonePlane.EffectParameters =
+                    this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
                 clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
                 clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 10.0f);
                 clonePlane.Transform.Translation = new Vector3((-2.56f * worldScale) / 4.0f, (2.54f * worldScale) / 20.0f, 222);
@@ -979,6 +985,8 @@ namespace GDApp
             #region Right Exit Wall
 
                 clonePlane = (CollidableObject)prototypeModel.Clone();
+                clonePlane.EffectParameters =
+                    this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
                 clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
                 clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 10.0f);
                 clonePlane.Transform.Translation = new Vector3((-4.7f * worldScale) / 4.0f, (2.54f * worldScale) / 20.0f, 222);
@@ -1001,7 +1009,7 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3((-2.02f * worldScale) / 2.2f, 0.8f, (6.6f * worldScale) / 2f), new Vector3(xScale * 0.66f, 4, worldScale / 60f));
             
             //clone the dictionary effect and set unique properties for the hero player object
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["wall"];
 
             CollidableObject prototypeModel = new CollidableObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
@@ -1062,7 +1070,7 @@ namespace GDApp
             #region exithallway
      
             transform3D = new Transform3D(new Vector3(-91, 0, 230), Vector3.Zero, new Vector3(20, 0.1f, 80), Vector3.UnitX, Vector3.UnitY);
-            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["concreteFloor"];
 
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
@@ -1085,7 +1093,7 @@ namespace GDApp
             transform3D = new Transform3D(new Vector3(-65, 0, 140), new Vector3(90, 270, 0),
                 new Vector3(0.07f, 0.05f, 0.05f), Vector3.UnitX, Vector3.UnitY);
 
-            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
 
             archetype = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters,
@@ -1136,6 +1144,8 @@ namespace GDApp
 
             #region exit Ceiling
             transform = new Transform3D(new Vector3(-91, 25, 230), Vector3.Zero, new Vector3(20, 0.1f, 80), Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["concreteFloor"];
             model = new ModelObject("ceiling exit hall", ActorType.NonCollidableCeiling, transform, effectParameters, this.modelDictionary["box2"]);
             this.objectManager.Add(model);
             #endregion
@@ -2643,21 +2653,45 @@ namespace GDApp
 
 
             basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
-            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.38f, 0.38f, 0.38f); // a red light
-            basicEffect.DirectionalLight0.Direction = new Vector3(1, 1, 1);  // coming along the x-axis
-            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.3f); // a red light
+            basicEffect.DirectionalLight0.Direction = new Vector3(1);  // coming along the x-axis
+            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.15f, 0); // with green highlights
             basicEffect.SpecularPower = 1f;
 
             basicEffect.DirectionalLight1.Enabled = true;
-            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.5f, 0.5f, 0.4f); // a red light
-            basicEffect.DirectionalLight1.Direction = new Vector3(-1, -1, -1);  // coming along the x-axis
-            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.25f, 0.25f, 0.2f); // a red light
+            basicEffect.DirectionalLight1.Direction = new Vector3(-1);  // coming along the x-axis
+            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.15f, 0); // with green highlights
             basicEffect.SpecularPower = 1f;
 
-            basicEffect.AmbientLightColor = new Vector3(1, 1, 1);
-            basicEffect.EmissiveColor = new Vector3(1, 1, 1);
+            basicEffect.AmbientLightColor = new Vector3(0.5f);
+            basicEffect.EmissiveColor = new Vector3(0.5f);
 
             this.effectDictionary.Add(AppData.LitModelsEffectID, new BasicEffectParameters(basicEffect));
+            #endregion
+            
+            #region Darkened Lit objects
+            //create a BasicEffect and set the lighting conditions for all models that use this effect in their EffectParameters field
+            basicEffect = new BasicEffect(graphics.GraphicsDevice);
+
+            basicEffect.TextureEnabled = true;
+
+            basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.19f); // a red light
+            basicEffect.DirectionalLight0.Direction = new Vector3(1);  // coming along the x-axis
+            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
+            basicEffect.SpecularPower = 0.1f;
+
+            basicEffect.DirectionalLight1.Enabled = true;
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.25f, 0.25f, 0.2f); // a red light
+            basicEffect.DirectionalLight1.Direction = new Vector3(-1);  // coming along the x-axis
+            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0); // with green highlights
+            basicEffect.SpecularPower = 0.1f;
+
+            basicEffect.AmbientLightColor = new Vector3(1);
+            basicEffect.EmissiveColor = new Vector3(1);
+
+            this.effectDictionary.Add(AppData.DarkLitModelsEffectID, new BasicEffectParameters(basicEffect));
             #endregion
 
             #region For Unlit objects
@@ -2668,19 +2702,19 @@ namespace GDApp
 
 
             basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
-            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.38f, 0.38f,0.38f); // a red light
-            basicEffect.DirectionalLight0.Direction = new Vector3(1, 1, 1);  // coming along the x-axis
-            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
-            basicEffect.SpecularPower = 1f;
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.25f); // a red light
+            basicEffect.DirectionalLight0.Direction = new Vector3(1);  // coming along the x-axis
+            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.15f, 0); // with green highlights
+            basicEffect.SpecularPower = 0.5f;
 
             basicEffect.DirectionalLight1.Enabled = true;
-            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.5f, 0.5f, 0.4f); // a red light
-            basicEffect.DirectionalLight1.Direction = new Vector3(-1, -1, -1);  // coming along the x-axis
-            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
-            basicEffect.SpecularPower = 1f;
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.25f, 0.25f, 0.2f); // a red light
+            basicEffect.DirectionalLight1.Direction = new Vector3(-1);  // coming along the x-axis
+            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.15f, 0); // with green highlights
+            basicEffect.SpecularPower = 0.5f;
 
-            basicEffect.AmbientLightColor = new Vector3(1, 1, 1);
-            basicEffect.EmissiveColor = new Vector3(1, 1, 1);
+            basicEffect.AmbientLightColor = new Vector3(0.5f);
+            basicEffect.EmissiveColor = new Vector3(0.5f);
             
             this.effectDictionary.Add(AppData.UnlitModelsEffectID, new BasicEffectParameters(basicEffect));
             #endregion
