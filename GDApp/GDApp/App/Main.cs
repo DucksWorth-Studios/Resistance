@@ -56,7 +56,7 @@ namespace GDApp
         private CutsceneTimer cutsceneTimer;
 
         public TimerManager timerManager { get; private set; }
-        public LogicManager logicPuzzle;
+        public LogicTemplate logicPuzzle;
         public ObjectiveManager objectiveManager;
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
@@ -460,7 +460,8 @@ namespace GDApp
             this.managerParameters = new ManagerParameters(this.objectManager,
                 this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager, this.screenManager, this.soundManager);
 
-            this.logicPuzzle = new LogicManager(this,this.eventDispatcher);
+            BasePuzzle baseLogicPuzzle = new BasePuzzle(this, this.eventDispatcher);
+            this.logicPuzzle = baseLogicPuzzle as LogicTemplate;
             Components.Add(logicPuzzle);
 
             #region Pick Manager
