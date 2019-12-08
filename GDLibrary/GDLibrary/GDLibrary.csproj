@@ -160,6 +160,8 @@
     <Compile Include="Managers\Input\GamePadManager.cs" />
     <Compile Include="Exceptions\GamePadException.cs" />
     <Compile Include="Managers\MechanicManagers\LogicManager.cs" />
+    <Compile Include="Managers\MechanicManagers\Puzzles\BasePuzzle.cs" />
+    <Compile Include="Managers\MechanicManagers\Template\LogicTemplate.cs" />
     <Compile Include="Managers\Menu\MenuManager.cs" />
     <Compile Include="Managers\Objectives\ObjectiveManager.cs" />
     <Compile Include="Managers\Object\ObjectManager.cs" />
