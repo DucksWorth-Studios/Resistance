@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::a24ff4e7-ee6e-4d6a-9893-0cf4252b7a6e;
+            Name = Sound::b58e4916-16fa-4575-a10b-4323ccc2ddfc;
             Property = 0;
             Sound = 1;
             Line Color = 4291388006;
@@ -249,7 +249,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::b0f36646-7170-442c-a791-bf459298852e;
+            Name = Sound::747e2bc7-4ca8-49c1-83c5-16ebea7ee6e0;
             Property = 0;
             Sound = 1;
             Line Color = 4293476393;
@@ -286,8 +286,8 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 579089133;
-    Bank Last Revised High = 30780739;
+    Bank Last Revised Low = 916461471;
+    Bank Last Revised High = 30780934;
 
     Wave
     {
@@ -430,9 +430,9 @@ Wave Bank
     Wave
     {
         Name = Door_Open;
-        File = ..\..\..\..\..\..\..\Desktop\Door_Open.wav;
-        Build Settings Last Modified Low = 492613752;
-        Build Settings Last Modified High = 30780739;
+        File = ..\..\..\..\..\..\..\Desktop\Sounds\Door_Open.wav;
+        Build Settings Last Modified Low = 869983991;
+        Build Settings Last Modified High = 30780934;
 
         Cache
         {
@@ -441,12 +441,12 @@ Wave Bank
             Sampling Rate = 48000;
             Bits Per Sample = 1;
             Play Region Offset = 44;
-            Play Region Length = 562964;
+            Play Region Length = 268788;
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4202502419;
-            Last Modified High = 30780248;
+            Last Modified Low = 29149016;
+            Last Modified High = 30780934;
         }
     }
 }
