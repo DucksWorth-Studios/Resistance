@@ -286,8 +286,8 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 3032756972;
-    Bank Last Revised High = 30780943;
+    Bank Last Revised Low = 3854985893;
+    Bank Last Revised High = 30780947;
 
     Wave
     {
@@ -477,8 +477,8 @@ Wave Bank
     {
         Name = Bookcase_Sound;
         File = ..\..\..\..\..\..\..\Desktop\Sounds\Bookcase_Sound.wav;
-        Build Settings Last Modified Low = 3015722639;
-        Build Settings Last Modified High = 30780943;
+        Build Settings Last Modified Low = 3800457108;
+        Build Settings Last Modified High = 30780947;
 
         Cache
         {
@@ -487,12 +487,12 @@ Wave Bank
             Sampling Rate = 44100;
             Bits Per Sample = 1;
             Play Region Offset = 44;
-            Play Region Length = 192322;
+            Play Region Length = 221184;
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 2880524402;
-            Last Modified High = 30780943;
+            Last Modified Low = 3564001060;
+            Last Modified High = 30780947;
         }
     }
 }
