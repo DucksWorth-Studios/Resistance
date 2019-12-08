@@ -1992,6 +1992,8 @@ namespace GDApp
             EventDispatcher.Publish(new EventData(EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
             EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
             EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] { 5, "collidable first person camera" }));
+            
+            this.soundManager.PlayCue("SolutionSound02");
         }
 
         /*
