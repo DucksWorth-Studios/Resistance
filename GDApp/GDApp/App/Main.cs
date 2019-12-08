@@ -1841,8 +1841,14 @@ namespace GDApp
             this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
             this.eventDispatcher.Reset += Reset;
             this.eventDispatcher.VolumeChanged += ChangeVolume;
+            this.eventDispatcher.animationTriggered += playDoorSound;
+
+        }
 
 
+        private void playDoorSound(EventData eventData)
+        {
+            this.soundManager.PlayCue("Door_Open");
         }
         /*
          * Author: Tomas
