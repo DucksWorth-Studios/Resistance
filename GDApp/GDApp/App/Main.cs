@@ -1841,14 +1841,22 @@ namespace GDApp
             this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
             this.eventDispatcher.Reset += Reset;
             this.eventDispatcher.VolumeChanged += ChangeVolume;
-            this.eventDispatcher.animationTriggered += playDoorSound;
+            this.eventDispatcher.animationTriggered += playAnimationSound;
 
         }
 
 
-        private void playDoorSound(EventData eventData)
+        private void playAnimationSound(EventData eventData)
         {
-            this.soundManager.PlayCue("Door_Open");
+
+            if(eventData.EventType == EventActionType.OpenBookcase)
+            {
+                this.soundManager.PlayCue("Bookcase_Sound");
+            }
+            else if(eventData.EventType == EventActionType.OpenDoor)
+            {
+                this.soundManager.PlayCue("Door_Open");
+            }
         }
         /*
          * Author: Tomas
