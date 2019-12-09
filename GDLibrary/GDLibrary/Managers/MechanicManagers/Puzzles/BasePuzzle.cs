@@ -115,23 +115,5 @@ namespace GDLibrary
 
         }
 
-        protected override void RegisterForHandling(EventDispatcher eventDispatcher)
-        {
-            eventDispatcher.Reset += Reset;
-        }
-
-        protected override void Reset(EventData eventData)
-        {
-            this.switchOne = false;
-            this.switchTwo = false;
-            this.switchThree = false;
-            this.switchFour = false;
-            this.IsSolved = false;
-
-            this.gateOne = false;
-            this.gateTwo = false;
-            this.gateThree = false;
-            this.gateFour = false;
-        }
     }
 }

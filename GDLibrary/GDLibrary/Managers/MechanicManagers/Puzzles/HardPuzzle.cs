@@ -110,14 +110,5 @@ namespace GDLibrary
             }
         }
 
-        protected override void RegisterForHandling(EventDispatcher eventDispatcher)
-        {
-            base.RegisterForHandling(eventDispatcher);
-        }
-
-        protected override void Reset(EventData eventData)
-        {
-            base.Reset(eventData);
-        }
     }
 }

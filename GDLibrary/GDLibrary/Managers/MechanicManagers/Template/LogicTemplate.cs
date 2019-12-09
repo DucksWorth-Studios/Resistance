@@ -28,7 +28,7 @@ namespace GDLibrary
 
         protected virtual void RegisterForHandling(EventDispatcher eventDispatcher)
         {
-            eventDispatcher.Reset += Reset;
+            
         }
 
         protected virtual void Reset(EventData eventData)
