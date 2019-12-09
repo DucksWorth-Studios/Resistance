@@ -168,7 +168,7 @@ namespace GDApp
          */
         private int GenerateRandomNum(int min, int max)
         {
-            Random rand = new Random();
+            Random rand = new Random();            
             return rand.Next(min, max);
         }
 
@@ -564,7 +564,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/Stielhandgranate", "grenade");
             this.modelDictionary.Load("Assets/Models/Props/GermanHelmet", "helmet");
             this.modelDictionary.Load("Assets/Models/Props/hat2", "hat");
-            this.modelDictionary.Load("Assets/Models/Props/phone3", "phone");
+            //this.modelDictionary.Load("Assets/Models/Props/phone3", "phone");
             this.modelDictionary.Load("Assets/Models/Props/shelf1", "shelf");
 
             //riddle object
@@ -630,13 +630,13 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/FilingCabinet");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
-            this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
+            //this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
             this.textureDictionary.Load("Assets/Textures/Props/Globe/mp");
             this.textureDictionary.Load("Assets/Textures/Props/Globe/mtlscr");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/grenadetexture", "grenade");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/German Helmet", "helmet");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/hat");
-            this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonetex", "phone");
+            //this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonetex", "phone");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/wood");
 
             //propaganda
@@ -646,7 +646,10 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Propaganda/unsere-luftwaffe", "poster-4");
 
             //interactable
+            //riddle object
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-" + this.riddleId, "riddleObjTexture");
+
+            this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
 
             //load riddle pop up
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/riddlePopup-" + this.riddleId, "popup");
@@ -800,7 +803,7 @@ namespace GDApp
             InitialiseGrenade();
             InitialiseHelmet();
             InitialiseHat();
-            InitialisePhone();
+            //InitialisePhone();
             InitialiseShelf();
             InitializePosters();       
         }
@@ -1506,12 +1509,25 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-89, 8.73f, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
+            if(this.riddleId == 1)
+            {
+                transform3D = new Transform3D(new Vector3(-89, 8.73f, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
+            }
+            else if(this.riddleId == 2)
+            {
+                transform3D = new Transform3D(new Vector3(-126, 19, 22), new Vector3(0, 90, -90), new Vector3(0.1f, 0.1f, 0.1f), Vector3.UnitX, Vector3.UnitY);
+            }
+            else
+            {
+                transform3D = new Transform3D(new Vector3(-68, 14, 18), new Vector3(0, -90, 0), new Vector3(0.01f, 0.01f, 0.01f), Vector3.UnitX, Vector3.UnitY);
+            }
+            
+
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["riddleObjTexture"];
 
             collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.CollidableDecorator, transform3D, effectParameters, 
-                this.modelDictionary["riddleAnswerObj"], new MaterialProperties(0.1f, 0.1f, 0.1f));
+                this.modelDictionary["riddleAnswerObj"], new MaterialProperties(0.5f, 0.5f, 0.5f));
             collidableObject.Enable(true, 1);
 
             this.objectManager.Add(collidableObject);
@@ -1643,7 +1659,7 @@ namespace GDApp
         
         /*
          * Author: Cameron
-         */
+         *
         private void InitialisePhone()
         {
             Transform3D transform = new Transform3D(new Vector3(-94, 6.6f, -120), 
@@ -1657,6 +1673,7 @@ namespace GDApp
                 this.modelDictionary["phone"]);
             this.objectManager.Add(model);
         }
+        */
         
         /*
         * Author: Cameron
