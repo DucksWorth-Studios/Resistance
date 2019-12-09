@@ -18,9 +18,9 @@ namespace GDLibrary
             this.timer = timer;
         }
 
-        public UITimer(Transform2D transform, float layerDepth, SpriteFont spriteFont, TimerUtility timer) :
+        public UITimer(Transform2D transform, Color color, float layerDepth, SpriteFont spriteFont, TimerUtility timer) :
             base("Default Timer", ActorType.UIDynamicText, StatusType.Drawn | StatusType.Update, 
-                transform, Color.Red, SpriteEffects.None, layerDepth, 
+                transform, color, SpriteEffects.None, layerDepth, 
                 timer.ToString(), spriteFont)
         {
             this.timer = timer;

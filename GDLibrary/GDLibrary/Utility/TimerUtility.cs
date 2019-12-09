@@ -81,7 +81,18 @@ namespace GDLibrary
 
         public override string ToString()
         {
-            return Hours + ":" + Minutes + ":" + Seconds;
+            string hours = Hours.ToString();
+            string mins = Minutes.ToString();
+            string secs = Seconds.ToString();
+
+            if (Hours < 10)
+                hours = "0" + hours;
+            if (Minutes < 10)
+                mins = "0" + mins;
+            if (Seconds < 10)
+                secs = "0" + secs;
+
+            return hours + ":" + mins + ":" + secs;
         }
     }
 }

@@ -138,14 +138,14 @@ namespace GDLibrary
         #endregion
 
         #region Effect parameter ids used by the effect dictionary
+        
         public static readonly string LitModelsEffectID = "lit models basic effect";
+        public static readonly string DarkLitModelsEffectID = "dark lit models basic effect";
         public static readonly string UnlitModelsEffectID = "unlit models basic effect";
         public static readonly string UnLitPrimitivesEffectID = "unlit primitives basic effect";
         public static readonly string UnlitModelDualEffectID = "unlit models dual effect";
         public static readonly string UnlitBillboardsEffectID = "unlit billboards effect";
-
-
-
+        
         #endregion
     }
 }

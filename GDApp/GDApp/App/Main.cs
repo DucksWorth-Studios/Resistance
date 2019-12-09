@@ -132,6 +132,7 @@ namespace GDApp
             AddUIElements();
             AddGameOverMenu();
             AddWinMenu();
+            addAudioMenu();
 #if DEBUG
             //InitializeDebugTextInfo();
 #endif
@@ -587,8 +588,12 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/Resume");
 
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/back-Button","back");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/audio-button","Audio");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/control-button","controls");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/mainMenu-Button");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/volUp");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Buttons/volDown");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/audio-bar");
 
 
             //menu - backgrounds
@@ -597,6 +602,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/PauseMenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/control-screen", "ControlMenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/win-screen");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/Audio-Menu" ,"audioMenu");
 
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
@@ -773,7 +779,12 @@ namespace GDApp
         private void LoadGame(int level)
         {
             int worldScale = 100;
+            // inital game volume
+            this.soundManager.ChangeVolume(1f, "Default");
+
             //collidable
+
+
             InitializeCollidableWalls(worldScale);
             InitialiseStairs(worldScale);
             InitializeCollidableGround(worldScale);
@@ -926,6 +937,8 @@ namespace GDApp
 
             #region Exit End Wall
             clonePlane = (CollidableObject)prototypeModel.Clone();
+            clonePlane.EffectParameters =
+                this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale, 30, worldScale / 5.0f);
             clonePlane.Transform.Translation = new Vector3((-2.493f * worldScale) / 2.2f, (2.54f * worldScale) / 20.0f, (7f * worldScale) / 2f);
@@ -937,6 +950,8 @@ namespace GDApp
 
             ////right side of door
             clonePlane = (CollidableObject)prototypeModel.Clone();
+            clonePlane.EffectParameters =
+                this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
             clonePlane.Transform.Scale = new Vector3(xScale * 0.8f, 30, worldScale / 5.0f);
             clonePlane.Transform.Translation = new Vector3((-2.55f * worldScale) / 3.5f, (2.54f * worldScale) / 20.0f, (7f * worldScale) / 2f);
@@ -976,6 +991,8 @@ namespace GDApp
             #region ExitHall
             #region Left Exit Wall
                 clonePlane = (CollidableObject)prototypeModel.Clone();
+                clonePlane.EffectParameters =
+                    this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
                 clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
                 clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 10.0f);
                 clonePlane.Transform.Translation = new Vector3((-2.56f * worldScale) / 4.0f, (2.54f * worldScale) / 20.0f, 222);
@@ -989,6 +1006,8 @@ namespace GDApp
             #region Right Exit Wall
 
                 clonePlane = (CollidableObject)prototypeModel.Clone();
+                clonePlane.EffectParameters =
+                    this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
                 clonePlane.EffectParameters.Texture = this.textureDictionary["wall"];
                 clonePlane.Transform.Scale = new Vector3(3 * worldScale / 4, 1, worldScale / 10.0f);
                 clonePlane.Transform.Translation = new Vector3((-4.7f * worldScale) / 4.0f, (2.54f * worldScale) / 20.0f, 222);
@@ -1011,7 +1030,7 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3((-2.02f * worldScale) / 2.2f, 0.8f, (6.6f * worldScale) / 2f), new Vector3(xScale * 0.66f, 4, worldScale / 60f));
             
             //clone the dictionary effect and set unique properties for the hero player object
-            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["wall"];
 
             CollidableObject prototypeModel = new CollidableObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
@@ -1072,7 +1091,7 @@ namespace GDApp
             #region exithallway
      
             transform3D = new Transform3D(new Vector3(-91, 0, 230), Vector3.Zero, new Vector3(20, 0.1f, 80), Vector3.UnitX, Vector3.UnitY);
-            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["concreteFloor"];
 
             collidableObject = new CollidableObject("ground", ActorType.CollidableGround, transform3D, effectParameters, model);
@@ -1095,7 +1114,7 @@ namespace GDApp
             transform3D = new Transform3D(new Vector3(-65, 0, 140), new Vector3(90, 270, 0),
                 new Vector3(0.07f, 0.05f, 0.05f), Vector3.UnitX, Vector3.UnitY);
 
-            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["aluminum"];
 
             archetype = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters,
@@ -1146,6 +1165,8 @@ namespace GDApp
 
             #region exit Ceiling
             transform = new Transform3D(new Vector3(-91, 25, 230), Vector3.Zero, new Vector3(20, 0.1f, 80), Vector3.UnitX, Vector3.UnitY);
+            effectParameters = this.effectDictionary[AppData.DarkLitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["concreteFloor"];
             model = new ModelObject("ceiling exit hall", ActorType.NonCollidableCeiling, transform, effectParameters, this.modelDictionary["box2"]);
             this.objectManager.Add(model);
             #endregion
@@ -1256,16 +1277,41 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
             ModelObject model = null, clone = null;
             model = new ModelObject("poster-", ActorType.Decorator, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
+            int i = 1;
 
-            for(int i = 1; i < 5; i++)
+            #region right wall
+            for (i = 1; i < 3; i++)
             {
                 clone = (ModelObject)model.Clone();
                 clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
-                clone.Transform.Translation = new Vector3(-65, 15, -30 + (i * 25));
+                clone.Transform.Translation = new Vector3(-65, 15, 50 + (i * 25));
                 clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
                 this.objectManager.Add(clone);
             }
+            #endregion
 
+            #region left wall
+            for (i = 3; i < 5; i++)
+            {
+                clone = (ModelObject)model.Clone();
+                clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
+                clone.Transform.Translation = new Vector3(-125.5f, 15, 0 + (i * 25));
+                clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
+                this.objectManager.Add(clone);
+            }
+            #endregion
+
+            #region front wall
+            for (i = 1; i < 3; i++)
+            {
+                clone = (ModelObject)model.Clone();
+                clone.EffectParameters.Texture = this.textureDictionary["poster-" + i];
+                clone.Transform.Translation = new Vector3(-135 + (i * 25), 15, -125);
+                clone.Transform.Rotation = new Vector3(0, 90, 0);
+                clone.Transform.Scale = new Vector3(0.0001f, 5, 5);
+                this.objectManager.Add(clone);
+            }
+            #endregion
         }
 
         private void InitializeAmmoBoxes()
@@ -1457,7 +1503,7 @@ namespace GDApp
 
         private void InitializePhonoGraph()
         {
-            Transform3D transform = new Transform3D(new Vector3(-100.0f, 7.0f, -121.0f), new Vector3(0, 180, 0), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
+            Transform3D transform = new Transform3D(new Vector3(-100.0f, 6.7f, -120.0f), new Vector3(0, 180, 0), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["phonograph"];
 
@@ -1839,6 +1885,23 @@ namespace GDApp
             this.eventDispatcher.PopUpChanged += ChangePopUPState;
             this.eventDispatcher.RiddleAnswerChanged += ChangeRiddleState;
             this.eventDispatcher.Reset += Reset;
+            this.eventDispatcher.VolumeChanged += ChangeVolume;
+            this.eventDispatcher.animationTriggered += playAnimationSound;
+
+        }
+
+
+        private void playAnimationSound(EventData eventData)
+        {
+
+            if(eventData.EventType == EventActionType.OpenBookcase)
+            {
+                this.soundManager.PlayCue("Bookcase_Sound");
+            }
+            else if(eventData.EventType == EventActionType.OpenDoor)
+            {
+                this.soundManager.PlayCue("Door_Open");
+            }
         }
         /*
          * Author: Tomas
@@ -1858,6 +1921,33 @@ namespace GDApp
             this.logicPuzzle.changeState(actor.ID);
 
         }
+
+        private void ChangeVolume(EventData eventData)
+        {
+
+           float delta = (float)eventData.AdditionalParameters.GetValue(0);
+            this.soundManager.ChangeVolume(delta,"Default");
+
+            Predicate<UIObject> predicate = s => s.GetID() == "audio-bar";
+        
+            UITextureObject bar = this.menuManager.ActiveList.Find(predicate) as UITextureObject;
+
+            if (delta < 0 && bar.SourceRectangleWidth != 0)
+            {
+                bar.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, bar.SourceRectangleWidth - bar.Texture.Width / 4, bar.SourceRectangleHeight);
+            }
+            else if (delta > 0 && bar.SourceRectangleWidth < bar.Texture.Width)
+            {
+                bar.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, bar.SourceRectangleWidth + bar.Texture.Width / 4, bar.SourceRectangleHeight);
+            }
+
+
+
+
+
+        }
+
+
 
         /**
          * Author: Tomas 
@@ -1972,9 +2062,9 @@ namespace GDApp
         */
         private void Reset(EventData eventData)
         {
+            resetFPCamera();
             resetLogicPuzzleModels();
             resetRiddleAnswer();
-            resetFPCamera();
             resetLoseTimer();
         }
         #endregion
@@ -2070,7 +2160,7 @@ namespace GDApp
             Vector2 position = Vector2.Zero;
             UIButtonObject uiButtonObject = null, clone = null;
             string sceneID = "", buttonID = "", buttonText = "";
-            int verticalBtnSeparation = 50;
+            int verticalBtnSeparation = 105;
 
             #region Main Menu
             sceneID = "main menu";
@@ -2091,9 +2181,9 @@ namespace GDApp
             //add start button
             buttonID = "startbtn";
             texture = this.textureDictionary["start"];
-            position = new Vector2(graphics.PreferredBackBufferWidth / 2.0f, graphics.PreferredBackBufferHeight - texture.Height);
+            position = new Vector2(graphics.PreferredBackBufferWidth - texture.Width ,  texture.Height*2.5f);
             transform = new Transform2D(position,
-                0, new Vector2(0.6f, 0.4f),
+                0, new Vector2(0.8f, 0.8f),
                 new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
 
             uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn,
@@ -2104,7 +2194,7 @@ namespace GDApp
             uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
               new TrigonometricParameters(0.1f, 0.2f, 1)));
             uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.Blue, Color.DarkBlue));
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
 
             this.menuManager.Add(sceneID, uiButtonObject);
 
@@ -2113,14 +2203,14 @@ namespace GDApp
             clone.ID = "exitbtn";
             clone.Texture = this.textureDictionary["quit"];
             //move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(0, verticalBtnSeparation*1.9f);
+            clone.Transform.Translation += new Vector2(0, verticalBtnSeparation*3);
             //change the texture blend color
             clone.Color = Color.Gray;
             //store the original color since if we modify with a controller and need to reset
             clone.OriginalColor = clone.Color;
             //attach another controller on the exit button just to illustrate multi-controller approach
             clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.DarkRed));
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
             this.menuManager.Add(sceneID, clone);
             #endregion
 
@@ -2132,7 +2222,7 @@ namespace GDApp
             clone.ID = "controlsbtn";
             clone.Texture = this.textureDictionary["controls"];
             //move down on Y-axis for next button
-            clone.Transform.Translation += new Vector2(-clone.Texture.Width/10, verticalBtnSeparation);
+            clone.Transform.Translation += new Vector2(-clone.Texture.Width/5, verticalBtnSeparation);
             clone.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0,0, clone.Texture.Width, clone.Texture.Height);
 
             //change the texture blend color
@@ -2141,8 +2231,28 @@ namespace GDApp
             clone.OriginalColor = clone.Color;
             //attach another controller on the exit button just to illustrate multi-controller approach
             clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.Indigo, Color.Violet));
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
             this.menuManager.Add(sceneID, clone);
+
+            clone = null;
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "audiobtn";
+            clone.Texture = this.textureDictionary["Audio"];
+            //move down on Y-axis for next button
+            clone.Transform.Translation += new Vector2(-clone.Texture.Width/8, verticalBtnSeparation*2);
+            clone.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, clone.Texture.Width, clone.Texture.Height);
+
+            //change the texture blend color
+            clone.Color = Color.Gray;
+            //store the original color since if we modify with a controller and need to reset
+            clone.OriginalColor = clone.Color;
+            //attach another controller on the exit button just to illustrate multi-controller approach
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
+            this.menuManager.Add(sceneID, clone);
+
+
+            //Audio
 
             #region Pause Menu
             sceneID = "pause menu";
@@ -2157,26 +2267,30 @@ namespace GDApp
 
             clone = null;
             clone = (UIButtonObject)uiButtonObject.Clone();
-            clone.ID = "resumebtn";
-            clone.Transform = new Transform2D(position,
-                0, new Vector2(0.8f, 0.8f),
-                new Vector2(clone.Texture.Width / 2.0f, clone.Texture.Height / 2.0f), new Integer2(clone.Texture.Width, clone.Texture.Height));
             clone.Texture = this.textureDictionary["Resume"];
-            clone.Transform.Translation -= new Vector2(0, verticalBtnSeparation * 7);
+            clone.ID = "resumebtn";
+            clone.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, clone.Texture.Width*1, clone.Texture.Height*1);
+
+            clone.Transform.Translation = new Vector2(graphics.PreferredBackBufferWidth /2, graphics.PreferredBackBufferHeight/3);
+            clone.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, clone.Texture.Width, clone.Texture.Height);
+
+
+
             clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                  new TrigonometricParameters(1, 0.4f, 0), Color.Blue, Color.DarkBlue));
+                  new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
             this.menuManager.Add(sceneID, clone);
-            
+            clone = null;
 
             clone = (UIButtonObject)uiButtonObject.Clone();
             clone.ID = "exitbtn";
             clone.Texture = this.textureDictionary["quit"];
-            clone.Transform = new Transform2D(position,
-                0, new Vector2(0.8f, 0.8f),
-                new Vector2(clone.Texture.Width / 2.0f, clone.Texture.Height / 2.0f), new Integer2(clone.Texture.Width, clone.Texture.Height));
-            clone.Transform.Translation -= new Vector2(0, verticalBtnSeparation *5);
-              clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.Red));
+           
+            clone.Transform.Translation = new Vector2(graphics.PreferredBackBufferWidth / 2 + clone.Texture.Width/7, graphics.PreferredBackBufferHeight / 2);
+            clone.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, clone.Texture.Width, clone.Texture.Height);
+
+
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
  
             this.menuManager.Add(sceneID, clone);
 
@@ -2209,7 +2323,7 @@ namespace GDApp
             clone.OriginalColor = clone.Color;
             //attach another controller on the exit button just to illustrate multi-controller approach
             clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.Indigo, Color.Violet));
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
             this.menuManager.Add(sceneID, clone);
 
             #endregion
@@ -2271,7 +2385,7 @@ namespace GDApp
             uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
               new TrigonometricParameters(0.1f, 0.2f, 1)));
             uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.Green, Color.Green));
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
 
             this.menuManager.Add(sceneID, uiButtonObject);
 
@@ -2288,7 +2402,7 @@ namespace GDApp
             clone.OriginalColor = clone.Color;
             //attach another controller on the exit button just to illustrate multi-controller approach
             clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.IndianRed, Color.DarkRed));
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
             this.menuManager.Add(sceneID, clone);
 
             
@@ -2319,8 +2433,6 @@ namespace GDApp
             c = (float)1 / a;
             d = (float)1 / b;
 
-            Console.WriteLine("width " + w);
-            Console.WriteLine("height " + h);
             Vector2 scale = new Vector2(a, b);
 
             Transform2D transform = new Transform2D(new Vector2(0, 0), 0, scale, Vector2.One, new Integer2(1, 1));
@@ -2352,7 +2464,7 @@ namespace GDApp
             uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
               new TrigonometricParameters(0.1f, 0.2f, 1)));
             uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.Green, Color.Green));
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
 
             this.menuManager.Add(sceneID, uiButtonObject);
 
@@ -2371,7 +2483,7 @@ namespace GDApp
             uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
               new TrigonometricParameters(0.1f, 0.2f, 1)));
             uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.White, Color.Cyan));
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
 
             this.menuManager.Add(sceneID, uiButtonObject);
 
@@ -2391,11 +2503,124 @@ namespace GDApp
             uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
               new TrigonometricParameters(0.1f, 0.2f, 1)));
             uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
-                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkRed, Color.Red));
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
 
             this.menuManager.Add(sceneID, uiButtonObject);
 
         }
+
+        private void addAudioMenu()
+        {
+            string buttonID;
+            string sceneID = "audio menu";
+            Transform2D transform = null;
+            Texture2D texture = null;
+            Vector2 position = Vector2.Zero;
+            UIButtonObject uiButtonObject = null;
+            Vector2 scale = Vector2.Zero;
+
+            texture = this.textureDictionary["audioMenu"];
+            scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
+                (float)graphics.PreferredBackBufferHeight / texture.Height);
+
+            transform = new Transform2D(scale);
+            this.menuManager.Add(sceneID, new UITextureObject("audioMenu", ActorType.UIStaticTexture, StatusType.Drawn,
+                transform, Color.White, SpriteEffects.None, 1, texture));
+
+
+            texture = this.textureDictionary["back"];
+            buttonID = "backbtn";
+            string buttonText = "";
+
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2 , texture.Height/1.5f );
+            scale = new Vector2(0.8f,0.8f);
+            Integer2 dimensions = new Integer2(texture.Width, texture.Height);
+            Vector2 origin = new Vector2(texture.Width / 2.0f, texture.Height / 2.0f);
+
+            transform = new Transform2D(position,0,scale, origin, dimensions);
+
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn, transform, Color.White, SpriteEffects.None, 0f, texture,
+                buttonText, this.fontDictionary["menu"],Color.Transparent,Vector2.Zero);
+          
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+
+
+            texture = this.textureDictionary["volUp"];
+            buttonID = "volumeUpbtn";
+            buttonText = "";
+
+            position = new Vector2(graphics.PreferredBackBufferWidth / 1.3f, texture.Height );
+            scale = new Vector2(0.3f, 0.3f);
+            dimensions = new Integer2(texture.Width, texture.Height);
+            origin = new Vector2(texture.Width / 2.0f, texture.Height / 2.0f);
+
+            transform = new Transform2D(position, 180, scale, origin, dimensions);
+
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn, transform, Color.White, SpriteEffects.None, 0f, texture,
+                buttonText, this.fontDictionary["menu"], Color.Transparent, Vector2.Zero);
+
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+
+
+
+
+
+            texture = this.textureDictionary["volDown"];
+            buttonID = "volumeDownbtn";
+            buttonText = "";
+
+            position = new Vector2(graphics.PreferredBackBufferWidth - graphics.PreferredBackBufferWidth / 1.3f, texture.Height);
+            scale = new Vector2(0.3f, 0.3f);
+            dimensions = new Integer2(texture.Width, texture.Height);
+            origin = new Vector2(texture.Width / 2.0f, texture.Height / 2.0f);
+
+            transform = new Transform2D(position, 0, scale, origin, dimensions);
+
+            uiButtonObject = new UIButtonObject(buttonID, ActorType.UIButton, StatusType.Update | StatusType.Drawn, transform, Color.White, SpriteEffects.None, 0f, texture,
+                buttonText, this.fontDictionary["menu"], Color.Transparent, Vector2.Zero);
+
+
+            uiButtonObject.AttachController(new UIScaleSineLerpController("sineScaleLerpController2", ControllerType.SineScaleLerp,
+              new TrigonometricParameters(0.1f, 0.2f, 1)));
+            uiButtonObject.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
+            this.menuManager.Add(sceneID, uiButtonObject);
+
+
+
+
+            sceneID = "audio menu";
+            transform = null;
+            texture = null;
+            position = Vector2.Zero;
+            scale = Vector2.Zero;
+
+            texture = this.textureDictionary["audio-bar"];
+            position = new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 1.5f);
+            origin = new Vector2(texture.Width / 2, texture.Height / 2f);
+            dimensions = new Integer2(texture.Width, texture.Height);
+            scale = new Vector2(0.6f,0.6f);
+
+            transform = new Transform2D(position,0,scale,origin,dimensions);
+            this.menuManager.Add(sceneID, new UITextureObject("audio-bar", ActorType.UIStaticTexture, StatusType.Drawn,
+                transform, Color.White, SpriteEffects.None, -2, texture));
+
+
+        }
+
+
         #endregion
         private void AddUIElements()
         {
@@ -2440,11 +2665,22 @@ namespace GDApp
 
             foreach (TimerUtility timer in timerManager.TimerList)
             {
-                Transform2D timerTransform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth-100, 25 * count),
+                Transform2D timerTransform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth-130, 25 * count),
                     0, Vector2.One, Vector2.Zero, Integer2.Zero);
 
-                UITimer uiTimer = new UITimer(timerTransform, 0.1f, fontDictionary["timerFont"], timer);
+                UITimer uiTimer = new UITimer(timerTransform, Color.WhiteSmoke, 0.1f, 
+                        fontDictionary["timerFont"], timer);
                 this.uiManager.Add(uiTimer);
+
+                /*
+                //An experimental shadow
+                Transform2D shadowTimerTransform = new Transform2D(new Vector2(timerTransform.Translation.X - 4,
+                    timerTransform.Translation.Y - 2),
+                    0, new Vector2(1.1f), Vector2.Zero, Integer2.Zero);
+                UITimer uiShadowTimer = new UITimer(shadowTimerTransform, Color.Black, 1, 
+                    fontDictionary["timerFont"], timer);
+                this.uiManager.Add(uiShadowTimer);
+                */
                 count++;
             }
         }
@@ -2466,21 +2702,45 @@ namespace GDApp
 
 
             basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
-            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.38f, 0.38f, 0.38f); // a red light
-            basicEffect.DirectionalLight0.Direction = new Vector3(1, 1, 1);  // coming along the x-axis
-            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.3f); // a red light
+            basicEffect.DirectionalLight0.Direction = new Vector3(1);  // coming along the x-axis
+            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.15f, 0); // with green highlights
             basicEffect.SpecularPower = 1f;
 
             basicEffect.DirectionalLight1.Enabled = true;
-            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.5f, 0.5f, 0.4f); // a red light
-            basicEffect.DirectionalLight1.Direction = new Vector3(-1, -1, -1);  // coming along the x-axis
-            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.25f, 0.25f, 0.2f); // a red light
+            basicEffect.DirectionalLight1.Direction = new Vector3(-1);  // coming along the x-axis
+            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.15f, 0); // with green highlights
             basicEffect.SpecularPower = 1f;
 
-            basicEffect.AmbientLightColor = new Vector3(1, 1, 1);
-            basicEffect.EmissiveColor = new Vector3(1, 1, 1);
+            basicEffect.AmbientLightColor = new Vector3(0.5f);
+            basicEffect.EmissiveColor = new Vector3(0.5f);
 
             this.effectDictionary.Add(AppData.LitModelsEffectID, new BasicEffectParameters(basicEffect));
+            #endregion
+            
+            #region Darkened Lit objects
+            //create a BasicEffect and set the lighting conditions for all models that use this effect in their EffectParameters field
+            basicEffect = new BasicEffect(graphics.GraphicsDevice);
+
+            basicEffect.TextureEnabled = true;
+
+            basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.19f); // a red light
+            basicEffect.DirectionalLight0.Direction = new Vector3(1);  // coming along the x-axis
+            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
+            basicEffect.SpecularPower = 0.1f;
+
+            basicEffect.DirectionalLight1.Enabled = true;
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.25f, 0.25f, 0.2f); // a red light
+            basicEffect.DirectionalLight1.Direction = new Vector3(-1);  // coming along the x-axis
+            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0); // with green highlights
+            basicEffect.SpecularPower = 0.1f;
+
+            basicEffect.AmbientLightColor = new Vector3(1);
+            basicEffect.EmissiveColor = new Vector3(1);
+
+            this.effectDictionary.Add(AppData.DarkLitModelsEffectID, new BasicEffectParameters(basicEffect));
             #endregion
 
             #region For Unlit objects
@@ -2491,19 +2751,19 @@ namespace GDApp
 
 
             basicEffect.LightingEnabled = true; // turn on the lighting subsystem.
-            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.38f, 0.38f,0.38f); // a red light
-            basicEffect.DirectionalLight0.Direction = new Vector3(1, 1, 1);  // coming along the x-axis
-            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
-            basicEffect.SpecularPower = 1f;
+            basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.25f); // a red light
+            basicEffect.DirectionalLight0.Direction = new Vector3(1);  // coming along the x-axis
+            basicEffect.DirectionalLight0.SpecularColor = new Vector3(0, 0.15f, 0); // with green highlights
+            basicEffect.SpecularPower = 0.5f;
 
             basicEffect.DirectionalLight1.Enabled = true;
-            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.5f, 0.5f, 0.4f); // a red light
-            basicEffect.DirectionalLight1.Direction = new Vector3(-1, -1, -1);  // coming along the x-axis
-            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.25f, 0); // with green highlights
-            basicEffect.SpecularPower = 1f;
+            basicEffect.DirectionalLight1.DiffuseColor = new Vector3(0.25f, 0.25f, 0.2f); // a red light
+            basicEffect.DirectionalLight1.Direction = new Vector3(-1);  // coming along the x-axis
+            basicEffect.DirectionalLight1.SpecularColor = new Vector3(0, 0.15f, 0); // with green highlights
+            basicEffect.SpecularPower = 0.5f;
 
-            basicEffect.AmbientLightColor = new Vector3(1, 1, 1);
-            basicEffect.EmissiveColor = new Vector3(1, 1, 1);
+            basicEffect.AmbientLightColor = new Vector3(0.5f);
+            basicEffect.EmissiveColor = new Vector3(0.5f);
             
             this.effectDictionary.Add(AppData.UnlitModelsEffectID, new BasicEffectParameters(basicEffect));
             #endregion

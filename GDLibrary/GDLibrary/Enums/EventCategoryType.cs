@@ -39,6 +39,7 @@ namespace GDLibrary
         RiddleAnswer,
         Objective,
         Win,
+        volume,
 
         //all other categories of sender...
         Animator,
