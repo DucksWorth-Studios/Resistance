@@ -37,13 +37,13 @@ namespace GDLibrary
                 {
                     this.XORGate = true;
                     //Publish Event
-                    Console.WriteLine("XOR ON");
+                    Console.WriteLine("HARD XOR ON");
                 }
                 else if (((this.switchThree && this.switchOne) || (!this.switchThree && !this.switchOne)) && this.XORGate)
                 {
                     this.XORGate = false;
                     //Publish Event
-                    Console.WriteLine("XOROFF");
+                    Console.WriteLine("HARD XOROFF");
                 }
 
                 //AND GATE
@@ -51,13 +51,13 @@ namespace GDLibrary
                 {
                     this.ANDGate = true;
                     //Publish Event
-                    Console.WriteLine("AND GATE ON");
+                    Console.WriteLine("HARD AND GATE ON");
                 }
                 else if ((!this.XORGate || !this.switchFour) && this.ANDGate)
                 {
                     this.ANDGate = false;
                     //Publish Event
-                    Console.WriteLine("AND GATE ON");
+                    Console.WriteLine("HARD AND GATE ON");
                 }
 
                 //FIRST NAND GATE
@@ -65,13 +65,13 @@ namespace GDLibrary
                 {
                     this.NANDGate1 = false;
                     //Publish Event
-                    Console.WriteLine("FIRST NAND GATE ON");
+                    Console.WriteLine("HARD FIRST NAND GATE ON");
                 }
                 else if ((!this.switchOne || !this.switchTwo) && !this.NANDGate1)
                 {
                     this.NANDGate1 = true;
                     //Publish Event
-                    Console.WriteLine("FIRST NAND GATE ON");
+                    Console.WriteLine("HARD FIRST NAND GATE ON");
                 }
 
                 //NOT GATE
@@ -99,13 +99,13 @@ namespace GDLibrary
                     EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] { 3, "collidable first person camera" }));
                     EventDispatcher.Publish(new EventData(EventActionType.OpenDoor, EventCategoryType.Animator));
 
-                    Console.WriteLine("SECOND NAND GATE ON");
+                    Console.WriteLine("HARD SECOND NAND GATE ON");
                 }
                 else if ((!this.NOTGate || !this.NANDGate1) && !this.NANDGate2)
                 {
                     this.NANDGate2 = true;
                     //Publish Event
-                    Console.WriteLine("FIRST NAND GATE ON");
+                    Console.WriteLine("HARD FIRST NAND GATE ON");
                 }
             }
         }

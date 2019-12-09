@@ -36,13 +36,13 @@ namespace GDLibrary
                 {
                     this.XORGate = true;
                     //Publish Event
-                    Console.WriteLine("XOR ON");
+                    Console.WriteLine("SIMPLE XOR ON");
                 }
                 else if (((this.switchThree && this.switchOne) || (!this.switchThree && !this.switchOne)) && this.XORGate)
                 {
                     this.XORGate = false;
                     //Publish Event
-                    Console.WriteLine("XOROFF");
+                    Console.WriteLine("SIMPLE XOROFF");
                 }
 
                 //Not Gate
@@ -60,13 +60,13 @@ namespace GDLibrary
                 {
                     this.ANDGate1 = true;
                     //Publish Event
-                    Console.WriteLine("FIRST AND GATE ON");
+                    Console.WriteLine("SIMPLE FIRST AND GATE ON");
                 }
                 else if((!this.NOTGate || !this.switchFour) && this.ANDGate1)
                 {
                     this.ANDGate1 = false;
                     //Publish Event
-                    Console.WriteLine("FIRST AND GATE ON");
+                    Console.WriteLine("SIMPLE FIRST AND GATE ON");
                 }
 
 
@@ -83,13 +83,13 @@ namespace GDLibrary
                     EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] { 3, "collidable first person camera" }));
                     EventDispatcher.Publish(new EventData(EventActionType.OpenDoor, EventCategoryType.Animator));
 
-                    Console.WriteLine("SECOND AND GATE ON");
+                    Console.WriteLine("SIMPLE SECOND AND GATE ON");
                 }
                 else if ((!this.ANDGate1 || !this.XORGate) && this.ANDGate2)
                 {
                     this.ANDGate2 = false;
                     //Publish Event
-                    Console.WriteLine("SECOND AND GATE ON");
+                    Console.WriteLine("SIMPLE SECOND AND GATE ON");
                 }
 
             }
