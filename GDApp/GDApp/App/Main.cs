@@ -95,7 +95,7 @@ namespace GDApp
         {
             //moved instanciation here to allow menu and ui managers to be moved to InitializeManagers()
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             int gameLevel = 1;
             bool isMouseVisible = true;
             Integer2 screenResolution = ScreenUtility.HD720;
@@ -153,12 +153,42 @@ namespace GDApp
             InitialiseObjectiveHUD();
             loadCurrentObjective();
 
-
+            InitialiseLogicPuzzle();
 
             base.Initialize();
         }
 
   
+        private void InitialiseLogicPuzzle()
+        {
+            Random rnd = new Random();
+            int num = rnd.Next(1, 4);
+            Console.WriteLine("RANDOM " + num);
+            switch(num)
+            {
+                case 1:
+                    BasePuzzle basePuzzle = new BasePuzzle(this, this.eventDispatcher);
+                    this.logicPuzzle = basePuzzle as LogicTemplate;
+                    this.Components.Add(this.logicPuzzle);
+                    break;
+                case 2:
+                    SimplePuzzle simplePuzzle = new SimplePuzzle(this, this.eventDispatcher);
+                    this.logicPuzzle = simplePuzzle as LogicTemplate;
+                    this.Components.Add(this.logicPuzzle);
+                    break;
+                case 3:
+                    HardPuzzle hardPuzzle = new HardPuzzle(this, this.eventDispatcher);
+                    this.logicPuzzle = hardPuzzle as LogicTemplate;
+                    this.Components.Add(this.logicPuzzle);
+                    break;
+                default:
+                    BasePuzzle defaultPuzzle = new BasePuzzle(this, this.eventDispatcher);
+                    this.logicPuzzle = defaultPuzzle as LogicTemplate;
+                    this.Components.Add(this.logicPuzzle);
+                    break;
+            }
+        }
+
         /**
          * Authors : Tomas & Aaron
          * This initialises the popup and scales it accrding to screen size
@@ -229,7 +259,6 @@ namespace GDApp
 
             UITextureObject picture = new UITextureObject("Objective", ActorType.UIDynamicText, StatusType.Drawn, transform, Color.White,
                 SpriteEffects.None, 0, texture, rect, new Vector2(0, 0));
-
             this.uiManager.Add(picture);
         }
 
@@ -460,9 +489,7 @@ namespace GDApp
             this.managerParameters = new ManagerParameters(this.objectManager,
                 this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager, this.screenManager, this.soundManager);
 
-            BasePuzzle baseLogicPuzzle = new BasePuzzle(this, this.eventDispatcher);
-            this.logicPuzzle = baseLogicPuzzle as LogicTemplate;
-            Components.Add(logicPuzzle);
+            
 
             #region Pick Manager
             //call this function anytime we want to decide if a mouse over object is interesting to the PickingManager
