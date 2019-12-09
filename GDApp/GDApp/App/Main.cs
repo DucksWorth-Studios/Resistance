@@ -56,7 +56,7 @@ namespace GDApp
         private CutsceneTimer cutsceneTimer;
 
         public TimerManager timerManager { get; private set; }
-        public LogicManager logicPuzzle;
+        public LogicTemplate logicPuzzle;
         public ObjectiveManager objectiveManager;
         //receives, handles and routes events
         public EventDispatcher eventDispatcher { get; private set; }
@@ -98,7 +98,7 @@ namespace GDApp
         {
             //moved instanciation here to allow menu and ui managers to be moved to InitializeManagers()
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             int gameLevel = 1;
             bool isMouseVisible = true;
             Integer2 screenResolution = ScreenUtility.HD720;
@@ -157,7 +157,7 @@ namespace GDApp
             InitialiseObjectiveHUD();
             loadCurrentObjective();
 
-
+            InitialiseLogicPuzzle();
 
             base.Initialize();
         }
@@ -174,6 +174,36 @@ namespace GDApp
         }
 
   
+        private void InitialiseLogicPuzzle()
+        {
+            Random rnd = new Random();
+            int num = rnd.Next(1, 4);
+            Console.WriteLine("RANDOM " + num);
+            switch(num)
+            {
+                case 1:
+                    BasePuzzle basePuzzle = new BasePuzzle(this, this.eventDispatcher);
+                    this.logicPuzzle = basePuzzle as LogicTemplate;
+                    this.Components.Add(this.logicPuzzle);
+                    break;
+                case 2:
+                    SimplePuzzle simplePuzzle = new SimplePuzzle(this, this.eventDispatcher);
+                    this.logicPuzzle = simplePuzzle as LogicTemplate;
+                    this.Components.Add(this.logicPuzzle);
+                    break;
+                case 3:
+                    HardPuzzle hardPuzzle = new HardPuzzle(this, this.eventDispatcher);
+                    this.logicPuzzle = hardPuzzle as LogicTemplate;
+                    this.Components.Add(this.logicPuzzle);
+                    break;
+                default:
+                    BasePuzzle defaultPuzzle = new BasePuzzle(this, this.eventDispatcher);
+                    this.logicPuzzle = defaultPuzzle as LogicTemplate;
+                    this.Components.Add(this.logicPuzzle);
+                    break;
+            }
+        }
+
         /**
          * Authors : Tomas & Aaron
          * This initialises the popup and scales it accrding to screen size
@@ -244,7 +274,6 @@ namespace GDApp
 
             UITextureObject picture = new UITextureObject("Objective", ActorType.UIDynamicText, StatusType.Drawn, transform, Color.White,
                 SpriteEffects.None, 0, texture, rect, new Vector2(0, 0));
-
             this.uiManager.Add(picture);
         }
 
@@ -475,8 +504,7 @@ namespace GDApp
             this.managerParameters = new ManagerParameters(this.objectManager,
                 this.cameraManager, this.mouseManager, this.keyboardManager, this.gamePadManager, this.screenManager, this.soundManager);
 
-            this.logicPuzzle = new LogicManager(this,this.eventDispatcher);
-            Components.Add(logicPuzzle);
+            
 
             #region Pick Manager
             //call this function anytime we want to decide if a mouse over object is interesting to the PickingManager
@@ -2063,6 +2091,7 @@ namespace GDApp
         private void Reset(EventData eventData)
         {
             resetFPCamera();
+            resetLogicPuzzleManager();
             resetLogicPuzzleModels();
             resetRiddleAnswer();
             resetLoseTimer();
@@ -2070,6 +2099,11 @@ namespace GDApp
         #endregion
 
         #region Reset Functions
+        private void resetLogicPuzzleManager()
+        {
+            this.Components.Remove(this.logicPuzzle);
+            InitialiseLogicPuzzle();
+        }
         /**
          * Author: Tomas
          * Resets logic puzzle models to default state
