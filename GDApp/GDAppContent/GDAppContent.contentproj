@@ -573,13 +573,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Textures\UI\HUD\Popup\the-riddle.png">
-      <Name>the-riddle</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Assets\Textures\Architecture\concrete.jpg">
       <Name>concrete</Name>
       <Importer>TextureImporter</Importer>
@@ -855,20 +848,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Textures\Props\Interactable\GunTexture.png">
-      <Name>GunTexture</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\Models\Props\Gun.FBX">
-      <Name>Gun</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Assets\Models\Props\wine-bottle.fbx">
       <Name>wine-bottle</Name>
       <Importer>FbxImporter</Importer>
@@ -963,13 +942,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Models\Props\phone3.FBX">
-      <Name>phone3</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Assets\Textures\Props\Resistance\phonetex.png">
       <Name>phonetex</Name>
       <Importer>TextureImporter</Importer>
@@ -1032,6 +1004,27 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Models\Props\riddleObjects\riddleObj-1.FBX">
+      <Name>riddleObj-1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Props\riddleObjects\riddleObj-3.FBX">
+      <Name>riddleObj-3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\UI\HUD\Popup\riddlePopup-1.png">
+      <Name>riddlePopup-1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Buttons\audio-button.png">
       <Name>audio-button</Name>
       <Importer>TextureImporter</Importer>
@@ -1039,9 +1032,37 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Textures\Props\Interactable\riddleObjTexture-1.png">
+      <Name>riddleObjTexture-1</Name>
+    <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+<ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\audio-bar.png">
       <Name>audio-bar</Name>
       <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\Props\Interactable\riddleObjTexture-2.png">
+      <Name>riddleObjTexture-2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Props\riddleObjects\riddleObj-2.FBX">
+      <Name>riddleObj-2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\Props\Interactable\riddleObjTexture-3.png">
+      <Name>riddleObjTexture-3</Name>
+<Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
@@ -1051,12 +1072,28 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Buttons\volUp.png">
       <Name>volUp</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\UI\HUD\Popup\riddlePopup-2.png">
+      <Name>riddlePopup-2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Textures\UI\HUD\Popup\riddlePopup-3.png">
+      <Name>riddlePopup-3</Name>
+<Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Backgrounds\Audio-Menu.png">
       <Name>Audio-Menu</Name>

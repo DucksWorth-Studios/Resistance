@@ -147,6 +147,5 @@ namespace GDLibrary
         public static readonly string UnlitBillboardsEffectID = "unlit billboards effect";
         
         #endregion
-
     }
 }
