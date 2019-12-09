@@ -161,6 +161,7 @@
     <Compile Include="Exceptions\GamePadException.cs" />
     <Compile Include="Managers\MechanicManagers\LogicManager.cs" />
     <Compile Include="Managers\MechanicManagers\Puzzles\BasePuzzle.cs" />
+    <Compile Include="Managers\MechanicManagers\Puzzles\HardPuzzle.cs" />
     <Compile Include="Managers\MechanicManagers\Puzzles\SimplePuzzle.cs" />
     <Compile Include="Managers\MechanicManagers\Template\LogicTemplate.cs" />
     <Compile Include="Managers\Menu\MenuManager.cs" />
