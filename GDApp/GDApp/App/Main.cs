@@ -2056,6 +2056,7 @@ namespace GDApp
         private void Reset(EventData eventData)
         {
             resetFPCamera();
+            resetLogicPuzzleManager();
             resetLogicPuzzleModels();
             resetRiddleAnswer();
             resetLoseTimer();
@@ -2063,6 +2064,11 @@ namespace GDApp
         #endregion
 
         #region Reset Functions
+        private void resetLogicPuzzleManager()
+        {
+            this.Components.Remove(this.logicPuzzle);
+            InitialiseLogicPuzzle();
+        }
         /**
          * Author: Tomas
          * Resets logic puzzle models to default state
