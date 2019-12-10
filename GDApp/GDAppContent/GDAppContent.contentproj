@@ -1023,7 +1023,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Buttons\audio-button.png">
       <Name>audio-button</Name>
@@ -1038,7 +1038,7 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
-<ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\audio-bar.png">
       <Name>audio-bar</Name>
       <Importer>TextureImporter</Importer>
@@ -1062,7 +1062,7 @@
   <ItemGroup>
     <Compile Include="Assets\Textures\Props\Interactable\riddleObjTexture-3.png">
       <Name>riddleObjTexture-3</Name>
-<Importer>TextureImporter</Importer>
+      <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
@@ -1072,7 +1072,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Buttons\volUp.png">
       <Name>volUp</Name>
@@ -1086,19 +1086,33 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Textures\UI\HUD\Popup\riddlePopup-3.png">
       <Name>riddlePopup-3</Name>
-<Importer>TextureImporter</Importer>
+      <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Textures\UI\Menu\Backgrounds\Audio-Menu.png">
       <Name>Audio-Menu</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Props\HardPuzzle.FBX">
+      <Name>HardPuzzle</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Props\SimplePuzzle.FBX">
+      <Name>SimplePuzzle</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
