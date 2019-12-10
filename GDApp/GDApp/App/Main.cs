@@ -847,6 +847,20 @@ namespace GDApp
             InitializePosters();       
         }
 
+        private void InitializeNonRiddleModels(Transform3D transform3D, string texture, string objectName)
+        {
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+            
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary[texture];
+
+            collidableObject = new TriangleMeshObject(objectName, ActorType.CollidableDecorator, transform3D, effectParameters,
+                this.modelDictionary[objectName], new MaterialProperties(0.5f, 0.5f, 0.5f));
+            collidableObject.Enable(true, 1);
+
+            this.objectManager.Add(collidableObject);
+        }
 
         private void InitializeCollidableWalls(int worldScale)
         {
