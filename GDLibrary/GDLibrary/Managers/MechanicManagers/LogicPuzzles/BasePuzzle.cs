@@ -49,7 +49,7 @@ namespace GDLibrary
                     this.gateOne = false;
                     //Send Event to delight Gate One;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-1" }));
-                    Console.WriteLine("BASE Gate One Off");
+                    
 
                 }
 
@@ -58,15 +58,14 @@ namespace GDLibrary
                 {
                     this.gateTwo = true;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-2" }));
-                    Console.WriteLine("Gate Two");
+                    
 
                 }
                 else if (((this.switchThree && this.switchTwo) || (!this.switchThree && !this.switchTwo)) && this.gateTwo)
                 {
                     this.gateTwo = false;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-2" }));
-                    Console.WriteLine("Gate Two OFF");
-
+                    
                 }
 
                 //Tri-State gate
@@ -74,14 +73,14 @@ namespace GDLibrary
                 {
                     this.gateThree = true;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-3" }));
-                    Console.WriteLine("BASE Gate Three");
+                    
 
                 }
                 else if ((!this.gateOne || !this.switchTwo) && this.gateThree)
                 {
                     this.gateThree = false;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-3" }));
-                    Console.WriteLine("BASE Gate Three Off");
+                    
 
                 }
 
