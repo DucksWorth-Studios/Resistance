@@ -180,9 +180,9 @@ namespace GDApp
         {
             Random rnd = new Random();
             int num = rnd.Next(1, 4);
-
+            
             this.logicID = num;
-            Console.WriteLine("NUMBER " + logicID);
+
             switch(num)
             {
                 case 1:
@@ -230,7 +230,6 @@ namespace GDApp
                     changeBaseStatus(s);
                     break;
             }
-            Console.WriteLine("Changing Status ID-" +ID + ", Status:" +s);
         }
 
         #region ChangeLogicModelStatus
