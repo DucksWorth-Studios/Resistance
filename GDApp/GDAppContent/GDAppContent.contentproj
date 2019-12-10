@@ -1034,8 +1034,8 @@
   <ItemGroup>
     <Compile Include="Assets\Textures\Props\Interactable\riddleObjTexture-1.png">
       <Name>riddleObjTexture-1</Name>
-    <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
 <ItemGroup>
