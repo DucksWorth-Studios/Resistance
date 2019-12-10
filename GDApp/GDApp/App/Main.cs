@@ -154,6 +154,7 @@ namespace GDApp
             InitializeSwitches();
             InitialiseBaseLogicPuzzleLights();
             InitialiseSimpleLogicPuzzleLights();
+            InitialiseHardLogicPuzzleLights();
             InitialisePopUP();
             InitialiseObjectiveHUD();
             loadCurrentObjective();
@@ -433,7 +434,6 @@ namespace GDApp
             #endregion
         }
 
-
         private void InitialiseSimpleLogicPuzzleLights()
         {
             CollidableObject collidableObject, archetypeCollidableObject = null;
@@ -508,6 +508,103 @@ namespace GDApp
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
             collidableObject.ID = "simple-gate-5";
             collidableObject.StatusType = StatusType.Off;
+            collidableObject.Transform = new Transform3D(new Vector3(-11f, 13.75f, -125.25f), new Vector3(0, 0, 0),
+                0.025f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.025f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+            #endregion
+        }
+
+        private void InitialiseHardLogicPuzzleLights()
+        {
+            CollidableObject collidableObject, archetypeCollidableObject = null;
+            Model model = this.modelDictionary["sphere"];
+
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["gray"];
+
+            //make once then clone
+            archetypeCollidableObject = new CollidableObject("sphere", ActorType.Light, Transform3D.Zero, effectParameters, model);
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+
+            #region Gate-1
+            collidableObject.ID = "base-gate-1";
+            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.Transform = new Transform3D(new Vector3(-37.5f, 13.75f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+            #endregion
+
+
+            #region Gate-2
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "hard-gate-2";
+            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.Transform = new Transform3D(new Vector3(-36, 20.25f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+            #endregion
+
+            #region Gate-3
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "hard-gate-3";
+            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.Transform = new Transform3D(new Vector3(-32, 9f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+            #endregion
+
+            #region Gate-4
+
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "hard-gate-4";
+            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.Transform = new Transform3D(new Vector3(-26f, 11.1f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+            #endregion
+
+            #region Gate-5
+
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "hard-gate-5";
+            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.Transform = new Transform3D(new Vector3(-16f, 13.75f, -125.25f), new Vector3(0, 0, 0),
+                0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
+                Vector3.UnitX, Vector3.UnitY);
+
+            collidableObject.AddPrimitive(new Sphere(collidableObject.Transform.Translation, 0.0082f), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+            #endregion
+
+            #region End Light
+
+            collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
+            collidableObject.ID = "hard-gate-6";
+            //collidableObject.StatusType = StatusType.Off;
             collidableObject.Transform = new Transform3D(new Vector3(-11f, 13.75f, -125.25f), new Vector3(0, 0, 0),
                 0.025f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -1671,10 +1768,10 @@ namespace GDApp
 
             
 
-            model = new ModelObject("Simple Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["SimpleLogicPuzzle"],StatusType.Drawn);
+            model = new ModelObject("Simple Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["SimpleLogicPuzzle"],StatusType.Off);
             this.objectManager.Add(model);
 
-            model = new ModelObject("Hard Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["HardLogicPuzzle"],StatusType.Off);
+            model = new ModelObject("Hard Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["HardLogicPuzzle"],StatusType.Drawn);
             this.objectManager.Add(model);
         }
 
