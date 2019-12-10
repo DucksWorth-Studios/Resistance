@@ -2385,16 +2385,55 @@ namespace GDApp
                 logicSwitch.EffectParameters.Texture = this.textureDictionary["gray"];
             }
             #endregion
+            switch(this.logicID)
+            {
+                case 1:
+                    resetBasePuzzle();
+                    break;
+                case 2:
+                    resetSimplePuzzle();
+                    break;
+                case 3:
+                    resetHardPuzzle();
+                    break;
+                default:
+                    resetBasePuzzle();
+                    break;
+            }
 
-            #region Gates
+            logicModelStatusChanger(this.logicID, StatusType.Off);
+            InitialiseLogicPuzzle();
+        }
+
+
+        private void resetBasePuzzle()
+        {
             for (int i = 1; i < 6; i++)
             {
-                Predicate<Actor3D> pred = s => s.ID == "gate-" + i;
+                Predicate<Actor3D> pred = y => y.ID == "base-gate-" + i;
                 CollidableObject logicGate = (CollidableObject)this.objectManager.Find(pred);
-
                 logicGate.EffectParameters.Texture = this.textureDictionary["gray"];
             }
-            #endregion
+        }
+
+        private void resetSimplePuzzle()
+        {
+            for (int i = 1; i < 6; i++)
+            {
+                Predicate<Actor3D> pred = y => y.ID == "simple-gate-" + i;
+                CollidableObject logicGate = (CollidableObject)this.objectManager.Find(pred);
+                logicGate.EffectParameters.Texture = this.textureDictionary["gray"];
+            }
+        }
+
+        private void resetHardPuzzle()
+        {
+            for (int i = 1; i < 7; i++)
+            {
+                Predicate<Actor3D> pred = y => y.ID == "hard-gate-" + i;
+                CollidableObject logicGate = (CollidableObject)this.objectManager.Find(pred);
+                logicGate.EffectParameters.Texture = this.textureDictionary["gray"];
+            }
         }
         /**
          * Author: Tomas
