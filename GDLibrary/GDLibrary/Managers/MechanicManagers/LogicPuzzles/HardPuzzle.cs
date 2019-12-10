@@ -18,8 +18,8 @@ namespace GDLibrary
         {
             this.XORGate = false;
             this.ANDGate = false;
-            this.NOTGate = true;
-            this.NANDGate1 = true;
+            this.NOTGate = false;
+            this.NANDGate1 = false;
             this.NANDGate2 = false;
         }
 
@@ -33,55 +33,57 @@ namespace GDLibrary
             if (!IsSolved)
             {
                 //XOR GATE
-                if ((this.switchOne || this.switchThree) && !(this.switchThree && this.switchOne) && !this.XORGate)
+                if ((this.switchFour || this.switchTwo) && !(this.switchTwo && this.switchFour) && !this.XORGate)
                 {
                     this.XORGate = true;
                     //Publish Event
-                    Console.WriteLine("HARD XOR ON");
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-1" }));
                 }
-                else if (((this.switchThree && this.switchOne) || (!this.switchThree && !this.switchOne)) && this.XORGate)
+                else if (((this.switchTwo && this.switchFour) || (!this.switchTwo && !this.switchFour)) && this.XORGate)
                 {
                     this.XORGate = false;
                     //Publish Event
-                    Console.WriteLine("HARD XOROFF");
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-1" }));
                 }
 
                 //AND GATE
-                if (this.XORGate && this.switchFour && !this.ANDGate)
+                if (this.XORGate && this.switchOne && !this.ANDGate)
                 {
                     this.ANDGate = true;
                     //Publish Event
-                    Console.WriteLine("HARD AND GATE ON");
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-2" }));
                 }
-                else if ((!this.XORGate || !this.switchFour) && this.ANDGate)
+                else if ((!this.XORGate || !this.switchOne) && this.ANDGate)
                 {
                     this.ANDGate = false;
                     //Publish Event
-                    Console.WriteLine("HARD AND GATE ON");
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-2" }));
                 }
 
                 //FIRST NAND GATE
-                if ((this.switchOne && this.switchTwo) && this.NANDGate1)
+                if ((this.switchFour && this.switchThree) && this.NANDGate1)
                 {
                     this.NANDGate1 = false;
                     //Publish Event
-                    Console.WriteLine("HARD FIRST NAND GATE ON");
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-3" }));
                 }
-                else if ((!this.switchOne || !this.switchTwo) && !this.NANDGate1)
+                else if ((!this.switchFour || !this.switchThree) && !this.NANDGate1)
                 {
                     this.NANDGate1 = true;
                     //Publish Event
-                    Console.WriteLine("HARD FIRST NAND GATE ON");
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-3" }));
                 }
 
                 //NOT GATE
                 if (this.ANDGate && this.NOTGate)
                 {
                     this.NOTGate = false;
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-4" }));
                 }
                 else if ((this.ANDGate && !this.NOTGate))
                 {
                     this.NOTGate = true;
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-4" }));
                 }
 
 
@@ -98,14 +100,16 @@ namespace GDLibrary
                     //sends off the event to ensure camera switches back to player once event has concluded
                     EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Cutscene, new object[] { 3, "collidable first person camera" }));
                     EventDispatcher.Publish(new EventData(EventActionType.OpenDoor, EventCategoryType.Animator));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-5" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "hard-gate-6" }));
 
-                    Console.WriteLine("HARD SECOND NAND GATE ON");
+
                 }
                 else if ((!this.NOTGate || !this.NANDGate1) && !this.NANDGate2)
                 {
                     this.NANDGate2 = true;
                     //Publish Event
-                    Console.WriteLine("HARD FIRST NAND GATE ON");
+                    
                 }
             }
         }

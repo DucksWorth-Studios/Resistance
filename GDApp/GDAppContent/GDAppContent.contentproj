@@ -1106,6 +1106,20 @@
       <Name>mission-brief</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+</Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Props\HardPuzzle.FBX">
+      <Name>HardPuzzle</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Models\Props\SimplePuzzle.FBX">
+      <Name>SimplePuzzle</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
