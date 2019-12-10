@@ -78,7 +78,7 @@ namespace GDApp
 
         //random number for riddle
         private int riddleId;
-
+        private int logicID;
         #endregion
 
         #region Properties
@@ -180,6 +180,7 @@ namespace GDApp
         {
             Random rnd = new Random();
             int num = rnd.Next(1, 4);
+            this.logicID = num;
             Console.WriteLine("RANDOM " + num);
             switch(num)
             {
@@ -202,6 +203,26 @@ namespace GDApp
                     BasePuzzle defaultPuzzle = new BasePuzzle(this, this.eventDispatcher);
                     this.logicPuzzle = defaultPuzzle as LogicTemplate;
                     this.Components.Add(this.logicPuzzle);
+                    break;
+            }
+        }
+
+
+        private void logicModelStatusChanger(int ID,StatusType s)
+        {
+            switch(ID)
+            {
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                default:
+
                     break;
             }
         }
