@@ -57,14 +57,14 @@ namespace GDLibrary
                 if ((this.switchThree || this.switchTwo) && !(this.switchThree && this.switchTwo) && !this.gateTwo)
                 {
                     this.gateTwo = true;
-                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-2" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-2" }));
                     Console.WriteLine("Gate Two");
 
                 }
                 else if (((this.switchThree && this.switchTwo) || (!this.switchThree && !this.switchTwo)) && this.gateTwo)
                 {
                     this.gateTwo = false;
-                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-2" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-2" }));
                     Console.WriteLine("Gate Two OFF");
 
                 }
@@ -73,14 +73,14 @@ namespace GDLibrary
                 if (this.gateOne && this.switchTwo && !this.gateThree)
                 {
                     this.gateThree = true;
-                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-3" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-3" }));
                     Console.WriteLine("BASE Gate Three");
 
                 }
                 else if ((!this.gateOne || !this.switchTwo) && this.gateThree)
                 {
                     this.gateThree = false;
-                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-3" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-3" }));
                     Console.WriteLine("BASE Gate Three Off");
 
                 }
@@ -92,10 +92,10 @@ namespace GDLibrary
                     this.IsSolved = true;
 
                     //Changes the final Gate state
-                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-4" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-4" }));
 
                     //Changes the end light to signify puzzle solved
-                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-5" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-5" }));
 
                     //sets active camera to door cutscene camera
                     EventDispatcher.Publish(new EventData(EventActionType.OnCameraSetActive, EventCategoryType.Camera, new object[] { "Door Cutscene Camera" }));

@@ -152,7 +152,7 @@ namespace GDApp
             InitializeEvents();
             initialiseTestObject();
             InitializeSwitches();
-            InitialisePuzzleLights();
+            InitialiseBaseLogicPuzzleLights();
             InitialisePopUP();
             InitialiseObjectiveHUD();
             loadCurrentObjective();
@@ -347,7 +347,7 @@ namespace GDApp
          * Author Tomas
          * Initialise the lights for logic puzzle gates
          */
-        private void InitialisePuzzleLights()
+        private void InitialiseBaseLogicPuzzleLights()
         {
             CollidableObject collidableObject, archetypeCollidableObject = null;
             Model model = this.modelDictionary["sphere"];
@@ -361,7 +361,7 @@ namespace GDApp
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
 
             #region Gate-1
-            collidableObject.ID = "gate-1";
+            collidableObject.ID = "base-gate-1";
             collidableObject.Transform = new Transform3D(new Vector3(-36.5f, 12.75f, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -374,7 +374,7 @@ namespace GDApp
 
             #region Gate-2
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
-            collidableObject.ID = "gate-2";
+            collidableObject.ID = "base-gate-2";
             collidableObject.Transform = new Transform3D(new Vector3(-33, 19.75f, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -388,7 +388,7 @@ namespace GDApp
             #region Gate-3
 
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
-            collidableObject.ID = "gate-3";
+            collidableObject.ID = "base-gate-3";
             collidableObject.Transform = new Transform3D(new Vector3(-25.75f, 9, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -402,7 +402,7 @@ namespace GDApp
             #region Gate-4
 
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
-            collidableObject.ID = "gate-4";
+            collidableObject.ID = "base-gate-4";
             collidableObject.Transform = new Transform3D(new Vector3(-13.5f, 13.75f, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -416,7 +416,7 @@ namespace GDApp
             #region End Light
 
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
-            collidableObject.ID = "gate-5";
+            collidableObject.ID = "base-gate-5";
             collidableObject.Transform = new Transform3D(new Vector3(-11f, 13.75f, -125.25f), new Vector3(0, 0, 0),
                 0.025f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
