@@ -181,9 +181,8 @@ namespace GDApp
             Random rnd = new Random();
             //int num = rnd.Next(1, 4);
 
-            int num = 1;
+            int num = 3;
             this.logicID = num;
-            Console.WriteLine("RANDOM " + num);
             switch(num)
             {
                 case 1:
@@ -196,16 +195,19 @@ namespace GDApp
                     SimplePuzzle simplePuzzle = new SimplePuzzle(this, this.eventDispatcher);
                     this.logicPuzzle = simplePuzzle as LogicTemplate;
                     this.Components.Add(this.logicPuzzle);
+                    logicModelStatusChanger(num, StatusType.Drawn);
                     break;
                 case 3:
                     HardPuzzle hardPuzzle = new HardPuzzle(this, this.eventDispatcher);
                     this.logicPuzzle = hardPuzzle as LogicTemplate;
                     this.Components.Add(this.logicPuzzle);
+                    logicModelStatusChanger(num, StatusType.Drawn);
                     break;
                 default:
                     BasePuzzle defaultPuzzle = new BasePuzzle(this, this.eventDispatcher);
                     this.logicPuzzle = defaultPuzzle as LogicTemplate;
                     this.Components.Add(this.logicPuzzle);
+                    logicModelStatusChanger(1, StatusType.Drawn);
                     break;
             }
         }
@@ -222,10 +224,10 @@ namespace GDApp
 
                     break;
                 case 3:
-
+                    changeHardStatus(s);
                     break;
                 default:
-
+                    changeBaseStatus(s);
                     break;
             }
         }
@@ -243,7 +245,20 @@ namespace GDApp
                 CollidableObject logicGate = (CollidableObject)this.objectManager.Find(pred);
                 logicGate.StatusType = s;
             }
+        }
 
+        private void changeHardStatus(StatusType s)
+        {
+            Predicate<Actor3D> findModel = x => x.GetID() == "Hard Logic Puzzle";
+            ModelObject logicPuzzle = (ModelObject)this.objectManager.Find(findModel);
+            logicPuzzle.StatusType = s;
+
+            for (int i = 1; i < 7; i++)
+            {
+                Predicate<Actor3D> pred = y => y.ID == "hard-gate-" + i;
+                CollidableObject logicGate = (CollidableObject)this.objectManager.Find(pred);
+                logicGate.StatusType = s;
+            }
         }
         #endregion
         /**
@@ -572,7 +587,7 @@ namespace GDApp
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
 
             #region Gate-1
-            collidableObject.ID = "base-gate-1";
+            collidableObject.ID = "hard-gate-1";
             collidableObject.StatusType = StatusType.Off;
             collidableObject.Transform = new Transform3D(new Vector3(-37.5f, 13.75f, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
