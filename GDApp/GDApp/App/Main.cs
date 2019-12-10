@@ -78,7 +78,6 @@ namespace GDApp
 
         //random number for riddle
         private int riddleId;
-
         #endregion
 
         #region Properties
@@ -597,7 +596,24 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/shelf1", "shelf");
 
             //riddle object
-            this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-" + this.riddleId, "riddleAnswerObj");
+            if(this.riddleId == 1)
+            {
+                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-1", "riddleAnswerObj");
+                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-2", "clock");
+                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-3", "phone");
+            }
+            else if(this.riddleId == 2)
+            {
+                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-2", "riddleAnswerObj");
+                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-1", "gun");
+                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-3", "phone");
+            }
+            else
+            {
+                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-3", "riddleAnswerObj");
+                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-1", "gun");
+                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-2", "clock");
+            }
             #endregion
 
             #region Textures
@@ -681,7 +697,24 @@ namespace GDApp
 
             //interactable
             //riddle object
-            this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-" + this.riddleId, "riddleObjTexture");
+            if (this.riddleId == 1)
+            {
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-1", "riddleObjTexture");
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-2", "clock");
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-3", "phone");
+            }
+            else if (this.riddleId == 2)
+            {
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-2", "riddleObjTexture");
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-1", "gun");
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-3", "phone");
+            }
+            else
+            {
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-3", "riddleObjTexture");
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-1", "gun");
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-2", "clock");
+            }
 
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
 
@@ -844,9 +877,38 @@ namespace GDApp
             InitialiseHat();
             //InitialisePhone();
             InitialiseShelf();
-            InitializePosters();       
+            InitializePosters();
+            if(this.riddleId == 1)
+            {
+                InitializeNonRiddleModels(AppData.ClockTransform, "clock");
+                InitializeNonRiddleModels(AppData.PhoneTransform, "phone");
+            }
+            else if(this.riddleId == 2)
+            {
+                InitializeNonRiddleModels(AppData.gunTransform, "gun");
+                InitializeNonRiddleModels(AppData.PhoneTransform, "phone");
+            }
+            else
+            {
+                InitializeNonRiddleModels(AppData.gunTransform, "gun");
+                InitializeNonRiddleModels(AppData.ClockTransform, "clock");
+            }
         }
 
+        private void InitializeNonRiddleModels(Transform3D transform3D, string objName)
+        {
+            BasicEffectParameters effectParameters;
+            CollidableObject collidableObject;
+            
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary[objName];
+
+            collidableObject = new TriangleMeshObject(objName, ActorType.CollidableDecorator, transform3D, effectParameters,
+                this.modelDictionary[objName], new MaterialProperties(0.5f, 0.5f, 0.5f));
+            collidableObject.Enable(true, 1);
+
+            this.objectManager.Add(collidableObject);
+        }
 
         private void InitializeCollidableWalls(int worldScale)
         {
@@ -1585,15 +1647,15 @@ namespace GDApp
 
             if(this.riddleId == 1)
             {
-                transform3D = new Transform3D(new Vector3(-89, 8.73f, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
+                transform3D = AppData.gunTransform;
             }
             else if(this.riddleId == 2)
             {
-                transform3D = new Transform3D(new Vector3(-126, 19, 22), new Vector3(0, 90, -90), new Vector3(0.1f, 0.1f, 0.1f), Vector3.UnitX, Vector3.UnitY);
+                transform3D = AppData.ClockTransform;
             }
             else
             {
-                transform3D = new Transform3D(new Vector3(-68, 14, 18), new Vector3(0, -90, 0), new Vector3(0.01f, 0.01f, 0.01f), Vector3.UnitX, Vector3.UnitY);
+                transform3D = AppData.PhoneTransform;
             }
             
 
