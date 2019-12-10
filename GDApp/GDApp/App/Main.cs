@@ -78,7 +78,7 @@ namespace GDApp
 
         //random number for riddle
         private int riddleId;
-        private int logicID;
+        public int logicID;
         #endregion
 
         #region Properties
@@ -182,6 +182,7 @@ namespace GDApp
             int num = rnd.Next(1, 4);
 
             this.logicID = num;
+            Console.WriteLine("NUMBER " + logicID);
             switch(num)
             {
                 case 1:
@@ -229,6 +230,7 @@ namespace GDApp
                     changeBaseStatus(s);
                     break;
             }
+            Console.WriteLine("Changing Status ID-" +ID + ", Status:" +s);
         }
 
         #region ChangeLogicModelStatus
@@ -2357,7 +2359,7 @@ namespace GDApp
         private void Reset(EventData eventData)
         {
             resetFPCamera();
-            resetLogicPuzzleManager();
+
             resetLogicPuzzleModels();
             resetRiddleAnswer();
             resetLoseTimer();
@@ -2365,11 +2367,7 @@ namespace GDApp
         #endregion
 
         #region Reset Functions
-        private void resetLogicPuzzleManager()
-        {
-            this.Components.Remove(this.logicPuzzle);
-            InitialiseLogicPuzzle();
-        }
+
         /**
          * Author: Tomas
          * Resets logic puzzle models to default state
@@ -2385,7 +2383,9 @@ namespace GDApp
                 logicSwitch.EffectParameters.Texture = this.textureDictionary["gray"];
             }
             #endregion
-            switch(this.logicID)
+
+            int num = logicID;
+            switch(num)
             {
                 case 1:
                     resetBasePuzzle();
@@ -2401,7 +2401,8 @@ namespace GDApp
                     break;
             }
 
-            logicModelStatusChanger(this.logicID, StatusType.Off);
+            logicModelStatusChanger(num, StatusType.Off);
+            
             InitialiseLogicPuzzle();
         }
 
