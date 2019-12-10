@@ -1102,6 +1102,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Textures\UI\Menu\Backgrounds\mission-brief.png">
+      <Name>mission-brief</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+</Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Models\Props\HardPuzzle.FBX">
       <Name>HardPuzzle</Name>
       <Importer>FbxImporter</Importer>
