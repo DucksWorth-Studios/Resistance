@@ -647,6 +647,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/control-screen", "ControlMenu");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/win-screen");
             this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/Audio-Menu" ,"audioMenu");
+            this.textureDictionary.Load("Assets/Textures/UI/Menu/Backgrounds/mission-brief");
 
             //ui (or hud) elements
             this.textureDictionary.Load("Assets/Textures/UI/HUD/reticuleDefault");
@@ -2308,11 +2309,7 @@ namespace GDApp
             clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
                     new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
             this.menuManager.Add(sceneID, clone);
-            #endregion
-
-
-
-
+            
             clone = null;
             clone = (UIButtonObject)uiButtonObject.Clone();
             clone.ID = "controlsbtn";
@@ -2346,6 +2343,7 @@ namespace GDApp
             clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
                     new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
             this.menuManager.Add(sceneID, clone);
+            #endregion
 
 
             //Audio
@@ -2422,6 +2420,28 @@ namespace GDApp
                     new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
             this.menuManager.Add(sceneID, clone);
 
+            #endregion
+
+            #region Story menu
+            sceneID = "story menu";
+            texture = this.textureDictionary["mission-brief"];
+            scale = new Vector2((float)graphics.PreferredBackBufferWidth / texture.Width,
+                (float)graphics.PreferredBackBufferHeight / texture.Height);
+
+            transform = new Transform2D(scale);
+            this.menuManager.Add(sceneID, new UITextureObject("storyMenuTexture", ActorType.UIStaticTexture, StatusType.Drawn, transform, Color.White, SpriteEffects.None, 1, texture));
+
+            clone = (UIButtonObject)uiButtonObject.Clone();
+            clone.ID = "playbtn";
+            clone.Texture = this.textureDictionary["start"];
+            clone.Transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth - texture.Width, graphics.PreferredBackBufferHeight - texture.Height),
+                0, new Vector2(0.8f, 0.8f),
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+            clone.Color = Color.Gray;
+            clone.OriginalColor = clone.Color;
+            clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
+                    new TrigonometricParameters(1, 0.4f, 0), Color.DarkOrange, Color.Orange));
+            this.menuManager.Add(sceneID, clone);
             #endregion
 
         }
