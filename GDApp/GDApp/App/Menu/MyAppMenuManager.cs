@@ -73,8 +73,7 @@ namespace GDApp
                 switch (clickedUIObject.ID)
                 {
                     case "startbtn":
-                        DoStart();
-                        EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                    SetActiveList("story menu");
                     break;
 
                     case "resumebtn":
@@ -137,6 +136,10 @@ namespace GDApp
                     EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
                     EventDispatcher.Publish(new EventData(EventActionType.OnStart, EventCategoryType.MainMenu));
                     //SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
+                    break;
+                case "playbtn":
+                    DoStart();
+                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
                     break;
 
                 default:

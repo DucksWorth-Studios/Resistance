@@ -2434,9 +2434,10 @@ namespace GDApp
             clone = (UIButtonObject)uiButtonObject.Clone();
             clone.ID = "playbtn";
             clone.Texture = this.textureDictionary["start"];
-            clone.Transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth - texture.Width, graphics.PreferredBackBufferHeight - texture.Height),
+            //clone.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, clone.Texture.Width, clone.Texture.Height);
+            clone.Transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight * 1.2f),
                 0, new Vector2(0.8f, 0.8f),
-                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
+                new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width/4, texture.Height));
             clone.Color = Color.Gray;
             clone.OriginalColor = clone.Color;
             clone.AttachController(new UIColorSineLerpController("colorSineLerpController", ControllerType.SineColorLerp,
