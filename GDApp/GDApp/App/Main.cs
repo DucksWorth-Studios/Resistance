@@ -179,9 +179,8 @@ namespace GDApp
         private void InitialiseLogicPuzzle()
         {
             Random rnd = new Random();
-            //int num = rnd.Next(1, 4);
+            int num = rnd.Next(1, 4);
 
-            int num = 3;
             this.logicID = num;
             switch(num)
             {
@@ -221,7 +220,7 @@ namespace GDApp
                     changeBaseStatus(s);
                     break;
                 case 2:
-
+                    changeSimpleStatus(s);
                     break;
                 case 3:
                     changeHardStatus(s);
@@ -242,6 +241,20 @@ namespace GDApp
             for (int i = 1; i < 6; i++)
             {
                 Predicate<Actor3D> pred = y => y.ID == "base-gate-" + i;
+                CollidableObject logicGate = (CollidableObject)this.objectManager.Find(pred);
+                logicGate.StatusType = s;
+            }
+        }
+
+        private void changeSimpleStatus(StatusType s)
+        {
+            Predicate<Actor3D> findModel = x => x.GetID() == "Simple Logic Puzzle";
+            ModelObject logicPuzzle = (ModelObject)this.objectManager.Find(findModel);
+            logicPuzzle.StatusType = s;
+
+            for (int i = 1; i < 6; i++)
+            {
+                Predicate<Actor3D> pred = y => y.ID == "simple-gate-" + i;
                 CollidableObject logicGate = (CollidableObject)this.objectManager.Find(pred);
                 logicGate.StatusType = s;
             }
