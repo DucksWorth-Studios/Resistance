@@ -41,14 +41,14 @@ namespace GDLibrary
                 if (this.switchOne && this.switchFour && !this.gateOne)
                 {
                     this.gateOne = true;
-                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-1" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-1" }));
                     Console.WriteLine("BASE Gate One");
                 }
                 else if ((!this.switchOne || !this.switchFour) && this.gateOne)
                 {
                     this.gateOne = false;
                     //Send Event to delight Gate One;
-                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-1" }));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-1" }));
                     Console.WriteLine("BASE Gate One Off");
 
                 }

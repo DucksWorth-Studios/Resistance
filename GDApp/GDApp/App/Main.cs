@@ -179,7 +179,9 @@ namespace GDApp
         private void InitialiseLogicPuzzle()
         {
             Random rnd = new Random();
-            int num = rnd.Next(1, 4);
+            //int num = rnd.Next(1, 4);
+
+            int num = 1;
             this.logicID = num;
             Console.WriteLine("RANDOM " + num);
             switch(num)
@@ -188,6 +190,7 @@ namespace GDApp
                     BasePuzzle basePuzzle = new BasePuzzle(this, this.eventDispatcher);
                     this.logicPuzzle = basePuzzle as LogicTemplate;
                     this.Components.Add(this.logicPuzzle);
+                    logicModelStatusChanger(num,StatusType.Drawn);
                     break;
                 case 2:
                     SimplePuzzle simplePuzzle = new SimplePuzzle(this, this.eventDispatcher);
@@ -213,7 +216,7 @@ namespace GDApp
             switch(ID)
             {
                 case 1:
-
+                    changeBaseStatus(s);
                     break;
                 case 2:
 
@@ -227,6 +230,22 @@ namespace GDApp
             }
         }
 
+        #region ChangeLogicModelStatus
+        private void changeBaseStatus(StatusType s)
+        {
+            Predicate<Actor3D> findModel = x => x.GetID() == "Base Logic Puzzle";
+            ModelObject logicPuzzle =(ModelObject) this.objectManager.Find(findModel);
+            logicPuzzle.StatusType = s;
+
+            for (int i = 1; i < 6; i++)
+            {
+                Predicate<Actor3D> pred = y => y.ID == "base-gate-" + i;
+                CollidableObject logicGate = (CollidableObject)this.objectManager.Find(pred);
+                logicGate.StatusType = s;
+            }
+
+        }
+        #endregion
         /**
          * Authors : Tomas & Aaron
          * This initialises the popup and scales it accrding to screen size
@@ -554,7 +573,7 @@ namespace GDApp
 
             #region Gate-1
             collidableObject.ID = "base-gate-1";
-            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.StatusType = StatusType.Off;
             collidableObject.Transform = new Transform3D(new Vector3(-37.5f, 13.75f, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -568,7 +587,7 @@ namespace GDApp
             #region Gate-2
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
             collidableObject.ID = "hard-gate-2";
-            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.StatusType = StatusType.Off;
             collidableObject.Transform = new Transform3D(new Vector3(-36, 20.25f, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -581,7 +600,7 @@ namespace GDApp
             #region Gate-3
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
             collidableObject.ID = "hard-gate-3";
-            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.StatusType = StatusType.Off;
             collidableObject.Transform = new Transform3D(new Vector3(-32, 9f, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -595,7 +614,7 @@ namespace GDApp
 
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
             collidableObject.ID = "hard-gate-4";
-            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.StatusType = StatusType.Off;
             collidableObject.Transform = new Transform3D(new Vector3(-26f, 11.1f, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -610,7 +629,7 @@ namespace GDApp
 
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
             collidableObject.ID = "hard-gate-5";
-            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.StatusType = StatusType.Off;
             collidableObject.Transform = new Transform3D(new Vector3(-16f, 13.75f, -125.25f), new Vector3(0, 0, 0),
                 0.0082f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -625,7 +644,7 @@ namespace GDApp
 
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
             collidableObject.ID = "hard-gate-6";
-            //collidableObject.StatusType = StatusType.Off;
+            collidableObject.StatusType = StatusType.Off;
             collidableObject.Transform = new Transform3D(new Vector3(-11f, 13.75f, -125.25f), new Vector3(0, 0, 0),
                 0.025f * Vector3.One, //notice theres a certain amount of tweaking the radii with reference to the collision sphere radius of 2.54f below
                 Vector3.UnitX, Vector3.UnitY);
@@ -1792,7 +1811,7 @@ namespace GDApp
             model = new ModelObject("Simple Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["SimpleLogicPuzzle"],StatusType.Off);
             this.objectManager.Add(model);
 
-            model = new ModelObject("Hard Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["HardLogicPuzzle"],StatusType.Drawn);
+            model = new ModelObject("Hard Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["HardLogicPuzzle"],StatusType.Off);
             this.objectManager.Add(model);
         }
 
