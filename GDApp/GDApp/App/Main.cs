@@ -356,7 +356,7 @@ namespace GDApp
             effectParameters.Texture = this.textureDictionary["gray"];
 
             //make once then clone
-            archetypeCollidableObject = new CollidableObject("sphere", ActorType.Light, Transform3D.Zero, effectParameters, model);
+            archetypeCollidableObject = new CollidableObject("sphere", ActorType.Light, Transform3D.Zero, effectParameters, model,);
 
             collidableObject = (CollidableObject)archetypeCollidableObject.Clone();
 
@@ -426,6 +426,12 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
 
             #endregion
+        }
+
+
+        private void InitialiseSimpleLogicPuzzleLights()
+        {
+
         }
 
         #region TestObjects
@@ -587,7 +593,9 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/Bookshelf_01");
             this.modelDictionary.Load("Assets/Models/Props/Phonograph");
             this.modelDictionary.Load("Assets/Models/Props/computer");
-            this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle");
+            this.modelDictionary.Load("Assets/Models/Props/LogicPuzzle","BaseLogicPuzzle");
+            this.modelDictionary.Load("Assets/Models/Props/SimplePuzzle","SimpleLogicPuzzle");
+            this.modelDictionary.Load("Assets/Models/Props/HardPuzzle", "HardLogicPuzzle");
             this.modelDictionary.Load("Assets/Models/Props/wine-bottle");
             this.modelDictionary.Load("Assets/Models/Props/globe");
             this.modelDictionary.Load("Assets/Models/Props/Stielhandgranate", "grenade");
@@ -1573,7 +1581,15 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3(-30.0f, 12.0f, -125.2f), new Vector3(90, -180, 180), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
 
-            ModelObject model = new ModelObject("logic puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["LogicPuzzle"]);
+            ModelObject model = new ModelObject("Base Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["BaseLogicPuzzle"],StatusType.Off);
+            this.objectManager.Add(model);
+
+            
+
+            model = new ModelObject("Simple Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["SimpleLogicPuzzle"],StatusType.Off);
+            this.objectManager.Add(model);
+
+            model = new ModelObject("Hard Logic Puzzle", ActorType.Decorator, transform, effectParameters, this.modelDictionary["HardLogicPuzzle"],StatusType.Off);
             this.objectManager.Add(model);
         }
 
