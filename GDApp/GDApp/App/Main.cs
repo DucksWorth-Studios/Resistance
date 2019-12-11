@@ -1970,9 +1970,11 @@ namespace GDApp
                 Vector3.UnitX, Vector3.UnitY);
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
 
-            ModelObject model = new ModelObject("WineBottle01", ActorType.Interactable | ActorType.CollidableDecorator, transform, effectParameters, 
-                this.modelDictionary["wine-bottle"]);
-            this.objectManager.Add(model);
+
+            CollidableObject collidableObject = new CollidableObject("wine bottle",ActorType.CollidableDecorator,transform,effectParameters ,this.modelDictionary["wine-bottle"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2, 7, 2)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
         }
         
         /*
