@@ -2280,7 +2280,13 @@ namespace GDApp
                 actor.EffectParameters.Texture = this.textureDictionary["green"];
             }
             this.logicPuzzle.changeState(actor.ID);
+            AudioEmitter switchSound = new AudioEmitter();
+            switchSound.Position = new Vector3(-100.0f, 7.0f, -121.0f);
+            switchSound.DopplerScale = 500000f;
+            switchSound.Up = Vector3.UnitY;
+            switchSound.Forward = Vector3.UnitZ;
 
+            this.soundManager.Play3DCue("switchInteract", switchSound);
         }
 
         private void ChangeVolume(EventData eventData)
