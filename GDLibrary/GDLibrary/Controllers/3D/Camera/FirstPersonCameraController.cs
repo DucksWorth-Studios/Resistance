@@ -111,8 +111,12 @@ namespace GDLibrary
                     this.ManagerParameters.MouseManager.SetPosition(new Vector2(this.ManagerParameters.ScreenManager.ScreenResolution.X / 2, this.ManagerParameters.ScreenManager.ScreenResolution.Y / 2));
                 }
 
-                parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
-                OldmousePosition = mousePosition;
+                if (mouseDelta.Y + parentActor.Transform.Rotation.Y <= 180 && 
+                    mouseDelta.Y + parentActor.Transform.Rotation.Y >= -180)
+                {
+                    parentActor.Transform.RotateBy(new Vector3(mouseDelta.X, mouseDelta.Y, 0));
+                    OldmousePosition = mousePosition;       
+                }
 
                 if (mousePosition != Vector2.Zero) { mouseDeltaTemp = mouseDelta; }
 
