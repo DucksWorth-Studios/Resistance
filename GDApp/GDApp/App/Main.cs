@@ -33,8 +33,8 @@ namespace GDApp
         #region Fields
 #if DEBUG
         //used to visualize debug info (e.g. FPS) and also to draw collision skins
-        //private DebugDrawer debugDrawer;
-        //private PhysicsDebugDrawer physicsDebugDrawer;
+        private DebugDrawer debugDrawer;
+        private PhysicsDebugDrawer physicsDebugDrawer;
 #endif
 
         GraphicsDeviceManager graphics;
@@ -136,7 +136,7 @@ namespace GDApp
             AddWinMenu();
             addAudioMenu();
 #if DEBUG
-            //InitializeDebugTextInfo();
+            InitializeDebugTextInfo();
 #endif
 
             //load game happens before cameras are loaded because we may add a third person camera that needs a reference to a loaded Actor
@@ -148,7 +148,7 @@ namespace GDApp
             StartGame();
 
 #if DEBUG
-            //InitializeDebugCollisionSkinInfo();
+            InitializeDebugCollisionSkinInfo();
 #endif
 
             InitializeEvents();
@@ -985,14 +985,14 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/riddlePopup-" + this.riddleId, "popup");
 #if DEBUG
             //demo
-            //this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
-            //this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
+            this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
+            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
 #endif
             #endregion
 
             #region Fonts
 #if DEBUG
-            //this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
+            this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");
@@ -1079,22 +1079,22 @@ namespace GDApp
         }
 
 #if DEBUG
-        //private void InitializeDebugTextInfo()
-        //{
-        //    //add debug info in top left hand corner of the screen
-        //    this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
-        //        this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
-        //    Components.Add(this.debugDrawer);
+        private void InitializeDebugTextInfo()
+        {
+            //add debug info in top left hand corner of the screen
+            this.debugDrawer = new DebugDrawer(this, this.managerParameters, spriteBatch,
+                this.fontDictionary["debug"], Color.Black, new Vector2(5, 5), this.eventDispatcher, StatusType.Off);
+            Components.Add(this.debugDrawer);
 
-        //}
+        }
 
-        //private void InitializeDebugCollisionSkinInfo()
-        //{
-        //    //show the collision skins
-        //    this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager, this.objectManager,
-        //        this.screenManager, this.eventDispatcher, StatusType.Off);
-        //    Components.Add(this.physicsDebugDrawer);
-        //}
+        private void InitializeDebugCollisionSkinInfo()
+        {
+            //show the collision skins
+            this.physicsDebugDrawer = new PhysicsDebugDrawer(this, this.cameraManager, this.objectManager,
+                this.screenManager, this.eventDispatcher, StatusType.Off);
+            Components.Add(this.physicsDebugDrawer);
+        }
 #endif
         #endregion
 
@@ -1987,10 +1987,10 @@ namespace GDApp
                 Vector3.UnitX, Vector3.UnitY);
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["mp"];
-
-            ModelObject model = new ModelObject("Globe", ActorType.Decorator, transform, effectParameters, 
-                this.modelDictionary["globe"]);
-            this.objectManager.Add(model);
+            CollidableObject collidable = new CollidableObject("globe",ActorType.CollidableDecorator,transform,effectParameters, this.modelDictionary["globe"]);
+            collidable.AddPrimitive(new Box(collidable.Transform.Translation,Matrix.Identity,new Vector3(3,9,3)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidable.Enable(true, 1);
+            this.objectManager.Add(collidable);
         }
         
         /*
@@ -3229,7 +3229,7 @@ namespace GDApp
             //            #endregion
 
 #if DEBUG
-            //InitializeDebugTextInfo();
+            InitializeDebugTextInfo();
 #endif
         }
 
