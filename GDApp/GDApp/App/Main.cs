@@ -832,7 +832,7 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/box2", "box2");
             this.modelDictionary.Load("Assets/Models/sphere", "sphere");
             //architecture
-            this.modelDictionary.Load("Assets/Models/Architecture/Buildings/house");
+           
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_01", "barrier");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoorSmooth", "bunker_door");
             this.modelDictionary.Load("Assets/Models/Architecture/Doors/BunkerDoor_Mapped_01", "ExitDoor");
@@ -880,8 +880,6 @@ namespace GDApp
 
             #region Textures
             //environment
-            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
-            this.textureDictionary.Load("Assets/Textures/Foliage/Ground/grass1");
             this.textureDictionary.Load("Assets/Textures/Architecture/concrete2", "wall");
             this.textureDictionary.Load("Assets/Textures/Architecture/concrete", "concreteFloor");
             this.textureDictionary.Load("Assets/Textures/Architecture/concrete2");
@@ -920,13 +918,11 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Logic");
 
             //architecture
-            this.textureDictionary.Load("Assets/Textures/Architecture/Buildings/house-low-texture");
+
             this.textureDictionary.Load("Assets/Textures/Architecture/Doors/Concrete", "concrete");
             this.textureDictionary.Load("Assets/Textures/Architecture/Doors/BrushedAluminum", "aluminum");
-            //this.textureDictionary.Load("Assets/Textures/Architecture/Walls/wall");
-            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1");
-            //dual texture demo - see Main::InitializeCollidableGround()
-            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard_greywhite");
+            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1");     
+            
 
             //Load Colors
             this.textureDictionary.Load("Assets/Colours/gray");
@@ -983,40 +979,17 @@ namespace GDApp
 
             //load riddle pop up
             this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/riddlePopup-" + this.riddleId, "popup");
-#if DEBUG
-            //demo
-            //this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
-            //this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
-#endif
             #endregion
 
             #region Fonts
 #if DEBUG
-            //this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
+            
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
             this.fontDictionary.Load("Assets/Fonts/mouse");
             this.fontDictionary.Load("Assets/Fonts/timerFont");
             #endregion
 
-            #region Video
-            this.videoDictionary.Load("Assets/Video/sample");
-            #endregion
-
-            #region Animations
-            //contains a single animation "Take001"
-            this.modelDictionary.Load("Assets/Models/Animated/dude");
-
-            //squirrel - one file per animation
-            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Idle");
-            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Jump");
-            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Punch");
-            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Standing");
-            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/Red_Tailwhip");
-            this.modelDictionary.Load("Assets/Models/Animated/Squirrel/RedRun4");
-            this.modelDictionary.Load("Assets/Models/Architecture/Doors/Barrier_Mapped_01");
-
-            #endregion
 
         }
 
@@ -1180,7 +1153,7 @@ namespace GDApp
 
             //clone the dictionary effect and set unique properties for the hero player object
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["checkerboard"];
+            effectParameters.Texture = this.textureDictionary["wall"];
 
             CollidableObject prototypeModel = new CollidableObject("plane1", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
 
@@ -3198,10 +3171,6 @@ namespace GDApp
             this.effectDictionary.Add(AppData.UnlitModelDualEffectID, new DualTextureEffectParameters(dualTextureEffect));
             #endregion
 
-            #region For unlit billboard objects
-            billboardEffect = Content.Load<Effect>("Assets/Effects/billboard");
-            this.effectDictionary.Add(AppData.UnlitBillboardsEffectID, new BillboardEffectParameters(billboardEffect));
-            #endregion
 
             #region For unlit primitive objects
             basicEffect = new BasicEffect(graphics.GraphicsDevice);
