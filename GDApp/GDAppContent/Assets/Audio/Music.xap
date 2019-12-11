@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::9a653299-1885-43b1-b4ca-44e0be78b78c;
+            Name = Sound::a6277549-ac4a-4c98-b1b0-2a8e5f97c1c5;
             Property = 0;
             Sound = 1;
             Line Color = 4291388006;
@@ -249,7 +249,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::cf933b5d-55a5-449a-b1d5-c12eeafa3f2d;
+            Name = Sound::c1a2d601-b653-48c4-8b2a-75e6c126ffca;
             Property = 0;
             Sound = 1;
             Line Color = 4293476393;
@@ -286,8 +286,14 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 3669646345;
-    Bank Last Revised High = 30780960;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 0;
+    PC Bank Last Modified High = 0;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
+    Bank Last Revised Low = 836573771;
+    Bank Last Revised High = 30780965;
 
     Wave
     {
@@ -504,6 +510,8 @@ Sound Bank
     Windows File = Win\Music Sound Bank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
 
     Sound
     {
@@ -899,7 +907,7 @@ Sound Bank
     Sound
     {
         Name = SolutionSound02;
-        Volume = -1200;
+        Volume = -2400;
         Pitch = 0;
         Priority = 0;
 
@@ -916,10 +924,10 @@ Sound Bank
             Play Wave Event
             {
                 Break Loop = 0;
-                Use Speaker Position = 0;
+                Use Speaker Position = 1;
                 Use Center Speaker = 1;
                 New Speaker Position On Loop = 1;
-                Speaker Position Angle = 0.000000;
+                Speaker Position Angle = 90.000000;
                 Speaker Position Arc = 0.000000;
 
                 Event Header
