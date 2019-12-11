@@ -2045,9 +2045,10 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["helmet"];
 
-            ModelObject model = new ModelObject("Helmet", ActorType.Interactable | ActorType.CollidableDecorator, transform, effectParameters, 
-                this.modelDictionary["helmet"]);
-            this.objectManager.Add(model);
+            CollidableObject collidableObject = new CollidableObject("helmet", ActorType.CollidableDecorator, transform, effectParameters, this.modelDictionary["helmet"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2, 2, 2)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
         }
         
         /*
@@ -2062,9 +2063,11 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["hat"];
 
-            ModelObject model = new ModelObject("Hat", ActorType.Interactable | ActorType.CollidableDecorator, transform, effectParameters, 
-                this.modelDictionary["hat"]);
-            this.objectManager.Add(model);
+
+            CollidableObject collidableObject = new CollidableObject("hat", ActorType.CollidableDecorator, transform, effectParameters, this.modelDictionary["hat"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2, 2, 2)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
         }
         
         /*
