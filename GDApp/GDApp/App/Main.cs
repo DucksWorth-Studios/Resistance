@@ -2008,27 +2008,36 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["grenade"];
 
-            ModelObject model = new ModelObject("Grenade00", ActorType.Interactable | ActorType.CollidableDecorator, transform, effectParameters, 
-                this.modelDictionary["grenade"]);
-            this.objectManager.Add(model);
+            CollidableObject archetype = new CollidableObject("grenade", ActorType.CollidableDecorator, transform, effectParameters, this.modelDictionary["grenade"]);
+           
 
-            ModelObject clone = (ModelObject)model.Clone();
-            
+            CollidableObject clone = (CollidableObject)archetype.Clone();
+            clone.AddPrimitive(new Box(archetype.Transform.Translation, Matrix.Identity, new Vector3(1, 2, 5)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            clone.Enable(true, 1);
+            this.objectManager.Add(clone);
+
+            clone = (CollidableObject)archetype.Clone();
             clone.Transform.TranslateBy(new Vector3(1, 0, -0.1f));
             clone.Transform.RotateAroundYBy(2);
             clone.Transform.RotateAroundZBy(10);
+            clone.AddPrimitive(new Box(archetype.Transform.Translation, Matrix.Identity, new Vector3(1, 2, 5)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            clone.Enable(true, 1);
             this.objectManager.Add(clone);
             
-            clone = (ModelObject)model.Clone();
+            clone = (CollidableObject)archetype.Clone();
             clone.Transform.TranslateBy(new Vector3(2, 0, 0.1f));
             clone.Transform.RotateAroundYBy(-2);
             clone.Transform.RotateAroundZBy(30);
+            clone.AddPrimitive(new Box(archetype.Transform.Translation, Matrix.Identity, new Vector3(1, 2, 5)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            clone.Enable(true, 1);
             this.objectManager.Add(clone);
             
-            clone = (ModelObject)model.Clone();
+            clone = (CollidableObject)archetype.Clone();
             clone.Transform.TranslateBy(new Vector3(-1, 0, -0.1f));
             clone.Transform.RotateAroundYBy(1);
             clone.Transform.RotateAroundZBy(90);
+            clone.AddPrimitive(new Box(archetype.Transform.Translation, Matrix.Identity, new Vector3(1, 2, 5)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            clone.Enable(true, 1);
             this.objectManager.Add(clone);
         }
         
