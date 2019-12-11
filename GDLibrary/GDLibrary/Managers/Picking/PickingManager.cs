@@ -48,6 +48,8 @@ namespace GDLibrary
             eventDispatcher.PopUpChanged += changeState;
         }
 
+ 
+
         public void changeState(EventData eventdata)
         {
             if(currentlyOpen)
@@ -124,24 +126,28 @@ namespace GDLibrary
                     this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
 
                 if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.Interactable)
-                { 
+                {
                     //generate event to tell object manager and physics manager to remove the object
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.Interact, EventCategoryType.Interactive));
-                    //Console.WriteLine("Interacting");
+                    Console.WriteLine("Interacting");
                 }
                 else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.PopUP)
                 {
-                    if(!currentlyOpen)
+                    if (!currentlyOpen)
                     {
                         //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.MainMenu));
                         //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.mouseLock));
                         EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
-                    } 
+                    }
                 }
-                else if(this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.CollidablePickup)
+                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.CollidablePickup)
                 {
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
                     EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
+                }
+                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == (ActorType.Interactable | ActorType.CollidableDecorator))
+                {
+                    this.managerParameters.SoundManager.PlayCue("Interact-sound");
                 }
                 //Console.WriteLine("Hello");
             }

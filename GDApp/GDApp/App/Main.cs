@@ -1675,8 +1675,9 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["ammo-box"];
 
-            collidableObject = new CollidableObject("Ammo box - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
+            collidableObject = new CollidableObject("Ammo box - ", ActorType.Interactable | ActorType.CollidableDecorator  , Transform3D.Zero, effectParameters,
                 this.modelDictionary["ammo-box"]);
+           
 
 
             for (int i = 0; i < 3; i++)
@@ -1738,7 +1739,7 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["FilingCabinet"];
 
-            collidableObject = new CollidableObject("filing cabinet - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
+            collidableObject = new CollidableObject("filing cabinet - ", ActorType.Interactable | ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
                 this.modelDictionary["FilingCabinet"]);
             //collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(4,2,4)),
             //  new MaterialProperties(1, 1, 1));
@@ -1860,7 +1861,7 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["phonograph"];
 
-            ModelObject model = new ModelObject("phonograph", ActorType.Decorator, transform, effectParameters, this.modelDictionary["Phonograph"]);
+            ModelObject model = new ModelObject("phonograph", ActorType.Interactable | ActorType.CollidableDecorator, transform, effectParameters, this.modelDictionary["Phonograph"]);
             this.objectManager.Add(model);
 
             AudioEmitter phonograph = new AudioEmitter();
@@ -1887,7 +1888,7 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["ComputerTexture"];
 
-            collidableObject = new TriangleMeshObject("computer", ActorType.CollidableDecorator, transform3D, effectParameters, this.modelDictionary["computer"],
+            collidableObject = new TriangleMeshObject("computer", ActorType.Interactable | ActorType.CollidableDecorator, transform3D, effectParameters, this.modelDictionary["computer"],
                 new MaterialProperties(0.1f, 0.1f, 0.1f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
@@ -1933,7 +1934,7 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["riddleObjTexture"];
 
-            collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.CollidableDecorator, transform3D, effectParameters, 
+            collidableObject = new TriangleMeshObject("Riddle Answer", ActorType.Interactable | ActorType.CollidableDecorator, transform3D, effectParameters, 
                 this.modelDictionary["riddleAnswerObj"], new MaterialProperties(0.5f, 0.5f, 0.5f));
             collidableObject.Enable(true, 1);
 
@@ -1969,7 +1970,7 @@ namespace GDApp
                 Vector3.UnitX, Vector3.UnitY);
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
 
-            ModelObject model = new ModelObject("WineBottle01", ActorType.Decorator, transform, effectParameters, 
+            ModelObject model = new ModelObject("WineBottle01", ActorType.Interactable | ActorType.CollidableDecorator, transform, effectParameters, 
                 this.modelDictionary["wine-bottle"]);
             this.objectManager.Add(model);
         }
@@ -2005,7 +2006,7 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["grenade"];
 
-            ModelObject model = new ModelObject("Grenade00", ActorType.Decorator, transform, effectParameters, 
+            ModelObject model = new ModelObject("Grenade00", ActorType.Interactable | ActorType.CollidableDecorator, transform, effectParameters, 
                 this.modelDictionary["grenade"]);
             this.objectManager.Add(model);
 
@@ -2042,7 +2043,7 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["helmet"];
 
-            ModelObject model = new ModelObject("Helmet", ActorType.Decorator, transform, effectParameters, 
+            ModelObject model = new ModelObject("Helmet", ActorType.Interactable | ActorType.CollidableDecorator, transform, effectParameters, 
                 this.modelDictionary["helmet"]);
             this.objectManager.Add(model);
         }
@@ -2059,7 +2060,7 @@ namespace GDApp
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["hat"];
 
-            ModelObject model = new ModelObject("Hat", ActorType.Decorator, transform, effectParameters, 
+            ModelObject model = new ModelObject("Hat", ActorType.Interactable | ActorType.CollidableDecorator, transform, effectParameters, 
                 this.modelDictionary["hat"]);
             this.objectManager.Add(model);
         }
@@ -2271,6 +2272,7 @@ namespace GDApp
         private void Interactive(EventData eventData)
         {
             CollidableObject actor = eventData.Sender as CollidableObject;
+
             if (actor.EffectParameters.Texture == this.textureDictionary["green"])
             {
                 actor.EffectParameters.Texture = this.textureDictionary["gray"];

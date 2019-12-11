@@ -1106,7 +1106,7 @@
       <Name>mission-brief</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-</Compile>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Models\Props\HardPuzzle.FBX">
@@ -1120,6 +1120,13 @@
       <Name>SimplePuzzle</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Audio\Interact-sound.wav">
+      <Name>Interact-sound</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
