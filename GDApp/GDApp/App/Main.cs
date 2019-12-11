@@ -1687,20 +1687,32 @@ namespace GDApp
 
         private void InitializeFieldDesk()
         {
-            Transform3D transform3D;
             BasicEffectParameters effectParameters;
-            CollidableObject collidableObject;
+            CollidableObject collidableObject = null, cloneCollider = null;
 
-            transform3D = new Transform3D(new Vector3(-100.0f, 0.0f, -121.0f), new Vector3(0, 90, 0), new Vector3(0.15f, 0.1f, 0.15f),
-               Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["FieldDeskTexture"];
 
-            collidableObject = new CollidableObject("field desk", ActorType.CollidableDecorator, transform3D, effectParameters,
+            collidableObject = new CollidableObject("field desk - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
                 this.modelDictionary["field-desk"]);
-            collidableObject.AddPrimitive(new Box(new Vector3(-100.0f, 0.0f, -100.0f), Matrix.Identity, new Vector3(30.0f, 8.0f, 7.0f)), new MaterialProperties(0.2f, 0.8f, 0.7f));
-            collidableObject.Enable(true, 1);
-            this.objectManager.Add(collidableObject);
+
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 1;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-100.0f, 0.1f, -121.0f), new Vector3(0, 90, 0), new Vector3(0.15f, 0.1f, 0.15f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(23, 8, 7)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
+
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 2;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-70.0f, 0.1f, 70.0f), new Vector3(0, -90, 0), new Vector3(0.15f, 0.1f, 0.15f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.CreateRotationY(MathHelper.PiOver2), new Vector3(23, 8, 7)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
         }
 
         private void InitializeFilingCabinet()
