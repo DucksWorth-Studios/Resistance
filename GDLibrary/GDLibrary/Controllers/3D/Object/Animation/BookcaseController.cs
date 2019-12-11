@@ -14,14 +14,18 @@ namespace GDLibrary
         private bool opened = false;
         private bool opening = false;
         private CollidableObject parent;
+        private Box bookcaseCollision;
+        private MaterialProperties collisionProperties;
 
         /*
          * Authors: Cameron & Tomas
          */
-        public BookcaseController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id,
-            controllerType)
+        public BookcaseController(string id, ControllerType controllerType, EventDispatcher eventDispatcher, 
+            Box bookcaseCollision, MaterialProperties collisionProperties) : base(id, controllerType)
         {
             RegisterForEventHandling(eventDispatcher);
+            this.bookcaseCollision = bookcaseCollision;
+            this.collisionProperties = collisionProperties;
         }
 
         #region Event Handeling
@@ -47,11 +51,8 @@ namespace GDLibrary
                 
                 this.parent.Transform.RotateAroundYBy(-90);
 
-                //TODO - Find a better way of updating collision
                 parent.Collision.RemoveAllPrimitives();
-                parent.Collision.AddPrimitive(new Box(new Vector3(-64, 0, -102), Matrix.Identity,
-                        new Vector3(8f, 30.0f, 35.0f)),
-                    new MaterialProperties(0.2f, 0.8f, 0.7f));
+                parent.Collision.AddPrimitive(bookcaseCollision, collisionProperties);
             }
         }
 
@@ -76,16 +77,21 @@ namespace GDLibrary
                     opening = false;
 
                     //TODO - Ask Niall why neither of these work
+                    /*
                     parent.Transform.TranslateTo(new Vector3(parent.Transform.Translation.X - 10,
                         parent.Transform.Translation.Y,
                         parent.Transform.Translation.Z - 10));
                     parent.Transform.TranslateBy(new Vector3(-10, 0, -10));
+                    */
 
                     parent.Collision.RemoveAllPrimitives();
                     //NCMG
-                    parent.Collision.AddPrimitive(new Box(new Vector3(-64, 0, -102), Matrix.Identity,
-                            new Vector3(15.0f, 17.0f, 2.0f)),
-                        new MaterialProperties(0.2f, 0.8f, 0.7f));
+                    parent.Collision.AddPrimitive(new Box(this.bookcaseCollision.Position, Matrix.Identity,
+                            new Vector3(this.bookcaseCollision.SideLengths.Y, 
+                                this.bookcaseCollision.SideLengths.Z, 
+                                this.bookcaseCollision.SideLengths.X)),
+                        this.collisionProperties);
+                    //y    z    x
                 }
             }
 

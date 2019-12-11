@@ -78,9 +78,9 @@ namespace GDLibrary
                     parent.Collision.RemoveAllPrimitives();
                     
                     parent.Collision.AddPrimitive(new Box(this.doorCollision.Position, Matrix.Identity,
-                            new Vector3(this.doorCollision.SideLengths.Y, 
-                                this.doorCollision.SideLengths.Z, 
-                                this.doorCollision.SideLengths.X)),
+                            new Vector3(this.doorCollision.SideLengths.Z, 
+                                this.doorCollision.SideLengths.X, 
+                                this.doorCollision.SideLengths.Y)),
                         this.collisionProperties);
                 }
             }
