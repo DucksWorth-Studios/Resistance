@@ -1861,10 +1861,12 @@ namespace GDApp
 
             if(eventData.EventType == EventActionType.OpenBookcase)
             {
+                this.soundManager.PlayCue("SolutionSound02");
                 this.soundManager.PlayCue("Bookcase_Sound");
             }
             else if(eventData.EventType == EventActionType.OpenDoor)
             {
+                this.soundManager.PlayCue("SolutionSound02");
                 this.soundManager.PlayCue("Door_Open");
             }
         }
@@ -1983,8 +1985,6 @@ namespace GDApp
          */
         private void ChangeRiddleState(EventData eventData)
         {
-            this.soundManager.PlayCue("SolutionSound02");
-            
             Predicate<Actor3D> pred = s => s.ID == "Riddle Answer";
             Actor3D item = this.objectManager.Find(pred) as Actor3D;
 
