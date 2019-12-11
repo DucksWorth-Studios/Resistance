@@ -1528,11 +1528,18 @@ namespace GDApp
 
             collidableObject = new CollidableObject("exitDoor", ActorType.CollidableDoor, transform3D, effectParameters, 
                 this.modelDictionary["bunker_door"]);
-            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
-                    new Vector3(30f,50f,5f)),
-                    new MaterialProperties(0.2f, 0.8f, 0.7f));
+            
+            Box collisionBox = new Box(collidableObject.Transform.Translation, Matrix.Identity,
+                                            new Vector3(30f, 50f, 5f));
+            MaterialProperties collisionMaterialProperties = new MaterialProperties(0.2f, 0.8f, 0.7f);
+            
+            collidableObject.AddPrimitive(collisionBox, collisionMaterialProperties);
             collidableObject.Enable(true, 1);
-            collidableObject.AttachController(new DoorController("Door Controller", ControllerType.Rotation,this.eventDispatcher));
+            collidableObject.AttachController(new DoorController("Door Controller", 
+                ControllerType.Rotation, 
+                this.eventDispatcher,
+                collisionBox,
+                collisionMaterialProperties));
             this.objectManager.Add(collidableObject);
         }
 

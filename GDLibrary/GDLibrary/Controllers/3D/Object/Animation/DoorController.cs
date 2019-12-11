@@ -5,6 +5,7 @@ Author: 		Cameron
 
 using JigLibX.Collision;
 using JigLibX.Geometry;
+using JigLibX.Math;
 using Microsoft.Xna.Framework;
 
 namespace GDLibrary
@@ -14,14 +15,18 @@ namespace GDLibrary
         private bool opened = false;
         private bool opening = false;
         private CollidableObject parent;
+        private Box doorCollision;
+        private MaterialProperties collisionProperties;
 
         /*
          * Authors: Cameron & Tomas
          */
-        public DoorController(string id, ControllerType controllerType, EventDispatcher eventDispatcher) : base(id,
-            controllerType)
+        public DoorController(string id, ControllerType controllerType, EventDispatcher eventDispatcher, 
+            Box doorCollision, MaterialProperties collisionProperties) : base(id, controllerType)
         {
             RegisterForEventHandling(eventDispatcher);
+            this.doorCollision = doorCollision;
+            this.collisionProperties = collisionProperties;
         }
 
         #region Event Handeling
@@ -47,10 +52,8 @@ namespace GDLibrary
                 this.parent.Transform.RotateAroundYBy(90);
 
                 //TODO - Find a better way of updating collision
-                parent.Collision.RemoveAllPrimitives();
-                parent.Collision.AddPrimitive(new Box(new Vector3(0.2f, 0, -18), Matrix.Identity,
-                        new Vector3(40, 40, 2)),
-                    new MaterialProperties(0.2f, 0.8f, 0.7f));
+                this.parent.Collision.RemoveAllPrimitives();
+                this.parent.Collision.AddPrimitive(doorCollision, collisionProperties);
             }
         }
 
@@ -73,11 +76,12 @@ namespace GDLibrary
                     opening = false;
 
                     parent.Collision.RemoveAllPrimitives();
-
-                    //NCMG
-                    parent.Collision.AddPrimitive(new Box(new Vector3(0.2f, 0, -18), Matrix.Identity,
-                            new Vector3(2, 15, 15)),
-                        new MaterialProperties(0.2f, 0.8f, 0.7f));
+                    
+                    parent.Collision.AddPrimitive(new Box(this.doorCollision.Position, Matrix.Identity,
+                            new Vector3(this.doorCollision.SideLengths.Y, 
+                                this.doorCollision.SideLengths.Z, 
+                                this.doorCollision.SideLengths.X)),
+                        this.collisionProperties);
                 }
             }
 
