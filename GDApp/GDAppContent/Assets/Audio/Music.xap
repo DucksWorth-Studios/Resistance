@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::d06e181a-261c-437b-833b-f07f38892084;
+            Name = Sound::e6a02e4f-4859-4a83-a544-49e661dfc9f1;
             Property = 0;
             Sound = 1;
             Line Color = 4291388006;
@@ -249,7 +249,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::b005ceb2-e71e-4569-b8fd-4b7fc23e321f;
+            Name = Sound::e7debd93-2b5b-4303-baad-36fb1f38c06c;
             Property = 0;
             Sound = 1;
             Line Color = 4293476393;
@@ -286,8 +286,8 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 286190224;
-    Bank Last Revised High = 30780953;
+    Bank Last Revised Low = 2991731490;
+    Bank Last Revised High = 30781366;
 
     Wave
     {
@@ -470,6 +470,29 @@ Wave Bank
             File Type = 1;
             Last Modified Low = 29149016;
             Last Modified High = 30780934;
+        }
+    }
+
+    Wave
+    {
+        Name = Interact-sound;
+        File = Interact-sound.wav;
+        Build Settings Last Modified Low = 2915683896;
+        Build Settings Last Modified High = 30781366;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 1;
+            Sampling Rate = 44100;
+            Bits Per Sample = 1;
+            Play Region Offset = 44;
+            Play Region Length = 57312;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 3322674694;
+            Last Modified High = 30781363;
         }
     }
 }
@@ -873,6 +896,53 @@ Sound Bank
         }
     }
 
+    Sound
+    {
+        Name = Interact-sound;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaker Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = Music Wave Bank;
+                    Bank Index = 0;
+                    Entry Name = Interact-sound;
+                    Entry Index = 8;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
     Cue
     {
         Name = victory;
@@ -1067,6 +1137,26 @@ Sound Bank
         {
             Name = Door_Open;
             Index = 6;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = Interact-sound;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = Interact-sound;
+            Index = 8;
             Weight Min = 0;
             Weight Max = 255;
         }

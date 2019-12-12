@@ -861,9 +861,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+
+    <Compile Include="Assets\Audio\Interact-sound.wav">
+      <Name>Interact-sound</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      </Compile>
+
     <Folder Include="Assets\Effects\" />
     <Folder Include="Assets\Models\Architecture\Walls\" />
   </ItemGroup>
+  
   <ItemGroup>
     <Compile Include="Assets\Textures\Props\Resistance\map.png">
       <Name>map</Name>
