@@ -149,7 +149,7 @@ namespace GDLibrary
         #endregion
 
         #region riddle transforms
-        public static readonly Transform3D gunTransform = new Transform3D(new Vector3(-89, 8.73f, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
+        public static readonly Transform3D gunTransform = new Transform3D(new Vector3(-89, 10.95f, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
         public static readonly Transform3D ClockTransform = new Transform3D(new Vector3(-126, 19, 22), new Vector3(0, 90, -90), new Vector3(0.1f, 0.1f, 0.1f), Vector3.UnitX, Vector3.UnitY);
         public static readonly Transform3D PhoneTransform = new Transform3D(new Vector3(-68, 14, 18), new Vector3(0, -90, 0), new Vector3(0.01f, 0.01f, 0.01f), Vector3.UnitX, Vector3.UnitY);
         #endregion
