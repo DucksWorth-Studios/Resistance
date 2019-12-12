@@ -37,6 +37,7 @@ namespace GDLibrary
         PopUpDown,
         Cutscene,
         RiddleAnswer,
+        InteractMessage,
         Objective,
         Win,
         volume,
