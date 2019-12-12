@@ -947,6 +947,8 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/hat");
             //this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonetex", "phone");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/wood");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/map");
+            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1");
 
             //propaganda
             this.textureDictionary.Load("Assets/Textures/Props/Propaganda/ww2-propaganda_waffenss", "poster-1");
@@ -1114,7 +1116,9 @@ namespace GDApp
             //InitialisePhone();
             InitialiseShelf();
             InitializePosters();
-            if(this.riddleId == 1)
+            InitializeMap();
+            InitializeCrates();
+            if (this.riddleId == 1)
             {
                 InitializeNonRiddleModels(AppData.ClockTransform, "clock");
                 InitializeNonRiddleModels(AppData.PhoneTransform, "phone");
@@ -1687,20 +1691,32 @@ namespace GDApp
 
         private void InitializeFieldDesk()
         {
-            Transform3D transform3D;
             BasicEffectParameters effectParameters;
-            CollidableObject collidableObject;
+            CollidableObject collidableObject = null, cloneCollider = null;
 
-            transform3D = new Transform3D(new Vector3(-100.0f, 0.0f, -121.0f), new Vector3(0, 90, 0), new Vector3(0.15f, 0.1f, 0.15f),
-               Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["FieldDeskTexture"];
 
-            collidableObject = new CollidableObject("field desk", ActorType.CollidableDecorator, transform3D, effectParameters,
+            collidableObject = new CollidableObject("field desk - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters,
                 this.modelDictionary["field-desk"]);
-            collidableObject.AddPrimitive(new Box(new Vector3(-100.0f, 0.0f, -100.0f), Matrix.Identity, new Vector3(30.0f, 8.0f, 7.0f)), new MaterialProperties(0.2f, 0.8f, 0.7f));
-            collidableObject.Enable(true, 1);
-            this.objectManager.Add(collidableObject);
+
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 1;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-100.0f, 0.1f, -121.0f), new Vector3(0, 90, 0), new Vector3(0.15f, 0.1f, 0.15f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(23, 8, 7)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
+
+            cloneCollider = (CollidableObject)collidableObject.Clone();
+            cloneCollider.ID += 2;
+
+            cloneCollider.Transform = new Transform3D(new Vector3(-70.0f, 0.1f, 70.0f), new Vector3(0, -90, 0), new Vector3(0.15f, 0.1f, 0.15f),
+                Vector3.UnitX, Vector3.UnitY);
+            cloneCollider.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.CreateRotationY(MathHelper.PiOver2), new Vector3(23, 8, 7)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+            cloneCollider.Enable(true, 1);
+            this.objectManager.Add(cloneCollider);
         }
 
         private void InitializeFilingCabinet()
@@ -2106,7 +2122,48 @@ namespace GDApp
             
         }
         
-        
+        private void InitializeMap()
+        {
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
+            Transform3D transform = new Transform3D(new Vector3(-70.0f, 6.82f, 70.0f), new Vector3(0, -90, 0), new Vector3(5.0f, 0.0001f, 2.5f), Vector3.UnitX, Vector3.UnitY);
+            effectParameters.Texture = this.textureDictionary["map"];
+
+            ModelObject model = new ModelObject("map", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
+            this.objectManager.Add(model);
+        }
+
+        private void InitializeCrates()
+        {
+            BasicEffectParameters effectParameters;
+            CollidableObject collidable = null, clone = null;
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["crate1"];
+
+            collidable = new CollidableObject("crate - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
+
+            for(int i = 0; i < 3; i++)
+            {
+                clone = (CollidableObject)collidable.Clone();
+                clone.ID += i;
+
+                clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 88), new Vector3(2, 2, 2));
+                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f,2,3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clone.Enable(true, 1);
+                this.objectManager.Add(clone);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                clone = (CollidableObject)collidable.Clone();
+                clone.ID += i + 3;
+
+                clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 60), new Vector3(2, 2, 2));
+                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f, 2, 3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clone.Enable(true, 1);
+                this.objectManager.Add(clone);
+            }
+        }
         #endregion
 
         #region Initialize Cameras
