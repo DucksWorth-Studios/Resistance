@@ -1601,7 +1601,7 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-80, 0, -30), new Vector3(0, 0, 0), new Vector3(2.0f, 1.0f, 3.0f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-80, 0, -30), new Vector3(0, 0, 0), new Vector3(2.0f, 1.5f, 3.0f), Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["WarTableTexture"];
 
@@ -1972,7 +1972,7 @@ namespace GDApp
          */
         private void InitialiseWineBottles()
         {
-            Transform3D transform = new Transform3D(new Vector3(-106.8f, 4.5f, 35), 
+            Transform3D transform = new Transform3D(new Vector3(-106.8f, 6.5f, 35), 
                 new Vector3(0, 0, 0), 
                 new Vector3(0.003f), 
                 Vector3.UnitX, Vector3.UnitY);
@@ -1991,7 +1991,7 @@ namespace GDApp
          */
         private void InitialiseGlobe()
         {
-            Transform3D transform = new Transform3D(new Vector3(-106, 6.7f, -6), 
+            Transform3D transform = new Transform3D(new Vector3(-106, 9.0f, -6), 
                 new Vector3(0, 90, 0), 
                 new Vector3(0.2f), 
                 Vector3.UnitX, Vector3.UnitY);
@@ -2189,27 +2189,33 @@ namespace GDApp
 
             collidable = new CollidableObject("crate", ActorType.CollidableDecorator |ActorType.Interactable, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
 
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 2; i++)
             {
                 clone = (CollidableObject)collidable.Clone();
                 clone.ID = "crate";
 
-                clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 88), new Vector3(2, 2, 2));
-                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f,2,3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clone.Transform = new Transform3D(new Vector3(-120, 3.6f + (i * 7.6f), 85 + (i * 3.0f)), new Vector3(3, 3, 3));
+                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.CreateRotationY(i * MathHelper.PiOver4), new Vector3(6.3f,3,6.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
                 clone.Enable(true, 1);
                 this.objectManager.Add(clone);
             }
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 clone = (CollidableObject)collidable.Clone();
                 clone.ID = "crate";
-
-                clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 60), new Vector3(2, 2, 2));
-                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f, 2, 3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clone.Transform = new Transform3D(new Vector3(-120, 3.6f + (i * 7.6f), 60 - (i * 1.5f)), new Vector3(3, 3, 3));
+                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(6.3f, 3, 6.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
                 clone.Enable(true, 1);
                 this.objectManager.Add(clone);
             }
+
+            clone = (CollidableObject)collidable.Clone();
+            clone.ID = "crate";
+            clone.Transform = new Transform3D(new Vector3(-72, 3.6f, 100), new Vector3(3, 3, 3));
+            clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(6.3f, 3, 6.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+            clone.Enable(true, 1);
+            this.objectManager.Add(clone);
         }
         #endregion
 
