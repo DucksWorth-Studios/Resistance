@@ -947,6 +947,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/hat");
             //this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonetex", "phone");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/wood");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/map");
 
             //propaganda
             this.textureDictionary.Load("Assets/Textures/Props/Propaganda/ww2-propaganda_waffenss", "poster-1");
@@ -1114,6 +1115,7 @@ namespace GDApp
             //InitialisePhone();
             InitialiseShelf();
             InitializePosters();
+            InitializeMap();
             if(this.riddleId == 1)
             {
                 InitializeNonRiddleModels(AppData.ClockTransform, "clock");
@@ -2118,7 +2120,15 @@ namespace GDApp
             
         }
         
-        
+        private void InitializeMap()
+        {
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
+            Transform3D transform = new Transform3D(new Vector3(-70.0f, 6.82f, 70.0f), new Vector3(0, -90, 0), new Vector3(5.0f, 0.0001f, 2.5f), Vector3.UnitX, Vector3.UnitY);
+            effectParameters.Texture = this.textureDictionary["map"];
+
+            ModelObject model = new ModelObject("map", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
+            this.objectManager.Add(model);
+        }
         #endregion
 
         #region Initialize Cameras
