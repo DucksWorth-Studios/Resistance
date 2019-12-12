@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::fdf64eea-49d8-4e82-9bbb-b68603d68741;
+            Name = Sound::ee53d5fe-5824-4a2a-8bd8-d74f7412b36c;
             Property = 0;
             Sound = 1;
             Line Color = 4291388006;
@@ -254,7 +254,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::43d44188-2476-4fae-b803-d8631a9cd921;
+            Name = Sound::a17bbda0-57ac-425e-af14-ee6ea8133ced;
             Property = 0;
             Sound = 1;
             Line Color = 4285447319;
@@ -291,6 +291,12 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 0;
+    PC Bank Last Modified High = 0;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
     Bank Last Revised Low = 3710770589;
     Bank Last Revised High = 30781678;
 
@@ -555,6 +561,8 @@ Sound Bank
     Windows File = Win\Music Sound Bank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
 
     Sound
     {
@@ -1044,7 +1052,7 @@ Sound Bank
     Sound
     {
         Name = Morse Code Easter Egg;
-        Volume = -4520;
+        Volume = -3800;
         Pitch = 0;
         Priority = 0;
 

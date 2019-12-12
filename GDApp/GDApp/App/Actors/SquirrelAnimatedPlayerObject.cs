@@ -50,7 +50,7 @@ namespace GDApp
                     EventDispatcher.Publish(new EventData(EventActionType.OnHealthDelta, EventCategoryType.Player, additionalEventParams));
 
                     object[] additionalParameters = { "boing" };
-                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.SoundStart, additionalParameters));
 
                 }
                 //add else if statements here for all the responses that you want your player to have
