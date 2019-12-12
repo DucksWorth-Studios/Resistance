@@ -59,7 +59,7 @@ namespace GDApp
             //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
             if(oldID != currentUIObject.GetID())
             {
-                EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+                EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.SoundStart, additionalParameters));
                 oldID = currentUIObject.GetID();
             }
         }
@@ -140,6 +140,7 @@ namespace GDApp
                 case "playbtn":
                     DoStart();
                     EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnClick, EventCategoryType.StartSound));
                     break;
 
                 default:

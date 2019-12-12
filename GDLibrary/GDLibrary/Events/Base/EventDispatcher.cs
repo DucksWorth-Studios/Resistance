@@ -50,7 +50,8 @@ namespace GDLibrary
         public delegate void ResetHandler(EventData eventData);
         public delegate void VolumeHandler(EventData eventData);
         public delegate void MessageHandler(EventData eventData);
-        
+        public delegate void StartSoundHandler(EventData eventData);
+
 
         //an event is either null (not yet happened) or non-null - when the event occurs the delegate reads through its list and calls all the listening functions
         public event CameraEventHandler CameraChanged;
@@ -80,7 +81,7 @@ namespace GDLibrary
         public event ResetHandler Reset;
         public event VolumeHandler VolumeChanged;
         public event VolumeHandler MessageChanged;
-
+        public event StartSoundHandler StartSoundChanged;
 
         public EventDispatcher(Game game, int initialSize)
             : base(game)
@@ -162,7 +163,7 @@ namespace GDLibrary
                     OnSound3D(eventData);
                     break;
 
-                case EventCategoryType.Sound2D:
+                case EventCategoryType.SoundStart:
                     OnSound2D(eventData);
                     break;
 
@@ -217,6 +218,9 @@ namespace GDLibrary
                 case EventCategoryType.InteractMessage:
                     OnMessage(eventData);
                     break;
+                case EventCategoryType.StartSound:
+                    OnstartSound(eventData);
+                    break;
                 default:
                     break;
             }
@@ -232,6 +236,10 @@ namespace GDLibrary
             RiddleAnswerChanged?.Invoke(eventData);
         }
 
+        private void OnstartSound(EventData eventData)
+        {
+            StartSoundChanged?.Invoke(eventData);
+        }
         protected virtual void onMouseLock(EventData eventData)
         {
             lockChanged?.Invoke(eventData);

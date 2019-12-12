@@ -856,9 +856,10 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/hat2", "hat");
             //this.modelDictionary.Load("Assets/Models/Props/phone3", "phone");
             this.modelDictionary.Load("Assets/Models/Props/shelf1", "shelf");
+            this.modelDictionary.Load("Assets/Models/Props/morse-code-telegraph", "telegraph");
 
             //riddle object
-            if(this.riddleId == 1)
+            if (this.riddleId == 1)
             {
                 this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-1", "riddleAnswerObj");
                 this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-2", "clock");
@@ -949,6 +950,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/wood");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/map");
             this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1");
+            this.textureDictionary.Load("Assets/Textures/Props/telegraph/Telegraphtexture");
 
             //propaganda
             this.textureDictionary.Load("Assets/Textures/Props/Propaganda/ww2-propaganda_waffenss", "poster-1");
@@ -1126,6 +1128,7 @@ namespace GDApp
             InitialiseShelf();
             InitializePosters();
             InitializeMap();
+            InitialiseTelegraph();
             InitializeCrates();
             if (this.riddleId == 1)
             {
@@ -2179,6 +2182,19 @@ namespace GDApp
             //this.objectManager.Add(model);
         }
 
+
+        private void InitialiseTelegraph()
+        {
+            BasicEffectParameters effectParameters = this.effectDictionary[AppData.UnlitModelsEffectID].Clone() as BasicEffectParameters;
+            Transform3D transform = new Transform3D(new Vector3(-70.0f, 7f, 80.0f), new Vector3(0, -135, 0), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
+            effectParameters.Texture = this.textureDictionary["Telegraphtexture"];
+
+            CollidableObject collidableObject = new CollidableObject("telegraph", ActorType.Decorator, transform, effectParameters,this.modelDictionary["telegraph"]);
+            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2, 2, 2)), new MaterialProperties(0.2f, 0.8f, 0.7f));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+        }
+
         private void InitializeCrates()
         {
             BasicEffectParameters effectParameters;
@@ -2332,6 +2348,21 @@ namespace GDApp
             this.eventDispatcher.VolumeChanged += ChangeVolume;
             this.eventDispatcher.animationTriggered += playAnimationSound;
             this.eventDispatcher.MessageChanged += interactMessage;
+            this.eventDispatcher.StartSoundChanged += playMorseCode;
+        }
+
+        private void playMorseCode(EventData eventData)
+        {
+            Console.WriteLine("HELO FRIEND");
+            AudioEmitter telegraph = new AudioEmitter();
+
+            telegraph.Position = new Vector3(-70.0f, 7f, 80.0f);
+            telegraph.DopplerScale = 1000f;
+            telegraph.Up = Vector3.UnitY;
+            telegraph.Forward = Vector3.UnitZ;
+
+            this.soundManager.Play3DCue("game-main-soundtrack", telegraph);
+            this.soundManager.PlayCue("morsecode");
 
         }
 
@@ -2623,7 +2654,7 @@ namespace GDApp
             object[] addParams = { "lose" };
             EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
-            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.Sound2D, addParams));
+            EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.SoundStart, addParams));
             this.soundManager.Pause3DCue("game-main-soundtrack");
         }
 
@@ -2637,7 +2668,7 @@ namespace GDApp
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnPause, EventCategoryType.MainMenu));
             EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.mouseLock));
-            EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.Sound2D, addParams));
+            EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.SoundStart, addParams));
             this.soundManager.Pause3DCue("game-main-soundtrack");
         }
 

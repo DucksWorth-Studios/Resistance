@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::1df93df2-76a5-4d3b-bfcc-bfae3a6c216a;
+            Name = Sound::ee53d5fe-5824-4a2a-8bd8-d74f7412b36c;
             Property = 0;
             Sound = 1;
             Line Color = 4291388006;
@@ -246,31 +246,36 @@ Global Settings
                 Curve = 2;
             }
         }
+    }
+
+    RPC
+    {
+        Name = RPC Preset 2;
 
         RPC Curve
         {
-            Name = Sound::b499ceed-9cc8-4919-8a40-07202395ec82;
+            Name = Sound::a17bbda0-57ac-425e-af14-ee6ea8133ced;
             Property = 0;
             Sound = 1;
-            Line Color = 4293476393;
-            Viewable = 0;
+            Line Color = 4285447319;
+            Viewable = 1;
 
             Variable Entry
             {
-                Name = OrientationAngle;
+                Name = Distance;
             }
 
             RPC Point
             {
-                X = -60.000000;
-                Y = 0.000000;
-                Curve = 0;
+                X = 61.576355;
+                Y = 388.235291;
+                Curve = 1;
             }
 
             RPC Point
             {
-                X = 60.000000;
-                Y = 0.000000;
+                X = 150.000000;
+                Y = -9600.000000;
                 Curve = 0;
             }
         }
@@ -286,8 +291,14 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 2195886998;
-    Bank Last Revised High = 30781657;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 0;
+    PC Bank Last Modified High = 0;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
+    Bank Last Revised Low = 3710770589;
+    Bank Last Revised High = 30781678;
 
     Wave
     {
@@ -518,6 +529,29 @@ Wave Bank
             Last Modified High = 30781657;
         }
     }
+
+    Wave
+    {
+        Name = Morse Code Easter Egg;
+        File = Morse Code Easter Egg.wav;
+        Build Settings Last Modified Low = 3577424312;
+        Build Settings Last Modified High = 30781678;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 2;
+            Sampling Rate = 44100;
+            Bits Per Sample = 1;
+            Play Region Offset = 44;
+            Play Region Length = 4903344;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 4046851554;
+            Last Modified High = 30781324;
+        }
+    }
 }
 
 Sound Bank
@@ -527,6 +561,8 @@ Sound Bank
     Windows File = Win\Music Sound Bank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
 
     Sound
     {
@@ -1013,6 +1049,58 @@ Sound Bank
         }
     }
 
+    Sound
+    {
+        Name = Morse Code Easter Egg;
+        Volume = -3800;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = RPC Preset 2;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaker Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = Music Wave Bank;
+                    Bank Index = 0;
+                    Entry Name = Morse Code Easter Egg;
+                    Entry Index = 10;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
     Cue
     {
         Name = victory;
@@ -1247,6 +1335,26 @@ Sound Bank
         {
             Name = switchInteract;
             Index = 9;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = morsecode;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = Morse Code Easter Egg;
+            Index = 10;
             Weight Min = 0;
             Weight Max = 255;
         }
