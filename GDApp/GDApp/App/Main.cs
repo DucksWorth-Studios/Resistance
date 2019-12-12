@@ -1601,7 +1601,7 @@ namespace GDApp
             BasicEffectParameters effectParameters;
             CollidableObject collidableObject;
 
-            transform3D = new Transform3D(new Vector3(-80, 0, -30), new Vector3(0, 0, 0), new Vector3(2.0f, 1.0f, 3.0f), Vector3.UnitX, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-80, 0, -30), new Vector3(0, 0, 0), new Vector3(2.0f, 1.5f, 3.0f), Vector3.UnitX, Vector3.UnitY);
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["WarTableTexture"];
 
@@ -1972,7 +1972,7 @@ namespace GDApp
          */
         private void InitialiseWineBottles()
         {
-            Transform3D transform = new Transform3D(new Vector3(-106.8f, 4.5f, 35), 
+            Transform3D transform = new Transform3D(new Vector3(-106.8f, 6.5f, 35), 
                 new Vector3(0, 0, 0), 
                 new Vector3(0.003f), 
                 Vector3.UnitX, Vector3.UnitY);
@@ -1991,7 +1991,7 @@ namespace GDApp
          */
         private void InitialiseGlobe()
         {
-            Transform3D transform = new Transform3D(new Vector3(-106, 6.7f, -6), 
+            Transform3D transform = new Transform3D(new Vector3(-106, 9.0f, -6), 
                 new Vector3(0, 90, 0), 
                 new Vector3(0.2f), 
                 Vector3.UnitX, Vector3.UnitY);
