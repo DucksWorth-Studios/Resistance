@@ -2383,7 +2383,7 @@ namespace GDApp
                     break;
 
                 case "hat":
-                    message = "An officer's hat. I'd look stylish in that maybe not a german one though...";
+                    message = "An officer's hat. I'd look stylish in that maybe not a German one though...";
                     break;
 
                 case "gun":
