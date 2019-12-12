@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using JigLibX.Physics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GDLibrary
 {
@@ -27,6 +28,7 @@ namespace GDLibrary
         private ConstraintWorldPoint objectController = new ConstraintWorldPoint();
         private ConstraintVelocity damperController = new ConstraintVelocity();
         private bool currentlyOpen;
+        private bool MusicISPaused = false;
 
         public PickingManager(Game game, EventDispatcher eventDispatcher, StatusType statusType,
            ManagerParameters managerParameters, PickingBehaviourType pickingBehaviourType, float pickStartDistance, float pickEndDistance, Predicate<CollidableObject> collisionPredicate)
@@ -47,6 +49,8 @@ namespace GDLibrary
             eventDispatcher.RiddleChanged += changeState;
             eventDispatcher.PopUpChanged += changeState;
         }
+
+ 
 
         public void changeState(EventData eventdata)
         {
@@ -124,24 +128,44 @@ namespace GDLibrary
                     this.pickStartDistance, this.pickEndDistance, out pos, out normal) as CollidableObject;
 
                 if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.Interactable)
-                { 
+                {
                     //generate event to tell object manager and physics manager to remove the object
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.Interact, EventCategoryType.Interactive));
-                    //Console.WriteLine("Interacting");
+                    Console.WriteLine("Interacting");
                 }
                 else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.PopUP)
                 {
-                    if(!currentlyOpen)
+                    if (!currentlyOpen)
                     {
                         //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.MainMenu));
                         //EventDispatcher.Publish(new EventData(EventActionType.OnLose,EventCategoryType.mouseLock));
                         EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
-                    } 
+                    }
                 }
-                else if(this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.CollidablePickup)
+                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.CollidablePickup)
                 {
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
                     EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
+                }
+                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == (ActorType.Interactable | ActorType.CollidableDecorator))
+                {
+                    this.managerParameters.SoundManager.PlayCue("Interact-sound");
+
+
+                    if (this.currentPickedObject.ID != "phonograph")
+                    {
+                        interactPopUp(gameTime);
+                    }
+                    else if (this.currentPickedObject.ID == "phonograph") 
+                    {
+                        if (MusicISPaused) { this.managerParameters.SoundManager.Resume3DCue("game-main-soundtrack"); MusicISPaused = false; }
+                        else { this.managerParameters.SoundManager.Pause3DCue("game-main-soundtrack"); MusicISPaused = true; }
+
+
+
+
+                    }
+
                 }
                 //Console.WriteLine("Hello");
             }
@@ -224,11 +248,23 @@ namespace GDLibrary
 
         }
 
+        void interactPopUp(GameTime gameTime)
+        {
+
+            object[] additionalParameters = { currentPickedObject,gameTime };
+            EventDispatcher.Publish(new EventData(EventActionType.InteractMessage, EventCategoryType.InteractMessage, additionalParameters));
+
+
+        }
+
+
+
         //called when over collidable/pickable object
         protected virtual bool IsValidCollision(CollidableObject collidableObject, Vector3 pos, Vector3 normal)
         {
             //if not null then call method to see if its an object that conforms to our predicate (e.g. ActorType::CollidablePickup), otherwise return false
             return (collidableObject != null) ? this.collisionPredicate(collidableObject) : false;
+
         }
 
     }
