@@ -2189,7 +2189,7 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3(-70.0f, 7f, 80.0f), new Vector3(0, -135, 0), new Vector3(0.02f, 0.02f, 0.02f), Vector3.UnitX, Vector3.UnitY);
             effectParameters.Texture = this.textureDictionary["Telegraphtexture"];
 
-            CollidableObject collidableObject = new CollidableObject("telegraph", ActorType.Decorator, transform, effectParameters,this.modelDictionary["telegraph"]);
+            CollidableObject collidableObject = new CollidableObject("telegraph", ActorType.CollidableDecorator| ActorType.Interactable, transform, effectParameters,this.modelDictionary["telegraph"]);
             collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, new Vector3(2, 2, 2)), new MaterialProperties(0.2f, 0.8f, 0.7f));
             collidableObject.Enable(true, 1);
             this.objectManager.Add(collidableObject);
@@ -2384,6 +2384,7 @@ namespace GDApp
             Actor2D actor = uiManager.Find(predicate);
             Actor2D actor2 = uiManager.Find(predicate2);
             string message = "A " + obj.ID + ", this might be useful later. ";
+            bool isPaused = false;
 
 
             switch (obj.ID)
@@ -2437,12 +2438,18 @@ namespace GDApp
                     message = "Another map? Seriously?!";
                     break;
                 case "crate":
-                    message = "These crates to heavy to lift. What's in here, the ark of the covenant?";
+                    message = "These crates are to heavy to lift. What's in here, the ark of the covenant?";
                     break;
 
+                case "telegraph":
+                    message = "Morse code? I don't have time to decode this right now.";
+
+                    isPaused = playMorseCodePause(isPaused);
+
+                    break;
 
             }
-
+     
 
 
 
@@ -2490,8 +2497,18 @@ namespace GDApp
 
         }
 
+        
+        private bool playMorseCodePause(bool isPaused)
+        {
+
+            if (isPaused) { this.soundManager.PlayCue("morsecode"); isPaused = false; }
+            else { this.soundManager.PauseCue("morsecode"); isPaused = true; }
 
 
+
+
+            return isPaused;
+        }
 
 
         private void playAnimationSound(EventData eventData)
@@ -2778,7 +2795,7 @@ namespace GDApp
          */
         private void resetFPCamera()
         {
-           Integer2 screenResolution = ScreenUtility.HD720;
+           Integer2 screenResolution = ScreenUtility.HD1080;
             Predicate<Camera3D> pred = s => s.ID == "collidable first person camera";
             
 
@@ -2844,7 +2861,7 @@ namespace GDApp
             //add start button
             buttonID = "startbtn";
             texture = this.textureDictionary["start"];
-            position = new Vector2(graphics.PreferredBackBufferWidth - texture.Width ,  texture.Height*2.5f);
+            position = new Vector2(graphics.PreferredBackBufferWidth - graphics.PreferredBackBufferWidth/4, graphics.PreferredBackBufferHeight - graphics.PreferredBackBufferHeight/1.5f );
             transform = new Transform2D(position,
                 0, new Vector2(0.8f, 0.8f),
                 new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width, texture.Height));
@@ -3001,7 +3018,7 @@ namespace GDApp
             clone.ID = "playbtn";
             clone.Texture = this.textureDictionary["start"];
             //clone.SourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, clone.Texture.Width, clone.Texture.Height);
-            clone.Transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight * 1.2f),
+            clone.Transform = new Transform2D(new Vector2(graphics.PreferredBackBufferWidth - graphics.PreferredBackBufferWidth/60, graphics.PreferredBackBufferHeight + graphics.PreferredBackBufferHeight/6f),
                 0, new Vector2(0.8f, 0.8f),
                 new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), new Integer2(texture.Width/4, texture.Height));
             clone.Color = Color.Gray;
