@@ -2181,27 +2181,35 @@ namespace GDApp
 
             collidable = new CollidableObject("crate - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
 
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 2; i++)
             {
                 clone = (CollidableObject)collidable.Clone();
                 clone.ID += i;
 
-                clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 88), new Vector3(2, 2, 2));
-                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f,2,3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clone.Transform = new Transform3D(new Vector3(-120, 3.6f + (i * 7.6f), 85 + (i * 3.0f)), new Vector3(3, 3, 3));
+                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.CreateRotationY(i * MathHelper.PiOver4), new Vector3(6.3f,3,6.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
                 clone.Enable(true, 1);
                 this.objectManager.Add(clone);
             }
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 clone = (CollidableObject)collidable.Clone();
-                clone.ID += i + 3;
+                clone.ID += i + 2;
 
-                clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 60), new Vector3(2, 2, 2));
-                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f, 2, 3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clone.Transform = new Transform3D(new Vector3(-120, 3.6f + (i * 7.6f), 60 - (i * 1.5f)), new Vector3(3, 3, 3));
+                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(6.3f, 3, 6.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
                 clone.Enable(true, 1);
                 this.objectManager.Add(clone);
             }
+
+            clone = (CollidableObject)collidable.Clone();
+            clone.ID += 4;
+
+            clone.Transform = new Transform3D(new Vector3(-72, 3.6f, 100), new Vector3(3, 3, 3));
+            clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(6.3f, 3, 6.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+            clone.Enable(true, 1);
+            this.objectManager.Add(clone);
         }
         #endregion
 
