@@ -148,7 +148,7 @@ namespace GDApp
             StartGame();
 
 #if DEBUG
-         //   InitializeDebugCollisionSkinInfo();
+          // InitializeDebugCollisionSkinInfo();
 #endif
 
             InitializeEvents();
@@ -2167,8 +2167,16 @@ namespace GDApp
             Transform3D transform = new Transform3D(new Vector3(-70.0f, 6.82f, 70.0f), new Vector3(0, -90, 0), new Vector3(5.0f, 0.0001f, 2.5f), Vector3.UnitX, Vector3.UnitY);
             effectParameters.Texture = this.textureDictionary["map"];
 
-            ModelObject model = new ModelObject("map", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
-            this.objectManager.Add(model);
+
+            CollidableObject collidableObject;
+            collidableObject = new CollidableObject("map", ActorType.CollidableDecorator | ActorType.Interactable, transform, effectParameters, this.modelDictionary["box2"]);
+            collidableObject.AddPrimitive(new Box(new Vector3(-70.0f, 6.82f, 70.0f), Matrix.CreateTranslation(0f, 0f, 0f), new Vector3(5, 5, 5)), new MaterialProperties(1, 1, 1));
+            collidableObject.Enable(true, 1);
+            this.objectManager.Add(collidableObject);
+
+
+            //ModelObject model = new ModelObject("map", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
+            //this.objectManager.Add(model);
         }
 
         private void InitializeCrates()
@@ -2179,12 +2187,12 @@ namespace GDApp
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
             effectParameters.Texture = this.textureDictionary["crate1"];
 
-            collidable = new CollidableObject("crate - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
+            collidable = new CollidableObject("crate", ActorType.CollidableDecorator |ActorType.Interactable, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
 
             for(int i = 0; i < 3; i++)
             {
                 clone = (CollidableObject)collidable.Clone();
-                clone.ID += i;
+                clone.ID = "crate";
 
                 clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 88), new Vector3(2, 2, 2));
                 clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f,2,3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
@@ -2195,7 +2203,7 @@ namespace GDApp
             for (int i = 0; i < 3; i++)
             {
                 clone = (CollidableObject)collidable.Clone();
-                clone.ID += i + 3;
+                clone.ID = "crate";
 
                 clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 60), new Vector3(2, 2, 2));
                 clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f, 2, 3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
@@ -2338,9 +2346,69 @@ namespace GDApp
             Predicate<Actor2D> predicate2 = s => s.GetID() == "message2";
             Actor2D actor = uiManager.Find(predicate);
             Actor2D actor2 = uiManager.Find(predicate2);
-            string message = "A " + obj.ID + " this might be useful later. ";
+            string message = "A " + obj.ID + ", this might be useful later. ";
 
-          
+
+            switch (obj.ID)
+            {
+                case "wine bottle":
+                    message = "Now is no time for a drink I need to escape.";
+                    break;
+
+                case "grenade":
+                    message = "A grenade, it's dangerous but it's still not enough to get through that door.";
+                    break;
+
+                case "filing cabinet":
+                    message = "A filing cabinet. I've already got the intel I need";
+                    break;
+
+                case "globe":
+                    message = "A globe, whats the point of the big table map?";
+                    break;
+
+                case "clock":
+                    message = "A broken clock. Well, I guess it's still right twice a day.";
+                    break;
+
+
+                case "munitions box":
+                    message = "A munitions box. That's a lot of ammo for a small bunker.";
+                    break;
+
+                case "hat":
+                    message = "An officer's hat. I'd look stylish in that maybe not a german one though...";
+                    break;
+
+                case "gun":
+                    message = "A gun. I better be careful, I might end up on the wrong side of it.";
+                    break;
+
+                case "phone":
+                    message = "A phone it's definitely monitored. I won't be able to call for help";
+                    break;
+
+                case "helmet":
+                    message = "Why did I bother to look under here its just a helmet?";
+                    break;
+
+                case "computer":
+                    message = "A Nazi computer. These things are an enigma to me.";
+                    break;
+
+                case "map":
+                    message = "Another map? Seriously?!";
+                    break;
+                case "crate":
+                    message = "These crates to heavy to lift. What's in here, the ark of the covenant?";
+                    break;
+
+
+            }
+
+
+
+
 
 
             if (actor == null)
