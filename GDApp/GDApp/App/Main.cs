@@ -984,8 +984,7 @@ namespace GDApp
 
 #if DEBUG
             //demo
-            this.textureDictionary.Load("Assets/GDDebug/Textures/ml");
-            this.textureDictionary.Load("Assets/GDDebug/Textures/checkerboard");
+            this.textureDictionary.Load("Assets/GDDebug/Textures/mp");
 #endif
 
 
@@ -994,7 +993,7 @@ namespace GDApp
             #region Fonts
 #if DEBUG
 
-            this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
+           // this.fontDictionary.Load("Assets/GDDebug/Fonts/debug");
 
 #endif
             this.fontDictionary.Load("Assets/Fonts/menu");
