@@ -948,6 +948,7 @@ namespace GDApp
             //this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonetex", "phone");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/wood");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/map");
+            this.textureDictionary.Load("Assets/Textures/Props/Crates/crate1");
 
             //propaganda
             this.textureDictionary.Load("Assets/Textures/Props/Propaganda/ww2-propaganda_waffenss", "poster-1");
@@ -1116,7 +1117,8 @@ namespace GDApp
             InitialiseShelf();
             InitializePosters();
             InitializeMap();
-            if(this.riddleId == 1)
+            InitializeCrates();
+            if (this.riddleId == 1)
             {
                 InitializeNonRiddleModels(AppData.ClockTransform, "clock");
                 InitializeNonRiddleModels(AppData.PhoneTransform, "phone");
@@ -2128,6 +2130,39 @@ namespace GDApp
 
             ModelObject model = new ModelObject("map", ActorType.Decorator, transform, effectParameters, this.modelDictionary["box2"]);
             this.objectManager.Add(model);
+        }
+
+        private void InitializeCrates()
+        {
+            BasicEffectParameters effectParameters;
+            CollidableObject collidable = null, clone = null;
+
+            effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
+            effectParameters.Texture = this.textureDictionary["crate1"];
+
+            collidable = new CollidableObject("crate - ", ActorType.CollidableDecorator, Transform3D.Zero, effectParameters, this.modelDictionary["box2"]);
+
+            for(int i = 0; i < 3; i++)
+            {
+                clone = (CollidableObject)collidable.Clone();
+                clone.ID += i;
+
+                clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 88), new Vector3(2, 2, 2));
+                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f,2,3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clone.Enable(true, 1);
+                this.objectManager.Add(clone);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                clone = (CollidableObject)collidable.Clone();
+                clone.ID += i + 3;
+
+                clone.Transform = new Transform3D(new Vector3(-123, 2.48f + (i * 5.1f), 60), new Vector3(2, 2, 2));
+                clone.AddPrimitive(new Box(clone.Transform.Translation, Matrix.Identity, new Vector3(3.3f, 2, 3.3f)), new MaterialProperties(0.1f, 0.1f, 0.1f));
+                clone.Enable(true, 1);
+                this.objectManager.Add(clone);
+            }
         }
         #endregion
 
