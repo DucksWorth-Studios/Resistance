@@ -1873,14 +1873,7 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
           //  this.objectManager.Add(model);
 
-            AudioEmitter phonograph = new AudioEmitter();
 
-            phonograph.Position = new Vector3(-100.0f, 7.0f, -121.0f);
-            phonograph.DopplerScale = 500000f;
-            phonograph.Up = Vector3.UnitY;
-            phonograph.Forward = Vector3.UnitZ;
-
-            this.soundManager.Play3DCue("game-main-soundtrack", phonograph);
             this.soundManager.PlayCue("old-computer");
 
 
@@ -2362,7 +2355,14 @@ namespace GDApp
             telegraph.Up = Vector3.UnitY;
             telegraph.Forward = Vector3.UnitZ;
 
-            this.soundManager.Play3DCue("game-main-soundtrack", telegraph);
+            AudioEmitter phonograph = new AudioEmitter();
+
+            phonograph.Position = new Vector3(-100.0f, 7.0f, -121.0f);
+            phonograph.DopplerScale = 500000f;
+            phonograph.Up = Vector3.UnitY;
+            phonograph.Forward = Vector3.UnitZ;
+
+            this.soundManager.Play3DCue("game-main-soundtrack", phonograph);
             this.soundManager.Play3DCue("morsecode",telegraph);
 
         }
