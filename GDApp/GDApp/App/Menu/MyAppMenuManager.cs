@@ -131,10 +131,11 @@ namespace GDApp
                         SetActiveList("controls menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
                         break;
                     case "restart-Button":
-                    Console.WriteLine("In Button");
+                    
                     DoRestart();
                     EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
                     EventDispatcher.Publish(new EventData(EventActionType.OnStart, EventCategoryType.MainMenu));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnClick, EventCategoryType.StartSound));
                     //SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
                     break;
                 case "playbtn":

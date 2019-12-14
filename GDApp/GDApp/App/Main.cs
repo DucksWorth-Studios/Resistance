@@ -2343,10 +2343,10 @@ namespace GDApp
             this.eventDispatcher.VolumeChanged += ChangeVolume;
             this.eventDispatcher.animationTriggered += playAnimationSound;
             this.eventDispatcher.MessageChanged += interactMessage;
-            this.eventDispatcher.StartSoundChanged += playMorseCode;
+            this.eventDispatcher.StartSoundChanged += playAmbientSounds;
         }
 
-        private void playMorseCode(EventData eventData)
+        private void playAmbientSounds(EventData eventData)
         {
             AudioEmitter telegraph = new AudioEmitter();
 
@@ -2363,6 +2363,7 @@ namespace GDApp
             phonograph.Forward = Vector3.UnitZ;
 
             this.soundManager.Play3DCue("game-main-soundtrack", phonograph);
+            
             this.soundManager.Play3DCue("morsecode",telegraph);
 
         }
@@ -2701,6 +2702,7 @@ namespace GDApp
             resetLogicPuzzleModels();
             resetRiddleAnswer();
             resetLoseTimer();
+            this.soundManager.Resume3DCue("game-main-soundtrack");
         }
         #endregion
 
