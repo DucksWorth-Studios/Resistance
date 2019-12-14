@@ -1873,14 +1873,7 @@ namespace GDApp
             this.objectManager.Add(collidableObject);
           //  this.objectManager.Add(model);
 
-            AudioEmitter phonograph = new AudioEmitter();
 
-            phonograph.Position = new Vector3(-100.0f, 7.0f, -121.0f);
-            phonograph.DopplerScale = 500000f;
-            phonograph.Up = Vector3.UnitY;
-            phonograph.Forward = Vector3.UnitZ;
-
-            this.soundManager.Play3DCue("game-main-soundtrack", phonograph);
             this.soundManager.PlayCue("old-computer");
 
 
@@ -2350,12 +2343,11 @@ namespace GDApp
             this.eventDispatcher.VolumeChanged += ChangeVolume;
             this.eventDispatcher.animationTriggered += playAnimationSound;
             this.eventDispatcher.MessageChanged += interactMessage;
-            this.eventDispatcher.StartSoundChanged += playMorseCode;
+            this.eventDispatcher.StartSoundChanged += playAmbientSounds;
         }
 
-        private void playMorseCode(EventData eventData)
+        private void playAmbientSounds(EventData eventData)
         {
-            Console.WriteLine("HELO FRIEND");
             AudioEmitter telegraph = new AudioEmitter();
 
             telegraph.Position = new Vector3(-70.0f, 7f, 80.0f);
@@ -2363,8 +2355,16 @@ namespace GDApp
             telegraph.Up = Vector3.UnitY;
             telegraph.Forward = Vector3.UnitZ;
 
-            this.soundManager.Play3DCue("game-main-soundtrack", telegraph);
-            this.soundManager.PlayCue("morsecode");
+            AudioEmitter phonograph = new AudioEmitter();
+
+            phonograph.Position = new Vector3(-100.0f, 7.0f, -121.0f);
+            phonograph.DopplerScale = 500000f;
+            phonograph.Up = Vector3.UnitY;
+            phonograph.Forward = Vector3.UnitZ;
+
+            this.soundManager.Play3DCue("game-main-soundtrack", phonograph);
+            
+            this.soundManager.Play3DCue("morsecode",telegraph);
 
         }
 
@@ -2702,6 +2702,7 @@ namespace GDApp
             resetLogicPuzzleModels();
             resetRiddleAnswer();
             resetLoseTimer();
+            this.soundManager.Resume3DCue("game-main-soundtrack");
         }
         #endregion
 

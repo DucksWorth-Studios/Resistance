@@ -107,7 +107,7 @@ namespace GDLibrary
 
         //always ensure that we start picking OUTSIDE the collidable first person camera radius - otherwise we will always pick ourself!
         public static readonly float PickStartDistance = CollidableCameraCapsuleRadius * 2f;
-        public static readonly float PickEndDistance = 20; //can be related to camera far clip plane radius but should be limited to typical level max diameter
+        public static readonly float PickEndDistance = 25; //can be related to camera far clip plane radius but should be limited to typical level max diameter
         public static readonly bool EnablePickAndPlace = true;
 
         #endregion
