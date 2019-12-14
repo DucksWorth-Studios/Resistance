@@ -2355,7 +2355,6 @@ namespace GDApp
 
         private void playMorseCode(EventData eventData)
         {
-            Console.WriteLine("HELO FRIEND");
             AudioEmitter telegraph = new AudioEmitter();
 
             telegraph.Position = new Vector3(-70.0f, 7f, 80.0f);
@@ -2364,7 +2363,7 @@ namespace GDApp
             telegraph.Forward = Vector3.UnitZ;
 
             this.soundManager.Play3DCue("game-main-soundtrack", telegraph);
-            this.soundManager.PlayCue("morsecode");
+            this.soundManager.Play3DCue("morsecode",telegraph);
 
         }
 
