@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::fe29678e-1cb9-4802-a5e9-f70d34d4866c;
+            Name = Sound::0452966f-415f-4046-9017-5c0a51cee46b;
             Property = 0;
             Sound = 1;
             Line Color = 4291388006;
@@ -254,7 +254,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::33db26e0-cc03-433c-8afb-462c0a24d729;
+            Name = Sound::9484b473-879d-416a-8db6-55d65e7dad2e;
             Property = 0;
             Sound = 1;
             Line Color = 4285447319;
@@ -291,14 +291,10 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Xbox Bank Last Modified Low = 0;
-    Xbox Bank Last Modified High = 0;
-    PC Bank Last Modified Low = 0;
-    PC Bank Last Modified High = 0;
     Header Last Modified Low = 0;
     Header Last Modified High = 0;
-    Bank Last Revised Low = 3710770589;
-    Bank Last Revised High = 30781678;
+    Bank Last Revised Low = 3896228602;
+    Bank Last Revised High = 30782345;
 
     Wave
     {
@@ -483,7 +479,7 @@ Wave Bank
             Last Modified High = 30780934;
         }
     }
-    
+
     Wave
     {
         Name = ding;
@@ -584,8 +580,53 @@ Sound Bank
     Windows File = Win\Music Sound Bank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
-    Header Last Modified High = 0;
-    Header Last Modified Low = 0;
+
+    Sound
+    {
+        Name = ding;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaker Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = Music Wave Bank;
+                    Bank Index = 0;
+                    Entry Name = ding;
+                    Entry Index = 8;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
 
     Sound
     {
@@ -684,7 +725,7 @@ Sound Bank
     Sound
     {
         Name = footstep-concrete;
-        Volume = -380;
+        Volume = -1200;
         Pitch = 0;
         Priority = 0;
 
@@ -715,14 +756,6 @@ Sound Bank
                     Random Offset = 0;
                 }
 
-                Pitch Variation
-                {
-                    Min = -100;
-                    Max = 367;
-                    Operator = 0;
-                    New Variation On Loop = 0;
-                }
-
                 Wave Entry
                 {
                     Bank Name = Music Wave Bank;
@@ -739,7 +772,7 @@ Sound Bank
     Sound
     {
         Name = game-main-soundtrack;
-        Volume = -1730;
+        Volume = -1200;
         Pitch = 0;
         Priority = 0;
 
@@ -760,13 +793,12 @@ Sound Bank
 
             Play Wave Event
             {
-                Loop Count = 255;
                 Break Loop = 0;
                 Use Speaker Position = 0;
                 Use Center Speaker = 1;
-                New Speaker Position On Loop = 0;
+                New Speaker Position On Loop = 1;
                 Speaker Position Angle = 0.000000;
-                Speaker Position Arc = 360.000000;
+                Speaker Position Arc = 0.000000;
 
                 Event Header
                 {
@@ -792,7 +824,7 @@ Sound Bank
     Sound
     {
         Name = old-computer;
-        Volume = -2440;
+        Volume = -1200;
         Pitch = 0;
         Priority = 0;
 
@@ -840,7 +872,7 @@ Sound Bank
     Sound
     {
         Name = morse_button1;
-        Volume = -1200;
+        Volume = -1910;
         Pitch = 0;
         Priority = 0;
 
@@ -886,57 +918,10 @@ Sound Bank
 
     Sound
     {
-        Name = Door_Open;
-        Volume = -1200;
-        Pitch = 0;
-        Priority = 10;
-
-        Category Entry
-        {
-            Name = Default;
-        }
-
-        Track
-        {
-            Volume = 0;
-            Use Filter = 0;
-
-            Play Wave Event
-            {
-                Break Loop = 0;
-                Use Speaker Position = 0;
-                Use Center Speaker = 1;
-                New Speaker Position On Loop = 1;
-                Speaker Position Angle = 0.000000;
-                Speaker Position Arc = 0.000000;
-
-                Event Header
-                {
-                    Timestamp = 0;
-                    Relative = 0;
-                    Random Recurrence = 0;
-                    Random Offset = 0;
-                }
-
-                Wave Entry
-                {
-                    Bank Name = Music Wave Bank;
-                    Bank Index = 0;
-                    Entry Name = Door_Open;
-                    Entry Index = 7;
-                    Weight = 255;
-                    Weight Min = 0;
-                }
-            }
-        }
-    }
-
-    Sound
-    {
         Name = Bookcase_Sound;
         Volume = -1200;
         Pitch = 0;
-        Priority = 10;
+        Priority = 0;
 
         Category Entry
         {
@@ -980,8 +965,8 @@ Sound Bank
 
     Sound
     {
-        Name = ding;
-        Volume = -2400;
+        Name = Door_Open;
+        Volume = -1200;
         Pitch = 0;
         Priority = 0;
 
@@ -998,10 +983,10 @@ Sound Bank
             Play Wave Event
             {
                 Break Loop = 0;
-                Use Speaker Position = 1;
+                Use Speaker Position = 0;
                 Use Center Speaker = 1;
                 New Speaker Position On Loop = 1;
-                Speaker Position Angle = 90.000000;
+                Speaker Position Angle = 0.000000;
                 Speaker Position Arc = 0.000000;
 
                 Event Header
@@ -1016,8 +1001,8 @@ Sound Bank
                 {
                     Bank Name = Music Wave Bank;
                     Bank Index = 0;
-                    Entry Name = ding;
-                    Entry Index = 8;
+                    Entry Name = Door_Open;
+                    Entry Index = 7;
                     Weight = 255;
                     Weight Min = 0;
                 }
@@ -1064,7 +1049,7 @@ Sound Bank
                     Bank Name = Music Wave Bank;
                     Bank Index = 0;
                     Entry Name = Interact-sound;
-                    Entry Index = 8;
+                    Entry Index = 9;
                     Weight = 255;
                     Weight Min = 0;
                 }
@@ -1111,7 +1096,7 @@ Sound Bank
                     Bank Name = Music Wave Bank;
                     Bank Index = 0;
                     Entry Name = switchInteract;
-                    Entry Index = 9;
+                    Entry Index = 10;
                     Weight = 255;
                     Weight Min = 0;
                 }
@@ -1122,7 +1107,7 @@ Sound Bank
     Sound
     {
         Name = Morse Code Easter Egg;
-        Volume = -3800;
+        Volume = -2440;
         Pitch = 0;
         Priority = 0;
 
@@ -1164,11 +1149,51 @@ Sound Bank
                     Bank Name = Music Wave Bank;
                     Bank Index = 0;
                     Entry Name = Morse Code Easter Egg;
-                    Entry Index = 10;
+                    Entry Index = 11;
                     Weight = 255;
                     Weight Min = 0;
                 }
             }
+        }
+    }
+
+    Cue
+    {
+        Name = morse_button1;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = morse_button1;
+            Index = 6;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = SolutionSound;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = ding;
+            Index = 0;
+            Weight Min = 0;
+            Weight Max = 255;
         }
     }
 
@@ -1186,7 +1211,7 @@ Sound Bank
         Sound Entry
         {
             Name = victory;
-            Index = 0;
+            Index = 1;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -1206,7 +1231,7 @@ Sound Bank
         Sound Entry
         {
             Name = lose;
-            Index = 1;
+            Index = 2;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -1226,7 +1251,7 @@ Sound Bank
         Sound Entry
         {
             Name = footstep-concrete;
-            Index = 2;
+            Index = 3;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -1259,22 +1284,9 @@ Sound Bank
         Sound Entry
         {
             Name = game-main-soundtrack;
-            Index = 3;
+            Index = 4;
             Weight Min = 0;
             Weight Max = 255;
-        }
-
-        Instance Limit
-        {
-            Max Instances = 1;
-            Behavior = 0;
-
-            Crossfade
-            {
-                Fade In = 0;
-                Fade Out = 0;
-                Crossfade Type = 0;
-            }
         }
     }
 
@@ -1292,42 +1304,9 @@ Sound Bank
         Sound Entry
         {
             Name = old-computer;
-            Index = 4;
-            Weight Min = 0;
-            Weight Max = 255;
-        }
-    }
-
-    Cue
-    {
-        Name = morse_button1;
-
-        Variation
-        {
-            Variation Type = 3;
-            Variation Table Type = 1;
-            New Variation on Loop = 0;
-        }
-
-        Sound Entry
-        {
-            Name = morse_button1;
             Index = 5;
             Weight Min = 0;
             Weight Max = 255;
-        }
-
-        Instance Limit
-        {
-            Max Instances = 1;
-            Behavior = 0;
-
-            Crossfade
-            {
-                Fade In = 0;
-                Fade Out = 0;
-                Crossfade Type = 0;
-            }
         }
     }
 
@@ -1365,26 +1344,6 @@ Sound Bank
         Sound Entry
         {
             Name = Door_Open;
-            Index = 6;
-            Weight Min = 0;
-            Weight Max = 255;
-        }
-    }
-
-    Cue
-    {
-        Name = SolutionSound;
-
-        Variation
-        {
-            Variation Type = 3;
-            Variation Table Type = 1;
-            New Variation on Loop = 0;
-        }
-
-        Sound Entry
-        {
-            Name = ding;
             Index = 8;
             Weight Min = 0;
             Weight Max = 255;
@@ -1405,22 +1364,9 @@ Sound Bank
         Sound Entry
         {
             Name = Interact-sound;
-            Index = 8;
+            Index = 9;
             Weight Min = 0;
             Weight Max = 255;
-        }
-
-        Instance Limit
-        {
-            Max Instances = 1;
-            Behavior = 0;
-
-            Crossfade
-            {
-                Fade In = 0;
-                Fade Out = 0;
-                Crossfade Type = 0;
-            }
         }
     }
 
@@ -1438,7 +1384,7 @@ Sound Bank
         Sound Entry
         {
             Name = switchInteract;
-            Index = 9;
+            Index = 10;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -1458,22 +1404,9 @@ Sound Bank
         Sound Entry
         {
             Name = Morse Code Easter Egg;
-            Index = 10;
+            Index = 11;
             Weight Min = 0;
             Weight Max = 255;
-        }
-
-        Instance Limit
-        {
-            Max Instances = 1;
-            Behavior = 0;
-
-            Crossfade
-            {
-                Fade In = 0;
-                Fade Out = 0;
-                Crossfade Type = 0;
-            }
         }
     }
 }
