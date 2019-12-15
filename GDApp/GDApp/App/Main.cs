@@ -2518,10 +2518,12 @@ namespace GDApp
 
             if(eventData.EventType == EventActionType.OpenBookcase)
             {
+                this.soundManager.PlayCue("SolutionSound");
                 this.soundManager.PlayCue("Bookcase_Sound");
             }
             else if(eventData.EventType == EventActionType.OpenDoor)
             {
+                this.soundManager.PlayCue("SolutionSound");
                 this.soundManager.PlayCue("Door_Open");
             }
         }
