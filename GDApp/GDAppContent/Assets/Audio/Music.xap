@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::a6277549-ac4a-4c98-b1b0-2a8e5f97c1c5;
+            Name = Sound::7111c0e0-9a36-4d74-a795-3051a0e64a3d;
             Property = 0;
             Sound = 1;
             Line Color = 4291388006;
@@ -249,7 +249,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::c1a2d601-b653-48c4-8b2a-75e6c126ffca;
+            Name = Sound::686502c0-79d5-49b5-8a30-f1c896008c7e;
             Property = 0;
             Sound = 1;
             Line Color = 4293476393;
@@ -286,14 +286,8 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Xbox Bank Last Modified Low = 0;
-    Xbox Bank Last Modified High = 0;
-    PC Bank Last Modified Low = 0;
-    PC Bank Last Modified High = 0;
-    Header Last Modified Low = 0;
-    Header Last Modified High = 0;
-    Bank Last Revised Low = 836573771;
-    Bank Last Revised High = 30780965;
+    Bank Last Revised Low = 3674513801;
+    Bank Last Revised High = 30782334;
 
     Wave
     {
@@ -481,10 +475,10 @@ Wave Bank
 
     Wave
     {
-        Name = SolutionSound02;
-        File = SolutionSound02.wav;
-        Build Settings Last Modified Low = 3635944976;
-        Build Settings Last Modified High = 30780960;
+        Name = ding;
+        File = ding.wav;
+        Build Settings Last Modified Low = 3384663648;
+        Build Settings Last Modified High = 30782334;
 
         Cache
         {
@@ -492,13 +486,13 @@ Wave Bank
             Channels = 2;
             Sampling Rate = 44100;
             Bits Per Sample = 1;
-            Play Region Offset = 44;
-            Play Region Length = 326508;
+            Play Region Offset = 84;
+            Play Region Length = 943108;
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 3006276420;
-            Last Modified High = 30780957;
+            Last Modified Low = 1607443504;
+            Last Modified High = 30782334;
         }
     }
 }
@@ -510,8 +504,6 @@ Sound Bank
     Windows File = Win\Music Sound Bank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
-    Header Last Modified High = 0;
-    Header Last Modified Low = 0;
 
     Sound
     {
@@ -906,7 +898,7 @@ Sound Bank
 
     Sound
     {
-        Name = SolutionSound02;
+        Name = ding;
         Volume = -2400;
         Pitch = 0;
         Priority = 0;
@@ -942,7 +934,7 @@ Sound Bank
                 {
                     Bank Name = Music Wave Bank;
                     Bank Index = 0;
-                    Entry Name = SolutionSound02;
+                    Entry Name = ding;
                     Entry Index = 8;
                     Weight = 255;
                     Weight Min = 0;
@@ -1152,7 +1144,7 @@ Sound Bank
 
     Cue
     {
-        Name = SolutionSound02;
+        Name = SolutionSound;
 
         Variation
         {
@@ -1163,7 +1155,7 @@ Sound Bank
 
         Sound Entry
         {
-            Name = SolutionSound02;
+            Name = ding;
             Index = 8;
             Weight Min = 0;
             Weight Max = 255;
