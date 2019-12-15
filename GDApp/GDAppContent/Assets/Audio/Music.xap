@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::ee53d5fe-5824-4a2a-8bd8-d74f7412b36c;
+            Name = Sound::fe29678e-1cb9-4802-a5e9-f70d34d4866c;
             Property = 0;
             Sound = 1;
             Line Color = 4291388006;
@@ -254,7 +254,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::a17bbda0-57ac-425e-af14-ee6ea8133ced;
+            Name = Sound::33db26e0-cc03-433c-8afb-462c0a24d729;
             Property = 0;
             Sound = 1;
             Line Color = 4285447319;
@@ -1073,6 +1073,7 @@ Sound Bank
 
             Play Wave Event
             {
+                Loop Count = 255;
                 Break Loop = 0;
                 Use Speaker Position = 0;
                 Use Center Speaker = 1;
@@ -1318,6 +1319,19 @@ Sound Bank
             Weight Min = 0;
             Weight Max = 255;
         }
+
+        Instance Limit
+        {
+            Max Instances = 1;
+            Behavior = 0;
+
+            Crossfade
+            {
+                Fade In = 0;
+                Fade Out = 0;
+                Crossfade Type = 0;
+            }
+        }
     }
 
     Cue
@@ -1357,6 +1371,19 @@ Sound Bank
             Index = 10;
             Weight Min = 0;
             Weight Max = 255;
+        }
+
+        Instance Limit
+        {
+            Max Instances = 1;
+            Behavior = 0;
+
+            Crossfade
+            {
+                Fade In = 0;
+                Fade Out = 0;
+                Crossfade Type = 0;
+            }
         }
     }
 }

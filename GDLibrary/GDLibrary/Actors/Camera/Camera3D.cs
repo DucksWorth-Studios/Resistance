@@ -148,10 +148,10 @@ namespace GDLibrary
         public override string ToString()
         {
             return this.ID
-                + ", Translation: " + MathUtility.Round(this.Transform.Translation, 0)
-                    + ", Look: " + MathUtility.Round(this.Transform.Look, 0)
-                        + ", Up: " + MathUtility.Round(this.Transform.Up, 0)
-                            +", Depth: " + this.drawDepth;
+            +", Translation: " + MathUtility.Round(this.Transform.Translation, 0)
+                + ", Look: " + MathUtility.Round(this.Transform.Look, 0)
+                    + ", Up: " + MathUtility.Round(this.Transform.Up, 0)
+                        + ", Depth: " + this.drawDepth;
 
         }
     }

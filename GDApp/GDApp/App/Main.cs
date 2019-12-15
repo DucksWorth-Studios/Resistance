@@ -78,7 +78,7 @@ namespace GDApp
 
         //random number for riddle
         private int riddleId;
-
+        bool isPaused = false;
         public int logicID;
 
         #endregion
@@ -2386,70 +2386,89 @@ namespace GDApp
             Actor2D actor = uiManager.Find(predicate);
             Actor2D actor2 = uiManager.Find(predicate2);
             string message = "A " + obj.ID + ", this might be useful later. ";
-            bool isPaused = false;
+         
+
+
+
+
 
 
             switch (obj.ID)
             {
                 case "wine bottle":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "Now is no time for a drink I need to escape.";
                     break;
 
                 case "grenade":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "A grenade, it's dangerous but it's still not enough to get through that door.";
                     break;
 
                 case "filing cabinet":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "A filing cabinet. I've already got the intel I need";
                     break;
 
                 case "globe":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "A globe, whats the point of the big table map?";
                     break;
 
                 case "clock":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "A broken clock. Well, I guess it's still right twice a day.";
                     break;
 
 
                 case "munitions box":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "A munitions box. That's a lot of ammo for a small bunker.";
                     break;
 
                 case "hat":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "An officer's hat. I'd look stylish in that maybe not a German one though...";
                     break;
 
                 case "gun":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "A gun. I better be careful, I might end up on the wrong side of it.";
                     break;
 
                 case "phone":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "A phone it's definitely monitored. I won't be able to call for help";
                     break;
 
                 case "helmet":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "Why did I bother to look under here its just a helmet?";
                     break;
 
                 case "computer":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "A Nazi computer. These things are an enigma to me.";
                     break;
 
                 case "map":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "Another map? Seriously?!";
                     break;
                 case "crate":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "These crates are to heavy to lift. What's in here, the ark of the covenant?";
                     break;
 
                 case "telegraph":
+                    this.soundManager.PlayCue("Interact-sound");
                     message = "Morse code? I don't have time to decode this right now.";
-
                     isPaused = playMorseCodePause(isPaused);
-
                     break;
 
+                default:
+                    message = "";
+                    break;
             }
      
 
@@ -2503,8 +2522,12 @@ namespace GDApp
         private bool playMorseCodePause(bool isPaused)
         {
 
-            if (isPaused) { this.soundManager.PlayCue("morsecode"); isPaused = false; }
-            else { this.soundManager.PauseCue("morsecode"); isPaused = true; }
+            if (isPaused)
+            {
+                this.soundManager.Resume3DCue("morsecode");
+                isPaused = false;
+            }
+            else { this.soundManager.Pause3DCue("morsecode"); isPaused = true; }
 
 
 

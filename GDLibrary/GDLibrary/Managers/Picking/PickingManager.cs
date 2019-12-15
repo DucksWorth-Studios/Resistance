@@ -147,23 +147,19 @@ namespace GDLibrary
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
                     EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
                 }
-                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == (ActorType.Interactable | ActorType.CollidableDecorator))
+                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == (ActorType.Interactable | ActorType.CollidableDecorator) && this.currentPickedObject.ActorType != ActorType.Camera)
                 {
-                    this.managerParameters.SoundManager.PlayCue("Interact-sound");
-
 
                     if (this.currentPickedObject.ID != "phonograph")
                     {
+                        
                         interactPopUp(gameTime);
                     }
                     else if (this.currentPickedObject.ID == "phonograph") 
                     {
+                        this.managerParameters.SoundManager.PlayCue("Interact-sound");
                         if (MusicISPaused) { this.managerParameters.SoundManager.Resume3DCue("game-main-soundtrack"); MusicISPaused = false; }
                         else { this.managerParameters.SoundManager.Pause3DCue("game-main-soundtrack"); MusicISPaused = true; }
-
-
-
-
                     }
 
                 }
