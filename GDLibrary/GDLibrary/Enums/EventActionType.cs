@@ -29,6 +29,7 @@ namespace GDLibrary
         OnMute,
         OnUnMute,
         OnExit,
+        InteractMessage,
 
         //send by mouse or gamepad manager
         OnClick,

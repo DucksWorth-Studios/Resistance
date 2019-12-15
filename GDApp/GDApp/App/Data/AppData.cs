@@ -107,7 +107,7 @@ namespace GDLibrary
 
         //always ensure that we start picking OUTSIDE the collidable first person camera radius - otherwise we will always pick ourself!
         public static readonly float PickStartDistance = CollidableCameraCapsuleRadius * 2f;
-        public static readonly float PickEndDistance = 1000; //can be related to camera far clip plane radius but should be limited to typical level max diameter
+        public static readonly float PickEndDistance = 25; //can be related to camera far clip plane radius but should be limited to typical level max diameter
         public static readonly bool EnablePickAndPlace = true;
 
         #endregion
@@ -145,8 +145,13 @@ namespace GDLibrary
         public static readonly string UnLitPrimitivesEffectID = "unlit primitives basic effect";
         public static readonly string UnlitModelDualEffectID = "unlit models dual effect";
         public static readonly string UnlitBillboardsEffectID = "unlit billboards effect";
-        
+
         #endregion
 
+        #region riddle transforms
+        public static readonly Transform3D gunTransform = new Transform3D(new Vector3(-89, 10.95f, 25), new Vector3(0, 0, 90), new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY);
+        public static readonly Transform3D ClockTransform = new Transform3D(new Vector3(-126, 19, 22), new Vector3(0, 90, -90), new Vector3(0.1f, 0.1f, 0.1f), Vector3.UnitX, Vector3.UnitY);
+        public static readonly Transform3D PhoneTransform = new Transform3D(new Vector3(-68, 14, 18), new Vector3(0, -90, 0), new Vector3(0.01f, 0.01f, 0.01f), Vector3.UnitX, Vector3.UnitY);
+        #endregion
     }
 }

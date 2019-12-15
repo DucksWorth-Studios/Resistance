@@ -59,7 +59,7 @@ namespace GDApp
             //EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
             if(oldID != currentUIObject.GetID())
             {
-                EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.Sound2D, additionalParameters));
+                EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.SoundStart, additionalParameters));
                 oldID = currentUIObject.GetID();
             }
         }
@@ -73,8 +73,7 @@ namespace GDApp
                 switch (clickedUIObject.ID)
                 {
                     case "startbtn":
-                        DoStart();
-                        EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                    SetActiveList("story menu");
                     break;
 
                     case "resumebtn":
@@ -132,11 +131,17 @@ namespace GDApp
                         SetActiveList("controls menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
                         break;
                     case "restart-Button":
-                    Console.WriteLine("In Button");
+                    
                     DoRestart();
                     EventDispatcher.Publish(new EventData(EventActionType.OnLose, EventCategoryType.mouseLock));
                     EventDispatcher.Publish(new EventData(EventActionType.OnStart, EventCategoryType.MainMenu));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnClick, EventCategoryType.StartSound));
                     //SetActiveList("main menu"); //use sceneIDs specified when we created the menu scenes in Main::AddMenuElements()
+                    break;
+                case "playbtn":
+                    DoStart();
+                    EventDispatcher.Publish(new EventData(EventActionType.OnPlay, EventCategoryType.mouseLock));
+                    EventDispatcher.Publish(new EventData(EventActionType.OnClick, EventCategoryType.StartSound));
                     break;
 
                 default:

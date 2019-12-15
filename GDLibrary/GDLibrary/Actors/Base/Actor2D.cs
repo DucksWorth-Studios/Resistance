@@ -16,6 +16,7 @@ namespace GDLibrary
     {
         #region Fields
         private Transform2D transform;
+
         #endregion
 
         #region Properties
@@ -44,6 +45,9 @@ namespace GDLibrary
         {
             this.transform = transform;
         }
+
+
+
 
         public override Matrix GetWorldMatrix()
         {

@@ -112,9 +112,42 @@ namespace GDLibrary
                 if ((actor.StatusType & StatusType.Update) == StatusType.Update)
                 {
                     actor.Update(gameTime);
+                    clearMessage(gameTime);
+
+
                 }
             }
         }
+
+
+        private void clearMessage(GameTime gameTime)
+        {
+            int seconds = gameTime.TotalGameTime.Seconds;
+
+            Predicate<Actor2D> predicate = s => s.GetID() == "message";
+            Predicate<Actor2D> predicate2 = s => s.GetID() == "message2";
+            Actor2D actor = this.Find(predicate);
+            Actor2D actor2 = this.Find(predicate2);
+
+            if (actor != null)
+            {
+
+                UITextObject UImessage = actor as UITextObject;
+                UITextObject UImessage2 = actor2 as UITextObject;
+
+                if (UImessage.SecondCreated + 4 < seconds)
+                {
+
+
+                    UImessage.StatusType = StatusType.Off;
+                    UImessage2.StatusType = StatusType.Off;
+
+                }
+            }
+        }
+
+
+
 
         protected override void ApplyDraw(GameTime gameTime)
         {

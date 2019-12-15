@@ -16,6 +16,7 @@ namespace GDLibrary
         #region Fields
         private string text;
         private SpriteFont spriteFont;
+        public int SecondCreated;
         #endregion
 
         #region Properties
@@ -50,6 +51,16 @@ namespace GDLibrary
             this.spriteFont = spriteFont;
             this.text = text;
         }
+
+        public UITextObject(string id, ActorType actorType, StatusType statusType, Transform2D transform,
+     Color color, SpriteEffects spriteEffects, float layerDepth, string text, SpriteFont spriteFont,int SecondCreacted)
+     : base(id, actorType, statusType, transform, color, spriteEffects, layerDepth)
+        {
+            this.spriteFont = spriteFont;
+            this.text = text;
+            this.SecondCreated = SecondCreacted;
+        }
+
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
