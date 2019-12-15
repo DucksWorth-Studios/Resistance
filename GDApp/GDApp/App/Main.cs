@@ -2457,7 +2457,7 @@ namespace GDApp
                     break;
                 case "crate":
                     this.soundManager.PlayCue("Interact-sound");
-                    message = "These crates are to heavy to lift. What's in here, the ark of the covenant?";
+                    message = "These crates are too heavy to lift. What's in here, the ark of the covenant?";
                     break;
 
                 case "telegraph":
