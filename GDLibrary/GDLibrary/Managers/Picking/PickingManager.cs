@@ -131,7 +131,6 @@ namespace GDLibrary
                 {
                     //generate event to tell object manager and physics manager to remove the object
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.Interact, EventCategoryType.Interactive));
-                    Console.WriteLine("Interacting");
                 }
                 else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.PopUP)
                 {
@@ -142,7 +141,7 @@ namespace GDLibrary
                         EventDispatcher.Publish(new EventData(EventActionType.OnOpen, EventCategoryType.Riddle));
                     }
                 }
-                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.CollidablePickup)
+                else if (this.currentPickedObject != null && this.currentPickedObject.ActorType == ActorType.CollidablePickup && this.currentPickedObject.StatusType != StatusType.Off)
                 {
                     EventDispatcher.Publish(new EventData(this.currentPickedObject, EventActionType.RiddleSolved, EventCategoryType.RiddleAnswer));
                     EventDispatcher.Publish(new EventData(EventActionType.OpenBookcase, EventCategoryType.Animator));
@@ -152,7 +151,6 @@ namespace GDLibrary
 
                     if (this.currentPickedObject.ID != "phonograph")
                     {
-                        
                         interactPopUp(gameTime);
                     }
                     else if (this.currentPickedObject.ID == "phonograph") 
@@ -163,7 +161,6 @@ namespace GDLibrary
                     }
 
                 }
-                //Console.WriteLine("Hello");
             }
         }
 
