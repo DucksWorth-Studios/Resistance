@@ -285,7 +285,19 @@ namespace GDApp
          */
         private void InitialisePopUP()
         {
-            Texture2D texture = this.textureDictionary["popup"];
+            Texture2D texture;
+            if(this.riddleId == 1)
+            {
+                texture = this.textureDictionary["GunRiddle"];
+            }
+            else if(this.riddleId == 2)
+            {
+                texture = this.textureDictionary["ClockRiddle"];
+            }
+            else
+            {
+                texture = this.textureDictionary["PhoneRiddle"];
+            }
    
             int w,x,y,z,tw,th;
             int temp = graphics.PreferredBackBufferWidth / 4;
@@ -861,24 +873,9 @@ namespace GDApp
             this.modelDictionary.Load("Assets/Models/Props/morse-code-telegraph", "telegraph");
 
             //riddle object
-            if (this.riddleId == 1)
-            {
-                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-1", "riddleAnswerObj");
-                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-2", "clock");
-                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-3", "phone");
-            }
-            else if(this.riddleId == 2)
-            {
-                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-2", "riddleAnswerObj");
-                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-1", "gun");
-                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-3", "phone");
-            }
-            else
-            {
-                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-3", "riddleAnswerObj");
-                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-1", "gun");
-                this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-2", "clock");
-            }
+            this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-1", "gun");
+            this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-2", "clock");
+            this.modelDictionary.Load("Assets/Models/Props/riddleObjects/riddleObj-3", "phone");
             #endregion
 
             #region Textures
@@ -963,29 +960,14 @@ namespace GDApp
 
             //interactable
             //riddle object
-            if (this.riddleId == 1)
-            {
-                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-1", "riddleObjTexture");
-                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-2", "clock");
-                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-3", "phone");
-            }
-            else if (this.riddleId == 2)
-            {
-                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-2", "riddleObjTexture");
-                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-1", "gun");
-                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-3", "phone");
-            }
-            else
-            {
-                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-3", "riddleObjTexture");
                 this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-1", "gun");
                 this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-2", "clock");
-            }
+                this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddleObjTexture-3", "phone");
+                this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/riddlePopup-1", "GunRiddle");
+                this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/riddlePopup-2", "ClockRiddle");
+                this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/riddlePopup-3", "PhoneRiddle");
 
             this.textureDictionary.Load("Assets/Textures/Props/Interactable/riddletexture");
-
-            //load riddle pop up
-            this.textureDictionary.Load("Assets/Textures/UI/HUD/Popup/riddlePopup-" + this.riddleId, "popup");
 
 #if DEBUG
             //demo
@@ -1939,10 +1921,10 @@ namespace GDApp
             
 
             effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-            effectParameters.Texture = this.textureDictionary["riddleObjTexture"];
+            effectParameters.Texture = this.textureDictionary[id];
 
             collidableObject = new TriangleMeshObject(id, ActorType.Interactable | ActorType.CollidableDecorator, transform3D, effectParameters, 
-                this.modelDictionary["riddleAnswerObj"], new MaterialProperties(0.5f, 0.5f, 0.5f));
+                this.modelDictionary[id], new MaterialProperties(0.5f, 0.5f, 0.5f));
             collidableObject.Enable(true, 1);
 
             this.objectManager.Add(collidableObject);
@@ -2815,6 +2797,34 @@ namespace GDApp
             Actor3D item = this.objectManager.Find(pred) as Actor3D;
             item.ActorType = ActorType.CollidableProp;
             item.StatusType = StatusType.Drawn;
+
+            Predicate<Actor2D> UIpred = s => s.ID == "PopUp";
+            UITextureObject textureObject = this.uiManager.Find(UIpred) as UITextureObject;
+
+            int lastRiddleID = this.riddleId;
+            this.riddleId = GenerateRandomNum(1, 4);
+
+            // ensuring the riddle is changed and not the same one
+            if (this.riddleId == lastRiddleID)
+            {
+                if (this.riddleId == 3)
+                {
+                    this.riddleId = 1;
+                }
+            }
+
+            if (this.riddleId == 1)
+            {
+                textureObject.Texture = this.textureDictionary["GunRiddle"];
+            }
+            else if(this.riddleId == 2)
+            {
+                textureObject.Texture = this.textureDictionary["ClockRiddle"];
+            }
+            else
+            {
+                textureObject.Texture = this.textureDictionary["PhoneRiddle"];
+            }
         }
 
         /**
