@@ -2811,6 +2811,7 @@ namespace GDApp
                 {
                     this.riddleId = 1;
                 }
+                this.riddleId++;
             }
 
             if (this.riddleId == 1)
