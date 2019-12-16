@@ -90,6 +90,10 @@ namespace GDLibrary
                     this.gateFour = true;
                     this.IsSolved = true;
 
+                    EventDispatcher.Publish(new EventData(EventActionType.OnObjective, EventCategoryType.Objective));
+
+
+
                     //Changes the final Gate state
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-4" }));
 
