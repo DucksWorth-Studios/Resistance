@@ -57,7 +57,6 @@ namespace GDLibrary
             if (collidableObjectCollidee.ActorType == ActorType.CollidableCamera && this.inactive == false)
             {
                 this.inactive = true;
-                Console.WriteLine(collidableObjectCollidee.ID);
                 EventDispatcher.Publish(new EventData(EventActionType.OnWin, EventCategoryType.Win));
             }            
         }

@@ -80,7 +80,7 @@ namespace GDLibrary
             {
                 this.SetActiveList("lose-screen");
                 //turn on update and draw i.e. show the menu since the game is paused
-                Console.WriteLine("HELLO FRIEND");
+
                 this.StatusType = StatusType.Update | StatusType.Drawn;
                 //Set the ActiveList BeforeCalling this
                 
@@ -159,10 +159,10 @@ namespace GDLibrary
             if (this.menuDictionary.ContainsKey(menuSceneID))
             {
                 this.activeList = this.menuDictionary[menuSceneID];
-                Console.WriteLine(menuSceneID);
+
                 return true;
             }
-            Console.WriteLine(menuSceneID);
+
             return false;
         }
 

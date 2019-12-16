@@ -68,10 +68,9 @@ namespace GDLibrary
 
         public void MovementBlock(EventData eventData)
         {
-            Console.WriteLine("Movement");
+
             if(!inPopUp)
             {
-                Console.WriteLine("Movement2");
                 inPopUp = true;
             }
         }
