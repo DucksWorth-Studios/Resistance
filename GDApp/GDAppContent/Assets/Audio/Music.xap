@@ -725,7 +725,7 @@ Sound Bank
     Sound
     {
         Name = footstep-concrete;
-        Volume = -1200;
+        Volume = -400;
         Pitch = 0;
         Priority = 0;
 
@@ -1108,7 +1108,7 @@ Sound Bank
     Sound
     {
         Name = Morse Code Easter Egg;
-        Volume = -2440;
+        Volume = -2970;
         Pitch = 0;
         Priority = 0;
 
