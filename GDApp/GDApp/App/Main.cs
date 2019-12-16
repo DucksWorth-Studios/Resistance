@@ -941,6 +941,7 @@ namespace GDApp
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/LightTexture");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/FilingCabinet");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/bookcase");
+            this.textureDictionary.Load("Assets/Textures/Props/Resistance/wine");
             this.textureDictionary.Load("Assets/Textures/Props/Resistance/phonograph");
             //this.textureDictionary.Load("Assets/Textures/Props/Interactable/GunTexture");
             this.textureDictionary.Load("Assets/Textures/Props/Globe/mp");
@@ -1975,7 +1976,7 @@ namespace GDApp
                 new Vector3(0.003f), 
                 Vector3.UnitX, Vector3.UnitY);
             BasicEffectParameters effectParameters = this.effectDictionary[AppData.LitModelsEffectID].Clone() as BasicEffectParameters;
-
+            effectParameters.Texture = this.textureDictionary["wine"];
 
             CollidableObject collidableObject = new CollidableObject("wine bottle",ActorType.CollidableDecorator | ActorType.Interactable,transform,effectParameters ,this.modelDictionary["wine-bottle"]);
             collidableObject.AddPrimitive(new Box(Vector3.UnitY, Matrix.Identity, new Vector3(2, 7, 2)), new MaterialProperties(0.2f, 0.8f, 0.7f));
@@ -2397,7 +2398,7 @@ namespace GDApp
             {
                 case "wine bottle":
                     this.soundManager.PlayCue("Interact-sound");
-                    message = "Now is no time for a drink I need to escape.";
+                    message = "Now is no time for a drink! I need to escape.";
                     break;
 
                 case "grenade":
@@ -2412,7 +2413,7 @@ namespace GDApp
 
                 case "globe":
                     this.soundManager.PlayCue("Interact-sound");
-                    message = "A globe, whats the point of the big table map?";
+                    message = "A globe, whats the point of the big map on the table then?";
                     break;
 
                 case "clock":
@@ -2443,7 +2444,7 @@ namespace GDApp
 
                 case "helmet":
                     this.soundManager.PlayCue("Interact-sound");
-                    message = "Why did I bother to look under here its just a helmet?";
+                    message = "A Nazi helmet, lets not stick around to meet the owner.";
                     break;
 
                 case "computer":
