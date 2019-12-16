@@ -44,7 +44,7 @@ namespace GDApp
             }
             else if (eventData.EventType == EventActionType.OnWin)
             {
-                //Console.WriteLine("menu");
+
                 //this.SetActiveList("win-screen");
             }
         }

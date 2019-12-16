@@ -42,7 +42,7 @@ namespace GDLibrary
                 {
                     this.gateOne = true;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "base-gate-1" }));
-                    Console.WriteLine("BASE Gate One");
+
                 }
                 else if ((!this.switchOne || !this.switchFour) && this.gateOne)
                 {

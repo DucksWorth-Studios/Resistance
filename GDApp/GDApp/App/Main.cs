@@ -3092,8 +3092,7 @@ namespace GDApp
             c = (float)1 / a;
             d = (float)1 / b;
             
-            Console.WriteLine("width "+w);
-            Console.WriteLine("height "+h );
+
             Vector2 scale = new Vector2(a,b);
 
             Transform2D transform = new Transform2D(new Vector2(0, 0), 0,scale, Vector2.One, new Integer2(1, 1));

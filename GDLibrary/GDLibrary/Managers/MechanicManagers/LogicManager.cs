@@ -126,14 +126,14 @@ namespace GDLibrary
                 {
                     this.gateOne = true;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-1" }));
-                    Console.WriteLine("Gate One");
+
                 }
                 else if((!this.switchOne || !this.switchFour) && this.gateOne)
                 {
                     this.gateOne = false;
                     //Send Event to delight Gate One;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight,EventCategoryType.LogicPuzzle,new object[] { "gate-1" }));
-                    Console.WriteLine("Gate One Off");
+
 
                 }
 
@@ -142,14 +142,14 @@ namespace GDLibrary
                 {
                     this.gateTwo = true;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-2" }));
-                    Console.WriteLine("Gate Two");
+
 
                 }
                 else if (((this.switchThree && this.switchTwo) || (!this.switchThree && !this.switchTwo)) && this.gateTwo)
                 {
                     this.gateTwo = false;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-2" }));
-                    Console.WriteLine("Gate Two OFF");
+
 
                 }
 
@@ -158,14 +158,14 @@ namespace GDLibrary
                 {
                     this.gateThree = true;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-3" }));
-                    Console.WriteLine("Gate Three");
+
 
                 }
                 else if ((!this.gateOne || !this.switchTwo) && this.gateThree)
                 {
                     this.gateThree = false;
                     EventDispatcher.Publish(new EventData(EventActionType.OnLight, EventCategoryType.LogicPuzzle, new object[] { "gate-3" }));
-                    Console.WriteLine("Gate Three Off");
+
 
                 }
 
