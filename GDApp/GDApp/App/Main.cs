@@ -1796,11 +1796,18 @@ namespace GDApp
 
             collidableObject = new CollidableObject("bookcase door", ActorType.CollidableDoor, transform3D, effectParameters, 
                 this.modelDictionary["Bookshelf_01"]);
-            collidableObject.AddPrimitive(new Box(collidableObject.Transform.Translation, Matrix.Identity, 
-                    new Vector3(8f, 30.0f, 35.0f)),
-               new MaterialProperties(0.2f, 0.8f, 0.7f));
+
+            Box collisionBox = new Box(collidableObject.Transform.Translation, Matrix.Identity,
+                new Vector3(8f, 30.0f, 35.0f));
+            MaterialProperties collisionMaterial = new MaterialProperties(0.2f, 0.8f, 0.7f);
+
+            collidableObject.AddPrimitive(collisionBox, collisionMaterial);
             collidableObject.Enable(true, 1);
-            collidableObject.AttachController(new BookcaseController("Bookcase Controller", ControllerType.Rotation, this.eventDispatcher));
+            collidableObject.AttachController(new BookcaseController("Bookcase Controller", 
+                ControllerType.Rotation, 
+                this.eventDispatcher,
+                collisionBox,
+                collisionMaterial));
             this.objectManager.Add(collidableObject);
             
         }
