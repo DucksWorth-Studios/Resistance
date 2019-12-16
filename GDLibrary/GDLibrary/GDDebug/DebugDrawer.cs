@@ -144,11 +144,12 @@ namespace GDLibrary
             this.spriteBatch.DrawString(this.spriteFont,
                 "Look:" + MathUtility.Round(camera.Transform.Look, 1).ToString(), this.textPosition, this.textColor,
                 0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
-
+#if DEBUG
             this.textPosition.Y += this.textHeight;
             this.spriteBatch.DrawString(this.spriteFont,
                 "Nr. Drawn Obj.:" + this.managerParameters.ObjectManager.DebugDrawCount, this.textPosition, this.textColor,
                 0, Vector2.Zero, 1, SpriteEffects.None, DefaultLayerDepth);
+#endif
         }
     }
 }
